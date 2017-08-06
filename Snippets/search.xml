@@ -1,0 +1,2455 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dictionary>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Files_Folders_Directories</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>delete_files_based_on_Date</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Files_Folders_Directories</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>delete_files_based_on_Date</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+'displayed only files that were older than today and that had the TXT extension.
+$Now=Get-Date
+Get-Childitem C:\VendorApp\*.TXT | Where-Object { $_.LastWriteTime –lt $Now.AddDays(-1) }
+
+'Delete files older than today:
+$Now=Get-Date
+Get-Childitem C:\VendorApp\*.TXT | Where-Object { $_.LastWriteTime –lt $Now.AddDays(-1) } | Remove-Item</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Files_Folders_Directories</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>Get-MyFile.ps1</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Files_Folders_Directories</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>Get-MyFile.ps1</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+#' USAGE:
+&gt; .\Get-MyFile.ps1 -Criteria 'Extension' - Attributes @{'Extension' = 'log'}
+
+#' USAGE:
+&gt; .\Get-MyFile.ps1 -Criteria Age -Attributes @{'DaysOld' = 5}
+
+
+
+#'=================================================================================================================================
+param ([string[]]$Computername = 'localhost', [string]$Criteria, [hashtable]$Attributes)   #' &lt;==== an array of computer names
+
+foreach ($Computer in $Computername) {
+	## Enumerate all of the default admin shares
+    $CimInstParams = @{'ClassName' = 'Win32_Share'}
+    if ($Computer -ne 'localhost') {
+	    $CimInstParams.Computername = $Computer    
+    }
+    $DriveShares = (Get-CimInstance @CimInstParams | where { $_.Name -match '^[A-Z]\$$' }).Name    #' &lt;===List of Drive Shares
+	foreach ($Drive in $DriveShares) {
+		switch ($Criteria) {
+			'Extension' {
+                Get-ChildItem -Path "\\$Computer\$Drive" -Filter "*.$($Attributes.Extension)" -Recurse
+			}
+			'Age' {
+				$Today = Get-Date
+                $DaysOld = $Attributes.DaysOld
+                Get-ChildItem -Path "\\$Computer\$Drive" -Recurse | Where-Object { $_.LastWriteTime -le $Today.AddDays(-$DaysOld)}
+			}
+			'Name' {
+                $Name = $Attributes.Name
+				Get-ChildItem -Path "\\$Computer\$Drive" -Filter "*$Name*" -Recurse
+			}
+            default {
+                Write-Error "Unrecognized criteria '$Criteria'"
+            }
+		}
+	}
+}
+#'=================================================================================================================================</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Files_Folders_Directories</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>Interogating_text_LOG_files_on_multiple_Drives</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Files_Folders_Directories</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>Interogating_text_LOG_files_on_multiple_Drives</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+
+param(
+        [string]$ComputerName = 'localhost',[datetime]$StartTimestamp,[datetime]$EndTimestamp,[string]$LogFileExtension = 'log')
+
+##' Define the drives to look for log files if local or the shares to look for when remote
+if ($ComputerName -eq 'localhost') {
+    #' Win32_LogicalDisk list all attached and local drives (=3), network drives (=4), floppy drives, DVD (=5)
+    #' DriveType = '3' os for local drives
+    #' DeviceID is the Driver Letter w/ a semicolon
+    $Locations = (Get-CimInstance -ClassName Win32_LogicalDisk -Filter "DriveType = '3'").DeviceID
+} else {
+    ## Enumerate all the 'admin' shares
+    $Shares = Get-CimInstance -ComputerName $ComputerName -Class Win32_Share | where { $_.Path -match '^\w{1}:\\$' }
+    [System.Collections.ArrayList]$Locations = @()
+    foreach ($Share in $Shares) {
+	    $Share = "\\$ComputerName\$($Share.Name)"
+	    #' TEST the share, if it throws an error, then ignore it, otherwise add it to the ArrayList: $Locations
+	    if (!(Test-Path $Share)) {
+		    Write-Warning "Unable to access the '$Share' share on '$Computername'"
+	    } else {
+		    $Locations.Add($Share) | Out-Null	
+	    }
+    }
+}
+
+##' Build the HashTable variable for Parameters, to perform splatting on Get-ChildItem
+$GciParams = @{
+	Path = $Locations
+    Filter = "*.$LogFileExtension"
+	Recurse = $true						#'  &lt;=== recursively look in all sub-folders
+	Force = $true						#'  &lt;=== this will find hidden files
+	ErrorAction = 'SilentlyContinue'
+	File = $true
+}
+
+##' Build the Where-Object scriptblock on a separate line due to it's length
+$WhereFilter = {($_.LastWriteTime -ge $StartTimestamp) -and ($_.LastWriteTime -le $EndTimestamp) -and ($_.Length -ne 0)}
+
+##' Find all interesting log files
+Get-ChildItem @GciParams | Where-Object $WhereFilter</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Files_Folders_Directories</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>Permissions_recursive_on_items_in_Directory</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Files_Folders_Directories</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>Permissions_recursive_on_items_in_Directory</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code> 
+ #' This is just a huge list by folder
+ #' You have to CD to the target folder, and it saves the output file
+ #' to the target folder
+ Get-ChildItem -Recurse | where-object {($_.PsIsContainer)} | get-acl | format-list &gt; permission.txt
+ 
+ =================================================================
+ #' This is 3 column output: User, Access, folder
+ #' You have to CD to the target folder, and it saves the output file
+ #' to the target folder 
+ 
+ Get-childitem \\jphsa.org\shared\Data\CPS -recurse | where{$_.psiscontainer} |
+Get-Acl | % {
+    $path = $_.Path
+    $_.Access | % {
+        New-Object PSObject -Property @{
+            Folder = $path.Replace("Microsoft.PowerShell.Core\FileSystem::","")
+            Access = $_.FileSystemRights
+            Control = $_.AccessControlType
+            User = $_.IdentityReference
+            Inheritance = $_.IsInherited
+            }
+        }
+    } | select-object -Property User, Access, Folder | export-csv output.csv -force
+    
+#' Sample output
+User				Access						Folder
+JPHSA01\tjohnson	Modify, Synchronize			\\jphsa.org\shared\Data\CPS\Aftercare Records
+JPHSA01\dharris		Modify, Synchronize			\\jphsa.org\shared\Data\CPS\Aftercare Records
+JPHSA01\ERiehl		Modify, Synchronize			\\jphsa.org\shared\Data\CPS\Aftercare Records
+JPHSA01\CPS			ReadAndExecute, Synchronize	\\jphsa.org\shared\Data\CPS\Aftercare Records
+
+ =================================================================</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Functions</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>HELP_for_Functions</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Functions</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>HELP_for_Functions</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+#-----------------------------------------------------------------------------#
+# Adding Help to Your Functions
+#-----------------------------------------------------------------------------#
+#region Help
+
+# Robust help built into PowerShell
+Get-Help Get-ChildItem
+
+# Help for your function?
+function Get-ChildName ()
+{
+  Write-Output (Get-ChildItem | Select-Object "Name")
+}
+Clear-Host
+Get-Help Get-ChildName
+
+
+# Custom tags within a comment block that Get-Help will recognize
+# Note that not all of them are required
+# .SYNOPSIS - A brief description of the command
+# .DESCRIPTION - Detailed command description
+# .PARAMETER name - Include one description for each parameter
+# .EXAMPLE - Detailed examples on how to use the command
+# .INPUTS - What pipeline inputs are supported
+# .OUTPUTS - What this funciton outputs
+# .NOTES - Any misc notes you haven't put anywhere else
+# .LINK - A link to the URL for more help. Use one .LINK tag per URL
+# Use "Get-Help about_comment_based_help" for full list and details
+
+function Get-ChildName ()
+{
+&lt;#                                                         # &lt;=== Here is where it starts
+  .SYNOPSIS
+  Returns a list of only the names for the child items in the current location.
+  
+  .DESCRIPTION
+  This function is similar to Get-ChildItem, except that it returns only the name
+  property. 
+  
+  .INPUTS
+  None. 
+  
+  .OUTPUTS
+  System.String. Sends a collection of strings out the pipeline. 
+  
+  .EXAMPLE
+  Example 1 - Simple use
+  Get-ChildName
+  
+  .EXAMPLE
+  Example 2 - Passing to another object in the pipeline
+  Get-ChildName | Where-Object {$_.Name -like "*.ps1"}
+
+  .LINK
+  Get-ChildItem 
+  
+#&gt;
+
+  Write-Output (Get-ChildItem | Select-Object "Name")
+  
+}
+
+Clear-Host
+Get-Help Get-ChildName
+
+
+Clear-Host
+Get-Help Get-ChildName -full
+
+#endregion Help</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_LogParser</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>Use Logparser and Powershell to produce a single CSV output from IIS logs</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_LogParser</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>Use Logparser and Powershell to produce a single CSV output from IIS logs</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>#'https://gallery.technet.microsoft.com/office/Use-Logparser-and-59eaa5e5
+#' Use Logparser and Powershell to produce a single CSV output from IIS logs
+
+============================
+I wanted to combine powershell and logparser to get me a single csv file of user activity on my ASPX website.
+
+The following script acheives that by doing the following
+
+It connects to a root IIS log repository. 
+	Although the script looks at a single location, 
+	it would be fairly simple to collect the logs from several servers first 
+	(renaming them, possibly with the server name appended to give them a unique name) 
+My IIS logs are generated fresh each day (the default) 
+	so I used the create date to determine what day each log relates to.
+I considered a week to be a reasonable block of time to track activity.  
+	Therefore, I loop over the list of files and copy them into a week by week folder (named YYYY-WW)
+Logparser then comes into action, 
+	producing a single csv file for each set of logs for the week (i.e. for each folder)
+You can modify the SELECT statement as needed, 
+	but I was only interested in who hit which page, 
+	where it was in the site and what their average and maximum rendering time was
+Logparser will output some paths that I dont want in the report.  
+	As my site is a SharePoint site, I'm not interested (in this instance) 
+	so I strip them out of the file via the $unwantedPaths parameter.
+The prepared files are then grouped into one single output file (Logs.csv) that I can pivot and present in Excel
+ 
+
+Feel free to change structure and final output to suit your needs 
+	- the script should give the basic building blocks to get a decent usage report out quickly.  
+	The other advantage is that it will only do work if new data exists.  
+	So, if you delete the output directories or files or new logs exist then you'll get new output.
+
+It should go without saying that you'll need to have installed logparser on your machine before running this file.
+==================================
+Function CopyLogFile ($LogFile, [ref]$FoldersToProcess) { 
+ 
+     
+    $YearWeekOfFile = get-date ($LogFile.CreationTime) -UFormat %Y-%V 
+    $savePath = Join-Path -Path $weeklyLogRootFolder -ChildPath $YearWeekOfFile 
+    CreateFolderIfNotExists $savePath 
+     
+    $logFileDestinationPath = Join-Path -Path $savePath -ChildPath $LogFile.Name 
+     
+    if ((Test-Path $logFileDestinationPath) -eq $false) { 
+        Copy-Item -Path $LogFile.FullName -Destination $logFileDestinationPath 
+        $FoldersToProcess.value += $savePath 
+    } 
+     
+     
+} 
+Function CreateFolderIfNotExists ($FolderPath) { 
+ 
+    if ((Test-Path $FolderPath) -eq $false) { 
+        New-Item -Path $FolderPath -Type Directory 
+    } 
+ 
+} 
+ 
+Function PathIsWanted ($RequestPath) { 
+    $pathIsWanted = $true 
+    foreach($path in $unwantedPaths) { 
+        if ($RequestPath -like "$($path)*") { 
+            $pathIsWanted = $false 
+            break 
+        } 
+    } 
+    $pathIsWanted 
+} 
+ 
+#Modify this section with your own values 
+ 
+$rawLogFileRoot = "\\SERVER\c$\inetpub\logs\LogFiles\FOLDER" 
+$unwantedPaths = "/_layouts/", "/apps/", "/Lists/", "/_catalogs/", "/_vti_bin/", "/themes", "/Workflow" 
+$weeklyLogRootFolder = "C:\temp\logs\" 
+$outputCSVLocation = "C:\temp\logs\csvOutput\" 
+ 
+#End of variables to be modified 
+ 
+ 
+#You may need to modify the exe path of Logparser.exe as well as the SELECT script you wish to run 
+#I only wanted aspx pages from my site 
+$logParserExe = "C:\Program Files (x86)\Log Parser 2.2\LogParser.exe" 
+$logParserSQL =  "`"SELECT '{0}' AS Date, cs-username, STRCAT(EXTRACT_PATH(cs-uri-stem),'/') AS RequestPath, " 
+$logParserSQL += "EXTRACT_FILENAME(cs-uri-stem) AS RequestedFile, COUNT(*) AS TotalHits, Max(time-taken) AS MaxTime, " 
+$logParserSQL += "AVG(time-taken) AS AvgTime INTO {2} FROM {1}\*.log WHERE cs-username  IS NOT NULL AND " 
+$logParserSQL += "SUBSTR(STRREV(EXTRACT_FILENAME(cs-uri-stem)),0,5) = 'xpsa.'   GROUP BY cs-username, cs-uri-stem ORDER BY TotalHits DESC`"" 
+#  "STRREV(EXTRACT_FILENAME(cs-uri-stem)),0,5) = 'xpsa.'" gives us aspx pages only 
+$logParserParams = "-i:IISW3C" , "-o:CSV" 
+ 
+ 
+CreateFolderIfNotExists $weeklyLogRootFolder 
+CreateFolderIfNotExists $outputCSVLocation 
+ 
+$FoldersToProcess = @() 
+ 
+$rawLogFiles = Get-ChildItem $rawLogFileRoot 
+ 
+ 
+foreach ($logFile in $rawLogFiles) { 
+    CopyLogFile -logFile $logFile -FoldersToProcess ([ref] $FoldersToProcess) 
+} 
+$FoldersToProcess = $FoldersToProcess | select -uniq 
+ 
+#Log Parsing section 
+if ($FoldersToProcess -ne $null) { 
+ 
+    foreach ($folderToProcess in $FoldersToProcess) { 
+        $yearWeekName = $folderToProcess.Replace($weeklyLogRootFolder, '') 
+        $outputCSV = Join-Path -Path $outputCSVLocation -ChildPath ($yearWeekName + ".csv") 
+        $logParserParamsInput = ([string]::Format($logParserSQL, $yearWeekName, $folderToProcess, $outputCSV)), $logParserParams[0], $logParserParams[1] 
+         
+        Start-Process -NoNewWindow -FilePath $logParserExe -ArgumentList $logParserParamsInput -wait 
+ 
+        #Now process the CSV file - removing unwanted page entries 
+        $data = Import-Csv -Path $outputCSV | ?{$unwantedPaths -notcontains $_.RequestPath}  
+        $data | Where-Object { (PathIsWanted $_.RequestPath) -eq $true } | Export-CSV -Path $outputCSV -NoTypeInformation 
+         
+    } 
+} 
+ 
+ 
+$outputFile = $null 
+$outputFilePath = Join-Path -Path $outputCSVLocation -ChildPath "Logs.csv" 
+ 
+ 
+$resultFiles = Get-Childitem $outputCSVLocation  
+$firstItem = $true 
+if ($resultFiles -ne $null) { 
+    foreach ($resultFile in ($resultFiles | ?{$_.Name -ne "Logs.csv"})) { 
+        if ($firstItem) { 
+            Copy-Item $resultFile.FullName $outputFilePath 
+            $firstItem = $false 
+        } 
+        else { 
+            get-content $resultFile.FullName | Select -Skip 1 | Add-Content $outputFilePath 
+        } 
+    } 
+} 
+ </Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_MISC</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>HELP_adding_Help_to_your_function</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_MISC</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>HELP_adding_Help_to_your_function</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>#-----------------------------------------------------------------------------#
+# Adding Help to Your Functions
+#-----------------------------------------------------------------------------#
+#region Help
+
+# Robust help built into PowerShell
+Get-Help Get-ChildItem
+
+# Help for your function?
+function Get-ChildName ()
+{
+  Write-Output (Get-ChildItem | Select-Object "Name")
+}
+Clear-Host
+Get-Help Get-ChildName
+
+
+# Custom tags within a comment block that Get-Help will recognize
+# Note that not all of them are required
+# .SYNOPSIS - A brief description of the command
+# .DESCRIPTION - Detailed command description
+# .PARAMETER name - Include one description for each parameter
+# .EXAMPLE - Detailed examples on how to use the command
+# .INPUTS - What pipeline inputs are supported
+# .OUTPUTS - What this funciton outputs
+# .NOTES - Any misc notes you haven't put anywhere else
+# .LINK - A link to the URL for more help. Use one .LINK tag per URL
+# Use "Get-Help about_comment_based_help" for full list and details
+
+function Get-ChildName ()
+{
+&lt;#
+  .SYNOPSIS
+  Returns a list of only the names for the child items in the current location.
+  
+  .DESCRIPTION
+  This function is similar to Get-ChildItem, except that it returns only the name
+  property. 
+  
+  .INPUTS
+  None. 
+  
+  .OUTPUTS
+  System.String. Sends a collection of strings out the pipeline. 
+  
+  .EXAMPLE
+  Example 1 - Simple use
+  Get-ChildName
+  
+  .EXAMPLE
+  Example 2 - Passing to another object in the pipeline
+  Get-ChildName | Where-Object {$_.Name -like "*.ps1"}
+
+  .LINK
+  Get-ChildItem 
+  
+#&gt;
+
+  Write-Output (Get-ChildItem | Select-Object "Name")			#' &lt;=== This is the actual code for the function
+  
+}
+
+Clear-Host
+Get-Help Get-ChildName
+
+
+Clear-Host
+Get-Help Get-ChildName -full
+
+#endregion Help</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_MISC</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>LineContinuation</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_MISC</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>LineContinuation</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+
+#' Here the back-tick (under the Tilde(~)) is the line continuation symbol:
+
+Copy-Item "$($modulePath)bpsd-m05-module-advanced-*.*" `
+          $userModulePathBPSD `
+          -Force
+          
+          
+#' Can break commands up among several lines 
+#' (note pipe must be last char on line)
+Get-ChildItem |
+  Where-Object { $_.Length -gt 10kb } |
+  Sort-Object Length
+
+
+
+# If you have an especially long command without pipes, you can also use
+# a line continuation charcter of the reverse single quote ` (typically 
+# located to the left of the number 1 on your keyboard)
+# Note that just as with the |, the ` must be the very last character
+# on the line. No spaces or comments are allowed after it
+
+Get-ChildItem -Path C:\PS `
+              -File "*.ps1" `
+              -Verbose
+
+# Can combine line continuation and pipes
+Get-ChildItem -Path C:\PS `
+              -File "*.ps1" `
+              -Verbose |
+              Format-Table -Property Name, Length -AutoSize</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_MISC</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>Patch_Query_list_of_Computers_to_see_if_a_patch_is_installed</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_MISC</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>Patch_Query_list_of_Computers_to_see_if_a_patch_is_installed</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>'https://gallery.technet.microsoft.com/scriptcenter/Powershell-Query-a-patch-67cf35f8
+
+#'The script uses GET-HOTFIX powershell cmdlet to query local or remote computers 
+#'    to gather the patch/hotfix state either installed or missing on the list of servers based on the KB number. 
+#'    It also queries and reports other basic OS details like OS version, system type , ping connectivity check and last boot time etc. 
+#'These information is consolidate and saved into excel format to provide better human readable format.
+#'
+#' 
+#'
+#'The script, by default reads the list of servers from "C:\Computers.txt" , prompts for user input for kb number and saves the generated excel report to "C:\patchinfo*.xlsx"
+#'
+#'It doesn't overwrite the file automatically if the file exist by the name to avoid accidental deletion.
+#'
+#'The computer on which the script is run should have excel 2007 or later installed.
+
+
+  
+#### Spreadsheet Location 
+ $DirectoryToSaveTo = "c:\" 
+ $date=Get-Date -format "yyyy-MM-d" 
+ $Filename="Patchinfo-$($patch)" 
+ 
+  
+ ###InputLocation 
+ $Computers = Get-Content "c:\computers.txt" 
+ # Enter KB to be checked here 
+ $Patch = Read-Host 'Enter the KB number ? - eg: KB3011780 ' 
+  
+ 
+  
+# before we do anything else, are we likely to be able to save the file? 
+# if the directory doesn't exist, then create it 
+if (!(Test-Path -path "$DirectoryToSaveTo")) #create it if not existing 
+  { 
+  New-Item "$DirectoryToSaveTo" -type directory | out-null 
+  } 
+   
+ 
+ 
+#Create a new Excel object using COM  
+$Excel = New-Object -ComObject Excel.Application 
+$Excel.visible = $True 
+$Excel = $Excel.Workbooks.Add() 
+$Sheet = $Excel.Worksheets.Item(1) 
+ 
+$sheet.Name = 'Patch status - ' 
+#Create a Title for the first worksheet 
+$row = 1 
+$Column = 1 
+$Sheet.Cells.Item($row,$column)= 'Patch status'  
+ 
+$range = $Sheet.Range("a1","f2") 
+$range.Merge() | Out-Null 
+$range.VerticalAlignment = -4160 
+ 
+#Give it a nice Style so it stands out 
+$range.Style = 'Title' 
+ 
+#Increment row for next set of data 
+$row++;$row++ 
+ 
+#Save the initial row so it can be used later to create a border 
+#Counter variable for rows 
+$intRow = $row 
+$xlOpenXMLWorkbook=[int]51 
+ 
+#Read thru the contents of the Servers.txt file 
+ 
+$Sheet.Cells.Item($intRow,1)  ="Name" 
+$Sheet.Cells.Item($intRow,2)  ="status" 
+$Sheet.Cells.Item($intRow,3)  ="Patch status" 
+$Sheet.Cells.Item($intRow,4)  ="OS" 
+$Sheet.Cells.Item($intRow,5)  ="SystemType" 
+$Sheet.Cells.Item($intRow,6)  ="Last Boot Time" 
+ 
+ 
+for ($col = 1; $col –le 6; $col++) 
+     { 
+          $Sheet.Cells.Item($intRow,$col).Font.Bold = $True 
+          $Sheet.Cells.Item($intRow,$col).Interior.ColorIndex = 48 
+          $Sheet.Cells.Item($intRow,$col).Font.ColorIndex = 34 
+     } 
+ 
+$intRow++ 
+ 
+ 
+Function GetStatusCode 
+{  
+    Param([int] $StatusCode)   
+    switch($StatusCode) 
+    { 
+        0         {"Success"} 
+        11001   {"Buffer Too Small"} 
+        11002   {"Destination Net Unreachable"} 
+        11003   {"Destination Host Unreachable"} 
+        11004   {"Destination Protocol Unreachable"} 
+        11005   {"Destination Port Unreachable"} 
+        11006   {"No Resources"} 
+        11007   {"Bad Option"} 
+        11008   {"Hardware Error"} 
+        11009   {"Packet Too Big"} 
+        11010   {"Request Timed Out"} 
+        11011   {"Bad Request"} 
+        11012   {"Bad Route"} 
+        11013   {"TimeToLive Expired Transit"} 
+        11014   {"TimeToLive Expired Reassembly"} 
+        11015   {"Parameter Problem"} 
+        11016   {"Source Quench"} 
+        11017   {"Option Too Big"} 
+        11018   {"Bad Destination"} 
+        11032   {"Negotiating IPSEC"} 
+        11050   {"General Failure"} 
+        default {"Failed"} 
+    } 
+} 
+ 
+ 
+ 
+Function GetUpTime 
+{ 
+    param([string] $LastBootTime) 
+    $Uptime = (Get-Date) - [System.Management.ManagementDateTimeconverter]::ToDateTime($LastBootTime) 
+    "Days: $($Uptime.Days); Hours: $($Uptime.Hours); Minutes: $($Uptime.Minutes); Seconds: $($Uptime.Seconds)"  
+} 
+ 
+ 
+foreach ($Computer in $Computers) 
+ { 
+ 
+ TRY { 
+ $OS = Get-WmiObject -Class Win32_OperatingSystem -ComputerName $Computer 
+ $sheetS = Get-WmiObject -Class Win32_ComputerSystem -ComputerName $Computer 
+ $sheetPU = Get-WmiObject -Class Win32_Processor -ComputerName $Computer 
+ $drives = Get-WmiObject -ComputerName $Computer Win32_LogicalDisk | Where-Object {$_.DriveType -eq 3} 
+ $pingStatus = Get-WmiObject -Query "Select * from win32_PingStatus where Address='$Computer'" 
+ $OSRunning = $OS.caption + " " + $OS.OSArchitecture + " SP " + $OS.ServicePackMajorVersion 
+ $systemType=$sheetS.SystemType 
+ $date = Get-Date 
+ $uptime = $OS.ConvertToDateTime($OS.lastbootuptime) 
+   
+ if  
+ ($kb=get-hotfix -id $Patch -ComputerName $computer -ErrorAction 2) 
+ 
+ { 
+ $kbinstall="$patch is installed" 
+ } 
+ else 
+ { 
+ $kbinstall="$patch is not installed" 
+ } 
+ 
+  
+  
+ if($pingStatus.StatusCode -eq 0) 
+    { 
+        $Status = GetStatusCode( $pingStatus.StatusCode ) 
+    } 
+else 
+    { 
+    $Status = GetStatusCode( $pingStatus.StatusCode ) 
+       } 
+ } 
+  
+ CATCH 
+ { 
+ $pcnotfound = "true" 
+ } 
+ #### Pump Data to Excel 
+ if ($pcnotfound -eq "true") 
+ { 
+ #$sheet.Cells.Item($intRow, 1) = "PC Not Found" 
+ $sheet.Cells.Item($intRow, 1) = $computer 
+ $sheet.Cells.Item($intRow, 2) = "PC Not Found" 
+ } 
+ else 
+ { 
+ $sheet.Cells.Item($intRow, 1) = $computer 
+ $sheet.Cells.Item($intRow, 2) = $status 
+ $Sheet.Cells.Item($intRow, 3) = $kbinstall 
+ $sheet.Cells.Item($intRow, 4) = $OSRunning 
+ $Sheet.Cells.Item($intRow, 5) = $SystemType 
+ $sheet.Cells.Item($intRow, 6) = $uptime 
+ } 
+ 
+  
+$intRow = $intRow + 1 
+ $pcnotfound = "false" 
+ } 
+ 
+$erroractionpreference = “SilentlyContinue”  
+ 
+$Sheet.UsedRange.EntireColumn.AutoFit() 
+########################################333 
+ 
+ 
+ 
+############################################################## 
+ 
+$filename = "$DirectoryToSaveTo$filename.xlsx" 
+#if (test-path $filename ) { rm $filename } #delete the file if it already exists 
+$Sheet.UsedRange.EntireColumn.AutoFit() 
+$Excel.SaveAs($filename, $xlOpenXMLWorkbook) #save as an XML Workbook (xslx) 
+$Excel.Saved = $True 
+$Excel.Close() 
+$Excel.DisplayAlerts = $False 
+$Excel.quit() </Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_MISC</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>Pipelining</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_MISC</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>Pipelining</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>#region Cmdlet Pipelining
+
+# Moving around the file tree
+# Get-ChildItem lists all items in current path
+Get-ChildItem 
+
+# Set-Location will change the current path
+Set-Location "C:\PS\01 - Intro"
+
+# Pipelining - combine CmdLets for power
+Get-ChildItem | Where-Object { $_.Length -gt 10kb } 
+
+Get-ChildItem | Where-Object { $_.Length -gt 10kb } | Sort-Object Length
+
+# Can break commands up among several lines 
+# (note pipe must be last char on line)
+Get-ChildItem |
+  Where-Object { $_.Length -gt 10kb } |
+  Sort-Object Length
+
+# To specify columns in the output and get nice formatting, use Format-Table  
+Get-ChildItem |
+  Where-Object { $_.Length -gt 10kb } |
+  Sort-Object Length |
+  Format-Table -Property Name, Length -AutoSize
+  
+# You can also use the Select-Object to retrieve certain properties from an object
+# NOTE: the Select-Object creates a new object with just the selected properties
+Get-ChildItem | Select-Object Name, Length
+
+# If you have an especially long command without pipes, you can also use
+# a line continuation charcter of the reverse single quote ` (typically 
+# located to the left of the number 1 on your keyboard)
+# Note that just as with the |, the ` must be the very last character
+# on the line. No spaces or comments are allowed after it
+
+Get-ChildItem -Path C:\PS `
+              -File "*.ps1" `
+              -Verbose
+
+# Can combine line continuation and pipes
+Get-ChildItem -Path C:\PS `
+              -File "*.ps1" `
+              -Verbose |
+              Format-Table -Property Name, Length -AutoSize
+
+#endregion Cmdlet Pipelining
+
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_MISC</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>use_ARRAY_or_WHERE_or_ForEach</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_MISC</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>use_ARRAY_or_WHERE_or_ForEach</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+http://stackoverflow.com/questions/16678870/powershell-get-process-string-as-name
+
+'1] could give it an array:
+===========================
+$Proc = @("Firefox","iexplore")		'Declares an array explicitly, then checks for each running process.
+Get-Process $Proc
+
+'2] Or could use a WHERE
+=======================
+Get-Process | Where-Object {$_.Name -eq "Firefox"}
+
+
+'OR
+Get-Process | Where-Object {$_.handles -gt 200 -or $_.name -eq "svchost"}
+
+
+'OR Where with LIKE operator and wild card:
+'LIKE operator: https://mcpmag.com/articles/2012/07/31/pshell-like-operator.aspx 
+Get-ChildItem c:\scripts | Where-Object {$_.name -like "*test*"}
+
+
+'To do "stuff" with it, just pipe the objects into a script block.
+
+Get-Process | Where-Object {$_.Name -eq "Firefox"} | fl $_.ID
+
+'3] ForEach-Object as mentioned, and loop through them:
+===========================================================
+
+Get-Process $Proc | ForEach-Object {If($_.Path -contains "C:\Program Files*"){Write-host "Bad Directory"} else{ write-host "Safe"}}
+
+'If the running .exe above is running from C:\Program Files* then its writes out "Safe", otherwise it writes "Bad Directory".</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Network_subnet_IP_DNS_etc</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>01_List_Features_Roles__local_server.ps1</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Network_subnet_IP_DNS_etc</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>01_List_Features_Roles__local_server.ps1</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>Import-Module ServerManager
+$Arr = Get-WindowsFeature | Where-Object {$_.Installed -match “True”} | Select-Object -Property Name
+$loopCount = $Arr.Count
+For($i=0; $i -le $loopCount; $i++) {
+    Write-Host $Arr[$i]
+}</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Processes</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>about_POWERSHELL_Processes</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Processes</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>about_POWERSHELL_Processes</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>about_POWERSHELL_Processes
+
+
+
+'Examples
+'================
+'Stop all instances of the Notepad process:
+
+PS C:\&gt; stop-process -name notepad
+
+'Stop process ID# 6464 and prompt before stopping the process (this will display the process name first):
+
+PS C:\&gt; stop-process -id 6464 -confirm -passthru
+
+'Display processes that were running on the computer, but are now stopped:
+
+PS C:\&gt; get-process | where-object {$_.HasExited}
+
+
+Start-Process 		'- Start one or more processes, optionally as a specific user.
+Get-Process		 	'- Get a list of processes on a machine.
+Start-Process 		'- Start one or more processes.
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Processes</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>Get-Process_on_remote_machine</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Processes</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>Get-Process_on_remote_machine</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+////////////////////////////This works fine: gets the Explorer processes, their command line, and their PID
+
+'Run PowerShell as administrator, from my workstation
+
+$process = "pxplus.exe"
+$machine = "BCC-EXPLORER3"
+
+Get-WmiObject Win32_Process -Namespace "root\cimv2" -Computer $Computer -Filter "name = '$process'" |  Format-table CommandLine,ProcessID  -AutoSize
+
+'To run it on the server itself:
+$process = "pxplus.exe"
+
+Get-WmiObject Win32_Process -Namespace "root\cimv2"  -Filter "name = '$process'" |  Format-table CommandLine,ProcessID  -AutoSize
+
+'Just get the ones that have the right Command Line (NOTE must run as administrator to see the command line):
+
+$process = "pxplus.exe"
+
+$process = "pxplus.exe"
+
+Get-WmiObject Win32_Process -Namespace "root\cimv2"  -Filter "name = '$process'"  |  Select CommandLine,ProcessID  | Where-Object {$_.CommandLine -like "*id=T*"} | Sort-Object -Property ProcessID | Format-table -autosize 
+
+
+'OUTPUT:============================================================================================================
+'CommandLine                                                                                               ProcessID
+'-----------                                                                                               ---------
+"D:\xplr\pxplus\pxplus.exe" -bkg D:\xplr\pxplus\pvx.ini -id=T0 D:\xplr\pxplus\lib\_plus\cs\host -arg 4093      6760
+"D:\xplr\pxplus\pxplus.exe" -bkg D:\xplr\pxplus\pvx.ini -id=T0 D:\xplr\pxplus\lib\_plus\cs\host -arg 4093      7624
+"D:\xplr\pxplus\pxplus.exe" -bkg D:\xplr\pxplus\pvx.ini -id=T0 D:\xplr\pxplus\lib\_plus\cs\host -arg 4093     14912
+"D:\xplr\pxplus\pxplus.exe" -bkg D:\xplr\pxplus\pvx.ini -id=T0 D:\xplr\pxplus\lib\_plus\cs\host -arg 4093     21428
+"D:\xplr\pxplus\pxplus.exe" -bkg D:\xplr\pxplus\pvx.ini -id=T0 D:\xplr\pxplus\lib\_plus\cs\host -arg 4093     26180
+"D:\xplr\pxplus\pxplus.exe" -bkg D:\xplr\pxplus\pvx.ini -id=T0 D:\xplr\pxplus\lib\_plus\cs\host -arg 4093     29088
+"D:\xplr\pxplus\pxplus.exe" -bkg D:\xplr\pxplus\pvx.ini -id=T0 D:\xplr\pxplus\lib\_plus\cs\host -arg 4093     30440
+'============================================================================================================
+
+
+\\\\\\\\\\\\\\\\\\\\\\\\UNTESTED:
+
+
+Invoke-Command -ScriptBlock {get-process} -ComputerName 192.168.1.36 -Credential (get-credential)
+
+Invoke-Command -ScriptBlock {get-process} -ComputerName BCC-EXPLORER2 -Credential (get-credential)
+
+Invoke-Command -ComputerName BCC-EXPLORER2 -ScriptBlock {Get-Process}</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Processes</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>Given_List_of_Software_kill_The_Associated_Processes</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Processes</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>Given_List_of_Software_kill_The_Associated_Processes</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>$softwarelist = 'chrome|firefox|iexplore|opera'
+get-process |
+    Where-Object {$_.ProcessName -match $softwarelist} |
+    stop-process -force
+    
+    
+'NOTE:  $softwarelist isn't an array, it is a string. To make an array, you'd have to split it, e.g. $softwarelist -split '|'    
+
+'You can also pass multiple processes to Get-Process, e.g.
+
+Get-Process -Name 'chrome','firefox','iexplore','opera' | Stop-Process -Force
+
+
+
+========================================================================
+
+
+' First, create an array of strings.
+
+$array =  @("chrome","firefox","iexplore","opera")
+
+
+'Next, loop through each item in your array, and stop the process.
+
+foreach ($process in $array)
+{
+    Stop-Process -Name $process
+}
+
+===========================================================================
+'This kills the user sessions of Eclipse on BCC-EXPLORER3
+
+$process = "pxplus.exe"
+
+Get-WmiObject Win32_Process -Namespace "root\cimv2"  -Filter "name = '$process'"  |  Select CommandLine,ProcessID  | Where-Object {$_.CommandLine -like "*id=T*"} | Foreach-Object {Stop-Process $_.ProcessID -Force} </Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Processes</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>Kill_first_PID_which_is_running_given_name_to_look_for</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Processes</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>Kill_first_PID_which_is_running_given_name_to_look_for</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>Get-Process | Where-Object { $_.Name -eq "myprocess" } | Select-Object -First 1 | Stop-Process
+
+'Get-Process gets a list of all of the running processes
+'Where-Object filters the list of processes to only those whose "Name" is equal to "myprocess"
+'Select-Object the -First 1 selects the first entry from the list
+'Stop-Process stops the process passed to it</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Processes</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>List_Process_with_CertainProperties_Count_and_TimeStarted</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Processes</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>List_Process_with_CertainProperties_Count_and_TimeStarted</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>$process = "pxplus.exe"
+$arrResults = Get-WmiObject Win32_Process -Namespace "root\cimv2"  -Filter "name = '$process'"  |  Select CommandLine,CreationDate  | Where-Object {$_.CommandLine -like "*id=T*"} 
+$m = $arrResults | measure
+
+
+write-host 'count: '  $m.Count
+
+write-host ' ' 
+$arrResults | foreach{ 
+                        write-host $_.CommandLine 
+                        write-host 'Started: ' $_.CreationDate.substring(0,7) ' time:' $_.CreationDate.substring(8,2) ':'  $_.CreationDate.substring(10,2)
+                        write-host ' ' 
+                      }
+                      
+                      
+========================================
+LIST ALL PROCESSES:
+
+$arrResults = Get-WmiObject Win32_Process -Namespace "root\cimv2"    |  Select CommandLine,CreationDate 
+$m = $arrResults | measure
+
+
+write-host 'count: '  $m.Count
+
+write-host ' ' 
+$arrResults | foreach{ 
+                        write-host $_.CommandLine 
+                        write-host ' ' 
+                      }                      </Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Profile</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>SAMPLE_Profile_1</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Profile</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>SAMPLE_Profile_1</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>'http://www.zerrouki.com/powershell-profile-example/
+
+
+&lt;#
+.SYNOPSIS
+    Microsoft.PowerShell_profile.ps1 - My PowerShell profile
+.DESCRIPTION
+    Microsoft.PowerShell_profile - Customizes the PowerShell console
+.NOTES
+    File Name   : Microsoft.PowerShell_profile.ps1
+    Author      : Fabrice ZERROUKI - fabricezerrouki@hotmail.com
+#&gt;
+Set-Location D:\Documents\xxxxxx\PERSONNEL\powerscripts
+$Shell=$Host.UI.RawUI
+$size=$Shell.BufferSize
+$size.width=120
+$size.height=3000
+$Shell.BufferSize=$size
+$size=$Shell.WindowSize
+$size.width=120
+$size.height=30
+$Shell.WindowSize=$size
+ 
+$Shell.BackgroundColor="Black"
+$Shell.ForegroundColor="White"
+$Shell.CursorSize=10
+ 
+function Get-Time {return $(Get-Date | ForEach {$_.ToLongTimeString()})}
+function prompt
+{
+    Write-Host "[" -noNewLine
+    Write-Host $(Get-Time) -ForegroundColor DarkYellow -noNewLine
+    Write-Host "] " -noNewLine
+    Write-Host $($(Get-Location).Path.replace($home,"~")) -ForegroundColor DarkGreen -noNewLine
+    Write-Host $(if ($nestedpromptlevel -ge 1) { '&gt;&gt;' }) -noNewLine
+    return "&gt; "
+}
+ 
+function ll
+{
+    param ($dir = ".", $all = $false)
+ 
+    $origFg = $Host.UI.RawUI.ForegroundColor
+    if ( $all ) { $toList = ls -force $dir }
+    else { $toList = ls $dir }
+ 
+    foreach ($Item in $toList)
+    {
+        Switch ($Item.Extension)
+        {
+            ".exe" {$Host.UI.RawUI.ForegroundColor="DarkYellow"}
+            ".hta" {$Host.UI.RawUI.ForegroundColor="DarkYellow"}
+            ".cmd" {$Host.UI.RawUI.ForegroundColor="DarkRed"}
+            ".ps1" {$Host.UI.RawUI.ForegroundColor="DarkGreen"}
+            ".html" {$Host.UI.RawUI.ForegroundColor="Cyan"}
+            ".htm" {$Host.UI.RawUI.ForegroundColor="Cyan"}
+            ".7z" {$Host.UI.RawUI.ForegroundColor="Magenta"}
+            ".zip" {$Host.UI.RawUI.ForegroundColor="Magenta"}
+            ".gz" {$Host.UI.RawUI.ForegroundColor="Magenta"}
+            ".rar" {$Host.UI.RawUI.ForegroundColor="Magenta"}
+            Default {$Host.UI.RawUI.ForegroundColor=$origFg}
+        }
+        if ($item.Mode.StartsWith("d")) {$Host.UI.RawUI.ForegroundColor="Gray"}
+        $item
+    }
+    $Host.UI.RawUI.ForegroundColor = $origFg
+}
+ 
+function Edit-HostsFile {
+    Start-Process -FilePath notepad -ArgumentList "$env:windir\system32\drivers\etc\hosts"
+}
+ 
+function rdp ($ip) {
+    Start-Process -FilePath mstsc -ArgumentList "/admin /w:1024 /h:768 /v:$ip"
+}
+ 
+function tail ($file) {
+Get-Content $file -Wait
+}
+ 
+function whoami {
+    [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
+}
+ 
+function Reload-Profile {
+    @(
+        $Profile.AllUsersAllHosts,
+        $Profile.AllUsersCurrentHost,
+        $Profile.CurrentUserAllHosts,
+        $Profile.CurrentUserCurrentHost
+    ) | % {
+        if(Test-Path $_) {
+            Write-Verbose "Running $_"
+            . $_
+        }
+    }    
+}
+ 
+function Check-SessionArch {
+    if ([System.IntPtr]::Size -eq 8) { return "x64" }
+    else { return "x86" }
+}
+ 
+function Test-Port {
+[cmdletbinding()]
+param(
+[parameter(mandatory=$true)]
+[string]$Target,
+[parameter(mandatory=$true)]
+[int32]$Port,
+[int32]$Timeout=2000
+)
+$outputobj=New-Object -TypeName PSobject
+$outputobj | Add-Member -MemberType NoteProperty -Name TargetHostName -Value $Target
+if(Test-Connection -ComputerName $Target -Count 2) {$outputobj | Add-Member -MemberType NoteProperty -Name TargetHostStatus -Value "ONLINE"}
+else
+{$outputobj | Add-Member -MemberType NoteProperty -Name TargetHostStatus -Value "OFFLINE"}            
+$outputobj | Add-Member -MemberType NoteProperty -Name PortNumber -Value $Port
+$Socket=New-Object System.Net.Sockets.TCPClient
+$Connection=$Socket.BeginConnect($Target,$Port,$null,$null)
+$Connection.AsyncWaitHandle.WaitOne($timeout,$false) | Out-Null
+if($Socket.Connected -eq $true) {$outputobj | Add-Member -MemberType NoteProperty -Name ConnectionStatus -Value "Success"}
+else
+{$outputobj | Add-Member -MemberType NoteProperty -Name ConnectionStatus -Value "Failed"}            
+$Socket.Close | Out-Null
+$outputobj | Select TargetHostName, TargetHostStatus, PortNumber, Connectionstatus | Format-Table -AutoSize
+}
+ 
+Set-Alias powergui "C:\Program Files\PowerGUI\ScriptEditor.exe"
+Set-Alias grep select-string
+ 
+$MaximumHistoryCount=1024
+$IPAddress=@(Get-WmiObject Win32_NetworkAdapterConfiguration | Where-Object {$_.DefaultIpGateway})[0].IPAddress[0]
+$PSVersion=$host | Select-Object -ExpandProperty Version
+$PSVersion=$PSVersion -replace '^.+@\s'
+$SessionArch=Check-SessionArch
+$Shell.WindowTitle="PowerFab rulez! ($SessionArch)"
+ 
+Clear-Host
+ 
+Write-Host "`r`nsssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss" -ForegroundColor Yellow
+Write-Host "s" -ForegroundColor Yellow -nonewline; Write-Host "ssssssssss" -nonewline; Write-Host "`t`t`t`t`t`t`ts" -ForegroundColor Yellow
+Write-Host "s" -ForegroundColor Yellow -nonewline; Write-Host "ss  ssssss`tHi Fab!" -nonewline; Write-Host "`t`t`t`t`t`ts" -ForegroundColor Yellow
+Write-Host "s" -ForegroundColor Yellow -nonewline; Write-Host "sss  sssss" -nonewline; Write-Host "`t`t`t`t`t`t`ts" -ForegroundColor Yellow
+Write-Host "s" -ForegroundColor Yellow -nonewline; Write-Host "ssss  ssss`tComputerName`t`t" -nonewline
+Write-Host $($env:COMPUTERNAME) -nonewline; Write-Host "`t`ts" -ForegroundColor Yellow
+Write-Host "s" -ForegroundColor Yellow -nonewline; Write-Host "ssss  ssss`tIP Address`t`t" -nonewline
+Write-Host $IPAddress -nonewline; Write-Host "`t`ts" -ForegroundColor Yellow
+Write-Host "s" -ForegroundColor Yellow -nonewline; Write-Host "sss  sssss`tUserName`t`t" -nonewline
+Write-Host $env:UserDomain\$env:UserName -nonewline; Write-Host "`ts" -ForegroundColor Yellow
+Write-Host "s" -ForegroundColor Yellow -nonewline; Write-Host "ss  s   ss`tPowerShell Version`t" -nonewline
+Write-Host $PSVersion -nonewline; Write-Host "`t`t`ts" -ForegroundColor Yellow
+Write-Host "s" -ForegroundColor Yellow -nonewline; Write-Host "ss  s   ss`tPowerShell Session`t" -nonewline
+Write-Host $SessionArch -nonewline; Write-Host "`t`t`ts" -ForegroundColor Yellow
+Write-Host "s" -ForegroundColor Yellow -nonewline; Write-Host "ssssssssss" -nonewline; Write-Host "`t`t`t`t`t`t`ts" -ForegroundColor Yellow
+Write-Host "sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss`n" -ForegroundColor Yellow
+ 
+$LogicalDisk = @()
+Get-WmiObject Win32_LogicalDisk -filter "DriveType='3'" | % {
+    $LogicalDisk += @($_ | Select @{n="Name";e={$_.Caption}},
+    @{n="Volume Label";e={$_.VolumeName}},
+    @{n="Size (Gb)";e={"{0:N2}" -f ($_.Size/1GB)}},
+    @{n="Used (Gb)";e={"{0:N2}" -f (($_.Size/1GB) - ($_.FreeSpace/1GB))}},
+    @{n="Free (Gb)";e={"{0:N2}" -f ($_.FreeSpace/1GB)}},
+    @{n="Free (%)";e={if($_.Size) {"{0:N2}" -f (($_.FreeSpace/1GB) / ($_.Size/1GB) * 100 )} else {"NAN"} }})
+  }
+$LogicalDisk | Format-Table -AutoSize | Out-String</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Remoting</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>Count_And_List_pxplus_Sessions_on_BCC-EXPLORER3</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Remoting</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>Count_And_List_pxplus_Sessions_on_BCC-EXPLORER3</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>#'Count_And_List_pxplus_Sessions_on_BCC-EXPLORER3
+
+cls
+$serverName = 'BCC-EXPLORER3' 
+
+$serverName + '  (open pxplus Sessions)'
+Write-Host ''
+
+$result = Invoke-Command  -ComputerName $serverName  -ScriptBlock { 
+                                                                    
+                                                                    $process = "pxplus.exe"
+                                                                    $arrResults = Get-WmiObject Win32_Process -Namespace "root\cimv2"  -Filter "name = '$process'"  |  Select CommandLine,CreationDate,ProcessID  | Where-Object {$_.CommandLine -like "*id=T*"} 
+                                                                    $m = $arrResults | measure
+
+
+                                                                    write-host 'count: '  $m.Count
+
+                                                                    write-host ' ' 
+                                                                    $arrResults | foreach{ 
+                                                                                            write-host $_.CommandLine 
+                                                                                            write-host 'PID: ' $_.ProcessID
+                                                                                            write-host 'Started: ' $_.CreationDate.substring(0,8) ' time:' $_.CreationDate.substring(8,2) ':'  $_.CreationDate.substring(10,2)
+                                                                                            write-host ' ' 
+                                                                                          }
+
+                                                                    write-host 'count: '  $m.Count
+																 }															 }</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_ScheduledTask</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>BCC_Kill_all_the_EclipseApplicationProcesses_from_Users</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_ScheduledTask</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>BCC_Kill_all_the_EclipseApplicationProcesses_from_Users</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>$process = "pxplus.exe"
+
+Get-WmiObject Win32_Process -Namespace "root\cimv2"  -Filter "name = '$process'"  |  Select CommandLine,ProcessID  | Where-Object {$_.CommandLine -like "*id=T*"} | Foreach-Object {Stop-Process $_.ProcessID -Force} 
+
+#===========================================================================
+# Log to the file after the script has run
+#============================================================================
+$path = 'C:\DATA\PowerShellScript_LOGS\Kill_All_User_Sessions_LOG.txt'
+$pathTempFile = 'C:\DATA\PowerShellScript_LOGS\Kill_All_User_Sessions_LOG_TEMP.txt'
+$TheDateTime = Get-Date -format yyyy_M_d_h_m_s
+$text = 'Script run at: ' +  $TheDateTime
+
+if (Test-Path $path) {
+    $text | Set-Content $pathTempFile
+    Get-Content $path -ReadCount 5000 |
+    Add-Content $pathTempFile 
+    Remove-item $path 
+    Rename-Item $pathTempFile -NewName $path
+} else {
+   $text | Set-Content $path
+} 
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_SSRS</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>Download All Your SSRS RDL files</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_SSRS</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>Download All Your SSRS RDL files</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>#' FROM: http://www.sqlmusings.com/2011/03/28/how-to-download-all-your-ssrs-report-definitions-rdl-files-using-powershell/comment-page-1/#comment-8629
+'Here’s a short PowerShell script that :
+'1. Connects to your report server
+'2. Creates the same folder structure you have in your Report Server
+'3. Download all the SSRS Report Definition (RDL) files into their respective folders
+'Had to use 2005, not 2010 on the SQL 2008 R2 server
+'Had to run it on the server itself
+
+#note this is tested on PowerShell v2 and SSRS 2008 R2
+[void][System.Reflection.Assembly]::LoadWithPartialName("System.Xml.XmlDocument");
+[void][System.Reflection.Assembly]::LoadWithPartialName("System.IO");
+ 
+$ReportServerUri = "http://bcc-explorerdb/reportserver/reportservice2005.asmx";
+$Proxy = New-WebServiceProxy -Uri $ReportServerUri -Namespace SSRS.ReportingService2005 -UseDefaultCredential ;
+ 
+#check out all members of $Proxy
+#$Proxy | Get-Member
+#http://msdn.microsoft.com/en-us/library/aa225878(v=SQL.80).aspx
+ 
+#second parameter means recursive
+$items = $Proxy.ListChildren("/", $true) | `
+         select Type, Path, ID, Name | `
+         Where-Object {$_.type -eq "Report"};
+ 
+#create a new folder where we will save the files
+#PowerShell datetime format codes http://technet.microsoft.com/en-us/library/ee692801.aspx
+ 
+#create a timestamped folder, format similar to 2011-Mar-28-0850PM
+$folderName = Get-Date -format "yyyy-MMM-dd-hhmmtt";
+$fullFolderName = "C:\JUNK\" + $folderName;
+[System.IO.Directory]::CreateDirectory($fullFolderName) | out-null
+ 
+foreach($item in $items)
+{
+    #need to figure out if it has a folder name
+    $subfolderName = split-path $item.Path;
+    $reportName = split-path $item.Path -Leaf;
+    $fullSubfolderName = $fullFolderName + $subfolderName;
+    if(-not(Test-Path $fullSubfolderName))
+    {
+        #note this will create the full folder hierarchy
+        [System.IO.Directory]::CreateDirectory($fullSubfolderName) | out-null
+    }
+ 
+    $rdlFile = New-Object System.Xml.XmlDocument;
+    [byte[]] $reportDefinition = $null;
+    $reportDefinition = $Proxy.GetReportDefinition($item.Path);
+ 
+    #note here we're forcing the actual definition to be 
+    #stored as a byte array
+    #if you take out the @() from the MemoryStream constructor, you'll 
+    #get an error
+    [System.IO.MemoryStream] $memStream = New-Object System.IO.MemoryStream(@(,$reportDefinition));
+    $rdlFile.Load($memStream);
+ 
+    $fullReportFileName = $fullSubfolderName + "\" + $item.Name +  ".rdl";
+    #Write-Host $fullReportFileName;
+    $rdlFile.Save( $fullReportFileName);
+ 
+}</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_SSRS</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>DownLoading_multiple_reports</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_SSRS</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>DownLoading_multiple_reports</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+
+$reportServerUri = "http://localhost/reportserver/ReportService2010.asmx?wsdl"
+$rs = New-WebServiceProxy -Uri $reportServerUri -UseDefaultCredential
+                          -Namespace "SSRS"
+                          
+
+#' Download all Reports from a specific folder to .rdl files in the current 
+#' directory.
+
+$sourceFolderPath = "/Reports/MyDeparment"
+
+$items = $rs.ListChildren($sourceFolderPath, $false)
+
+$items | Where-Object { $_.TypeName -eq "Report" } | Foreach-Object {
+
+    									$filename = ("{0}.rdl" -f $_.Name)
+   									Write-Output ("Downloading ""{0}""..." -f $_.Path)
+   									$bytes = $rs.GetItemDefinition($_.Path)
+   									[System.IO.File]::WriteAllBytes("$pwd\$filename", $bytes)
+   								     }
+                          </Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_SSRS</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>List_or_Delete_Datasources_With_No_Dependencies</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_SSRS</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>List_or_Delete_Datasources_With_No_Dependencies</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>    #************************************************************************************************************************************
+# FileName:     Delete-DataSources.ps1
+# Date:         2015/04/23
+# Author:       Hugh Scott
+#
+# Description:
+# This script finds data sources with no dependencies in SSRS and removes them.
+#
+# Parameters:
+#   $serverBase     - base URL for the server to check (ie, myserver.mydomain.com)
+#   [$WhatIf]       - Option wwitch parameter to prevent actual deleting of objects (will list out reports that need to be deleted)
+#***********************************************************************************************************************************
+[CmdletBinding()]
+Param(
+    [Parameter(Mandatory=$true,Position=0)]
+    [string]$serverBase,
+    [Parameter(Mandatory=$false,Position=1)]
+    [switch]$WhatIf
+)
+
+$url = "http://$serverBase/reportserver/ReportService2010.asmx?WSDL"
+$ssrs = New-WebServiceProxy -uri $url -UseDefaultCredential -Namespace "ReportingWebService"
+
+$outFile = ".\DeleteItems_$serverBase.txt"
+
+# Connection to Web Service, grab all data sources
+$items = $ssrs.ListChildren("/", $true) | where-object {$_.typename -eq "DataSource"}
+foreach($item in $items) {
+
+    $dependencies = $ssrs.ListDependentItems($item.Path)
+    $dependentReports = $dependencies.Count
+
+    if($dependencies.Count -eq 0){
+        [string]$itemName = $item.Path
+        if($WhatIf){
+
+            Write-Host "Item $itemName would be deleted."
+            Add-Content $outFile "Item $itemName would be deleted."
+        } else {
+            try {
+                $ssrs.DeleteItem($item.Path)
+                Write-Host "Item $itemName deleted."
+                Add-Content $outFile "Deleted item $itemName ."
+            } catch [System.Exception] {
+                $Msg = $_.Exception.Message
+                Write-Host $itemName $Msg
+                Add-Content $itemName $msg
+            }
+        }
+    }
+}
+shareeditflag</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_SSRS</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>Querying for (linked) reports</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_SSRS</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>Querying for (linked) reports</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+$reportServerUri = "http://localhost/reportserver/ReportService2010.asmx?wsdl"
+$rs = New-WebServiceProxy -Uri $reportServerUri -UseDefaultCredential
+                          -Namespace "SSRS"
+                          
+
+#' List everything(!) on the Report Server, recursively
+
+$catalogItems = $rs.ListChildren("/", $true)
+$catalogItems
+
+#' List all Linked Reports, together with the path of the Report it refers to.
+
+$linkedReports = $rs.ListChildren("/", $true) | Where-Object { $_.TypeName -eq "LinkedReport" }
+
+$results = $linkedReports | Foreach-Object {
+    						$linkPath = $rs.GetItemLink($_.Path)
+    						$result = new-object PSObject -Property @{ LinkName = $_.Name; LinkPath = $_.Path; ReportPath = $linkPath }
+    						$result
+					}
+$results
+
+#' List all Linked Reports that refer to reports in a specific folder:
+$results | Where-Object { $_.ReportPath -like "/Reports/MyDeparment/*" }                 </Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_SSRS</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>SECURITY_for_Reports_set_security_by_folder</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_SSRS</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>SECURITY_for_Reports_set_security_by_folder</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>&lt;#
+.SYNOPSIS
+    Set user permissions in SQL Reporting Services using Web Service
+ 
+.DESCRIPTION
+    Set user permissions in SQL Reporting Services using Web Service
+ 
+.EXAMPLE
+    Add-SSRSItemSecurity -webServiceUrl "http://[ServerName]/ReportServer/ReportService2005.asmx?WSDL" -itemPath "MyReportFolder" -groupUserName RPAULO\User1 -role Browser
+ 
+.EXAMPLE
+    Add-SSRSItemSecurity -url "http://[ServerName]/ReportServer/ReportService2005.asmx?WSDL" -itemPath "MyReportFolder" -u RPAULO\User1 -r "Content Manager"
+ 
+#&gt;
+function Add-SSRSItemSecurity
+(
+    [Parameter(Position=0,Mandatory=$true)]
+    [Alias("url")]
+    [string]$webServiceUrl,
+ 
+    [Parameter(Position=1,Mandatory=$true)]
+    [Alias("path")]
+    [string]$itemPath,
+     
+    [Parameter(Position=2,Mandatory=$true)]
+    [Alias("u")]
+    [string]$groupUserName,
+     
+    [Parameter(Position=3,Mandatory=$true)]
+    [Alias("r")]
+    [string]$role,
+     
+    [Parameter(Position=4)]
+    [bool]$inherit=$true
+)
+ 
+{
+     
+    #Fix item path if not starting with /
+    if(!$itemPath.StartsWith("/")) { $itemPath = "/" + $itemPath}
+     
+    #Create Proxy
+    Write-Host "[Add-SSRSItemSecurity()] Creating Proxy, connecting to : $webServiceUrl"
+    $ssrsProxy = New-WebServiceProxy -Uri $webServiceUrl -UseDefaultCredential
+     
+    $type = $ssrsProxy.GetType().Namespace;
+    $policyType = "{0}.Policy" -f $type;
+    $roleType = "{0}.Role" -f $type;
+     
+    Write-Host "[Add-SSRSItemSecurity()] Retrieving all existing policies."
+    $policies = $ssrsProxy.GetPolicies($itemPath, [ref]$inherit);
+     
+    $a = 1;
+    foreach($policy in $policies)
+    {
+ 
+        foreach($r in $policy.Roles)
+        {
+            $msg = "[Add-SSRSItemSecurity()]  Existing Policy # {0} Group Name: {1}, Role: {2}" -f $a, $policy.GroupUserName, $r.Name
+            Write-Host $msg
+        }
+        $a+=1;
+    }
+ 
+    $msg = "[Add-SSRSItemSecurity()] Total Existing Policies: " + $policies.Length;
+    Write-Host $msg
+     
+    $Policy = $policies | 
+    Where-Object { $_.GroupUserName -eq $groupUserName } | 
+    Select-Object -First 1
+     
+    if (-not $Policy) {
+        $Policy = New-Object ($policyType)
+        $Policy.GroupUserName = $GroupUserName
+        $Policy.Roles = @()
+        $Policies += $Policy
+        $msg = "[Add-SSRSItemSecurity()] Adding new policy: '{0}'" -f $GroupUserName
+        Write-Host $msg
+    }
+ 
+    $r = $Policy.Roles |
+        Where-Object { $_.Name -eq $role } |
+        Select-Object -First 1
+    if (-not $r) {
+        $r = New-Object ($roleType)
+        $r.Name = $role
+        $Policy.Roles += $r
+        $msg = "[Add-SSRSItemSecurity()] Adding new role: '{0}'" -f $role
+        Write-Host $msg
+    }
+     
+    #Set the policies
+    $ssrsProxy.SetPolicies($itemPath,$policies);
+ 
+}
+
+#' To set the HOME folder Policies
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/" -groupUserName BCC\g_SSRS_CanSeeAllReports -role Browser
+
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/" -groupUserName BCC\g_SSRS_Developers -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/" -groupUserName BCC\g_SSRS_Developers -role 'Content Manager'
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/" -groupUserName BCC\g_SSRS_Developers -role 'My Reports'
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/" -groupUserName BCC\g_SSRS_Developers -role Publisher
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/" -groupUserName BCC\g_SSRS_Developers -role 'Report Builder'
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/" -groupUserName 'NT AUTHORITY\Authenticated Users' -role Browser
+
+
+#' To set the 'Eclipse_Admin' folder Policies
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/Eclipse_Admin" -groupUserName BCC\g_ECLIPSE_Admin -role Browser
+#' MANUALLY: remove the Browse permission, for 'NT AUTHORITY\Authenticated Users',  for the 'Eclipse_Admin' folder
+
+
+#' To set the 'Eclipse_Admin' folder Policies
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/Financial" -groupUserName 'BCC\g_eclipse_ACCT_AP' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/Financial" -groupUserName 'BCC\g_eclipse_ACCT_CA' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/Financial" -groupUserName 'BCC\g_eclipse_ACCT_CTL' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/Financial" -groupUserName 'BCC\g_eclipse_ACCT_LEAD' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/Financial" -groupUserName 'BCC\g_eclipse_OP_PM' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/Financial" -groupUserName 'BCC\g_SSRS_BusinessGroupAdmins' -role Browser
+#' MANUALLY: remove the Browse permission, for 'NT AUTHORITY\Authenticated Users', for this folder
+
+
+#' To set the 'Financial_Trucks' folder Policies
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/Financial_Trucks" -groupUserName 'BCC\g_eclipse_OP_PM' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/Financial_Trucks" -groupUserName 'BCC\g_SSRS_BusinessGroupAdmins' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/Financial_Trucks" -groupUserName 'BCC\g_SSRS_Trucking_Reports' -role Browser
+#' MANUALLY: remove the Browse permission, for 'NT AUTHORITY\Authenticated Users', for this folder
+
+
+#' To set the 'HR' folder Policies
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/HR" -groupUserName 'BCC\g_eclipse_ACCT_PAYRL' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/HR" -groupUserName 'BCC\g_eclipse_HR' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/HR" -groupUserName 'BCC\g_eclipse_HR_ADMIN' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/HR" -groupUserName 'BCC\g_eclipse_HR_PAY' -role Browser
+#' MANUALLY: remove the Browse permission, for 'NT AUTHORITY\Authenticated Users', for this folder
+
+
+#' To set the 'HR_ACCT' folder Policies
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/HR_ACCT" -groupUserName 'BCC\g_eclipse_ACCT_PAYRL' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/HR_ACCT" -groupUserName 'BCC\g_eclipse_HR' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/HR_ACCT" -groupUserName 'BCC\g_eclipse_HR_ADMIN' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/HR_ACCT" -groupUserName 'BCC\g_eclipse_HR_PAY' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/HR_ACCT" -groupUserName 'BCC\g_eclipse_ACCT_AP' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/HR_ACCT" -groupUserName 'BCC\g_eclipse_ACCT_CA' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/HR_ACCT" -groupUserName 'BCC\g_eclipse_ACCT_CTL' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/HR_ACCT" -groupUserName 'BCC\g_eclipse_ACCT_LEAD' -role Browser
+#' MANUALLY: remove the Browse permission, for 'NT AUTHORITY\Authenticated Users', for this folder
+
+
+#' To set the 'IT' folder Policies
+#' MANUALLY: remove the Browse permission, for 'NT AUTHORITY\Authenticated Users', for this folder
+
+
+
+#' To set the 'Job Cost' folder Policies
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/Job Cost" -groupUserName 'BCC\g_eclipse_ACCT_PAYRL' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/Job Cost" -groupUserName 'BCC\g_eclipse_ACCT_AP' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/Job Cost" -groupUserName 'BCC\g_eclipse_ACCT_CA' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/Job Cost" -groupUserName 'BCC\g_eclipse_ACCT_CTL' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/Job Cost" -groupUserName 'BCC\g_eclipse_ACCT_LEAD' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/Job Cost" -groupUserName 'BCC\g_eclipse_OP_PM' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/Job Cost" -groupUserName 'BCC\g_SSRS_BusinessGroupAdmins' -role Browser
+#' MANUALLY: remove the Browse permission, for 'NT AUTHORITY\Authenticated Users', for this folder
+
+
+#' To set the 'Payroll Reports' folder Policies
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/Payroll Reports" -groupUserName 'BCC\g_eclipse_ACCT_PAYRL' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/Payroll Reports" -groupUserName 'BCC\g_eclipse_HR' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/Payroll Reports" -groupUserName 'BCC\g_eclipse_HR_ADMIN' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/Payroll Reports" -groupUserName 'BCC\g_eclipse_HR_PAY' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/Payroll Reports" -groupUserName 'BCC\g_eclipse_ACCT_AP' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/Payroll Reports" -groupUserName 'BCC\g_eclipse_ACCT_CA' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/Payroll Reports" -groupUserName 'BCC\g_eclipse_ACCT_CTL' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/Payroll Reports" -groupUserName 'BCC\g_eclipse_ACCT_LEAD' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/Payroll Reports" -groupUserName 'BCC\g_SSRS_BusinessGroupAdmins' -role Browser
+#' MANUALLY: remove the Browse permission, for 'NT AUTHORITY\Authenticated Users', for this folder
+
+
+#' To set the 'Payroll Reports/Payroll_Reports_HR_ACCT' folder Policies
+#' MANUALLY: remove the Browse permission, for 'BCC\g_SSRS_BusinessGroupAdmins', for this folder
+#' Then create the LINKED Reports in the folder above it:
+#'               401K Census
+#'               Certified Payroll
+#'               Child Support
+#'               Employee Union Status
+#'               Employees that Received Advancements
+#'               Hourly Employee Verification
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_ToolKit</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>02_LogInvestigator.ps1</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_ToolKit</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>02_LogInvestigator.ps1</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>#' This holds two functions, but more could be added
+
+
+function Get-WinEventWithin {
+	&lt;#
+	.SYNOPSIS
+	    This function finds all events in all event logs on a local or remote computer between a start and end time	
+	.EXAMPLE
+		PS&gt; Get-WinEventWithin -StartTimestamp '04-15-15 04:00' -EndTimestamp '04-15-15 08:00'
+
+        This example finds all events in all event logs from April 15th, 2015 at 4AM to April 15th, 2015 at 8AM.
+	.PARAMETER Computername
+        The computer in which you'd like to find event log entries on.  If this is not specified, it will default to localhost.
+	.PARAMETER StartTimestamp
+        The earlier time of the event you'd like to find an event 
+	.PARAMETER EndTimestamp
+        The latest time of the event you'd like to find 
+	#&gt;
+	[CmdletBinding()]
+	param (
+        [string]$Computername = 'localhost',
+        [Parameter(Mandatory)]
+        [datetime]$StartTimestamp,
+        [Parameter(Mandatory)]
+        [datetime]$EndTimestamp
+	)
+	process {
+		try {
+            $Logs = (Get-WinEvent -ListLog * -ComputerName $ComputerName | where { $_.RecordCount }).LogName
+            $FilterTable = @{
+	            'StartTime' = $StartTimestamp
+	            'EndTime' = $EndTimestamp
+	            'LogName' = $Logs
+            }
+		
+            Get-WinEvent -ComputerName $ComputerName -FilterHashtable $FilterTable -ErrorAction 'SilentlyContinue'
+		} catch {
+			Write-Error "$($_.Exception.Message) - Line Number: $($_.InvocationInfo.ScriptLineNumber)"
+		}
+	}
+}
+
+function Get-TextLogEventWithin {
+	&lt;#
+	.SYNOPSIS
+	    This function finds all files matching a specified file extension that have a last write time
+        between a specific start and end time.
+	.EXAMPLE
+		PS&gt; Get-TextLogEventWithin -Computername MYCOMPUTER -StartTimestamp '04-15-15 04:00' -EndTimestamp '04-15-15 08:00' -LogFileExtension 'log'
+
+        This example finds all .log files on all drives on the remote computer MYCOMPUTER from April 15th, 2015 at 4AM to April 15th, 2015 at 8AM.
+	.PARAMETER Computername
+        The computer name you'd like to search for text log on.  This defaults to localhost.
+	.PARAMETER StartTimestamp
+        The earliest last write time of a log file you'd like to find
+	.PARAMETER EndTimestamp
+        The latest last write time of a log file you'd like to find
+    .PARAMETER LogFileExtension
+        The file extension you will be limiting your search to. This defaults to 'log'
+	#&gt;
+	[CmdletBinding()]
+	param (
+        [ValidateScript({Test-Connection -ComputerName $_ -Quiet -Count 1})]
+        [string]$Computername = 'localhost',
+        [Parameter(Mandatory)]
+        [datetime]$StartTimestamp,
+        [Parameter(Mandatory)]
+        [datetime]$EndTimestamp,
+        [ValidateSet('txt','log')]
+        [string]$LogFileExtension = 'log'
+	)
+	process {
+		try {
+            ## Define the drives to look for log files if local or the shares to look for when remote
+            if ($ComputerName -eq 'localhost') {
+                $Locations = (Get-CimInstance -ClassName Win32_LogicalDisk -Filter "DriveType = '3'").DeviceID
+            } else {
+                ## Enumerate all shares
+                $Shares = Get-CimInstance -ComputerName $ComputerName -Class Win32_Share | where { $_.Path -match '^\w{1}:\\$' }
+                [System.Collections.ArrayList]$Locations = @()
+                foreach ($Share in $Shares) {
+	                $Share = "\\$ComputerName\$($Share.Name)"
+	                if (!(Test-Path $Share)) {
+		                Write-Warning "Unable to access the '$Share' share on '$Computername'"
+	                } else {
+		                $Locations.Add($Share) | Out-Null	
+	                }
+                }
+            }
+
+            ## Build the hashtable to perform splatting on Get-ChildItem
+            $GciParams = @{
+	            Path = $Locations
+                Filter = "*.$LogFileExtension"
+	            Recurse = $true
+	            Force = $true
+	            ErrorAction = 'SilentlyContinue'
+	            File = $true
+            }
+
+            ## Build the Where-Object scriptblock on a separate line due to it's length
+            $WhereFilter = {($_.LastWriteTime -ge $StartTimestamp) -and ($_.LastWriteTime -le $EndTimestamp) -and ($_.Length -ne 0)}
+
+            ## Find all interesting log files
+    Get-ChildItem @GciParams | Where-Object $WhereFilter
+		} catch {
+			Write-Error "$($_.Exception.Message) - Line Number: $($_.InvocationInfo.ScriptLineNumber)"
+		}
+	}
+}</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Variables</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>about_Variables_from_PluralSight</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Variables</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>about_Variables_from_PluralSight</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>&lt;#-----------------------------------------------------------------------------
+  Beginning PowerShell Scripting for Developers
+  Using Variables in PowerShell
+
+  Author: Robert C. Cain | @ArcaneCode | arcanecode@gmail.com
+          http://arcanecode.com
+ 
+  This module is Copyright (c) 2015 Robert C. Cain. All rights reserved.
+  The code herein is for demonstration purposes. No warranty or guarentee
+  is implied or expressly granted. 
+  This module may not be reproduced in whole or in part without the express
+  written consent of the author. 
+-----------------------------------------------------------------------------#&gt;
+
+
+#-----------------------------------------------------------------------------#
+# Variables
+#-----------------------------------------------------------------------------#
+#region Variables
+
+Clear-Host
+
+# All variables start with a $. Show a simple assignment
+$hi = "Hello World"
+
+# Print the value
+$hi
+
+# This is a shortcut to Write-Host
+Write-Host $hi
+
+# Variables are objects. Show the type
+$hi.GetType()
+
+# Display all the members of this variable (object) - This gives list of "extension methods"
+$hi | Get-Member
+
+# Use some of those members
+$hi.ToUpper()
+$hi.ToLower()
+$hi.Length
+
+# Types are mutable, this changes it from string to INT
+Clear-Host
+$hi = 5
+$hi.GetType()
+
+$hi | Get-Member    #Now it would have a different set of "extension methods"
+
+# Variables can be strongly typed 
+Clear-Host 
+[System.Int32]$myint = 42            #EXPLICITY type it for strong typing
+$myint
+$myint.GetType()
+
+$myint = "This won't work"           #Will throw an error, b/c it is strongly typed as INT
+
+# There are shortcuts for most .net types
+Clear-Host
+[int] $myotherint = 42               #[int] is a "alias" for [System.Int32]
+$myotherint.GetType()
+
+[string] $mystring="PowerShell"
+$mystring.GetType()
+
+# Others include short, float, decimal, single, bool, byte, etc
+
+# Not just variables have types - so do static values
+"PowerShell Rocks".GetType()
+
+# Accessing methods on objects
+"PowerShell Rocks".ToUpper()
+"PowerShell Rocks".Contains("PowerShell")
+
+# For nonstrings you need to wrap in () so PS will evaluate as an object, from which we can use "GetType()"
+(33).GetType()  
+
+
+# Comparisons
+$var = 33
+
+$var -gt 30
+$var -lt 30
+$var -eq 33
+
+# List is:
+#   -eq        Equals
+#   -ne        Not equal to
+#   -lt        Less Than
+#   -gt        Greater then
+#   -le        Less than or equal to
+#   -ge        Greater then or equal to
+
+#   -in        See if value in an array
+#   -notin     See if a value is missing from an array
+#   -Like      Like wildcard pattern matching
+#   -NotLike   Not Like 
+#   -Match     Matches based on regular expressions
+#   -NotMatch  Non-Matches based on regular expressions
+
+# Calculations are like any other language
+$var = 3 * 11  # Also uses +, -, and / 
+$var
+
+# Supports post unary operators ++ and --
+$var++  
+$var
+
+# And pre unary operators as well
+++$var 
+$var
+
+Clear-Host
+$var = 33
+$post = $var++
+$post
+$var
+
+Clear-Host
+$var = 33
+$post = ++$var
+$post
+$var
+
+
+
+# Be cautious of Implicit Type Conversions
+"42" -eq 42
+42 -eq "42"
+
+# Whatever is on the right is converted to the data type on the left
+# Can lead to some odd conversions
+42 -eq "042"   # True because the string on the right is coverted to an int
+"042" -eq 42   # False because int on the right is converted to a string
+
+##
+
+
+#-----------------------------------------------------------------------------#
+# Built in variables
+#-----------------------------------------------------------------------------#
+# Automatic Variables
+Clear-Host
+
+# False and true
+$false
+$true
+
+# Null
+$NULL
+
+# Current directory
+$pwd
+
+# Users Home Directory
+$Home  
+
+# Info about a users scripting environment
+$host
+
+# Process ID
+$PID
+
+# Info about the current version of Powershell
+$PSVersionTable
+
+$_   # Current Object
+Set-Location "C:\ps\01 - intro"
+Get-ChildItem | Where-Object {$_.Name -like "*.ps1"}
+
+#endregion Variables
+
+##
+
+
+
+#-----------------------------------------------------------------------------#
+# Using the *-Variable cmdlets
+#-----------------------------------------------------------------------------#
+Clear-Host
+
+# Normal variable usage
+$normal = 33
+$normal
+
+$text = "In The Morning"
+$text
+
+
+# Long version of $var = 33
+New-Variable -Name var -Value 33
+$var
+
+# Note if you try to use New-Variable and it already exists, you get an error
+# Try again with $var already existing
+New-Variable -Name var -Value 99
+$var
+
+# Displays the variable and it's value
+Get-Variable var -valueonly
+
+Get-Variable var
+
+Get-Variable   # Without params it shows all variables
+
+# Assign a new value to an existing variable
+# $var = "In The Morning"
+Set-Variable -Name var -Value "In The Morning"
+$var
+
+# Clear the contents of a variable
+# Same as $var = $null
+Clear-Variable -Name var
+$var   
+
+# Variable is now set to null, this sets it to empty, even it though it still exists
+$var -eq $null
+
+# Even though null, it still exists
+Get-Variable var   
+
+
+# Wipe out a variable, now it will not exist
+Remove-Variable -Name var
+# Now var is gone, if you try to remove or clear again an error occurs
+# (note if you try to access it by just doing a $var the var is recreated)
+
+Get-Variable var   # Now produces an error
+
+
+##
+
+
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Loops</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>where-object_to_filter_from_a_Pipe</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Loops</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>where-object_to_filter_from_a_Pipe</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+'This will output just the powershell proces:
+&gt;get-process | where-object ($_.processname -eq 'powershell')
+
+
+'Filter for processes that have used more than 1 second of cpu:
+&gt;get-process | where-object &lt; $_.CPU -gt 1 &gt; | foreach-object &lt; $_.processname + "is over threshold" &gt;
+
+&gt;get-process | where-object ( $_.CPU -gt 1 ) | foreach-object ( $_.processname + "is over threshold" )</Code>
+      </SnippetValue>
+    </value>
+  </item>
+</dictionary>

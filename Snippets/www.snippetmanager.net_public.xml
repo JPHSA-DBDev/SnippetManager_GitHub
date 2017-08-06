@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dictionary>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>Generics</Category>
+        <Language>C#</Language>
+        <Public>true</Public>
+        <Name>Generics in C#</Name>
+        <Group>www.snippetmanager.net</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>Generics</Category>
+          <Language>C#</Language>
+          <Public>true</Public>
+          <Name>Generics in C#</Name>
+          <Group>www.snippetmanager.net</Group>
+        </Key>
+        <Keywords>Generics, generic, &lt;T&gt;, TKey, TValue</Keywords>
+        <Imports>using System;
+using System.Collections.Generic;
+using System.Text;</Imports>
+        <Code>/*
+ * Use generics when you intend to reuse common code 
+ * that should function the same way for any data type.
+ * Simply use &lt;T&gt; as shown below.
+ * You can use multiple alias data types just by adding
+ * a new letter such as class Test&lt;T&gt;&lt;K&gt;, etc.     
+ */
+
+class Test&lt;T&gt;
+{
+    private List&lt;T&gt; values = new List&lt;T&gt;();
+
+    // The default keyword sets a variable 
+    // with the appropriate default value.
+    private T m_defaultExample = default(T);
+
+    public void AddSomething(T value)
+    {
+        values.Add(value);
+    }
+
+
+    public void TryThisExample()
+    {
+        // Simple test:
+        Test&lt;double&gt; test = new Test&lt;double&gt;();
+        test.AddSomething(123);
+
+        // Advanced test:
+        // If you want to specify a default value type, use:
+        // using Test = TestSpace.Test&lt;double&gt;;
+        // This way you can just write:
+        // Test test = new Test();
+        // test.AddSomething(123);
+    }
+
+    // Note (advanced):
+    // You can declare the class with a constraint using the "where" keyword.
+    // class Test&lt;T&gt; where T : new()
+    // new() requires that the parameter T must have a default constructor.
+    // struct requires that the default parameter T must have a ValueType.
+    // class requires that the default parameter T must NOT be a ValueType.
+    // You can also use a name of a class or interface, such as:
+    // class Test&lt;T&gt; where T : IMyInterface
+    // or
+    // class Test&lt;T&gt; where T : MyClass
+
+}
+
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>Collections</Category>
+        <Language>C#</Language>
+        <Public>true</Public>
+        <Name>Serializable Dictionary</Name>
+        <Group>www.snippetmanager.net</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>Collections</Category>
+          <Language>C#</Language>
+          <Public>true</Public>
+          <Name>Serializable Dictionary</Name>
+          <Group>www.snippetmanager.net</Group>
+        </Key>
+        <Keywords>Serializable Dictionary, Serialize Dictionary, Serialize, Dictionary, IXmlSerializable</Keywords>
+        <Imports>using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Xml.Serialization;
+</Imports>
+        <Code>// A custom dictionary that is serializable and features multiple keys
+
+[Serializable]
+public class ItemValue
+{
+    public ItemKey Key { get; set; }
+    public string SomeText { get; set; }
+
+    public ItemValue()
+    {
+    }
+
+    public ItemValue(string key1, string key2)
+    {
+        Key = new ItemKey(key1, key2);
+    }
+}
+
+
+public class ItemKey
+{
+    public string SomeKey1 { get; set; }
+    public string SomeKey2 { get; set; }
+
+    public ItemKey()
+    {
+    }
+
+    public ItemKey(string key1, string key2)
+    {
+        SomeKey1 = key1;
+        SomeKey2 = key2;
+    }
+
+    public class EqualityComparer : IEqualityComparer&lt;ItemKey&gt;
+    {
+
+        bool IEqualityComparer&lt;ItemKey&gt;.Equals(ItemKey x, ItemKey y)
+        {
+            return x.SomeKey1 == y.SomeKey1 &amp;&amp; x.SomeKey2 == y.SomeKey2;
+        }
+
+        int IEqualityComparer&lt;ItemKey&gt;.GetHashCode(ItemKey obj)
+        {
+            if (obj == null) return 0;
+            if ((!(obj is ItemKey))) return 0;
+            ItemKey key = (ItemKey)obj;
+            unchecked
+            {
+                int result = (key.SomeKey1 != null ? key.SomeKey1.GetHashCode() : 0);
+                result += (key.SomeKey2 != null ? key.SomeKey2.GetHashCode() : 0);
+                return result;
+            }
+        }
+
+
+    }
+
+}
+
+
+[XmlRoot("dictionary")]
+public class SerializableDictionary&lt;TKey, TValue&gt;
+    : Dictionary&lt;TKey, TValue&gt;, IXmlSerializable
+{
+
+    public SerializableDictionary()
+
+        : base()
+    {
+
+    }
+
+    public SerializableDictionary(IDictionary&lt;TKey, TValue&gt; dictionary)
+
+        : base(dictionary)
+    {
+
+    }
+
+    public SerializableDictionary(IEqualityComparer&lt;TKey&gt; comparer)
+
+        : base(comparer)
+    {
+
+    }
+
+    public SerializableDictionary(int capacity)
+
+        : base(capacity)
+    {
+
+    }
+
+    public SerializableDictionary(IDictionary&lt;TKey, TValue&gt; dictionary, IEqualityComparer&lt;TKey&gt; comparer)
+
+        : base(dictionary, comparer)
+    {
+
+    }
+
+    public SerializableDictionary(int capacity, IEqualityComparer&lt;TKey&gt; comparer)
+
+        : base(capacity, comparer)
+    {
+
+    }
+
+    public System.Xml.Schema.XmlSchema GetSchema()
+    {
+        return null;
+    }
+
+    public void ReadXml(System.Xml.XmlReader reader)
+    {
+        XmlSerializer keySerializer = new XmlSerializer(typeof(TKey));
+        XmlSerializer valueSerializer = new XmlSerializer(typeof(TValue));
+
+        bool wasEmpty = reader.IsEmptyElement;
+        reader.Read();
+        if (wasEmpty) return;
+
+        while (reader.NodeType != System.Xml.XmlNodeType.EndElement)
+        {
+            reader.ReadStartElement("item");
+            reader.ReadStartElement("key");
+            TKey key = (TKey)keySerializer.Deserialize(reader);
+            reader.ReadEndElement();
+
+            reader.ReadStartElement("value");
+            TValue value = (TValue)valueSerializer.Deserialize(reader);
+            reader.ReadEndElement();
+            this.Add(key, value);
+
+            reader.ReadEndElement();
+            reader.MoveToContent();
+        }
+        reader.ReadEndElement();
+    }
+
+
+    public void WriteXml(System.Xml.XmlWriter writer)
+    {
+        XmlSerializer keySerializer = new XmlSerializer(typeof(TKey));
+        XmlSerializer valueSerializer = new XmlSerializer(typeof(TValue));
+
+        foreach (TKey key in this.Keys)
+        {
+            writer.WriteStartElement("item");
+            writer.WriteStartElement("key");
+            keySerializer.Serialize(writer, key);
+            writer.WriteEndElement();
+
+            writer.WriteStartElement("value");
+            TValue value = this[key];
+            valueSerializer.Serialize(writer, value);
+            writer.WriteEndElement();
+            writer.WriteEndElement();
+        }
+    }
+
+}
+
+
+
+class TestCustomDictionary
+{
+
+    public void TryThisExample()
+    {
+        SerializableDictionary&lt;ItemKey, ItemValue&gt; items = new
+            SerializableDictionary&lt;ItemKey, ItemValue&gt;(new ItemKey.EqualityComparer());
+
+        ItemValue item = new ItemValue();
+        item.Key = new ItemKey();
+        item.Key.SomeKey1 = "abc";
+        item.Key.SomeKey2 = "123";
+        item.SomeText = "Test 1";
+        items.Add(item.Key, item);
+
+        item = new ItemValue();
+        item.Key = new ItemKey();
+        item.Key.SomeKey1 = "def";
+        item.Key.SomeKey2 = "456";
+        item.SomeText = "Test 2";
+        items.Add(item.Key, item);
+
+
+        // Try to get an item
+        item = new ItemValue();
+        item.Key = new ItemKey();
+        item.Key.SomeKey1 = "def";
+        item.Key.SomeKey2 = "456";
+
+        item = items[item.Key];
+
+    }
+
+
+
+}</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>Collections</Category>
+        <Language>C#</Language>
+        <Public>true</Public>
+        <Name>Using ICloneable to make a deep copy</Name>
+        <Group>www.snippetmanager.net</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>Collections</Category>
+          <Language>C#</Language>
+          <Public>true</Public>
+          <Name>Using ICloneable to make a deep copy</Name>
+          <Group>www.snippetmanager.net</Group>
+        </Key>
+        <Keywords>Deep copy, clone, ICloneable</Keywords>
+        <Imports>using System;
+using System.Collections.Generic;
+using System.Text;</Imports>
+        <Code>// Shows how to return a deep copy clone of an object.
+
+class CloneTest : ICloneable
+{
+    public int SomeProperty { get; set; }
+
+    public object Clone()
+    {
+        CloneTest clone = new CloneTest();
+        clone.SomeProperty = this.SomeProperty;
+        return clone;
+
+        // If we only have properties to clone then we 
+        // could simplify by returning a "shallow" copy:
+        //return this.MemberwiseClone(); 
+    }
+
+    public void TryThisExample()
+    {
+        // Clone an object
+        CloneTest original = new CloneTest();
+        original.SomeProperty = 123;
+
+        CloneTest clone = (CloneTest)original.Clone();
+
+        // Now both will have the same state:
+        Console.Write(original.SomeProperty);
+        Console.Write(clone.SomeProperty);
+
+    }
+}
+
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+</dictionary>
