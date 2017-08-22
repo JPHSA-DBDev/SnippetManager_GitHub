@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <Category>POWERSHELL_MISC</Category>
+  <Category>POWERSHELL_Network_subnet_IP_DNS_etc</Category>
   <Language>VBSCRIPT</Language>
   <Public>false</Public>
-  <Name>RESTART_REMOTE_computers</Name>
+  <Name>Computer_Age</Name>
   <Group>My Snippets</Group>
 </SnippetKey>
