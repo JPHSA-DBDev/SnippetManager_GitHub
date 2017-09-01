@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <Category>VBA_EXCEL_String</Category>
-  <Language>VB</Language>
+  <Category>SELECT_COMPLEX</Category>
+  <Language>SQLSERVER2K SQL</Language>
   <Public>false</Public>
-  <Name>Count_occurance_of_specified_character</Name>
+  <Name>Calculate_GetString_Between_Pattern_OfCharacters</Name>
   <Group>My Snippets</Group>
 </SnippetKey>
