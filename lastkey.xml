@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <Category>POWERSHELL_Security</Category>
-  <Language>VBSCRIPT</Language>
+  <Category>VBA_ACCESS_Button</Category>
+  <Language>VB</Language>
   <Public>false</Public>
-  <Name>Certifcates_on_Remote_Computer</Name>
+  <Name>Export_records_to_Excel_on_Desktop</Name>
   <Group>My Snippets</Group>
 </SnippetKey>
