@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <Category>Table</Category>
+  <Category>MISC</Category>
   <Language>SQLSERVER2K SQL</Language>
   <Public>false</Public>
-  <Name>Update_and_Replace</Name>
+  <Name>DELETE_WHERE</Name>
   <Group>My Snippets</Group>
 </SnippetKey>
