@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <Category>MISC</Category>
-  <Language>SQLSERVER2K SQL</Language>
+  <Category>POWERSHELL_Files_Folders_Directories</Category>
+  <Language>VBSCRIPT</Language>
   <Public>false</Public>
-  <Name>DELETE_WHERE</Name>
+  <Name>FOLDERS_ThatDoNotInherit_working_version</Name>
   <Group>My Snippets</Group>
 </SnippetKey>
