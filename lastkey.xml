@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <Category>POWERSHELL_Files_Folders_Directories</Category>
+  <Category>POWERSHELL_Objects</Category>
   <Language>VBSCRIPT</Language>
   <Public>false</Public>
-  <Name>FOLDERS_ThatDoNotInherit_working_version</Name>
+  <Name>Example_1_h_Where-Object_to_filter</Name>
   <Group>My Snippets</Group>
 </SnippetKey>
