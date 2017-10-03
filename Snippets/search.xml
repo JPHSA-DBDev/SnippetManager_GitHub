@@ -1,2 +1,155 @@
 <?xml version="1.0" encoding="utf-8"?>
-<dictionary />
+<dictionary>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Remoting</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>about_POWERSHELL_Remoting</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Remoting</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>about_POWERSHELL_Remoting</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>about_POWERSHELL_Remoting
+
+https://msexchange.me/2014/07/26/how-to-detect-whether-powershell-remoting-is-enabled/
+'To test whether powershell remoting is enabled
+'Just log on to the machine for which you want to Test this &amp; enter below commands
+&gt; Enter-PSSession -ComputerName localhost
+
+'If machine is not enabled for powershell remoting below is the output:
+' it shows a red error:  "Connecting to remote server failed..."
+
+'If machine is enabled for powershell remoting below is the output:
+[localhost]: PS C:\Users</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Remoting</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>How_To_from_PluralSight</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Remoting</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>How_To_from_PluralSight</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>&lt;#'-----------------------------------------------------------------------------
+  Beginning PowerShell Scripting for Developers
+  Simple script that will just 'Do Something'
+
+  Author: Robert C. Cain | @ArcaneCode | arcanecode@gmail.com
+          http://arcanecode.com
+ 
+  This module is Copyright (c) 2015 Robert C. Cain. All rights reserved.
+  The code herein is for demonstration purposes. No warranty or guarentee
+  is implied or expressly granted. 
+  This module may not be reproduced in whole or in part without the express
+  written consent of the author. 
+-----------------------------------------------------------------------------#&gt;
+
+
+#'-----------------------------------------------------------------------------#'
+#' A few definitions, the "remote" computer is the machine you want to remote
+#' control from PowerShell. The "local" computer is the one you are using,
+#' i.e. running PowerShell on. 
+#'-----------------------------------------------------------------------------#'
+
+#' First, you will need to enable remoting on the computer you want to control
+#' ON the REMOTE COMPUTER, enter the command below. (-Force will run without
+#' prompts)
+
+Enable-PSRemoting -Force
+
+#' If you are NOT running on a domain, for example doing this on a home
+#' network, you will need to do a few other things. 
+#' On both the remote computer and the local computer, run:
+#' This tells it to trust ALL hosts (!!!!)
+
+Set-Item wsman:\localhost\client\trustedhosts *
+
+#' Instead of an *, you could specify the IP Addresses of the machines. 
+
+#' You will then need to restart the Windows Remote Management service
+#' on both computers.
+Restart-Service WinRM
+
+#' On the LOCAL computer you are using, you can test by using Test-WSMan
+#' followed by the name of the remote computer. 
+#' wsman
+Test-WSMan ACSrv
+
+#' Now execute a command on the remote system
+#' The Script block could be stored in a variable
+Invoke-Command -ComputerName BCC-EXPLORER3DB `
+               -ScriptBlock { Get-ChildItem C:\ } `
+               -Credential glenng
+#' It immediately challenges me for my password, then it runs successfully
+
+
+#' You can also open up a PowerShell window which will execute
+#' on the remote computer
+Enter-PSSession -ComputerName BCC-EXPLORER3 -Credential glenng
+
+#' Now the console screen shows that it is actually on the remote server:
+#' [BCC-EXPLORER3]: PS C:\Users\glenng\Documents&gt; 
+
+#' To exit the remote server in the console window:
+exit
+
+#' In the PowerShell ISE there is an icon in the menu bar to launch a remote session
+#' It will ask for the computer and my UserID, then challenge me for the password.
+#' When it succeeds it will open a new tab in the ISE that is on the remote computer
+
+
+#'-----------------------------------------------------------------------------#'
+#' Fix for network connection profile public {this was not a problem for me at BCC}
+#'-----------------------------------------------------------------------------#'
+Get-NetConnectionProfile           #' I think this is not available in Windows 7
+
+#' Temporarily Set to Private
+Set-NetConnectionProfile `
+  -InterfaceAlias 'vEthernet (HWired)' `
+  -NetworkCategory Private
+
+Set-NetConnectionProfile `
+  -InterfaceAlias 'vEthernet (Internal Ethernet Port Windows Phone Emulator Internal Switch)' `
+  -NetworkCategory Private
+
+
+#' Put them back
+Set-NetConnectionProfile `
+  -InterfaceAlias 'vEthernet (HWired)' `
+  -NetworkCategory Public
+
+Set-NetConnectionProfile `
+  -InterfaceAlias 'vEthernet (Internal Ethernet Port Windows Phone Emulator Internal Switch)' `
+  -NetworkCategory Public
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+</dictionary>
