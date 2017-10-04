@@ -3,6 +3,6 @@
   <Category>POWERSHELL_Remoting</Category>
   <Language>VBSCRIPT</Language>
   <Public>false</Public>
-  <Name>New-PSSession__for_repeated_interaction_with_remote_computer</Name>
+  <Name>RDP_Remotely_enable_RDP</Name>
   <Group>My Snippets</Group>
 </SnippetKey>
