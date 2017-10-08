@@ -3,36 +3,669 @@
   <item>
     <key>
       <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>POWERSHELL_Remoting</Category>
+        <Category>POWERSHELL_Files_Folders_Directories</Category>
         <Language>VBSCRIPT</Language>
         <Public>false</Public>
-        <Name>about_POWERSHELL_Remoting</Name>
+        <Name>FOLDERS_that_do_not_inherit_permissions</Name>
         <Group>My Snippets</Group>
       </SnippetKey>
     </key>
     <value>
       <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
         <Key>
-          <Category>POWERSHELL_Remoting</Category>
+          <Category>POWERSHELL_Files_Folders_Directories</Category>
           <Language>VBSCRIPT</Language>
           <Public>false</Public>
-          <Name>about_POWERSHELL_Remoting</Name>
+          <Name>FOLDERS_that_do_not_inherit_permissions</Name>
           <Group>My Snippets</Group>
         </Key>
         <Keywords />
         <Imports />
-        <Code>about_POWERSHELL_Remoting
+        <Code>
 
-https://msexchange.me/2014/07/26/how-to-detect-whether-powershell-remoting-is-enabled/
-'To test whether powershell remoting is enabled
-'Just log on to the machine for which you want to Test this &amp; enter below commands
-&gt; Enter-PSSession -ComputerName localhost
+=========================
+https://stackoverflow.com/questions/25126877/getting-names-of-folders-that-do-not-inherit-permissions
 
-'If machine is not enabled for powershell remoting below is the output:
-' it shows a red error:  "Connecting to remote server failed..."
+'CMD
+&gt;DIR "C:\temp" -directory -recurse | GET-ACL | where {$_.Access.IsInherited -eq $false}
 
-'If machine is enabled for powershell remoting below is the output:
-[localhost]: PS C:\Users</Code>
+'POWERSHELL:
+'The concept is: if a folder has at least 1 inherited access rule, 
+'	then inheritance is enabled, 
+'	if it has 0 inherited rules, inheritance is disabled.
+&gt; Get-ChildItem C:\temp -recurse | Select @{Name='Path';Expression={$_.FullName}},@{Name='InheritedCount';Expression={(Get-Acl $_.FullName | Select -ExpandProperty Access | Where { $_.IsInherited }).Count}} | Where { $_.InheritedCount -eq 0 } | Select Path
+
+=================================================================
+
+'	You can use Add-Member to add the path as a property on each ACE object:
+'	I also wrapped Get-Acl in a try block because it throws terminating errors.
+dir c:\temp -Directory -Recurse | ForEach-Object {
+    $Path = $_.FullName
+    try {
+        Get-Acl $Path | 
+            select -ExpandProperty Access | 
+            where { $_.IsInherited -eq $false } | 
+            Add-Member -MemberType NoteProperty -Name Path -Value $Path -PassThru
+    }
+    catch {
+        Write-Error $_
+    }
+}
+
+================================================================
+#'https://www.experts-exchange.com/questions/28395713/How-to-enumerate-which-folders-are-not-inheriting-permissions-from-parent-folder.html
+
+NOTE: the output did not make sense, it only listed the subfolders, not sub-sub folders
+	  and the output did not match what I was observing in the permissions
+
+#requires -version 3
+
+$Path = "c:\temp"
+$Folders = Get-ChildItem $Path -Directory -Recurse
+$statuses = @()
+
+Foreach ($Folder in $Folders)
+{
+    $ACLs = Get-Acl -Path $Folder.fullname | ForEach-Object { $_.Access }
+    Foreach ($ACL in $ACLs)
+    {
+        if (!($ACL.IsInherited))
+        {
+                $status = [ordered]@{ 
+                FolderPath = $Folder.Fullname;
+                IsInherited = $ACL.IsInherited;
+                InheritanceFlags = $ACL.InheritanceFlags;
+                PropagationFlags = $ACL.PropagationFlags }
+            $statuses += (New-Object -TypeName PSObject -Property $status)
+            break;
+        }
+        
+    }
+}
+$statuses | Export-Csv -Path c:\temp\report.csv -Encoding ASCII -NoTypeInformation </Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Files_Folders_Directories</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>FOLDERS_ThatDoNotInherit_working_version</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Files_Folders_Directories</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>FOLDERS_ThatDoNotInherit_working_version</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>#requires -version 3
+
+$Path = "G:\Administration Division"
+$Folders = Get-ChildItem $Path -Directory -Recurse
+$statuses = @()
+
+Foreach ($Folder in $Folders)
+{
+    $ACLs = Get-Acl -Path $Folder.fullname | ForEach-Object { $_.Access }
+    Foreach ($ACL in $ACLs)
+    {
+        if (!($ACL.IsInherited))
+        {
+                $status = [ordered]@{ 
+                FolderPath = $Folder.Fullname;
+                IsInherited = $ACL.IsInherited;
+                InheritanceFlags = $ACL.InheritanceFlags;
+                PropagationFlags = $ACL.PropagationFlags }
+            $statuses += (New-Object -TypeName PSObject -Property $status)
+            break;
+        }
+        
+    }
+}
+$statuses | Export-Csv -Path c:\JUNK\AdministrationDivision_DoNotInherit.csv -Encoding ASCII -NoTypeInformation </Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Files_Folders_Directories</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>LIST_Files_in_Folders_and_SubFolders</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Files_Folders_Directories</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>LIST_Files_in_Folders_and_SubFolders</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>'LIST_Files_in_Folders_and_SubFolders
+
+ 'Get all the PDF files in the folder/subfolders of  "D:\xplr" and write as .csv to: "C:\JUNK\directory.csv"
+ Get-ChildItem -Path D:\xplr -Include *.pdf -Recurse | Export-Csv -Force -NoTypeInformation C:\JUNK\directory.csv
+
+'Just a list of files and folders in a folder:, but not subfolders
+Get-ChildItem -Path E:\music
+
+'This would be the command to see only the directories at the E:\Music level:
+Get-ChildItem -Path E:\music –Directory
+
+'To see only the files at this level, I change it to use the –File switch:
+Get-ChildItem -Path E:\music –File
+
+'When I use the –Recurse switch, I can see the folders in addition to the files inside each of the folders.
+' but it is not clean like a database, but rather formatted and broken up by folder
+Get-ChildItem -Path E:\music\Santana –Recurse
+
+'This sorts it, BUT still not right for a database, b/c it is formatted, and broken up by folders
+Get-ChildItem -Path E:\music\Santana -Recurse -File | sort length –Descending
+
+'tems that are normally invisible in File Explorer or Cmd.exe are not displayed in the output of a Get-ChildItem command. 
+'	To display hidden items, use the Force parameter of Get-ChildItem. For example:
+Get-ChildItem -Path C:\Windows -Force
+
+'To find all files that begin with the letter x in the Windows directory, type:
+ Get-ChildItem -Path C:\Windows\x*
+ 
+'To find all files whose names begin with x or z, type:
+Get-ChildItem -Path C:\Windows\[xz]*
+
+'You can omit files that have any of these numbers in their names by using the Exclude parameter with the pattern *[9516]*:
+Get-ChildItem -Path C:\WINDOWS\System32\w*32*.dll -Exclude *[9516]*
+
+'To specify a recursive search for files whose names match a special pattern, use the -Include parameter.
+&gt; Get-ChildItem -Path C:\Windows -Include *.dll -Recurse -Exclude [a-y]*.dll
+
+'This one-line command will invoke Windows PowerShell to write a directory listing to a CSV file, 
+'which is easy to use in spreadsheets and database programs. 
+'It recurses subfolders, and it includes the following information: 
+'			full file name, creation time, last modified time, file size, and owner (last modified by).
+
+
+powershell "Get-ChildItem -Recurse c:\directory\to\scan\ | ForEach-Object {$_ | add-member -name "Owner" -membertype noteproperty -value (get-acl $_.fullname).owner -passthru} | Sort-Object fullname | Select FullName,CreationTime,LastWriteTime,Length,Owner | Export-Csv -Force -NoTypeInformation c:\folder\to\directory.csv"
+
+
+'to limit to folders add 
+	"| ?{ $_.PSIsContainer }" 
+	'before 
+	"| ForEach-Object" 		'(no quotation marks)
+	
+'this version uses relative paths (code not tested)
+powershell "Get-ChildItem -Recurse . | ?{ $_.PSIsContainer } | ForEach-Object {$_ | add-member -name "Owner" -membertype noteproperty -value (get-acl $_.fullname).owner -passthru} | Sort-Object fullname | Select FullName,CreationTime,LastWriteTime,Length,Owner | Export-Csv -Force -NoTypeInformation .\directory.csv" 	
+
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+
+Get-ChildItem -Recurse 'W:\Equipment Titles and Registrations' |
+     ForEach-Object {$_ |
+                            add-member -name "Owner" -membertype noteproperty -value (get-acl $_.fullname).Owner -passthru       
+                    } |   
+     ForEach-Object {$_ |
+                            add-member -name "TheFileName" -membertype noteproperty -value  $_.name -passthru    
+                    } |                                    
+       Sort-Object fullname |
+        Select FullName,CreationTime,LastWriteTime,Length,Owner,TheFileName |
+         Export-Csv -Force -NoTypeInformation c:\directory.csv
+
+'OUTPUT:============================================================================================================
+FullName																CreationTime	LastWriteTime	Length	Owner					TheFileName
+C:\Junk\Report Project1													11/6/2015 16:47	11/6/2015 16:47			BUILTIN\Administrators	Report Project1
+C:\Junk\Report Project1\Report Project1									11/6/2015 16:47	11/6/2015 16:47			BUILTIN\Administrators	Report Project1
+C:\Junk\Report Project1\Report Project1.sln								11/6/2015 16:47	11/6/2015 16:47	1342	BUILTIN\Administrators	Report Project1.sln
+C:\Junk\Report Project1\Report Project1\Report Project1.rptproj			11/6/2015 16:47	2/6/2014 13:49	204		BUILTIN\Administrators	Report Project1.rptproj
+C:\Junk\Report Project1\Report Project1\Report Project1.rptproj.user	11/6/2015 16:47	11/9/2015 7:45	1076	BUILTIN\Administrators	Report Project1.rptproj.user
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Loops</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>where-object_to_filter_from_a_Pipe</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Loops</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>where-object_to_filter_from_a_Pipe</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+'This will output just the powershell proces:
+&gt;get-process | where-object {$_.processname -eq 'powershell'}
+
+
+'Filter for processes that have used more than 1 second of cpu:
+
+&gt;get-process | where-object { $_.CPU -gt 1 } | foreach-object { $_.processname + "is over threshold" }</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_MISC</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>Interating_over_Objects</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_MISC</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>Interating_over_Objects</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+'there are 2 methods for iterating thru objects and are often confused:
+
+ForEach-Object cmdlet and its aliases foreach and %.
+
+foreach( in ){} statement.
+
+'As you can see the main reason for the confusion is that Foreach-Object has an alias of foreach which can be confused with the statement. 
+'Each method will take a collection and process the objects in a Scriptblock but each behaves differently, 
+'however and its use will vary case by case.
+
+=======================================================================================================
+'The ForEach-Object 
+'	cmdlet takes a stream of objects from the pipeline 
+'	and processes each and it uses less memory do to garbage control, 
+'	as objects gets processed and they are passed thru the pipeline they get removed from memory. 
+'	The cmdlet takes 4 main parameters:
+
+Begin &lt;Script block&gt; 		'executed before processing all objects
+Process &lt;Script block&gt; 		'executed per each object being processed
+End &lt;Script block &gt; 		'to be executed after all objects have been processing all objects.
+InputObject &lt;PSObject&gt; 		'to take actions against. Typically this is taken thru the pipeline.
+
+'The ScriptBlocks parameters are also positional
+
+PS C:\&gt; 1..5 | ForEach-Object { $Sum = 0 } { $Sum += $_ } { $Sum } 
+15 
+
+
+'To skip to the next object to be process in ForEach-Object the keyword Continue is used. 
+'For exiting the loop inside of a ForEach-Object the break keyword is used.
+
+C:\PS&gt; $Numbers = 4..7 
+C:\PS&gt; 1..10 | foreach-object { if ($Numbers -contains $_) { continue }; $_ } 
+1 
+2 
+3 
+
+
+=======================================================================================================
+'The foreach( in ){} statement 
+'	places on each iteration an element of a collection in to memory first and then processes each. 
+'	(Not good for extremely large collections on memory constrained systems). 
+'	Since the collection being worked on is loaded in to memory it tends to be faster than the ForEach-Object cmdlet.
+
+'To skip to the next object to be process in foreach statement the keyword continue is used. 
+'	For exiting the loop inside of a foreach statement the break keyword is used.
+
+'The foreach statement has a special variable called $foreach 
+'	with 2 special methods that can be used: 
+'	
+'	$foreach.MoveNext() to skip to the next element in the collection 
+'		and continue to process the next element in the collection.
+'		Returns a Boolean true value that should be handled.
+'	$foreach.Current to represent the current element being processed
+
+PS &gt;foreach ($i in (1..10)){ 
+&gt;&gt;    if ($i -gt 5){ 
+&gt;&gt;        continue 
+&gt;&gt;    } 
+&gt;&gt;    $i 
+&gt;&gt; } 
+&gt;&gt;
+1 
+2 
+3 
+4 
+5</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_MISC</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>use_ARRAY_or_WHERE_or_ForEach</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_MISC</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>use_ARRAY_or_WHERE_or_ForEach</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+http://stackoverflow.com/questions/16678870/powershell-get-process-string-as-name
+
+'1] could give it an array:
+===========================
+$Proc = @("Firefox","iexplore")		'Declares an array explicitly, then checks for each running process.
+Get-Process $Proc
+
+'2] Or could use a WHERE
+=======================
+Get-Process | Where-Object {$_.Name -eq "Firefox"}
+
+
+'OR
+Get-Process | Where-Object {$_.handles -gt 200 -or $_.name -eq "svchost"}
+
+
+'OR Where with LIKE operator and wild card:
+'LIKE operator: https://mcpmag.com/articles/2012/07/31/pshell-like-operator.aspx 
+Get-ChildItem c:\scripts | Where-Object {$_.name -like "*test*"}
+
+
+'To do "stuff" with it, just pipe the objects into a script block.
+
+Get-Process | Where-Object {$_.Name -eq "Firefox"} | fl $_.ID
+
+'3] ForEach-Object as mentioned, and loop through them:
+===========================================================
+
+Get-Process $Proc | ForEach-Object {If($_.Path -contains "C:\Program Files*"){Write-host "Bad Directory"} else{ write-host "Safe"}}
+
+'If the running .exe above is running from C:\Program Files* then its writes out "Safe", otherwise it writes "Bad Directory".</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Processes</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>Given_List_of_Software_kill_The_Associated_Processes</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Processes</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>Given_List_of_Software_kill_The_Associated_Processes</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>$softwarelist = 'chrome|firefox|iexplore|opera'
+get-process |
+    Where-Object {$_.ProcessName -match $softwarelist} |
+    stop-process -force
+    
+    
+'NOTE:  $softwarelist isn't an array, it is a string. To make an array, you'd have to split it, e.g. $softwarelist -split '|'    
+
+'You can also pass multiple processes to Get-Process, e.g.
+
+Get-Process -Name 'chrome','firefox','iexplore','opera' | Stop-Process -Force
+
+
+
+========================================================================
+
+
+' First, create an array of strings.
+
+$array =  @("chrome","firefox","iexplore","opera")
+
+
+'Next, loop through each item in your array, and stop the process.
+
+foreach ($process in $array)
+{
+    Stop-Process -Name $process
+}
+
+===========================================================================
+'This kills the user sessions of Eclipse on BCC-EXPLORER3
+
+$process = "pxplus.exe"
+
+Get-WmiObject Win32_Process -Namespace "root\cimv2"  -Filter "name = '$process'"  |  Select CommandLine,ProcessID  | Where-Object {$_.CommandLine -like "*id=T*"} | Foreach-Object {Stop-Process $_.ProcessID -Force} </Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Profile</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>Sample_Profile_3__CopyModule.psm1</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Profile</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>Sample_Profile_3__CopyModule.psm1</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>Function Get-OperatingSystemVersion
+{
+ (Get-WmiObject -Class Win32_OperatingSystem).Version
+} #'end Get-OperatingSystemVersion
+
+Function Test-ModulePath
+{
+ $VistaPath = "$env:userProfile\documents\WindowsPowerShell\Modules"
+ $XPPath =  "$env:Userprofile\my documents\WindowsPowerShell\Modules" 
+ if ([int](Get-OperatingSystemVersion).substring(0,1) -ge 6) 
+   { 
+     if(-not(Test-Path -path $VistaPath))
+       {
+         New-Item -Path $VistaPath -itemtype directory | Out-Null
+       } #'end if
+   } #'end if
+ Else 
+   {  
+     if(-not(Test-Path -path $XPPath))
+       {
+         New-Item -path $XPPath -itemtype directory | Out-Null
+       } #'end if
+   } #'end else
+} #'end Test-ModulePath
+
+Function Copy-Module([string]$name)
+{
+ $UserPath = $env:PSModulePath.split(";")[0]
+ $ModulePath = Join-Path -path $userPath `
+               -childpath (Get-Item -path $name).basename
+ New-Item -path $modulePath -itemtype directory | Out-Null
+ Copy-item -path $name -destination $ModulePath | Out-Null
+} #'end function copy-module
+
+Function Copy-Modules
+{
+ Param([string]$path = "c:\fso")
+ Test-ModulePath
+ Get-ChildItem -Path $path -Include *.psm1,*.psd1 -Recurse |
+ Foreach-Object { Copy-Module -name $_.fullName }
+} #'end function copy-modules
+
+Export-ModuleMember -Function copy-modules</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Profile</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>Sample_Profile_3__MenuModule.psm1</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Profile</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>Sample_Profile_3__MenuModule.psm1</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>#' MenuModule.psm1
+#' ed wilson
+
+Function Get-Fonts
+{
+#'modified function based upon comment by Tome Tanasovski made on blog
+#'
+ Param($fontSize = 16,  
+ $milliSecs = 500 
+) 
+$font = $psISE.Options.FontName 
+$size = $psISE.Options.FontSize 
+$lastfont = $psISE.Options.FontName
+[windows.media.fonts]::systemTypeFaces |
+Select-Object -Property fontFamily |
+ForEach-Object { 
+ if ($_.fontFamily.source -ne $psISE.Options.FontName) 
+  { 
+   $_.fontFamily.source 
+   $psISE.Options.FontName = $_.fontFamily.source 
+   $psISE.Options.FontSize = $fontSize 
+   Start-Sleep -Milliseconds $millisecs 
+  } #'end if
+} #'end foreach-object 
+$psise.options.FontName = $font 
+$psISE.Options.FontSize = $size 
+} #'end function get-fonts
+
+Function Get-PsIseColorValues
+{
+ #' wes-8-28-10
+ [windows.media.colors] | Get-Member -Static -MemberType property |  
+ ForEach-Object {  
+ $psISE.Options.OutputPaneTextBackgroundColor =
+   ([windows.media.colors]::$($_.name)).tostring()  
+ "$($_.name) `t $([windows.media.colors]::$($_.name))"}
+ } #'end function Get-PsISEColorValues
+ 
+ Function Set-PsISE
+ {
+  #' Set-PsISEcolorsAndFont.ps1
+ #' fonts
+ $psISE.Options.FontName = 'Kartika' 
+ $psISE.Options.FontSize = 16
+ # output pane
+ $psISE.Options.OutputPaneBackgroundColor = '#FFFFEFD5' 
+ $psISE.Options.OutputPaneTextBackgroundColor = '#FFFFEFD5' 
+ $psISE.Options.OutputPaneForegroundColor = '#FF000000' 
+ #' command pane
+ $psISE.Options.CommandPaneBackgroundColor = '#FFFAEBD7' 
+ #' script pane
+ $psISE.Options.ScriptPaneBackgroundColor = '#FFFAEBD7' 
+ #' tokens
+ $psISE.Options.TokenColors.item('Command') = '#FFA0522D' 
+ $psISE.Options.TokenColors.item('Operator') = '#FFA0522D' 
+ $psISE.Options.TokenColors.item('Unknown') = '#FFFFFFFF' 
+ $psISE.Options.TokenColors.item('Member') = '#FFFFFFFF' 
+ $psISE.Options.TokenColors.item('Position') = '#FFFFFFFF' 
+ $psISE.Options.TokenColors.item('GroupEnd') = '#FFFFFFFF' 
+ $psISE.Options.TokenColors.item('GroupStart') = '#FFFFFFFF' 
+ $psISE.Options.TokenColors.item('LineContinuation') = '#FFFFFFFF' 
+ $psISE.Options.TokenColors.item('NewLine') = '#FFFFFFFF' 
+ $psISE.Options.TokenColors.item('StatementSeparator') = '#FFFFFFFF' 
+ $psISE.Options.TokenColors.item('Comment') = '#FFAEAEAE' 
+ $psISE.Options.TokenColors.item('String') = '#A2BC13' 
+ $psISE.Options.TokenColors.item('Keyword') = '#FFFFDE00' 
+ $psISE.Options.TokenColors.item('Attribute') = '#FF84A7C1' 
+ $psISE.Options.TokenColors.item('Type') = '#FF84A7C1' 
+ $psISE.Options.TokenColors.item('Variable') = '#EE9A00' 
+ $psISE.Options.TokenColors.item('CommandParameter') = '#FFFFDE00' 
+ $psISE.Options.TokenColors.item('CommandArgument') = '#FFFFFFFF' 
+ $psISE.Options.TokenColors.item('Number') = '#FF4169E1' 
+ $psISE.Options.TokenColors.item('LoopLabel') = '#FF4169E1' 
+} #'end function Set-PsISE 
+
+Function Add-MenuItems
+{
+ #'add-menuitems.ps1
+#' wes-9-4-10
+#' this also adds support for Snippets
+$RestoreRoot = $psISE.CurrentPowerShellTab.AddOnsMenu.Submenus.Add( 
+   "Restore",$null,$null) 
+$RestoreRoot.Submenus.Add("RestoreALLDefaults",  
+ {$psISE.Options.RestoreDefaults()}, "Ctrl+Alt+R") | out-null
+$RestoreRoot.SubMenus.Add("RestoreTokenColorDefaults",  
+ {$psISE.Options.RestoreDefaultTokenColors()}, "Ctrl+Alt+T") | out-null
+
+$GetOptions = $psISE.CurrentPowerShellTab.AddOnsMenu.Submenus.Add( 
+   "GetOptions",$null,$null)  
+$GetOptions.SubMenus.Add("GetFonts", { Get-fonts -milliseconds 100 },$null) | out-null
+$GetOptions.SubMenus.Add("GetColors", { Get-PsIseColorValues },$null) | out-null
+#'these lines add snippet support
+$CodeSnippets = $psISE.CurrentPowerShellTab.AddOnsMenu.Submenus.Add( 
+"CodeSnippets",$null,$null)
+$CodeSnippets.Submenus.Add("BrowseSnippet",
+{Get-CodeSnippetV2 -initialDirectory $snipHome}, "Ctrl+Alt+B") | out-null
+$CodeSnippets.SubMenus.Add("AddSnippet",
+{Get-CodeSnippetV2 -initialDirectory $snipHome -add}, "Ctrl+Alt+A") |out-null
+#'end snippet support
+$psISE.CurrentPowerShellTab.AddOnsMenu.Submenus.Add("MyCustomISE", { Set-PsISE },$null) | out-null
+$psISE.CurrentPowerShellTab.AddOnsMenu.Submenus.Add("ClearMenu",  
+   { $psISE.CurrentPowerShellTab.AddOnsMenu.Submenus.Clear() }, $null) |out-null
+} #'end function Add-MenuItems</Code>
       </SnippetValue>
     </value>
   </item>
@@ -42,7 +675,7 @@ https://msexchange.me/2014/07/26/how-to-detect-whether-powershell-remoting-is-en
         <Category>POWERSHELL_Remoting</Category>
         <Language>VBSCRIPT</Language>
         <Public>false</Public>
-        <Name>How_To_from_PluralSight</Name>
+        <Name>Get-UserSession</Name>
         <Group>My Snippets</Group>
       </SnippetKey>
     </key>
@@ -52,103 +685,472 @@ https://msexchange.me/2014/07/26/how-to-detect-whether-powershell-remoting-is-en
           <Category>POWERSHELL_Remoting</Category>
           <Language>VBSCRIPT</Language>
           <Public>false</Public>
-          <Name>How_To_from_PluralSight</Name>
+          <Name>Get-UserSession</Name>
           <Group>My Snippets</Group>
         </Key>
         <Keywords />
         <Imports />
-        <Code>&lt;#'-----------------------------------------------------------------------------
-  Beginning PowerShell Scripting for Developers
-  Simple script that will just 'Do Something'
+        <Code>
 
-  Author: Robert C. Cain | @ArcaneCode | arcanecode@gmail.com
-          http://arcanecode.com
- 
-  This module is Copyright (c) 2015 Robert C. Cain. All rights reserved.
-  The code herein is for demonstration purposes. No warranty or guarentee
-  is implied or expressly granted. 
-  This module may not be reproduced in whole or in part without the express
-  written consent of the author. 
------------------------------------------------------------------------------#&gt;
+#'FROM: https://gallery.technet.microsoft.com/scriptcenter/Get-UserSessions-Parse-b4c97837
+
+#' To uset it:
+#' &gt; Get-UserSession -ComputerName BCC-EXPLORER3
 
 
-#'-----------------------------------------------------------------------------#'
-#' A few definitions, the "remote" computer is the machine you want to remote
-#' control from PowerShell. The "local" computer is the one you are using,
-#' i.e. running PowerShell on. 
-#'-----------------------------------------------------------------------------#'
+function Get-UserSession {
+&lt;#  
+.SYNOPSIS  
+    Retrieves all user sessions from local or remote computers(s)
 
-#' First, you will need to enable remoting on the computer you want to control
-#' ON the REMOTE COMPUTER, enter the command below. (-Force will run without
-#' prompts)
+.DESCRIPTION
+    Retrieves all user sessions from local or remote computer(s).
+    
+    Note:   Requires query.exe in order to run
+    Note:   This works against Windows Vista and later systems provided the following registry value is in place
+            HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server\AllowRemoteRPC = 1
+    Note:   If query.exe takes longer than 15 seconds to return, an error is thrown and the next computername is processed.  Suppress this with -erroraction silentlycontinue
+    Note:   If $sessions is empty, we return a warning saying no users.  Suppress this with -warningaction silentlycontinue
 
-Enable-PSRemoting -Force
+.PARAMETER computername
+    Name of computer(s) to run session query against
+              
+.parameter parseIdleTime
+    Parse idle time into a timespan object
 
-#' If you are NOT running on a domain, for example doing this on a home
-#' network, you will need to do a few other things. 
-#' On both the remote computer and the local computer, run:
-#' This tells it to trust ALL hosts (!!!!)
+.parameter timeout
+    Seconds to wait before ending query.exe process.  Helpful in situations where query.exe hangs due to the state of the remote system.
+                    
+.FUNCTIONALITY
+    Computers
 
-Set-Item wsman:\localhost\client\trustedhosts *
+.EXAMPLE
+    Get-usersession -computername "server1"
 
-#' Instead of an *, you could specify the IP Addresses of the machines. 
+    Query all current user sessions on 'server1'
 
-#' You will then need to restart the Windows Remote Management service
-#' on both computers.
-Restart-Service WinRM
+.EXAMPLE
+    Get-UserSession -computername $servers -parseIdleTime | ?{$_.idletime -gt [timespan]"1:00"} | ft -AutoSize
 
-#' On the LOCAL computer you are using, you can test by using Test-WSMan
-#' followed by the name of the remote computer. 
-#' wsman
-Test-WSMan ACSrv
+    Query all servers in the array $servers, parse idle time, check for idle time greater than 1 hour.
 
-#' Now execute a command on the remote system
-#' The Script block could be stored in a variable
-Invoke-Command -ComputerName BCC-EXPLORER3DB `
-               -ScriptBlock { Get-ChildItem C:\ } `
-               -Credential glenng
-#' It immediately challenges me for my password, then it runs successfully
+.NOTES
+    Thanks to Boe Prox for the ideas - http://learn-powershell.net/2010/11/01/quick-hit-find-currently-logged-on-users/
 
+.LINK
+    http://gallery.technet.microsoft.com/Get-UserSessions-Parse-b4c97837
 
-#' You can also open up a PowerShell window which will execute
-#' on the remote computer
-Enter-PSSession -ComputerName BCC-EXPLORER3 -Credential glenng
+#&gt; 
+    [cmdletbinding()]
+    Param(
+        [Parameter(
+            Position = 0,
+            ValueFromPipeline = $True)]
+        [string[]]$ComputerName = "localhost",
 
-#' Now the console screen shows that it is actually on the remote server:
-#' [BCC-EXPLORER3]: PS C:\Users\glenng\Documents&gt; 
+        [switch]$ParseIdleTime,
 
-#' To exit the remote server in the console window:
-exit
+        [validaterange(0,120)]
+        [int]$Timeout = 15
+    )             
+    Process
+    {
+        ForEach($computer in $ComputerName)
+        {
+        
+            #start query.exe using .net and cmd /c.  We do this to avoid cases where query.exe hangs
 
-#' In the PowerShell ISE there is an icon in the menu bar to launch a remote session
-#' It will ask for the computer and my UserID, then challenge me for the password.
-#' When it succeeds it will open a new tab in the ISE that is on the remote computer
+                #build temp file to store results.  Loop until we see the file
+                    Try
+                    {
+                        $Started = Get-Date
+                        $tempFile = [System.IO.Path]::GetTempFileName()
+                        
+                        Do{
+                            start-sleep -Milliseconds 300
+                            
+                            if( ((Get-Date) - $Started).totalseconds -gt 10)
+                            {
+                                Throw "Timed out waiting for temp file '$TempFile'"
+                            }
+                        }
+                        Until(Test-Path -Path $tempfile)
+                    }
+                    Catch
+                    {
+                        Write-Error "Error for '$Computer': $_"
+                        Continue
+                    }
 
+                #Record date.  Start process to run query in cmd.  I use starttime independently of process starttime due to a few issues we ran into
+                    $Started = Get-Date
+                    $p = Start-Process -FilePath C:\windows\system32\cmd.exe -ArgumentList "/c query user /server:$computer &gt; $tempfile" -WindowStyle hidden -passthru
 
-#'-----------------------------------------------------------------------------#'
-#' Fix for network connection profile public {this was not a problem for me at BCC}
-#'-----------------------------------------------------------------------------#'
-Get-NetConnectionProfile           #' I think this is not available in Windows 7
+                #we can't read in info or else it will freeze.  We cant run waitforexit until we read the standard output, or we run into issues...
+                #handle timeouts on our own by watching hasexited
+                    $stopprocessing = $false
+                    do
+                    {
+                    
+                        #check if process has exited
+                            $hasExited = $p.HasExited
+                
+                        #check if there is still a record of the process
+                            Try
+                            {
+                                $proc = Get-Process -id $p.id -ErrorAction stop
+                            }
+                            Catch
+                            {
+                                $proc = $null
+                            }
 
-#' Temporarily Set to Private
-Set-NetConnectionProfile `
-  -InterfaceAlias 'vEthernet (HWired)' `
-  -NetworkCategory Private
+                        #sleep a bit
+                            start-sleep -seconds .5
 
-Set-NetConnectionProfile `
-  -InterfaceAlias 'vEthernet (Internal Ethernet Port Windows Phone Emulator Internal Switch)' `
-  -NetworkCategory Private
+                        #If we timed out and the process has not exited, kill the process
+                            if( ( (Get-Date) - $Started ).totalseconds -gt $timeout -and -not $hasExited -and $proc)
+                            {
+                                $p.kill()
+                                $stopprocessing = $true
+                                Remove-Item $tempfile -force
+                                Write-Error "$computer`: Query.exe took longer than $timeout seconds to execute"
+                            }
+                    }
+                    until($hasexited -or $stopProcessing -or -not $proc)
+                    
+                    if($stopprocessing)
+                    {
+                        Continue
+                    }
 
+                    #if we are still processing, read the output!
+                        try
+                        {
+                            $sessions = Get-Content $tempfile -ErrorAction stop
+                            Remove-Item $tempfile -force
+                        }
+                        catch
+                        {
+                            Write-Error "Could not process results for '$computer' in '$tempfile': $_"
+                            continue
+                        }
+        
+            #handle no results
+            if($sessions){
 
-#' Put them back
-Set-NetConnectionProfile `
-  -InterfaceAlias 'vEthernet (HWired)' `
-  -NetworkCategory Public
+                1..($sessions.count - 1) | Foreach-Object {
+            
+                    #Start to build the custom object
+                    $temp = "" | Select ComputerName, Username, SessionName, Id, State, IdleTime, LogonTime
+                    $temp.ComputerName = $computer
 
-Set-NetConnectionProfile `
-  -InterfaceAlias 'vEthernet (Internal Ethernet Port Windows Phone Emulator Internal Switch)' `
-  -NetworkCategory Public
+                    #The output of query.exe is dynamic. 
+                    #strings should be 82 chars by default, but could reach higher depending on idle time.
+                    #we use arrays to handle the latter.
+
+                    if($sessions[$_].length -gt 5){
+                        
+                        #if the length is normal, parse substrings
+                        if($sessions[$_].length -le 82){
+                           
+                            $temp.Username = $sessions[$_].Substring(1,22).trim()
+                            $temp.SessionName = $sessions[$_].Substring(23,19).trim()
+                            $temp.Id = $sessions[$_].Substring(42,4).trim()
+                            $temp.State = $sessions[$_].Substring(46,8).trim()
+                            $temp.IdleTime = $sessions[$_].Substring(54,11).trim()
+                            $logonTimeLength = $sessions[$_].length - 65
+                            try{
+                                $temp.LogonTime = Get-Date $sessions[$_].Substring(65,$logonTimeLength).trim() -ErrorAction stop
+                            }
+                            catch{
+                                #Cleaning up code, investigate reason behind this.  Long way of saying $null....
+                                $temp.LogonTime = $sessions[$_].Substring(65,$logonTimeLength).trim() | Out-Null
+                            }
+
+                        }
+                        
+                        #Otherwise, create array and parse
+                        else{                                       
+                            $array = $sessions[$_] -replace "\s+", " " -split " "
+                            $temp.Username = $array[1]
+                
+                            #in some cases the array will be missing the session name.  array indices change
+                            if($array.count -lt 9){
+                                $temp.SessionName = ""
+                                $temp.Id = $array[2]
+                                $temp.State = $array[3]
+                                $temp.IdleTime = $array[4]
+                                try
+                                {
+                                    $temp.LogonTime = Get-Date $($array[5] + " " + $array[6] + " " + $array[7]) -ErrorAction stop
+                                }
+                                catch
+                                {
+                                    $temp.LogonTime = ($array[5] + " " + $array[6] + " " + $array[7]).trim()
+                                }
+                            }
+                            else{
+                                $temp.SessionName = $array[2]
+                                $temp.Id = $array[3]
+                                $temp.State = $array[4]
+                                $temp.IdleTime = $array[5]
+                                try
+                                {
+                                    $temp.LogonTime = Get-Date $($array[6] + " " + $array[7] + " " + $array[8]) -ErrorAction stop
+                                }
+                                catch
+                                {
+                                    $temp.LogonTime = ($array[6] + " " + $array[7] + " " + $array[8]).trim()
+                                }
+                            }
+                        }
+
+                        #if specified, parse idle time to timespan
+                        if($parseIdleTime){
+                            $string = $temp.idletime
+                
+                            #quick function to handle minutes or hours:minutes
+                            function Convert-ShortIdle {
+                                param($string)
+                                if($string -match "\:"){
+                                    [timespan]$string
+                                }
+                                else{
+                                    New-TimeSpan -Minutes $string
+                                }
+                            }
+                
+                            #to the left of + is days
+                            if($string -match "\+"){
+                                $days = New-TimeSpan -days ($string -split "\+")[0]
+                                $hourMin = Convert-ShortIdle ($string -split "\+")[1]
+                                $temp.idletime = $days + $hourMin
+                            }
+                            #. means less than a minute
+                            elseif($string -like "." -or $string -like "none"){
+                                $temp.idletime = [timespan]"0:00"
+                            }
+                            #hours and minutes
+                            else{
+                                $temp.idletime = Convert-ShortIdle $string
+                            }
+                        }
+                
+                        #Output the result
+                        $temp
+                    }
+                }
+            }            
+            else
+            {
+                Write-Warning "'$computer': No sessions found"
+            }
+        }
+    }
+}</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_ScheduledTask</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>BCC_Kill_all_the_EclipseApplicationProcesses_from_Users</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_ScheduledTask</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>BCC_Kill_all_the_EclipseApplicationProcesses_from_Users</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>$process = "pxplus.exe"
+
+Get-WmiObject Win32_Process -Namespace "root\cimv2"  -Filter "name = '$process'"  |  Select CommandLine,ProcessID  | Where-Object {$_.CommandLine -like "*id=T*"} | Foreach-Object {Stop-Process $_.ProcessID -Force} 
+
+#===========================================================================
+# Log to the file after the script has run
+#============================================================================
+$path = 'C:\DATA\PowerShellScript_LOGS\Kill_All_User_Sessions_LOG.txt'
+$pathTempFile = 'C:\DATA\PowerShellScript_LOGS\Kill_All_User_Sessions_LOG_TEMP.txt'
+$TheDateTime = Get-Date -format yyyy_M_d_h_m_s
+$text = 'Script run at: ' +  $TheDateTime
+
+if (Test-Path $path) {
+    $text | Set-Content $pathTempFile
+    Get-Content $path -ReadCount 5000 |
+    Add-Content $pathTempFile 
+    Remove-item $path 
+    Rename-Item $pathTempFile -NewName $path
+} else {
+   $text | Set-Content $path
+} 
 </Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_SSRS</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>Change_DataSource_of_muliple_SSRS_Reports</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_SSRS</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>Change_DataSource_of_muliple_SSRS_Reports</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>#'https://ask.sqlservercentral.com/questions/86369/change-datasource-of-ssrs-report-with-powershell.html
+#'I'm trying to ahange data sources of multiple SSRS Report with Powershell to one shared data source on my reporting server.
+
+
+cls;
+ 
+  #Set variables:
+  $reportserver = "myServer";
+  $url = "http://$($reportserver)/reportserver/reportservice2005.asmx?WSDL";
+  $newDataSourcePath = "/Data Sources/MyDS";
+  $newDataSourceName = "MyDS";
+  $reportFolderPath = "/DH";
+  #------------------------------------------------------------------------
+ 
+  $ssrs = New-WebServiceProxy -uri $url -UseDefaultCredential
+ 
+  $reports = $ssrs.ListChildren($reportFolderPath, $false)
+ 
+  $reports | ForEach-Object {
+  $reportPath = $_.path
+  Write-Host "Report: " $reportPath
+  $dataSources = $ssrs.GetItemDataSources($reportPath)
+  $dataSources | ForEach-Object {
+  $proxyNamespace = $_.GetType().Namespace
+  $myDataSource = New-Object ("$proxyNamespace.DataSource")
+  $myDataSource.Name = $newDataSourceName
+  $myDataSource.Item = New-Object ("$proxyNamespace.DataSourceReference")
+  $myDataSource.Item.Reference = $newDataSourcePath
+  
+  $_.item = $myDataSource.Item
+  
+  $ssrs.SetItemDataSources($reportPath, $_)
+  
+  Write-Host "Report's DataSource Reference ($($_.Name)): $($_.Item.Reference)";
+  }
+ 
+  Write-Host "------------------------"
+  }</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_SSRS</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>DownLoading_multiple_reports</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_SSRS</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>DownLoading_multiple_reports</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+
+$reportServerUri = "http://localhost/reportserver/ReportService2010.asmx?wsdl"
+$rs = New-WebServiceProxy -Uri $reportServerUri -UseDefaultCredential
+                          -Namespace "SSRS"
+                          
+
+#' Download all Reports from a specific folder to .rdl files in the current 
+#' directory.
+
+$sourceFolderPath = "/Reports/MyDeparment"
+
+$items = $rs.ListChildren($sourceFolderPath, $false)
+
+$items | Where-Object { $_.TypeName -eq "Report" } | Foreach-Object {
+
+    									$filename = ("{0}.rdl" -f $_.Name)
+   									Write-Output ("Downloading ""{0}""..." -f $_.Path)
+   									$bytes = $rs.GetItemDefinition($_.Path)
+   									[System.IO.File]::WriteAllBytes("$pwd\$filename", $bytes)
+   								     }
+                          </Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_SSRS</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>Querying for (linked) reports</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_SSRS</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>Querying for (linked) reports</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+$reportServerUri = "http://localhost/reportserver/ReportService2010.asmx?wsdl"
+$rs = New-WebServiceProxy -Uri $reportServerUri -UseDefaultCredential
+                          -Namespace "SSRS"
+                          
+
+#' List everything(!) on the Report Server, recursively
+
+$catalogItems = $rs.ListChildren("/", $true)
+$catalogItems
+
+#' List all Linked Reports, together with the path of the Report it refers to.
+
+$linkedReports = $rs.ListChildren("/", $true) | Where-Object { $_.TypeName -eq "LinkedReport" }
+
+$results = $linkedReports | Foreach-Object {
+    						$linkPath = $rs.GetItemLink($_.Path)
+    						$result = new-object PSObject -Property @{ LinkName = $_.Name; LinkPath = $_.Path; ReportPath = $linkPath }
+    						$result
+					}
+$results
+
+#' List all Linked Reports that refer to reports in a specific folder:
+$results | Where-Object { $_.ReportPath -like "/Reports/MyDeparment/*" }                 </Code>
       </SnippetValue>
     </value>
   </item>
