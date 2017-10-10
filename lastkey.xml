@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <Category>POWERSHELL_Objects</Category>
-  <Language>VBSCRIPT</Language>
+  <Category>Stored_Procedure</Category>
+  <Language>SQLSERVER2K SQL</Language>
   <Public>false</Public>
-  <Name>Example_1_k_PropertyExpanding_to_text</Name>
+  <Name>ALL_select_checkBox_in_SSRS__SQL_Script</Name>
   <Group>My Snippets</Group>
 </SnippetKey>
