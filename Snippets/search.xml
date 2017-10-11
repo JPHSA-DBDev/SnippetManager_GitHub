@@ -1,2 +1,1660 @@
 <?xml version="1.0" encoding="utf-8"?>
-<dictionary />
+<dictionary>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>Stored_Procedure</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>ALL_select_all_parm_values_and_option_for_All_in_LIST</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>Stored_Procedure</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>ALL_select_all_parm_values_and_option_for_All_in_LIST</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>--ALL_select_all_parm_values_and_option_for_All_in_LIST
+
+--simple list
+--Second List
+--Then SP that uses them
+
+/*
+Be able to select all business Units
+	prj_0021_SP_203_LIST_BusinessUnits
+Be able to select all Foreman given a Business Unit
+	prj_0021_SP_205_LIST_B2W_Foreman_for_given_BusinessUnit.sql
+Filter on a Time Sheet ID
+Filter on WorkClass
+*/
+
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+--1] First a simple one:
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+--prj_0021_SP_203_LIST_BusinessUnits_v2.sql
+/*
+	************************************************************************************
+	NOTE: 
+	Uses: 
+	Created: 5/4/2016
+	By: glenn garson
+	************************************************************************************
+*/
+
+
+
+USE [barriere]
+GO
+
+
+create Procedure prj_0021_SP_203_LIST_BusinessUnits
+
+	as
+		
+
+
+
+		--=============WITH THE WHERE STATEMENT===================================
+		;With CTE_ALL(BusinessUnit)
+		as 
+			(
+				Select '0_ALL' as [Division]
+			)
+
+		Select * 
+		From CTE_ALL
+UNION
+		(				
+			select Name AS BusinessUnit
+			from [B2WTIMESHEET\B2WONE].[BUILD2WIN].[dbo].vw_0021_501_TABLE_BusinessUnit_without_XML_fields BU_1
+			Where IsRootBusinessUnit = 0
+		)
+
+Order by BusinessUnit
+		--========================================================================
+go
+
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+--2] Then one dependent on another:
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+--prj_0021_SP_205_LIST_B2W_Foreman_for_given_BusinessUnit_v2.sql
+/*
+	************************************************************************************
+	NOTE: 
+	Uses: 
+	Created: 5/4/2016
+	By: glenn garson
+	************************************************************************************
+*/
+USE [barriere]
+GO
+
+alter Procedure prj_0021_SP_205_LIST_B2W_Foreman_for_given_BusinessUnit(
+	@BusinessUnit as nvarchar(10),
+	@BeginDate as date,
+	@EndDate as date
+	)
+
+	as
+	
+-- START DEBUGGING SECTION -------------------	
+	
+
+	
+-- END DEBUGGING SECTION -------------------		
+
+		--================================================
+		
+		;With CTE_one(Foreman_Name)
+		as 
+			(
+				Select '0_ALL' as [Foreman_Name]
+			),	
+			
+						
+		CTE_TWO(Foreman_Name)
+		AS
+			(					
+
+				SELECT  DISTINCT   
+						--vw.Name as [BusinessUnit],
+						R1.[FieldLog_Foreman_FullName] AS [Foreman_Name]
+						 --(SELECT 'TheCalculation' =  E.FirstName + ' ' + E.LastName ) AS [Foreman_Name]
+						--, E.FirstName
+						--, E.LastName
+						--, E.IsForeman
+				FROM         
+						[B2WTIMESHEET\B2WONE].[BUILD2WIN].[dbo].vw_0021_501_TABLE_BusinessUnit_without_XML_fields L1
+						INNER JOIN
+						[B2WTIMESHEET\B2WONE].[BUILD2WIN].[dbo].[FieldLogEmployeeHoursSummary] R1
+							on	
+								R1.[Employee_BusinessUnitREF] = L1.[ObjectID]
+				Where 
+					--vw.[IsRootBusinessUnit]=0
+					--and
+					--E.IsForeman = 1
+					--AND
+					(
+						(
+							(@BusinessUnit = '0_ALL')
+							AND
+							(R1.[FieldLog_Foreman_FullName] is not Null)
+							--And
+							--(E.LastName is not Null)
+						)
+						OR
+						( 
+							(upper(LTRIM(RTRIM(L1.Name))) = upper(LTRIM(RTRIM(@BusinessUnit))))
+						)
+					)
+					and
+					(
+						(R1.[FieldLog_WorkStartDateTime] &gt;= @BeginDate)
+						AND
+						(R1.[FieldLog_WorkStartDateTime] &lt;= @EndDate)
+					)				   
+			)
+			
+			
+			SELECT * from CTE_one
+			UNION
+			SELECT * from CTE_TWO				
+		--================================================				
+
+		
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\						
+--3] Then a SP that uses them:
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+--prj_0021_REP_002_SpotHeavyLightOperators_v2.sql
+/*
+	************************************************************************************
+	NOTE: uses the view from B2W instead of writing my own
+	Uses: 
+	Created: 5/4/2016
+	By: glenn garson
+	************************************************************************************
+*/
+
+
+
+USE [barriere]
+GO
+
+------------------------------------------------------------
+--DECLARE @BusinessUnit char(9)
+----SELECT @BusinessUnit = 'SSA'
+--SELECT @BusinessUnit = '0_ALL'
+
+--DECLARE @Forman_Name [nvarchar](100)
+--SELECT @Forman_Name = 'JASON BERGERON'
+
+
+--DECLARE @SearchString [nvarchar](100)
+----SELECT @SearchString = 'Const Craftsman'
+----SELECT @SearchString = 'Const Craftsman'
+------------------------------------------------------------
+
+alter Procedure prj_0021_REP_002_SpotHeavyLightOperators(
+	@BeginDate as date,
+	@EndDate as date,
+	@BusinessUnit as char(9),
+	@Forman_Name as [nvarchar](100),
+	@SearchString as NVARCHAR(100)
+	)
+
+	as
+	
+---- START DEBUGGING SECTION -------------------	
+	
+
+--	PRINT 'Input @BeginDate: ' + LEFT(CONVERT(VARCHAR, @BeginDate, 120), 10) 
+--	PRINT 'Input @EndDate: ' + LEFT(CONVERT(VARCHAR, @EndDate, 120), 10)
+
+	
+---- END DEBUGGING SECTION -------------------		
+
+
+IF ((LEN(@SearchString) &gt; 0) and (@SearchString is not null))
+		BEGIN
+
+		--=============WITH THE WHERE STATEMENT===================================
+				SELECT 
+					  L1.[FieldLog_FieldLogID]      as [Time Sheet ID]
+					  ,L1.[FieldLog_WorkStartDateTime]  as [Work Start]
+					  ,L1.[FieldLog_Foreman_FullName]  as [Foreman Name]
+					  ,L1.[Employee_EmployeeID] AS [EmployeeID]
+					  ,L1.[Employee_FullName]  AS  [Employee Name]
+					  ,L1.[Employee_LaborTypeName]  AS [Work Class]
+					  ,L1.[Job_JobNumber]    AS [JobNumber]
+					  ,L1.[TotalHours] AS [Work Hours]
+					  ,R1.Name AS [BusinessUnit]
+				  FROM 
+						(
+							[B2WTIMESHEET\B2WONE].[BUILD2WIN].[dbo].[FieldLogEmployeeHoursSummary] L1
+							inner Join
+							[B2WTIMESHEET\B2WONE].[BUILD2WIN].[dbo].vw_0021_501_TABLE_BusinessUnit_without_XML_fields R1
+							on	
+								L1.[Employee_BusinessUnitREF] = R1.[ObjectID]
+						)
+						
+				  Where
+						(
+							(L1.[TotalHours] &lt;&gt;0)
+							AND
+							(
+								(L1.[FieldLog_WorkStartDateTime] &gt;= @BeginDate)
+								AND
+								(L1.[FieldLog_WorkStartDateTime] &lt;= @EndDate)
+							)							)
+							AND 
+							(        
+									(
+										(@BusinessUnit='0_ALL')
+										AND
+										@BusinessUnit is not null 
+									)
+									OR
+									(	
+										(	@BusinessUnit is not null 
+											and 
+											R1.Name = @BusinessUnit
+										) 
+			
+									)			 
+							) 
+							AND
+							(     
+								(@Forman_Name='0_ALL')
+								OR
+								(L1.[FieldLog_Foreman_FullName] = @Forman_Name)
+							)
+							AND
+							(
+									(L1.[FieldLog_FieldLogID]  like '%' +  RTRIM(LTRIM(@SearchString)) + '%')		
+									OR (L1.[Employee_LaborTypeName] like '%' +  RTRIM(LTRIM(@SearchString)) + '%')	
+
+							)							
+							
+							 							
+													
+						
+							
+							
+		--========================================================================
+		END
+ELSE
+		BEGIN
+
+		--===========WITHOUT THE WHERE============================================
+
+				SELECT 
+					  L1.[FieldLog_FieldLogID]      as [Time Sheet ID]
+					  ,L1.[FieldLog_WorkStartDateTime]  as [Work Start]
+					  ,L1.[FieldLog_Foreman_FullName]  as [Foreman Name]
+					  ,L1.[Employee_EmployeeID] AS [EmployeeID]
+					  ,L1.[Employee_FullName]  AS  [Employee Name]
+					  ,L1.[Employee_LaborTypeName]  AS [Work Class]
+					  ,L1.[Job_JobNumber]    AS [JobNumber]
+					  ,L1.[TotalHours] AS [Work Hours]
+					  ,R1.Name AS [BusinessUnit]
+				  FROM 
+						(
+							[B2WTIMESHEET\B2WONE].[BUILD2WIN].[dbo].[FieldLogEmployeeHoursSummary] L1
+							inner Join
+							[B2WTIMESHEET\B2WONE].[BUILD2WIN].[dbo].vw_0021_501_TABLE_BusinessUnit_without_XML_fields R1
+							on	
+								L1.[Employee_BusinessUnitREF] = R1.[ObjectID]
+						)
+ Where
+						(
+							(L1.[TotalHours] &lt;&gt;0)
+							AND
+							(
+								(L1.[FieldLog_WorkStartDateTime] &gt;= @BeginDate)
+								AND
+								(L1.[FieldLog_WorkStartDateTime] &lt;= @EndDate)
+							)							)
+							AND 
+							(        
+									(
+										(@BusinessUnit='0_ALL')
+										AND
+										@BusinessUnit is not null 
+									)
+									OR
+									(	
+										(	@BusinessUnit is not null 
+											and 
+											R1.Name = @BusinessUnit
+										) 
+			
+									)			 
+							) 
+							AND
+							(     
+								(@Forman_Name='0_ALL')
+								OR
+								(L1.[FieldLog_Foreman_FullName] = @Forman_Name)
+							)
+							--AND
+							--(
+							--		(L1.[FieldLog_FieldLogID]  like '%' +  RTRIM(LTRIM(@SearchString)) + '%')		
+							--		OR (L1.[Employee_LaborTypeName] like '%' +  RTRIM(LTRIM(@SearchString)) + '%')	
+
+							--)								
+							
+							 							
+													
+						
+							
+					
+			
+			
+		--========================================================================
+		END		
+GO
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>Stored_Procedure</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>ALL_select_checkBox_in_SSRS__SQL_Script</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>Stored_Procedure</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>ALL_select_checkBox_in_SSRS__SQL_Script</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>--prj_0013_SP_205_sub_00C_Section_1a_NOTCAT_v2.sql
+/*
+	************************************************************************************
+	NOTE: PM125, NON-CAT, And the WO due date is NOT before today, and [MR_Completed_Date] is in the Time Window
+	Uses: 
+	Created: 5/11/2016
+	By: glenn garson
+	************************************************************************************
+*/
+USE B2W_Reports
+go
+
+
+--DECLARE @BeginDate as date
+--DECLARE @EndDate as date
+--								-- 0: Exclude Mechanic with 'CAT', 1: Just inlude Mechanic with 'CAT'
+--SELECT @BeginDate =  DATEADD(mm, -1, GETDATE())	-- MR_Completed Date On or after this date, or null	
+--SELECT @EndDate = DATEADD(dd, 0, GETDATE())					-- MR_Completed Date On or before this date, or null	
+
+--	PRINT 'Input @BeginDate: ' + LEFT(CONVERT(VARCHAR, @BeginDate, 120), 10) 
+--	PRINT 'Input @EndDate: ' + LEFT(CONVERT(VARCHAR, @EndDate, 120), 10)
+
+alter PROCEDURE prj_0013_SP_205_sub_00C_Section_1a_NOTCAT(
+																@BeginDate as date,
+																@EndDate as date,
+																@BU as nvarchar(max)
+																)
+AS
+;WITH CTE_prj_0013_SP_205_sub_00C_Section_1a_STEP_0(	
+											   [Equipment_No]
+											  ,[WO_ID]
+											  ,[MR_ID]
+											  ,[MR_Reason]
+											  ,[MR_Created_Date]
+											  ,[WO_Created_Date]
+											  ,[WO_Due_Date]
+											  ,[WO_Start_Date]
+											  ,[WO_End_Date]
+											  ,[MR_Completed_Date]
+											  ,[Mechanic]
+											  ,[WO_Priority]
+											  ,[WO_Problem_Description]
+											  ,[WO_Problem_Code]
+											  ,estimated_WO_Completed_Date
+											  ,COUNT_MR_ID
+											  ,COUNT_MR_Completed_Date
+											  ,WO_Completed_Date
+											  ,BackLog
+											  ,Schedule
+											  ,BU_Name
+											  ,Days_to_Create_WO		--NEW 5/31/2016	
+											  ,Days_from_Request		--NEW 5/31/2016			
+											  )
+AS
+		(
+		SELECT 
+			   [Equipment_No]
+			  ,[WO_ID]
+			  ,[MR_ID]
+			  ,[MR_Reason]
+			  ,[MR_Created_Date]
+			  ,[WO_Created_Date]
+			  ,[WO_Due_Date]
+			  ,[WO_Start_Date]
+			  ,[WO_End_Date]
+			  ,[MR_Completed_Date]
+			  ,[Mechanic]
+			  ,[WO_Priority]
+			  ,[WO_Problem_Description]
+			  ,[WO_Problem_Code]
+			  ,estimated_WO_Completed_Date
+			  ,COUNT_MR_ID
+			  ,COUNT_MR_Completed_Date
+			  ,WO_Completed_Date
+		      , (SELECT 'TheCalculation' = DATEDIFF ( dd , [WO_Due_Date] , WO_Completed_Date )   ) AS [BackLog]
+			  , (SELECT 'TheCalculation' = DATEDIFF ( dd , [WO_Start_Date] , WO_Completed_Date )   ) AS [Schedule]
+			  ,BU_Name
+			  , (SELECT 'TheCalculation' = DATEDIFF ( dd , [MR_Created_Date], [WO_Created_Date] )   ) AS [Days_to_Create_WO]		--NEW 5/31/2016	
+			  , (SELECT 'TheCalculation' = DATEDIFF ( dd  , [MR_Created_Date], [WO_Completed_Date] )   ) AS [Days_from_Request]		--NEW 5/31/2016																									
+		     
+		      
+		  FROM [B2W_Reports].[dbo].[prj_0013_sp_00A_vw_501_WorkOrderTracking]
+		  WHERE
+				(--1a
+					(WO_Completed_Date BETWEEN @BeginDate AND @EndDate)
+					AND
+					[MR_Reason]  like '%PM%'
+					AND
+					[MR_Reason]  like '%125%'
+					AND							
+					[WO_Completed_Date] &lt;= [WO_End_Date] 		--NEW 5/31/2016				
+					
+							
+					AND NOT
+					(		
+						[MR_Reason]  like '%PM 250%'
+						OR
+						[MR_Reason]  like '%PM 500%'
+						OR		
+						[MR_Reason]  like '%PM 1000%'
+						OR	
+						[MR_Reason]  like '%PM 2000%'
+					)
+					and NOT		(
+								[WO_Problem_Code]  like '%CP%'
+								OR
+								[WO_Problem_Code]  like '%CM%'
+								OR
+								[WO_Problem_Code]  like '%RC%'
+							)	
+					AND
+					(
+							([Mechanic] NOT  LIKE '%CAT%')
+							OR
+							([Mechanic] is NULL)		--NEW 5/31/2016
+					)
+					AND
+					[WO_Priority] NOT LIKE '%Emergency%'			
+					AND
+					[WO_Problem_Code] NOT LIKE '%BD%'	
+					----=======================================							
+					AND											
+					(
+						(BU_Name IN (select Item from dbo.prj_0013_FN_401_unSplit(@BU,','))	)   --&lt;==================== Here is the use of the Function
+						OR
+						(@BU = '0_ALL')			
+					)														
+				)	
+			
+		)
+SELECT * from CTE_prj_0013_SP_205_sub_00C_Section_1a_STEP_0			
+ORDER BY Equipment_No, WO_ID, MR_ID</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>Stored_Procedure</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>ALL_select_checkBox_in_SSRS__TEST_SQL_Script</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>Stored_Procedure</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>ALL_select_checkBox_in_SSRS__TEST_SQL_Script</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>--prj_0013_SP_205_sub_00C_Section_1a_NOTCAT_TEST.sql
+
+USE B2W_Reports
+go
+
+--EXEC prj_0013_SP_205_sub_00C_Section_1a_NOTCAT @BeginDate='04-01-2016', @EndDate='05-01-2016', @BU = 'Barriere Construction Co., L.L.C.'
+--EXEC prj_0013_SP_205_sub_00C_Section_1a_NOTCAT @BeginDate='04-01-2016', @EndDate='05-01-2016', @BU = '0_All'
+EXEC prj_0013_SP_205_sub_00C_Section_1a_NOTCAT @BeginDate='04-01-2016', @EndDate='05-01-2016', @BU = 'IND,SSA,NSA,BCC_LLC'</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>Stored_Procedure</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>DEV_search_v2</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>Stored_Procedure</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>DEV_search_v2</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>--prj_0006_REP_0017_ECLIPSE_REPORT_HR_REFERRAL_BONUSES_RESOURCE_QUERY_v3.sql
+/*
+	************************************************************************************
+	NOTE: 
+	Uses: 
+	Created: 09/14/2016
+	By: glenn garson
+	************************************************************************************
+*/
+
+use barriere
+go
+--------------------------------DEBUG PARMS START
+--DECLARE @BeginDate date
+--SELECT @BeginDate = '03-01-2016'
+
+--DECLARE @EndDate date
+--SELECT @EndDate = '06-15-2016'
+
+--DECLARE @BU as nvarchar(max)
+----SELECT @BU ='HCC'
+--SELECT @BU ='0_ALL'
+--------------------------------DEBUG PARMS END
+--================================================	
+--DECLARE @SearchString nvarchar(100)		-- for first name, last name or resource
+--DECLARE @EMPLOYMENT_TYPE nvarchar(100)	-- Hard code these: --Non-Exempt, Exempt, '0_ALL'
+--DECLARE @DEPARTMENT nvarchar(100)       -- FROM: prj_0006_SP_0009_LIST_DEPARTMENT.sql                              
+--DECLARE @HIRE_BeginDate_YYYYMMDD varchar(8)
+--DECLARE @HIRE_EndDate_YYYYMMDD varchar(8)
+--DECLARE @TERMINATE_BeginDate_YYYYMMDD varchar(8)
+--DECLARE @TERMINATE_EndDate_YYYYMMDD varchar(8)
+
+
+--SET @SearchString = ''			--'dai'
+--SET @EMPLOYMENT_TYPE =  '0_ALL'			--Non-Exempt     Exempt	 '0_ALL'
+--SET @DEPARTMENT = '0_ALL'
+--SET @HIRE_BeginDate_YYYYMMDD =	''	--'20150401'		--'20150401'		-- can be YYYYMMDD or null/empty		
+--SET @HIRE_EndDate_YYYYMMDD =	''	--'20150415'		--'20150430'
+--SET @TERMINATE_BeginDate_YYYYMMDD =	''		--'20150401'			
+--SET @TERMINATE_EndDate_YYYYMMDD =	''		--'20150430'
+--================================================
+    
+alter Procedure prj_0006_REP_0017_ECLIPSE_REPORT_HR_REFERRAL_BONUSES_RESOURCE_QUERY(
+		 @SearchString as NVARCHAR(100),	
+         @EMPLOYMENT_TYPE as nvarchar(100),
+         @DEPARTMENT as nvarchar(100),
+         @HIRE_BeginDate_YYYYMMDD as varchar(8),
+         @HIRE_EndDate_YYYYMMDD as varchar(8), 
+         @TERMINATE_BeginDate_YYYYMMDD as varchar(8),
+         @TERMINATE_EndDate_YYYYMMDD as varchar(8)                         	
+	)
+
+	as
+
+--=============================================================================================================================
+
+				SELECT TOP(1000) 
+							h.APPLICATION_DATE, 
+							v.RESOURCE_CODE_EMPLOYEE_PM_SM, 
+							v.LAST_NAME, 
+							v.FIRST_NAME, 
+							v.STATUS_Active_Status, 
+							h.RECRUITER, 
+							h.RECRUITMENT_SOURCE, 
+							v.START_DATE, 
+							hUDF.UDF_USER01 AS [Referral_Paid_90-Day], 
+							hUDF.UDF_USER05 AS [Requisition_No]
+							,v.TERMINATED
+							,v.EMPLOYMENT_TYPE
+							,v.DEPARTMENT
+				FROM         
+							vw_0006_502_HR_ResourceMaster_PM_and_SM_EmpMaster v
+							INNER JOIN
+							HR_APPLICANTMASTER h
+							ON 
+									v.COMPANY = h.COMPANY 
+									AND
+									v.RESOURCE_CODE_EMPLOYEE_PM_SM = h.NEW_RESOURCE_CODE
+							
+							INNER JOIN
+							HR_APPLICANTMASTER_UDF hUDF
+							ON 
+									h.COMPANY = hUDF.COMPANY
+									AND
+									h.RESOURCE_CODE = hUDF.RESOURCE_CODE
+		  
+
+			WHERE
+
+					(
+						(
+							(LEN(@SearchString) = 0) 
+							OR 
+							(@SearchString IS NULL)							
+						)
+						OR
+						(
+								(RTRIM(LTRIM(UPPER(v.[RESOURCE_CODE_EMPLOYEE_PM_SM]))) like '%' +  RTRIM(LTRIM(UPPER(@SearchString))) + '%')		
+								OR (RTRIM(LTRIM(UPPER(v.LAST_NAME))) like '%' +  RTRIM(LTRIM(UPPER(@SearchString))) + '%')			
+								OR (RTRIM(LTRIM(UPPER(v.FIRST_NAME))) like '%' +  RTRIM(LTRIM(UPPER(@SearchString))) + '%' )	
+						)
+					)			 
+					AND
+					(
+						(
+							(@EMPLOYMENT_TYPE = '0_ALL')
+							AND
+							(v.EMPLOYMENT_TYPE is not Null)
+						)
+						OR
+						( 
+							(upper(LTRIM(RTRIM(v.EMPLOYMENT_TYPE))) = upper(LTRIM(RTRIM(@EMPLOYMENT_TYPE))))
+						)
+					)
+					AND
+					(
+						(
+							(@DEPARTMENT = '0_ALL')
+							AND
+							(v.DEPARTMENT is not Null)
+						)
+						OR
+						( 
+							(upper(LTRIM(RTRIM(v.DEPARTMENT))) = upper(LTRIM(RTRIM(@DEPARTMENT))))
+						)
+					)	
+					AND
+					(
+						(	
+							(LEN(rtrim(ltrim(@HIRE_BeginDate_YYYYMMDD))) = 0) 
+							OR 
+							(@HIRE_BeginDate_YYYYMMDD IS NULL)							
+						)
+						OR
+						(v.START_DATE &gt; LTRIM(RTRIM(@HIRE_BeginDate_YYYYMMDD)))
+
+					)				
+					AND
+					(
+						(
+							(LEN(LTRIM(RTRIM(@HIRE_EndDate_YYYYMMDD))) = 0) 
+							OR 
+							(@HIRE_EndDate_YYYYMMDD IS NULL)							
+						)
+						OR
+						(LTRIM(RTRIM(v.START_DATE)) &lt; @HIRE_EndDate_YYYYMMDD)
+					)
+					AND
+					(
+						(
+							(LEN(LTRIM(RTRIM(@TERMINATE_BeginDate_YYYYMMDD))) = 0) 
+							OR 
+							(@TERMINATE_BeginDate_YYYYMMDD IS NULL)							
+						)
+						OR
+						(v.TERMINATED &gt; LTRIM(RTRIM(@TERMINATE_BeginDate_YYYYMMDD)))
+					)				
+					AND
+					(
+						(
+							(LEN(LTRIM(RTRIM(@TERMINATE_EndDate_YYYYMMDD))) = 0) 
+							OR 
+							(@TERMINATE_EndDate_YYYYMMDD IS NULL)							
+						)
+						OR
+						(v.TERMINATED &lt; LTRIM(RTRIM(@TERMINATE_EndDate_YYYYMMDD)))
+					)						
+GO					</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>Stored_Procedure</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>DEV</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>Stored_Procedure</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>DEV</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>--prj_0006_REP_0014_ECLIPSE_REPORT_HR_Standard_View.sql
+
+/*
+	************************************************************************************
+	NOTE: 
+	Uses: 
+	Created: 09/1/2016
+	By: glenn garson
+	************************************************************************************
+*/
+
+use barriere
+go
+
+--------------------------------DEBUG PARMS START
+--DECLARE @BeginDate date
+--SELECT @BeginDate = '03-01-2016'
+
+--DECLARE @EndDate date
+--SELECT @EndDate = '06-15-2016'
+
+--DECLARE @BU as nvarchar(max)
+----SELECT @BU ='HCC'
+--SELECT @BU ='0_ALL'
+--------------------------------DEBUG PARMS END
+
+----================================================	
+--DECLARE @SearchString nvarchar(100)
+--DECLARE @use_LAST_NAME as BIT
+--DECLARE @use_FIRST_NAME as BIT
+--DECLARE @use_Job_Title as BIT
+--DECLARE @use_DEPARTMENT as BIT
+--DECLARE @use_Supervisor as BIT
+----DECLARE @Terminated as BIT
+--DECLARE @Terminated as nvarchar(12)		-- 0_All, 1_Terminated, 2_Active
+
+--SET @SearchString = ''		
+--SET @use_LAST_NAME = 0	
+--SET @use_FIRST_NAME = 1
+--SET @use_Job_Title = 0	
+--SET @use_DEPARTMENT = 0
+--SET @use_Supervisor = 0
+----SET @Terminated = 1
+--SET @Terminated  = '2_Active'			-- 0_All, 1_Terminated, 2_Active
+----================================================
+  
+  
+alter Procedure prj_0006_REP_0014_ECLIPSE_REPORT_HR_Standard_View(
+		 @SearchString as NVARCHAR(100),
+         @use_LAST_NAME as BIT,	
+         @use_FIRST_NAME as BIT,
+         @use_Job_Title as BIT,
+         @use_DEPARTMENT as BIT,
+         @use_Supervisor as BIT,
+         @Terminated as nvarchar(12)                 	
+	)
+
+	as
+	
+-- START DEBUGGING SECTION -------------------		
+	-- Get rid of any spaces the user may have left in there:
+	select @SearchString = LTRIM(RTRIM(@SearchString))
+	PRINT '2] Input @SearchString: [' + @SearchString + ']'
+-- END DEBUGGING SECTION -------------------		
+
+IF (LEN(@SearchString) &gt; 0) OR (@SearchString IS NOT NULL)			--Must also set the PARM to allow Nulls in SSRS
+
+		BEGIN
+				--=============WITH THE WHERE STATEMENT===================================
+
+
+			SELECT     
+					RESOURCE_CODE_EMPLOYEE_PM_SM AS Resource
+					, DEPARTMENT
+					, LAST_NAME
+					, FIRST_NAME
+					, SIN_SSN AS SSN
+					, STATUS_Active_Status AS Status
+					, UDF_RES_USER02_Employment_Status AS Employment_Status
+					, EMPLOYMENT_TYPE
+					, UDF_USER01_Job_Title AS Job_Title
+					, UDF_RES_USER01_Supervisor AS Supervisor
+					, MIN_HR_RATE
+					, ADDRESS1
+					, ADDRESS2
+					, ADDRESS3
+					, POSTAL_CODE AS Zip
+					, WORK_PHONE
+					, CELL_PHONE
+					, EMAIL_ADDRESS
+					, START_DATE
+					, SENIORITY
+					, TERMINATED
+					, UDF_RES_USER04_Benefit_Class AS Benefit_Class
+					, From_SM_PM
+			FROM         vw_0006_502_HR_ResourceMaster_PM_and_SM_EmpMaster
+			WHERE 
+			  (		
+					(
+							(
+								(upper(rtrim(ltrim([LAST_NAME]))) like '%' +  UPPER(RTRIM(LTRIM(@SearchString))) + '%')
+								AND
+								(@use_LAST_NAME = 1)
+							)		
+							OR 
+							(
+								(
+									(upper(rtrim(ltrim([FIRST_NAME]))) like '%' +  (upper(rtrim(ltrim(@SearchString)))) + '%')				
+								)
+								AND
+								(@use_FIRST_NAME = 1)
+							)				  
+							OR 
+								(
+									(upper(rtrim(ltrim([UDF_USER01_Job_Title]))) like '%' +  (upper(rtrim(ltrim(@SearchString)))) + '%') 
+									AND
+									(@use_Job_Title = 1)								
+								)
+							OR  (
+									(upper(rtrim(ltrim([DEPARTMENT]))) like '%' +  (upper(rtrim(ltrim(@SearchString)))) + '%') 	
+									AND
+									(@use_DEPARTMENT = 1)									
+								)
+							OR  (
+									(upper(rtrim(ltrim([UDF_RES_USER01_Supervisor]))) like '%' +  (upper(rtrim(ltrim(@SearchString)))) + '%') 	
+									AND
+									(@use_Supervisor = 1)									
+								)													
+
+						)	
+						AND
+						( -- 0_All, 1_Terminated, 2_Active
+							(
+								(@Terminated = '0_All')
+							)
+							OR
+							(
+								(@Terminated = '1_Terminated')
+								AND
+								(TERMINATED is NOT NULL)
+							)	
+							OR
+							(
+								(@Terminated = '2_Active')
+								AND
+								(TERMINATED is NULL)
+							)																			
+						)
+									
+					
+			  ) 
+			ORDER BY FIRST_NAME, LAST_NAME
+		--========================================================================
+		END
+ELSE
+		BEGIN
+
+		--===========WITHOUT THE WHERE============================================
+			SELECT     
+					RESOURCE_CODE_EMPLOYEE_PM_SM AS Resource
+					, DEPARTMENT
+					, LAST_NAME
+					, FIRST_NAME
+					, SIN_SSN AS SSN
+					, STATUS_Active_Status AS Status
+					, UDF_RES_USER02_Employment_Status AS Employment_Status
+					, EMPLOYMENT_TYPE
+					, UDF_USER01_Job_Title AS Job_Title
+					, UDF_RES_USER01_Supervisor AS Supervisor
+					, MIN_HR_RATE
+					, ADDRESS1
+					, ADDRESS2
+					, ADDRESS3
+					, POSTAL_CODE AS Zip
+					, WORK_PHONE
+					, CELL_PHONE
+					, EMAIL_ADDRESS
+					, START_DATE
+					, SENIORITY
+					, TERMINATED
+					, UDF_RES_USER04_Benefit_Class AS Benefit_Class
+					, From_SM_PM
+			FROM         vw_0006_502_HR_ResourceMaster_PM_and_SM_EmpMaster
+			WHERE 
+			--  (		
+			--		(
+			--				(
+			--					(upper(rtrim(ltrim([LAST_NAME]))) like '%' +  UPPER(RTRIM(LTRIM(@SearchString))) + '%')
+			--					AND
+			--					(@use_LAST_NAME = 1)
+			--				)		
+			--				OR 
+			--				(
+			--					(
+			--						(upper(rtrim(ltrim([FIRST_NAME]))) like '%' +  (upper(rtrim(ltrim(@SearchString)))) + '%')				
+			--					)
+			--					AND
+			--					(@use_FIRST_NAME = 1)
+			--				)				  
+			--				OR 
+			--					(
+			--						(upper(rtrim(ltrim([UDF_USER01_Job_Title]))) like '%' +  (upper(rtrim(ltrim(@SearchString)))) + '%') 
+			--						AND
+			--						(@use_Job_Title = 1)								
+			--					)
+			--				OR  (
+			--						(upper(rtrim(ltrim([DEPARTMENT]))) like '%' +  (upper(rtrim(ltrim(@SearchString)))) + '%') 	
+			--						AND
+			--						(@use_DEPARTMENT = 1)									
+			--					)
+			--				OR  (
+			--						(upper(rtrim(ltrim([UDF_RES_USER01_Supervisor]))) like '%' +  (upper(rtrim(ltrim(@SearchString)))) + '%') 	
+			--						AND
+			--						(@use_Supervisor = 1)									
+			--					)													
+
+			--			)	
+						--AND
+						( -- 0_All, 1_Terminated, 2_Active
+							(
+								(@Terminated = '0_All')
+							)
+							OR
+							(
+								(@Terminated = '1_Terminated')
+								AND
+								(TERMINATED is NOT NULL)
+							)	
+							OR
+							(
+								(@Terminated = '2_Active')
+								AND
+								(TERMINATED is NULL)
+							)																			
+						)		
+									
+					
+			--  ) 
+			ORDER BY FIRST_NAME, LAST_NAME
+		--========================================================================
+		END		
+GO</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>Stored_Procedure</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>StoredProcedure_as_Input__using_OPENQUERY</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>Stored_Procedure</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>StoredProcedure_as_Input__using_OPENQUERY</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>--1] Need to enable DataAccess: http://sqlblogcasts.com/blogs/piotr_rodak/archive/2009/11/22/data-access-setting-on-local-server.aspx
+
+--Test Beforehand
+select server_id, name, is_data_access_enabled from sys.servers
+
+use master
+
+EXEC sp_serveroption 'BCC-EXPLORERDB', 'DATA ACCESS', TRUE
+
+go
+
+--Test afterwards
+select server_id, name, is_data_access_enabled from sys.servers
+--===============================================================================================================================
+--2] Then you can use OpenQuery
+
+use B2W_Reports
+go
+							
+SELECT  * 
+FROM    
+OPENQUERY([BCC-EXPLORERDB], 'EXEC B2W_Reports.dbo.prj_0013_SP_226_sub_00C_Section_1ab ''04-01-2016'', ''04-30-2016'', ''0_ALL'', ''0_ALL''');  
+
+
+--3] Use STORED PROC as input, AND create temp table from the input
+
+use B2W_Reports
+go
+							
+SELECT  * 
+INTO tmpJUNK
+FROM    
+OPENQUERY([BCC-EXPLORERDB], 'EXEC B2W_Reports.dbo.prj_0013_SP_226_sub_00C_Section_1ab ''04-01-2016'', ''04-30-2016'', ''0_ALL'', ''0_ALL''');  
+
+
+
+
+--=============================================================================================
+--http://stackoverflow.com/questions/209383/select-columns-from-result-set-of-stored-procedure
+
+--This works for me: (i.e. I only need 2 columns of the 30+ returned by sp_help_job)
+
+SELECT name, current_execution_status 
+FROM OPENQUERY (MYSERVER, 
+  'EXEC msdb.dbo.sp_help_job @job_name = ''My Job'', @job_aspect = ''JOB''');  
+
+--Before this would work, I needed to run this:
+
+sp_serveroption 'MYSERVER', 'DATA ACCESS', TRUE;
+
+--....to update the sys.servers table. (i.e. Using a self-reference within OPENQUERY seems to be disabled by default.)
+
+--For my simple requirement, I ran into none of the problems described in the OPENQUERY section of Lance's excellent link.
+
+--Rossini, if you need to dynamically set those input parameters, then use of OPENQUERY becomes a little more fiddly:
+
+DECLARE @innerSql varchar(1000);
+DECLARE @outerSql varchar(1000);
+
+-- Set up the original stored proc definition.
+SET @innerSql = 
+'EXEC msdb.dbo.sp_help_job @job_name = '''+@param1+''', @job_aspect = N'''+@param2+'''' ;
+
+-- Handle quotes.
+SET @innerSql = REPLACE(@innerSql, '''', '''''');
+
+-- Set up the OPENQUERY definition.
+SET @outerSql = 
+'SELECT name, current_execution_status 
+FROM OPENQUERY (MYSERVER, ''' + @innerSql + ''');';
+
+-- Execute.
+EXEC (@outerSql);
+
+/*
+I'm not sure of the differences (if any) between using sp_serveroption 
+	to update the existing sys.servers self-reference directly, vs. using sp_addlinkedserver (as described in Lance's link) 
+	to create a duplicate/alias.
+
+Note 1: I prefer OPENQUERY over OPENROWSET, given that OPENQUERY does not require the connection-string definition within the proc.
+
+Note 2: Having said all this: normally I would just use INSERT ... EXEC :) Yes, it's 10 mins extra typing, but if I can help it, 
+I prefer not to jigger around with:
+(a) quotes within quotes within quotes, and
+(b) sys tables, and/or sneaky self-referencing Linked Server setups (i.e. for these, I need to plead my case to our all-powerful DBAs :)
+
+However in this instance, I couldn't use a INSERT ... EXEC construct, as sp_help_job is already using one. 
+("An INSERT EXEC statement cannot be nested.")</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>Stored_Procedure</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>TEMPLATE_SP_and_DEV_in_one_Script</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>Stored_Procedure</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>TEMPLATE_SP_and_DEV_in_one_Script</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>--prj_0021_SP_206_NumberOfHourlyEmployees_ThoseWithTimeCards.sql
+/*	
+	************************************************************************************
+	NOTE: 
+	Uses: 
+	Created: 5/5/2014
+	By: glenn garson
+	************************************************************************************
+*/
+
+USE [barriere]
+GO
+
+--------------------------------DEBUG PARMS START
+--DECLARE @Company INT
+--SELECT @Company = 1
+
+--DECLARE @YYYYMM as char(6)
+--SELECT @YYYYMM ='201619'
+
+--DECLARE @UserID as char(6)
+
+--SELECT @UserID ='0_ALL'
+----SELECT @UserID ='0_ALL'
+
+--DECLARE @Division as char(6)
+----SELECT @Division ='7P'
+--SELECT @Division ='0_ALL'
+--------------------------------DEBUG PARMS END
+
+Create PROCEDURE [dbo].[prj_0021_SP_206_NumberOfHourlyEmployees_ThoseWithTimeCards](
+															@Company as char(3),
+															@YYYYMM as varchar(6),
+															@UserID as char(20),
+															@Division as char(9)
+														)
+AS
+
+;WITH
+
+  CTE_START (
+			
+						EMPLOYEE, 
+						TimeCard									
+			)
+  AS
+  (
+			--======================================================================================
+				Select 
+					coalesce(TC.EMPLOYEE, E.EMPLOYEE) as EMPLOYEE 
+				  ,	(SELECT     'TheCalculation' = 
+    						CASE 
+        							WHEN ( (TC.TIME_HALF_HOURS IS NULL ) AND (TC.REG_HOURS IS NULL ) ) 
+        							THEN 0
+			        		 
+							ELSE 1
+
+    							END) as TimeCard					
+						
+			
+				From 
+					(
+						SELECT *
+						FROM PM_TIMECARDS
+						WHERE
+						--SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS				
+								COMPANY = @Company 
+									and 
+									PAYROLL_TYPE='HP' 
+									and 
+									PAY_PERIOD=@YYYYMM 
+									and (        --&lt;============================================S
+											(
+												(@UserID='0_ALL')
+												AND
+												@UserID is not null 
+											)
+											OR
+											(	
+												(	@UserID is not null 
+													and 
+													[USER_ID] = @UserID
+												) 
+												--or 
+												--@UserID is null 			
+											)			 
+										)       --&lt;============================================E	
+									
+									and
+									NON_WORK is NULL
+									and
+									(      --&lt;============================================S
+										(@Division='0_ALL')
+										OR
+										(DIVISION = @Division)
+									) 						
+						--EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+					) AS TC
+					RIGHT OUTER JOIN		
+					(
+						SELECT *
+						FROM PM_EMPMASTER
+						WHERE (TERMINATED is NULL)
+					) as E
+					on(
+						TC.COMPANY=E.COMPANY 
+						and 
+						TC.EMPLOYEE=E.EMPLOYEE
+					   )
+
+  )
+  
+  --Select  * --TOP(100)
+  --from CTE_START
+
+ SELECT COUNT(*) as Number_Of_Hourly_Employees, SUM(TimeCard) as Number_Of_Time_Cards
+ FROM CTE_START </Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>TABLE_VARIABLE</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>Create_TVP_TableVariable_from_Stored_Procedure</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>TABLE_VARIABLE</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>Create_TVP_TableVariable_from_Stored_Procedure</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>--Create_TVP_TableVariable_from_Stored_Procedure
+
+--=====================================================================
+NOTE: The TVP (TableVariable) and the INSERT statement 
+		must include all the fields from the Stored Procedure.
+	  It is only in the 3rd step that you can cull some of the variables 
+--=====================================================================
+
+
+
+--prj_0013_SP_237_SubProj_00E_Audit_Scheduled_Days_v2.sql
+
+
+/*
+	************************************************************************************
+	NOTE: 
+	Uses: 
+	Created: 10/13/2016
+	By: glenn garson
+	************************************************************************************
+*/
+use B2W_Reports
+go
+
+--------------------------------DEBUG PARMS START
+DECLARE @BeginDate date
+SELECT @BeginDate = '09-01-2016'
+
+DECLARE @EndDate date
+SELECT @EndDate = '09-30-2016'
+
+DECLARE @BU as nvarchar(max)
+SELECT @BU ='0_ALL'	--'HCC'	--'SSA'
+
+DECLARE @Mechanic as nvarchar(max)
+SELECT @Mechanic ='0_ALL'
+
+--------------------------------DEBUG PARMS END
+
+--create Procedure prj_0013_SP_237_SubProj_00E_Audit_Scheduled_Days(
+--		 @BeginDate as date,
+--         @EndDate as date,	
+--         @BU as nvarchar(max),
+--         @Mechanic as nvarchar(max)                	
+--	)
+
+--	as
+
+Declare	@CompletedWorkOrders_1ab TABLE					--WAS: @NumeratorTable_1ab TABLE 
+(
+		   [Equipment_No] nvarchar(100) NULL
+		  ,[WO_ID] int NOT NULL
+		  ,[MR_ID] int	NULL
+		  ,[MR_Reason] nvarchar(100)
+		  ,[MR_Created_Date] datetime
+		  ,[WO_Created_Date] datetime
+		  ,[WO_Due_Date] datetime
+		  ,[WO_Start_Date] datetime						--&lt;== Use this the "WO Start Date"
+		  ,[WO_End_Date] datetime
+		  ,[MR_Completed_Date] datetime
+		  ,[Mechanic] nvarchar(201)
+		  ,[WO_Priority] nvarchar(100)
+		  ,[WO_Problem_Description] nvarchar(200)
+		  ,[WO_Problem_Code] nvarchar(50)
+		  ,estimated_WO_Completed_Date datetime
+		  ,COUNT_MR_ID int
+		  ,COUNT_MR_Completed_Date int
+		  ,WO_Completed_Date datetime					 --&lt;===
+		  ,BackLog int
+		  ,Schedule int
+		  ,BU_Name nvarchar(100)
+		  ,Days_to_Create_WO int
+		  ,Days_from_Request int		
+)
+
+
+
+insert into @CompletedWorkOrders_1ab(
+							   [Equipment_No]
+							  ,[WO_ID]
+							  ,[MR_ID]
+							  ,[MR_Reason]
+							  ,[MR_Created_Date]
+							  ,[WO_Created_Date]
+							  ,[WO_Due_Date]
+							  ,[WO_Start_Date]
+							  ,[WO_End_Date]
+							  ,[MR_Completed_Date]
+							  ,[Mechanic]
+							  ,[WO_Priority]
+							  ,[WO_Problem_Description]
+							  ,[WO_Problem_Code]
+							  ,estimated_WO_Completed_Date
+							  ,COUNT_MR_ID
+							  ,COUNT_MR_Completed_Date
+							  ,WO_Completed_Date
+							  ,BackLog
+							  ,Schedule
+							  ,BU_Name
+							  ,Days_to_Create_WO
+							  ,Days_from_Request
+							) exec prj_0013_SP_226_sub_00C_Section_1ab @BeginDate, @EndDate, @BU, @Mechanic
+							
+
+
+;							
+With CTE_CompletedWorkOrders_1ab
+AS
+(							
+	select    --DISTINCT 
+				   [Equipment_No]
+				  ,[WO_ID]
+				  ,[MR_ID]
+				  --,[MR_Reason]
+				  ,[MR_Created_Date]
+				  ,[WO_Created_Date]
+				  --,[WO_Due_Date]
+				  ,[WO_Start_Date]
+				  ,[WO_End_Date]
+				  ,[MR_Completed_Date]
+				  ,[Mechanic]
+				  --,[WO_Priority]
+				  --,[WO_Problem_Description]
+				  --,[WO_Problem_Code]
+				  ,estimated_WO_Completed_Date
+				  --,COUNT_MR_ID
+				  --,COUNT_MR_Completed_Date
+				  ,WO_Completed_Date
+				  --,BackLog
+				  ,Schedule
+				  ,BU_Name
+				  --,Days_to_Create_WO
+				  --,Days_from_Request
+				  ,'1ab' as [Sub_Sub_Population]
+				  ,'PM125' as [Sub_Population]
+	from @CompletedWorkOrders_1ab 
+)
+
+
+
+--========================================================================
+
+SELECT	--u.*
+				   DATEDIFF( dd , [WO_Start_Date] , [WO_Completed_Date] ) as DaysScheduled_WO ,
+					DATEDIFF( dd , [MR_Created_Date] , [MR_Completed_Date] ) as DaysScheduled_MR,	 --&lt;====				   
+				   u.[Equipment_No]
+				  ,u.[WO_ID]
+				  ,u.[MR_ID]
+				  --,u.[MR_Reason]
+				  ,u.[MR_Created_Date]
+				  ,u.[WO_Created_Date]
+				  --,u.[WO_Due_Date]
+				  ,u.[WO_Start_Date]
+				  ,u.[WO_End_Date]
+				  ,u.[MR_Completed_Date]
+				  ,u.[Mechanic]
+				  --,u.[WO_Priority]
+				  --,u.[WO_Problem_Description]
+				  --,u.[WO_Problem_Code]
+				  ,estimated_WO_Completed_Date
+				  --,COUNT_MR_ID
+				  --,COUNT_MR_Completed_Date
+				  ,WO_Completed_Date
+				  --,BackLog
+				  ,Schedule
+				  ,BU_Name
+				  --,Days_to_Create_WO
+				  --,Days_from_Request
+				  ,u.[Sub_Sub_Population]
+				  ,u.[Sub_Population],	
+
+		avgDaysScheduled_WO = avg(DATEDIFF( dd , [WO_Start_Date] , [WO_Completed_Date] ) ) OVER (PARTITION BY [Sub_Population],[year], [month], [WeekOfMonth], [WO_ID]),		
+		avgDaysScheduled_MR = avg(DATEDIFF( dd , [MR_Created_Date] , [MR_Completed_Date] ) ) OVER (PARTITION BY [Sub_Population],[year], [month], [WeekOfMonth], [WO_ID])		
+FROM
+		(
+			SELECT * from CTE_CompletedWorkOrders_1ab
+
+		)  as u
+		LEFT OUTER JOIN	
+		[LIST_DateDimension] d
+		on	Convert(date,u.WO_Completed_Date) = d.Date	
+WHERE 
+	(DATEDIFF( dd , [WO_Start_Date] , [WO_Completed_Date] )&lt;0)
+	OR
+	(DATEDIFF( dd , [MR_Created_Date] , [MR_Completed_Date] )&lt;0)
+		
+ORDER BY WO_ID, MR_ID
+								
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>TABLE_VARIABLE</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>POPULATE_TVP_from_CTE</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>TABLE_VARIABLE</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>POPULATE_TVP_from_CTE</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>use B2W_Reports
+go
+
+----------------------------------DEBUG PARMS START
+
+
+DECLARE @BU as nvarchar(max)
+SELECT @BU ='0_ALL'	--'HCC'	--'SSA'
+
+DECLARE @Mechanic as nvarchar(max)
+SELECT @Mechanic ='0_ALL'
+
+DECLARE @Week_1_Start date
+SELECT @Week_1_Start = ' '
+
+DECLARE @Week_1_USE bit
+SELECT @Week_1_USE = 0
+
+DECLARE @Week_2_Start date
+SELECT @Week_2_Start = '09-05-2016'
+
+DECLARE @Week_2_USE bit
+SELECT @Week_2_USE = 1
+
+DECLARE @Week_3_Start date
+SELECT @Week_3_Start = '09-12-2016'
+
+DECLARE @Week_3_USE bit
+SELECT @Week_3_USE = 1
+
+DECLARE @Week_4_Start date
+SELECT @Week_4_Start = '09-19-2016'
+
+DECLARE @Week_4_USE bit
+SELECT @Week_4_USE = 1
+
+DECLARE @Week_5_Start date
+SELECT @Week_5_Start = '09-26-2016'
+
+DECLARE @Week_5_USE bit
+SELECT @Week_5_USE = 1
+
+DECLARE @Week_6_Start date
+SELECT @Week_6_Start = ' '
+
+DECLARE @Week_6_USE bit
+SELECT @Week_6_USE = 1
+
+--------------------------------DEBUG PARMS END
+
+--=====================================Internal Variables - START
+DECLARE @BeginDate date
+
+DECLARE @EndDate date
+
+DECLARE @NoOfWeeks INT
+
+DECLARE @BeginEndDate_TVP TABLE(                                                 --&lt;=== DEFINE THE TVP
+    beginDate  date,
+    endDate  date,
+    NoOfWeeks INT
+    
+);
+--=====================================Internal Variables - END
+
+
+							
+;	With CTE_Begin_End_Dates_ALL                                                 --&lt;=== POPULATE the CTE with some synthetic data
+AS 
+(
+	SELECT 1 as TheWeek, @Week_1_Start as START_DATE, @Week_1_USE as USE_Week, DATEADD(dd, 6, @Week_1_Start) as END_DATE
+	UNION 
+	SELECT 2, @Week_2_Start, @Week_2_USE, DATEADD(dd, 6, @Week_2_Start)
+	UNION 
+	SELECT 3, @Week_3_Start, @Week_3_USE, DATEADD(dd, 6, @Week_3_Start)	
+	UNION 
+	SELECT 4, @Week_4_Start, @Week_4_USE, DATEADD(dd, 6, @Week_4_Start)	
+	UNION 
+	SELECT 5, @Week_5_Start, @Week_5_USE, DATEADD(dd, 6, @Week_5_Start)	
+	UNION 
+	SELECT 6, @Week_6_Start, @Week_6_USE, DATEADD(dd, 6, @Week_6_Start)		
+)
+
+	INSERT INTO @BeginEndDate_TVP                                                    --&lt;=== POPULATE the TVP     
+	SELECT 
+			MIN(START_DATE) as BeginDate,
+			MAX(END_DATE) as EndDate,
+			SUM(CAST(USE_Week as INT)) as NoOfWeeks
+	FROM CTE_Begin_End_Dates_ALL
+	WHERE (
+			(USE_Week =1)
+			AND
+			(START_DATE &lt;&gt; '1900-01-01')
+		   )</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>Table</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>CREATE_temp_Table_using_OPENQUERY_from_Stored_Procedure</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>Table</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>CREATE_temp_Table_using_OPENQUERY_from_Stored_Procedure</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>--1] Need to enable DataAccess: http://sqlblogcasts.com/blogs/piotr_rodak/archive/2009/11/22/data-access-setting-on-local-server.aspx
+
+--Test to make sure Data Access is enabled on the server, Beforehand
+select server_id, name, is_data_access_enabled from sys.servers
+
+use master
+
+EXEC sp_serveroption 'BCC-EXPLORERDB', 'DATA ACCESS', TRUE
+
+go
+
+--Test afterwards
+select server_id, name, is_data_access_enabled from sys.servers
+--===============================================================================================================================
+--2] Then you can use OpenQuery
+
+use B2W_Reports
+go
+							
+SELECT  * 
+FROM    
+OPENQUERY([BCC-EXPLORERDB], 'EXEC B2W_Reports.dbo.prj_0013_SP_226_sub_00C_Section_1ab ''04-01-2016'', ''04-30-2016'', ''0_ALL'', ''0_ALL''');  
+
+--===============================================================================================================================
+--3] Use STORED PROC as input, AND create temp table from the input
+
+use B2W_Reports
+go
+							
+SELECT  * 
+INTO tmpJUNK			--&lt;=== This actually not a "temp" table
+FROM    
+OPENQUERY([BCC-EXPLORERDB], 'EXEC B2W_Reports.dbo.prj_0013_SP_226_sub_00C_Section_1ab ''04-01-2016'', ''04-30-2016'', ''0_ALL'', ''0_ALL''');  
+
+
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+</dictionary>
