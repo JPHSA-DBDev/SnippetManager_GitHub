@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <Category>POWERSHELL_Remoting_CIM</Category>
+  <Category>POWERSHELL_Remoting</Category>
   <Language>VBSCRIPT</Language>
   <Public>false</Public>
-  <Name>about_POWERSHELL_Remoting_CIM</Name>
+  <Name>TrustedHosts</Name>
   <Group>My Snippets</Group>
 </SnippetKey>

@@ -1,2 +1,2793 @@
 <?xml version="1.0" encoding="utf-8"?>
-<dictionary />
+<dictionary>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Files_Folders_Directories</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>PowerShell_Drives_____fileSystem_registry_certificates</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Files_Folders_Directories</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>PowerShell_Drives_____fileSystem_registry_certificates</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+'A Windows PowerShell drive is a data store location that you can access like a file system drive in Windows PowerShell. 
+'	The Windows PowerShell providers create some drives for you, such as the file system drives (including C: and D:), 
+'	the registry drives (HKCU: and HKLM:), and the certificate drive (Cert:), and you can create your own Windows PowerShell drives. 
+'	These drives are very useful, but they are available only within Windows PowerShell. 
+'	You cannot access them by using other Windows tools, such as File Explorer or Cmd.exe.
+
+'Windows PowerShell uses the noun, PSDrive, for commands that work with Windows PowerShell drives.
+
+&gt; Get-PSDrive
+
+Name           Used (GB)     Free (GB) Provider      Root                                                                                                                       CurrentLocation
+----           ---------     --------- --------      ----                                                                                                                       ---------------
+Alias                                  Alias                                                                                                                                                   
+C                 164.15         58.39 FileSystem    C:\                                                                                                                                Windows
+Cert                                   Certificate   \                                                                                                                                         
+D                                      FileSystem    D:\                                                                                                                                       
+E                                      FileSystem    E:\                                                                                                                                       
+Env                                    Environment                                                                                                                                             
+Function                               Function                                                                                                                                                
+G                  47.69         76.80 FileSystem    \\BCC-CONTROL\PeopleTrak                                                                                                                  
+HKCU                                   Registry      HKEY_CURRENT_USER                                                                                                                         
+HKLM                                   Registry      HKEY_LOCAL_MACHINE                                                                                                                        
+Q                  15.31        176.22 FileSystem    \\bcc-hcss\HCSS                                                                                                                           
+S                 890.02        209.97 FileSystem    \\BCC-FS1\Divisions                                                                                                                       
+T                 890.02        209.97 FileSystem    \\BCC-FS1\Applications                                                                                                                    
+U                 890.02        209.97 FileSystem    \\BCC-FS1\Users\GlennG                                                                                                                    
+V                 890.02        209.97 FileSystem    \\BCC-FS1\Reports                                                                                                                         
+Variable                               Variable                                                                                                                                                
+W                 890.02        209.97 FileSystem    \\BCC-FS1\Public                                                                                                                          
+WSMan                                  WSMan                   
+
+===========================================================================
+'Adding New Windows PowerShell Drives (New-PSDrive)
+
+'The New-PsDrive cmdlet adds the new drive only to the current Windows PowerShell session. 
+
+'To create a new Windows PowerShell drive, you must supply three parameters:
+'		A name for the drive (you can use any valid Windows PowerShell name)
+'		The PSProvider (use "FileSystem" for file system locations and "Registry" for registry locations)
+'		The root, that is, the path to the root of the new drive
+
+'For example, you can create a drive named "Office" 
+'	that is mapped to the folder that contains the Microsoft Office applications on your computer, such as 
+'	C:\Program Files\Microsoft Office\OFFICE11.
+'	To create the drive, type the following command:
+
+&gt; New-PSDrive -Name Office -PSProvider FileSystem -Root "C:\Program Files\Microsoft Office\OFFICE11"
+
+' To view and change items in the CurrentVersion registry key, you can create a Windows PowerShell drive that is rooted in that key by typing:
+
+PS&gt; New-PSDrive -Name cvkey -PSProvider Registry -Root HKLM\Software\Microsoft\Windows\CurrentVersion
+
+'You can then change location to the cvkey: drive as you would any other drive:
+PS&gt; cd cvkey:
+'or:
+PS&gt; Set-Location cvkey: -PassThru
+
+'If you close the Windows PowerShell window, the new drive is lost. 
+'	To save a Windows PowerShell drive, use the Export-Console cmdlet to export the current Windows PowerShell session, 
+'	and then use the PowerShell.exe PSConsoleFile parameter to import it. 
+'	Or, add the new drive to your Windows PowerShell profile.
+
+'For example, if you added the Office: Windows PowerShell drive, as shown in the New-PSDrive topic, you can delete it by typing:
+&gt; Remove-PSDrive -Name Office</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_MISC</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>RESTART_REMOTE_computers</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_MISC</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>RESTART_REMOTE_computers</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>'https://community.spiceworks.com/topic/1981643-remote-restart-from-txt-file-listing-computers
+'https://mcpmag.com/articles/2012/04/10/how-to-restart-computers-remotely-via-powershell.aspx
+
+$YourFile = Get-Content 'C:\users\joe\desktop\computers.txt'
+
+foreach ($computer in $YourFile)
+{
+
+Restart-Computer -ComputerName $computer -force
+
+}
+
+
+
+
+
+
+
+
+
+
+https://mcpmag.com/articles/2012/04/10/how-to-restart-computers-remotely-via-powershell.aspx
+https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.management/restart-computer?view=powershell-5.1
+'you could shut down a list of computers:
+&gt; restart-computer "server01","server02","server03" -whatif
+
+'Because the cmdlet is using WMI objects and methods under the hood you can specify alternate credentials, either a saved credential object or a user name:
+&gt; restart-computer (get-content c:\work\computers.txt) -credential "mycompany\administrator"
+'I'll get prompted for the password, but then this credential will be used for every computer in the list.
+
+'The Restart-Computer cmdlet will fail, if a logon session is detected. 
+'PowerShell will raise an exception. However, you can force a reboot using -- what else? -- 
+'the -force parameter. Be aware this will force applications to close 
+'with the potential loss of unsaved work.
+--------------------------------------------
+'Another option for rebooting or even logging off 
+
+&gt; Get-WmiObject win32_operatingsystem -ComputerName Quark | Invoke-WMIMethod -name Win32Shutdown
+--------------------------------------------
+'The Win32Shutdown method can accept parameters. 
+'The default is 0 which means do a simple logoff. But if the user has open files 
+'or if the default method fails, you can always resort to a forceful logoff:
+
+&gt; Get-WmiObject win32_operatingsystem -ComputerName Quark | Invoke-WMIMethod -name Win32Shutdown -ArgumentList @(4)
+--------------------------------------------
+'Restart several computers including the local computer
+Restart-Computer -ComputerName "Server01", "Server02", "localhost"
+
+--------------------------------------------
+'Restart computers as a background job
+
+'The first command uses the *AsJob* parameter to run the command as a background job. 
+'The command stores the resulting job object in the $j variable.
+&gt; $j = Restart-Computer -ComputerName "Server01", "Server02" -AsJob
+
+'The second command uses a pipeline operator to send the job object in $j to the Receive-Job cmdlet, 
+'which gets the job results. The command stores the results in the $Results variable.
+&gt; $Results = $j | Receive-Job
+
+'The third command displays the result stores in the $Results variable.Because *AsJob* creates the job 
+'on the local computer and automatically returns the results to the local computer, 
+'you can run **Receive-Job** as a local command.
+PS C:\&gt; $Results
+--------------------------------------------
+
+' Restart a remote computer
+&gt;Restart-Computer -ComputerName "Server01" -Impersonation Anonymous -Authentication PacketIntegrity
+
+-------------------------------------------
+
+'Force restart of all computers from a list
+
+'The first command uses the Get-Content cmdlet to get a list of computers in the domain 
+'	from the Domain01.txt file. It stores the list in the $s variable.
+PS C:\&gt; $s = Get-Content Domain01.txt
+
+'The second command gets the credentials of a domain administrator and stores them in the $c variable.
+PS C:\&gt; $c = Get-Credential Domain01\Admin01
+
+'The third command restarts the computers. 
+'It uses the *ComputerName* parameter to submit the list of computers in the $s variable, 
+'the *Force* parameter to force an immediate restart, 
+'and the *Credential* parameter to submit the credentials saved in the $c variable. It also uses the *ThrottleLimit* parameter to limit the command to 10 concurrent connections.
+PS C:\&gt; Restart-Computer -ComputerName $s -Force -ThrottleLimit 10 -Credential $c
+
+
+--------------------------------------------------
+
+'Restart a computer by using WSMan, instead of DCOM, which is the default.
+&gt;Restart-Computer -ComputerName "Server01" -Protocol WSMan -WSManAuthentication Kerberos</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Remoting</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>about_POWERSHELL_Remoting</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Remoting</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>about_POWERSHELL_Remoting</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>about_POWERSHELL_Remoting
+
+get more notes from:
+https://blogs.technet.microsoft.com/heyscriptingguy/2012/07/24/an-introduction-to-powershell-remoting-part-two-configuring-powershell-remoting/
+https://blogs.technet.microsoft.com/heyscriptingguy/2012/07/25/an-introduction-to-powershell-remoting-part-three-interactive-and-fan-out-remoting/
+https://blogs.technet.microsoft.com/heyscriptingguy/2012/07/27/an-introduction-to-powershell-remoting-part-five-constrained-powershell-endpoints/
+https://blogs.technet.microsoft.com/heyscriptingguy/2012/07/26/an-introduction-to-powershell-remoting-part-four-sessions-and-implicit-remoting/
+
+
+
+'    To verify that remoting is configured correctly (on local machine as the server), 
+'	 run a test command such as
+'    the following command, which creates a remote session on the local 
+'    computer.
+
+          New-PSSession
+
+#'there are already many techniques available for working with remote computers Besides PowerShell. 
+#'- Windows Management Instrumentation (WMI), which is commonly used with VBScript. 
+#'-  executables from resource kits or non-Microsoft tools that allow remote management, 
+#'        for example, 
+#'            the Sysinternals PSExec tools.
+#'Even many of the Windows PowerShell cmdlets have a ComputerName parameter to specify remote computers. 
+
+#' Power Shell Remoting is built on Microsoft’s implementation of the Web Services for Management (WSMan) protocol,
+#' and it uses the Windows Remote Management (WinRM) service to manage communication and authentication
+#'
+#' PowerShell Remoting connects my local Windows PowerShell session with another session running on the remote system.
+#' The commands that I enter are sent to the remote computer, executed locally, and then the results are sent back. 
+#'
+#' A major advantage over other methods of remote management is that a single port is used for every application that uses WSMan. 
+#' There are several authentication methods, including Kerberos protocol and Windows Challenge/Response. 
+#' The communication between two computers is encrypted at the protocol layer, 
+#'
+#' With fan-out remoting, I provide Windows PowerShell a list of computers along with the command I want them to run. 
+#'    Windows PowerShell “fans-out” and sends the command to the remote computers in parallel. 
+#'    Each remote system runs the command locally and sends the results back. 
+#'    This is different from the common VBScript technique of using a foreach loop to perform operations against a list of computers, one at a time.
+
+
+https://msexchange.me/2014/07/26/how-to-detect-whether-powershell-remoting-is-enabled/
+'To test whether powershell remoting is enabled
+'Just log on to the machine for which you want to Test this &amp; enter below commands
+&gt; Enter-PSSession -ComputerName localhost
+
+'If machine is not enabled for powershell remoting below is the output:
+' it shows a red error:  "Connecting to remote server failed..."
+
+'If machine is enabled for powershell remoting below is the output:
+[localhost]: PS C:\Users</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Remoting</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>CIM_session_examples</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Remoting</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>CIM_session_examples</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+#'A CIM session is a client-side object 
+#'	representing a connection to a local computer or a remote computer.
+#'The CIM session contains information about the connection, such as ComputerName, 
+#'	the protocol used for the connection, session ID and instance ID.
+
+#'1: Create a CIM session with default options
+#'	If ComputerName is not specified, 
+#'		New-CimSession creates a DCOM session to the local computer.
+&gt; New-CimSession
+
+#'2: Create a CIM session to a specific computer
+#'	By default, New-CimSession creates a WsMan session when ComputerName is specified
+&gt; New-CimSession -ComputerName Server01
+
+#'3: Create a CIM session to multiple computers
+#'	creates a CIM session to each of the computers specified by ComputerName, in the comma separated list.
+&gt;New-CimSession -ComputerName Server01,Server02,Server03
+
+#'4: Create a CIM session with a friendly name
+'Then you can use the friendly name of a CIM session to easily refer to the session in other CIM cmdlets, 
+'		for example, Get-CimSession
+&gt;New-CimSession -ComputerName Server01,Server02 -Name FileServers
+'USAGE
+&gt;Get-CimSession -Name File*
+
+#'5: Create a CIM session to a computer using a PSCredential object
+&gt;New-CimSession -ComputerName Server01 -Credential $cred -Authentication Negotiate
+
+#'6: Create a CIM session to a computer using a specific port
+&gt;New-CimSession -ComputerName Server01 -Port 1234
+
+#'7: Create a CIM session using DCOM
+&gt;$so = New-CimSessionOption -Protocol DCOM
+'USAGE
+&gt;New-CimSession -ComputerName Server1 -SessionOption $so</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Remoting</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>CimSession_ connect via WS-MAN on default and fall back to DCOM automatically</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Remoting</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>CimSession_ connect via WS-MAN on default and fall back to DCOM automatically</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>http://maikkoster.com/cim-vs-wmi-cmdlets-the-top-reasons-i-changed/
+
+
+$SessionParams = @{}
+if ($PSBoundParameters['Credential']) {$SessionParams.Credential = $Credential}
+      
+$SessionParams.ComputerName = $ComputerName
+$WSMan = Test-WSMan -ComputerName $ComputerName -ErrorAction SilentlyContinue
+ 
+if (($WSMan -ne $null) -and ($WSMan.ProductVersion -match 'Stack: ([3-9]|[1-9][0-9]+)\.[0-9]+')) {
+    $Session = New-CimSession @SessionParams
+} 
+ 
+if ($Session -eq $null) {
+    $SessionParams.SessionOption = (New-CimSessionOption -Protocol Dcom)
+    $Session = New-CimSession @SessionParams
+}</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Remoting</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>Create_CimSessions_with_fallback_to_DCOM__function</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Remoting</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>Create_CimSessions_with_fallback_to_DCOM__function</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>from:https://gallery.technet.microsoft.com/scriptcenter/PowerShell-Function-to-a7fb6800
+
+
+=================USAGE:
+&gt;New-MrCimSession -ComputerName SQL01, SQL03
+
+'The previously created CimSessions can be used to query information from WMI 
+'	on the remote computers regardless of which underlying protocol is used for communication:
+
+&gt; Get-CimInstance -CimSession (Get-CimSession) -ClassName Win32_OperatingSystem |
+Select-Object -Property PSComputerName, Caption
+
+'The 'Get-CimSession' gets the sessions created in the first command,
+'	and the result is a list of the computernames, and the OS (i.e. the Caption)
+=======================================================================
+#Requires -Version 3.0 
+function New-MrCimSession { 
+&lt;# 
+.SYNOPSIS 
+    Creates CimSessions to remote computer(s), automatically determining if the WSMAN 
+    or Dcom protocol should be used. 
+.DESCRIPTION 
+    New-MrCimSession is a function that is designed to create CimSessions to one or more 
+    computers, automatically determining if the default WSMAN protocol or the backwards 
+    compatible Dcom protocol should be used. PowerShell version 3 is required on the 
+    computer that this function is being run on, but PowerShell does not need to be 
+    installed at all on the remote computer. 
+.PARAMETER ComputerName 
+    The name of the remote computer(s). This parameter accepts pipeline input. The local 
+    computer is the default. 
+.PARAMETER Credential 
+    Specifies a user account that has permission to perform this action. The default is 
+    the current user. 
+.EXAMPLE 
+     New-MrCimSession -ComputerName Server01, Server02 
+.EXAMPLE 
+     New-MrCimSession -ComputerName Server01, Server02 -Credential (Get-Credential) 
+.EXAMPLE 
+     Get-Content -Path C:\Servers.txt | New-MrCimSession 
+.INPUTS 
+    String 
+.OUTPUTS 
+    Microsoft.Management.Infrastructure.CimSession 
+.NOTES 
+    Author:  Mike F Robbins 
+    Website: http://mikefrobbins.com 
+    Twitter: @mikefrobbins 
+#&gt; 
+    [CmdletBinding()] 
+    param( 
+        [Parameter(ValueFromPipeline)] 
+        [ValidateNotNullorEmpty()] 
+        [string[]]$ComputerName = $env:COMPUTERNAME, 
+  
+        [System.Management.Automation.Credential()]$Credential = [System.Management.Automation.PSCredential]::Empty 
+    ) 
+ 
+    BEGIN { 
+        $Opt = New-CimSessionOption -Protocol Dcom 
+ 
+        $SessionParams = @{ 
+            ErrorAction = 'Stop' 
+        } 
+ 
+        If ($PSBoundParameters['Credential']) { 
+            $SessionParams.Credential = $Credential 
+        } 
+    } 
+ 
+    PROCESS { 
+        foreach ($Computer in $ComputerName) { 
+            $SessionParams.ComputerName  = $Computer 
+ 
+            if ((Test-WSMan -ComputerName $Computer -ErrorAction SilentlyContinue).productversion -match 'Stack: ([3-9]|[1-9][0-9]+)\.[0-9]+') { 
+                try { 
+                    Write-Verbose -Message "Attempting to connect to $Computer using the WSMAN protocol." 
+                    New-CimSession @SessionParams 
+                } 
+                catch { 
+                    Write-Warning -Message "Unable to connect to $Computer using the WSMAN protocol. Verify your credentials and try again." 
+                } 
+            } 
+  
+            else { 
+                $SessionParams.SessionOption = $Opt 
+ 
+                try { 
+                    Write-Verbose -Message "Attempting to connect to $Computer using the DCOM protocol." 
+                    New-CimSession @SessionParams 
+                } 
+                catch { 
+                    Write-Warning -Message "Unable to connect to $Computer using the WSMAN or DCOM protocol. Verify $Computer is online and try again." 
+                } 
+ 
+                $SessionParams.Remove('SessionOption') 
+            }             
+        } 
+    } 
+}
+
+=======================================================================</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Remoting</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>How_To_from_PluralSight</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Remoting</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>How_To_from_PluralSight</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>&lt;#'-----------------------------------------------------------------------------
+  Beginning PowerShell Scripting for Developers
+  Simple script that will just 'Do Something'
+
+  Author: Robert C. Cain | @ArcaneCode | arcanecode@gmail.com
+          http://arcanecode.com
+ 
+  This module is Copyright (c) 2015 Robert C. Cain. All rights reserved.
+  The code herein is for demonstration purposes. No warranty or guarentee
+  is implied or expressly granted. 
+  This module may not be reproduced in whole or in part without the express
+  written consent of the author. 
+-----------------------------------------------------------------------------#&gt;
+
+
+#'-----------------------------------------------------------------------------#'
+#' A few definitions, the "remote" computer is the machine you want to remote
+#' control from PowerShell. The "local" computer is the one you are using,
+#' i.e. running PowerShell on. 
+#'-----------------------------------------------------------------------------#'
+
+#' First, you will need to enable remoting on the computer you want to control
+#' ON the REMOTE COMPUTER, enter the command below. (-Force will run without
+#' prompts)
+
+Enable-PSRemoting -Force
+
+#' If you are NOT running on a domain, for example doing this on a home
+#' network, you will need to do a few other things. 
+#' On both the remote computer and the local computer, run:
+#' This tells it to trust ALL hosts (!!!!)
+
+Set-Item wsman:\localhost\client\trustedhosts *
+
+#' Instead of an *, you could specify the IP Addresses of the machines. 
+
+#' You will then need to restart the Windows Remote Management service
+#' on both computers.
+Restart-Service WinRM
+
+#' On the LOCAL computer you are using, you can test by using Test-WSMan
+#' followed by the name of the remote computer. 
+#' wsman
+Test-WSMan ACSrv
+
+#' Now execute a command on the remote system
+#' The Script block could be stored in a variable
+Invoke-Command -ComputerName BCC-EXPLORER3DB `
+               -ScriptBlock { Get-ChildItem C:\ } `
+               -Credential glenng
+#' It immediately challenges me for my password, then it runs successfully
+
+
+#' You can also open up a PowerShell window which will execute
+#' on the remote computer
+Enter-PSSession -ComputerName BCC-EXPLORER3 -Credential glenng
+
+#' Now the console screen shows that it is actually on the remote server:
+#' [BCC-EXPLORER3]: PS C:\Users\glenng\Documents&gt; 
+
+#' To exit the remote server in the console window:
+exit   'OR &gt; Exit-PSSession
+
+#' In the PowerShell ISE there is an icon in the menu bar to launch a remote session
+#' It will ask for the computer and my UserID, then challenge me for the password.
+#' When it succeeds it will open a new tab in the ISE that is on the remote computer
+
+
+#'-----------------------------------------------------------------------------#'
+#' Fix for network connection profile public {this was not a problem for me at BCC}
+#'-----------------------------------------------------------------------------#'
+Get-NetConnectionProfile           #' I think this is not available in Windows 7
+
+#' Temporarily Set to Private
+Set-NetConnectionProfile `
+  -InterfaceAlias 'vEthernet (HWired)' `
+  -NetworkCategory Private
+
+Set-NetConnectionProfile `
+  -InterfaceAlias 'vEthernet (Internal Ethernet Port Windows Phone Emulator Internal Switch)' `
+  -NetworkCategory Private
+
+
+#' Put them back
+Set-NetConnectionProfile `
+  -InterfaceAlias 'vEthernet (HWired)' `
+  -NetworkCategory Public
+
+Set-NetConnectionProfile `
+  -InterfaceAlias 'vEthernet (Internal Ethernet Port Windows Phone Emulator Internal Switch)' `
+  -NetworkCategory Public
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Remoting</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>Remoting_Overview</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Remoting</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>Remoting_Overview</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+#'Powershell remoting vs DCOM apprach
+#'
+#'Powershell remoting = run a command on a remote machine, or with a PSSession
+#'
+#'Powershell remoting sends a command, usually using WSMan, from Client to Server
+#'	by default uses Port (the port can be modified):
+#'							http:  5985
+#'							https: 5986
+#'							
+#'	Server listens on those Ports, then passes the command to an EndPoint
+#'		The EndPoint is a plugin, like a connection, in this case it is a Powershell instance
+#'		The results are serialized and sent back to the Client
+#'		
+
+
+-------------------------------------------------------------------------------------------------------	
+#'		There are several default session configurations	
+		&gt;Get-PSSessionConfiguration
+		
+		'Pop-up response: WinRM service is not started currently. Running this command will start WinRM service.
+		
+		'ERROR:dir : The client cannot connect to the destination specified in the request. Verify that the service on the destination is running and is accepting requests. Consult the logs and documentation for the WS-Management service running on the destination, most 
+		'	commonly IIS or WinRM. If the destination is the WinRM service, run the following command on the destination to analyze and configure the WinRM service: "winrm quickconfig". 
+		'To get past this, you need to start the 'Windows Remote Management (WS-Management)' service 
+
+-------------------------------------------------------------------------------------------------------
+'To enable on a local machine, so that it can be the Server (i.e. so that it can recieve commands)
+'	Must run elevated
+'	Run once per machine
+
+&gt;Enable-PSRemoting
+	-'	Runs Set-WSManQuickConfig
+	-'	Configures WinRM to AutoStart
+	-'	Configures Firewall settings
+	-'	Registers session configurations and listeners
+	
+'OR can use Group Policy	
+	
+'To disable remoting
+&gt;Disable-PSRemoting</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Remoting</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>TroubleShooting_PowerShellRemoting</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Remoting</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>TroubleShooting_PowerShellRemoting</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+
+&gt;Test-Connection
+'The Test-WSMan cmdlet submits an identification request that determines whether the WinRM service is running on a local or remote computer
+&gt;Test-WSMan
+
+'Connects to the WinRM service on a remote computer.
+&gt;Connect-WSMan  {to see if you can connect to the server}
+----------------------------------------
+			&gt;Connect-WSMan -ComputerName "server01"
+			PS C:\&gt; cd wsman:
+			PS WSMan:\&gt;
+			PS WSMan:\&gt; dir
+			WSManConfig: Microsoft.WSMan.Management\WSMan::WSMan
+			
+			ComputerName                                  Type
+			------------                                  ----
+			localhost                                     Container
+			server01                                      Container      
+			
+-----------------------------------------
+&gt;Get-PSSessionConfiguration  {run on the server}
+
+
+'ERROR MESSAGES:
+Get-WmiObject : The RPC server is unavailable. (Exception from HRESULT: 0x800706BA)
+...
+    + CategoryInfo          : InvalidOperation: (:) [Get-WmiObject], COMException
+    + FullyQualifiedErrorId : GetWMICOMException,Microsoft.PowerShell.Commands.GetWmiObjectCommand</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Remoting</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>WMI_vs_CIM_session</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Remoting</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>WMI_vs_CIM_session</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>https://blogs.technet.microsoft.com/heyscriptingguy/2016/02/08/should-i-use-cim-or-wmi-with-windows-powershell/
+
+remember that CIM = WMI = CIM
+
+CIM provides a common definition of management information for 
+	systems, networks, applications, and services, 
+	and it allows for vendor extensions. 
+WMI is the Microsoft implementation of CIM for the Windows platform.
+
+The big difference between the WMI cmdlets and the CIM cmdlets is that 
+	the CIM cmdlets use WSMAN (WinRM) to connect to remote machines. 
+
+These WMI cmdlets were introduced in Windows PowerShell 1.0 and 2.0:
+	Get-WmiObject	(Get-WmiObject is one of the original PowerShell cmdlets.)
+					( In PowerShell 1.0, Get-WmiObject was the only cmdlet with the option to access another system.)
+	Invoke-WmiMethod
+	Register-WmiEvent
+	Remove-WmiObject
+	Set-WmiInstance
+	
+There are CIM cmdlets that are directly equivalent to the WMI cmdlets:
+	Get-CimInstance
+	Invoke-CimMethod
+	Register-CimIndicationEvent
+	Remove-CimInstance
+	Set-CimInstance	
+	
+You also get extra cmdlets for working with CIM classes:
+	Get-CimAssociatedInstance
+	Get-CimClass
+	New-CimInstance	
+	
+	
+	
+WMI cmdlets
+----------
+The big drawback to the WMI cmdlets is that they use DCOM to access remote machines.
+DCOM isn’t firewall friendly, can be blocked by networking equipment, and gives some arcane errors when things go wrong.
+
+CIM cmdlets
+-------------
+The CIM cmdlets appeared in PowerShell 3.0 as part of the new API for working with CIM classes, 
+	which is more standards based. 
+	
+	
+NOTE
+-----
+CDXML, which enables a CIM class to be wrapped in some simple XML and published as a PowerShell module. This is how over 60% of the cmdlets in Windows 8 and later are produced.
+
+	
+CIM Sessions
+------------
+In the same way that you can create PowerShell remoting sessions, 
+	you can create and manage CIM sessions by using these cmdlets:
+
+Get-CimSession
+New-CimSession
+New-CimSessionOption
+Remove-CimSession
+
+
+Example WMI vs CIM - Get last boot time
+========================================
+&gt;Get-WmiObject -Class Win32_OperatingSystem | select @{N='LastBootTime'; E={$_.ConvertToDateTime($_.LastBootUpTime)}}
+OUTPUT
+---------
+'LastBootTime
+'------------
+'31/01/2016 09:44:54
+
+'VS
+
+&gt;Get-CimInstance -ClassName Win32_OperatingSystem | select LastBootUpTime
+'OUTPUT
+------------
+'LastBootUpTime
+'--------------
+'31/01/2016 09:44:54
+
+
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Functions</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>Function_PARAMETERS</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Functions</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>Function_PARAMETERS</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>From Directions Training 
+
+#' basic function model
+function test {
+    Param(
+    [string]$ComputerName
+    )
+}
+help test
+
+
+
+#' again:
+function test {
+    [CmdletBinding()]
+    Param(
+        [string]$ComputerName
+    )
+}
+test
+
+
+
+#' starting with...
+function Get-MachineInfo {
+    Param(
+        [string[]]$ComputerName,
+        [string]$LogFailuresToPath,
+        [string]$Protocol = "Wsman",
+        [switch]$ProtocolFallback
+    )
+ 
+    foreach ($computer in $computername) {
+ 
+        #' Establish session protocol
+        if ($protocol -eq 'Dcom') {
+            $option = New-CimSessionOption -Protocol Dcom
+        } else {
+            $option = New-CimSessionOption -Protocol Wsman
+        }
+ 
+        #' Connect session
+        $session = New-CimSession -ComputerName $computer `
+                                  -SessionOption $option
+  
+        #' Query data
+        $os = Get-CimInstance -ClassName Win32_OperatingSystem `
+                              -CimSession $session
+  
+        #' Close session
+        $session | Remove-CimSession
+  
+        #' Output data
+        $os | Select-Object -Prop @{n='ComputerName';e={$computer}},
+                                Version,ServicePackMajorVersion
+ 
+    } #'foreach
+ 
+} #'function
+
+
+
+#' moving to...
+function Get-MachineInfo {
+    [CmdletBinding()]
+    Param(
+        [Parameter(ValueFromPipeline=$True)]
+        [string[]]$ComputerName,
+        
+        [string]$LogFailuresToPath,
+
+        [string]$Protocol = "Wsman",
+
+        [switch]$ProtocolFallback
+    )
+ 
+ BEGIN {}
+
+ PROCESS {
+    foreach ($computer in $computername) {
+ 
+        #' Establish session protocol
+        if ($protocol -eq 'Dcom') {
+            $option = New-CimSessionOption -Protocol Dcom
+        } else {
+            $option = New-CimSessionOption -Protocol Wsman
+        }
+ 
+        #' Connect session
+        $session = New-CimSession -ComputerName $computer `
+                                  -SessionOption $option
+  
+        #' Query data
+        $os = Get-CimInstance -ClassName Win32_OperatingSystem `
+                              -CimSession $session
+  
+        #' Close session
+        $session | Remove-CimSession
+  
+        #' Output data
+        $os | Select-Object -Prop @{n='ComputerName';e={$computer}},
+                                Version,ServicePackMajorVersion
+ 
+    } #'foreach
+} #'PROCESS
+
+END {}
+
+} #'function
+
+
+
+#' imagine this run pattern:
+Get-MachineInfo -ComputerName ONE,TWO,THREE
+
+#' versus:
+"ONE","TWO","THREE" | Get-MachineInfo
+
+
+
+#' consider doing this
+End {
+ #' intentionally empty
+}
+
+
+
+#' parameter decorator
+[Parameter(ValueFromPipeline=$True)]
+
+
+#' adding ByPropertyName
+[Parameter(ValueFromPipeline=$True,ValueFromPipelineByPropertyName=$True)]
+
+
+
+#' marking mandatory
+    Param(
+        [Parameter(ValueFromPipeline=$True,
+                   Mandatory=$True)]
+        [string[]]$ComputerName,
+        
+        [string]$LogFailuresToPath,
+
+        [string]$Protocol = "Wsman",
+
+        [switch]$ProtocolFallback
+    )
+
+
+
+#' adding validation
+    [CmdletBinding()]
+    Param(
+        [Parameter(ValueFromPipeline=$True,
+                   Mandatory=$True)]
+        [string[]]$ComputerName,
+        
+        [string]$LogFailuresToPath,
+
+        [ValidateSet('Wsman','Dcom')]
+        [string]$Protocol = "Wsman",
+
+        [switch]$ProtocolFallback
+    )
+
+
+
+#' aliases (more on these later)
+    [CmdletBinding()]
+    Param(
+        [Parameter(ValueFromPipeline=$True,
+                   Mandatory=$True)]
+        [Alias('CN','MachineName','Name')]
+        [string[]]$ComputerName,
+        
+        [string]$LogFailuresToPath,
+
+        [ValidateSet('Wsman','Dcom')]
+        [string]$Protocol = "Wsman",
+
+        [switch]$ProtocolFallback
+    )
+
+
+
+
+
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Remoting_CIM</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>custom_Get-MachineInfo</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Remoting_CIM</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>custom_Get-MachineInfo</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>From Directions Training:
+
+
+assumes WSman if $Protocol is not supplied
+======================================================================
+#' final code
+function Get-MachineInfo {
+    [CmdletBinding()]
+    Param(
+        [Parameter(ValueFromPipeline=$True,
+                   Mandatory=$True)]
+        [Alias('CN','MachineName','Name')]
+        [string[]]$ComputerName,
+        
+        [string]$LogFailuresToPath,
+
+        [ValidateSet('Wsman','Dcom')]
+        [string]$Protocol = "Wsman",
+
+        [switch]$ProtocolFallback
+    )
+ 
+ BEGIN {}
+
+ PROCESS {
+    foreach ($computer in $computername) {
+ 
+        #' Establish session protocol
+        if ($protocol -eq 'Dcom') {
+            $option = New-CimSessionOption -Protocol Dcom
+        } else {
+            $option = New-CimSessionOption -Protocol Wsman
+        }
+ 
+        #' Connect session
+        $session = New-CimSession -ComputerName $computer `
+                                  -SessionOption $option
+  
+        #' Query data
+        $os_params = @{'ClassName'='Win32_OperatingSystem'
+                       'CimSession'=$session}
+        $os = Get-CimInstance @os_params
+
+        $cs_params = @{'ClassName'='Win32_ComputerSystem'
+                       'CimSession'=$session}
+        $cs = Get-CimInstance @cs_params
+
+        $sysdrive = $os.SystemDrive
+        $drive_params = @{'ClassName'='Win32_LogicalDisk'
+                          'Filter'="DeviceId='$sysdrive'"
+                          'CimSession'=$session}
+        $drive = Get-CimInstance @drive_params
+
+        $proc_params = @{'ClassName'='Win32_Processor'
+                         'CimSession'=$session}
+        $proc = Get-CimInstance @proc_params |
+                Select-Object -first 1
+
+  
+        #' Close session
+        $session | Remove-CimSession
+  
+        #' Output data
+        $props = @{'ComputerName'=$computer
+                   'OSVersion'=$os.version
+                   'SPVersion'=$os.servicepackmajorversion
+                   'OSBuild'=$os.buildnumber
+                   'Manufacturer'=$cs.manufacturer
+                   'Model'=$cs.model
+                   'Procs'=$cs.numberofprocessors
+                   'Cores'=$cs.numberoflogicalprocessors
+                   'RAM'=($cs.totalphysicalmemory / 1GB)
+                   'Arch'=$proc.addresswidth
+                   'SysDriveFreeSpace'=$drive.freespace}
+        $obj = New-Object -TypeName PSObject -Property $props
+        Write-Output $obj                           #' &lt;=== Put HashTable object for output
+ 
+    } #'foreach
+} #'PROCESS
+
+END {}
+
+} #'function
+
+
+====NOTES=====================================================================
+
+#' functional overview of tool - will not execute as-is
+        #' Query data
+        $os = Get-CimInstance -ClassName Win32_OperatingSystem `
+                              -CimSession $session
+  
+        #' Close session
+        $session | Remove-CimSession
+  
+        #' Output data
+        $os | Select-Object -Prop @{n='ComputerName';e={$computer}},
+                                Version,ServicePackMajorVersion
+
+
+#' params into hash table
+$params = @{'ClassName'='Win32_OperatingSystem'
+            'ComputerName'='CLIENT1'}
+
+
+#' switch params in hash table
+$params = @{'ClassName'='Win32_OperatingSystem'
+            'ComputerName'='CLIENT1'
+            'Verbose' = $True}
+
+
+
+#' splatting hash table of params
+Get-CimInstance @params
+
+
+
+#' revised snippet - will not execute as-is
+        #' Query data
+        $os_params = @{'ClassName'='Win32_OperatingSystem'
+                       'CimSession'=$session}
+        $os = Get-CimInstance @os_params
+
+        $cs_params = @{'ClassName'='Win32_ComputerSystem'
+                       'CimSession'=$session}
+        $cs = Get-CimInstance @cs_params
+
+        $sysdrive = $os.SystemDrive
+        $drive_params = @{'ClassName'='Win32_LogicalDisk'
+                          'Filter'="DeviceId='$sysdrive'"
+                          'CimSession'=$session}        $drive = Get-CimInstance @drive_params
+
+        $proc_params = @{'ClassName'='Win32_Processor'
+                         'CimSession'=$session}
+        $proc = Get-CimInstance @proc_params |
+                Select-Object -first 1
+
+
+
+#' constructing custom object
+        #' Output data
+        $props = @{'ComputerName'=$computer
+                   'OSVersion'=$os.version
+                   'SPVersion'=$os.servicepackmajorversion
+                   'OSBuild'=$os.buildnumber
+                   'Manufacturer'=$cs.manufacturer
+                   'Model'=$cs.model
+                   'Procs'=$cs.numberofprocessors
+                   'Cores'=$cs.numberoflogicalprocessors
+                   'RAM'=($cs.totalphysicalmemory / 1GB)
+                   'Arch'=$proc.addresswidth
+                   'SysDriveFreeSpace'=$drive.freespace}
+        $obj = New-Object -TypeName PSObject -Property $props
+        Write-Output $obj</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Remoting_CIM</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>Example_GetResultsFromContactingAComputer_showAsStatus</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Remoting_CIM</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>Example_GetResultsFromContactingAComputer_showAsStatus</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>Example_GetResultsFromContactingAComputer_showAsStatus
+
+'it outputs an object for each computer it operates against. 
+'	The output should include the computer name and a status 
+
+
+
+
+===========================================================
+function Set-TMServiceLogon {
+    [CmdletBinding()]
+    Param(
+        [Parameter(Mandatory=$True,                              #' &lt;=== Mandatory
+                   ValueFromPipelineByPropertyName=$True)]       #' &lt;=== can accept pipeline input ByPropertyName
+        [string]$ServiceName,
+
+        [Parameter(Mandatory=$True,                              #' &lt;=== Mandatory
+                   ValueFromPipeline=$True,                      #' &lt;=== can accept pipeline input ByValue  (only one parm is allowed to do so?)
+                   ValueFromPipelineByPropertyName=$True)]       #' &lt;=== can accept pipeline input ByPropertyName
+        [string[]]$ComputerName,
+
+        [Parameter(Mandatory=$True,                              #' &lt;=== Mandatory
+                   ValueFromPipelineByPropertyName=$True)]       #' &lt;=== can accept pipeline input ByPropertyName
+        [string]$NewPassword,
+
+        [Parameter(ValueFromPipelineByPropertyName=$True)]       #' &lt;=== can accept pipeline input ByPropertyName
+        [string]$NewUser,
+
+        [string]$ErrorLogFilePath
+    )
+
+BEGIN{}
+
+PROCESS{
+    ForEach ($computer in $ComputerName) {
+
+        $option = New-CimSessionOption -Protocol Wsman
+        $session = New-CimSession -SessionOption $option `
+                                  -ComputerName $Computer
+
+        If ($PSBoundParameters.ContainsKey('NewUser')) {           
+            $args = @{'StartName'=$NewUser
+                      'StartPassword'=$NewPassword}
+        } Else {
+            $args = @{'StartPassword'=$NewPassword}
+        }
+
+        $params = @{'CimSession'=$session                        #' Put the Parms into a HashTable
+                    'MethodName'='Change'
+                    'Query'="SELECT * FROM Win32_Service WHERE Name = '$ServiceName'"
+                    'Arguments'=$args}
+        $ret = Invoke-CimMethod @params                          #' Splat the HashTable as input to 'Invoke-CimMethod'
+       
+        #' Change Method (Win32_Service) status Codes: https://msdn.microsoft.com/en-us/library/aa384901.aspx
+        
+        switch ($ret.ReturnValue) {                              #' Get the Return Value
+            0  { $status = "Success" }      
+            22 { $status = "Invalid Account" }
+            Default { $status = "Failed: $($ret.ReturnValue)" }
+        }
+
+        $props = @{'ComputerName'=$computer                      #' Build the output variable, with the Return Value and the Computer Name
+                   'Status'=$status}
+        $obj = New-Object -TypeName PSObject -Property $props    #' Package the output variable into a new object
+        Write-Output $obj                                        #' Write the object to the screen
+
+        $session | Remove-CimSession
+
+    } #foreach
+} #PROCESS
+
+END{} 
+
+} #function
+===========================================================</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Select</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>Select-Object_to_build_output_from_function</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Select</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>Select-Object_to_build_output_from_function</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>function Set-TMServiceLogon {
+    [CmdletBinding()]
+    Param(
+        [Parameter(Mandatory=$True,                              #' &lt;=== Mandatory
+                   ValueFromPipelineByPropertyName=$True)]       #' &lt;=== can accept pipeline input ByPropertyName
+        [string]$ServiceName,
+
+        [Parameter(Mandatory=$True,                              #' &lt;=== Mandatory
+                   ValueFromPipeline=$True,                      #' &lt;=== can accept pipeline input ByValue  (only one parm is allowed to do so?)
+                   ValueFromPipelineByPropertyName=$True)]       #' &lt;=== can accept pipeline input ByPropertyName
+        [string[]]$ComputerName,
+
+        [Parameter(Mandatory=$True,                              #' &lt;=== Mandatory
+                   ValueFromPipelineByPropertyName=$True)]       #' &lt;=== can accept pipeline input ByPropertyName
+        [string]$NewPassword,
+
+        [Parameter(ValueFromPipelineByPropertyName=$True)]       #' &lt;=== can accept pipeline input ByPropertyName
+        [string]$NewUser,
+
+        [string]$ErrorLogFilePath
+    )
+
+BEGIN{}
+
+PROCESS{
+
+
+    ForEach ($computer in $ComputerName) {
+
+        $option = New-CimSessionOption -Protocol Wsman
+        $session = New-CimSession -SessionOption $option `
+                                  -ComputerName $Computer
+
+        If ($PSBoundParameters.ContainsKey('NewUser')) {
+            $args = @{'StartName'=$NewUser
+                      'StartPassword'=$NewPassword}
+        } Else {
+            $args = @{'StartPassword'=$NewPassword}
+        }
+
+        Invoke-CimMethod -ComputerName $computer `
+                         -MethodName Change `
+                         -Query "SELECT * FROM Win32_Service WHERE Name = '$ServiceName'" `
+                         -Arguments $args |
+        Select-Object -Property @{n='ComputerName';e={$computer}},         #' This is the output object presented to the user 
+                                @{n='Result';e={$_.ReturnValue}}           #' n=name, e=Expression
+
+        $session | Remove-CimSession
+
+    } #foreach
+
+
+} #PROCESS
+
+END{} 
+
+} #function</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_OutPut</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>Put_results_into_an_object_thenAtTheEnd_Write-Output_the_object</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_OutPut</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>Put_results_into_an_object_thenAtTheEnd_Write-Output_the_object</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code># simply notice the use of Write- commands in the below...
+function Get-MachineInfo {
+    [CmdletBinding()]
+    Param(
+        [Parameter(ValueFromPipeline=$True,
+                   Mandatory=$True)]
+        [Alias('CN','MachineName','Name')]
+        [string[]]$ComputerName,
+        
+        [string]$LogFailuresToPath,
+
+        [ValidateSet('Wsman','Dcom')]
+        [string]$Protocol = "Wsman",
+
+        [switch]$ProtocolFallback
+    )
+ 
+ BEGIN {}
+
+ PROCESS {
+    foreach ($computer in $computername) {
+ 
+        if ($protocol -eq 'Dcom') {
+            $option = New-CimSessionOption -Protocol Dcom
+        } else {
+            $option = New-CimSessionOption -Protocol Wsman
+        }
+ 
+        Write-Verbose "Connecting to $computer over $protocol"
+        $session = New-CimSession -ComputerName $computer `
+                                  -SessionOption $option
+  
+        Write-Verbose "Querying from $computer"
+        $os_params = @{'ClassName'='Win32_OperatingSystem'
+                       'CimSession'=$session}
+        $os = Get-CimInstance @os_params
+
+        $cs_params = @{'ClassName'='Win32_ComputerSystem'
+                       'CimSession'=$session}
+        $cs = Get-CimInstance @cs_params
+
+        $sysdrive = $os.SystemDrive
+        $drive_params = @{'ClassName'='Win32_LogicalDisk'
+                          'Filter'="DeviceId='$sysdrive'"
+                          'CimSession'=$session}
+        $drive = Get-CimInstance @drive_params
+
+        $proc_params = @{'ClassName'='Win32_Processor'
+                         'CimSession'=$session}
+        $proc = Get-CimInstance @proc_params |
+                Select-Object -first 1
+
+  
+        Write-Verbose "Closing session to $computer"
+        $session | Remove-CimSession
+  
+        Write-Verbose "Outputting for $computer"
+        $obj = [pscustomobject]@{'ComputerName'=$computer         #'&lt;===========
+                   'OSVersion'=$os.version
+                   'SPVersion'=$os.servicepackmajorversion
+                   'OSBuild'=$os.buildnumber
+                   'Manufacturer'=$cs.manufacturer
+                   'Model'=$cs.model
+                   'Procs'=$cs.numberofprocessors
+                   'Cores'=$cs.numberoflogicalprocessors
+                   'RAM'=($cs.totalphysicalmemory / 1GB)
+                   'Arch'=$proc.addresswidth
+                   'SysDriveFreeSpace'=$drive.freespace}
+        Write-Output $obj                                        #'&lt;===========
+ 
+    } #foreach
+} #PROCESS
+
+END {}
+
+} #function</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Help</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>example</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Help</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>example</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>'You do not have to use all-uppercase letters, but the period preceding each help keyword 
+'	(.SYNOPSIS, .DESCRIPTION) must be in the first column. 
+ 
+
+
+
+# completed...
+function Get-MachineInfo {
+&lt;#
+.SYNOPSIS
+Retrieves specific information about one or more
+computers, using WMI or CIM.
+.DESCRIPTION
+This command uses either WMI or CIM to retrieve
+specific information about one or more computers.
+You must run this command as a user who has permission
+to remotely query CIM or WMI on the machines involved.
+You can specify a starting protocol (CIM by default),
+and specify that, in the event of a failure, the other
+protocol be used on a per-machine basis.
+.PARAMETER ComputerName
+One or more computer names. When using WMI, this can
+also be IP addresses. IP addresses may not work for CIM.
+.PARAMETER LogFailuresToPath
+A path and filename to write failed computer names to.
+If omitted, no log will be written.
+.PARAMETER Protocol
+Valid values: Wsman (uses CIM) or Dcom (uses WMI). Will
+be used for all machines. "Wsman" is the default.
+.PARAMETER ProtocolFallback
+Specify this to automatically try the other protocol if
+a machine fails.
+.EXAMPLE
+Get-MachineInfo -ComputerName ONE,TWO,THREE
+This example will query three machines.
+.EXAMPLE
+Get-ADUser -filter * | Select -Expand Name | Get-MachineInfo
+This example will attempt to query all machines in AD.
+#&gt;
+    [CmdletBinding()]
+    Param(
+        [Parameter(ValueFromPipeline=$True,
+                   Mandatory=$True)]
+        [Alias('CN','MachineName','Name')]
+        [string[]]$ComputerName,
+        
+        [string]$LogFailuresToPath,
+
+        [ValidateSet('Wsman','Dcom')]
+        [string]$Protocol = "Wsman",
+
+        [switch]$ProtocolFallback
+    )
+ 
+ BEGIN {}
+
+ PROCESS {
+    foreach ($computer in $computername) {
+ 
+        if ($protocol -eq 'Dcom') {
+            $option = New-CimSessionOption -Protocol Dcom
+        } else {
+            $option = New-CimSessionOption -Protocol Wsman
+        }
+ 
+        Write-Verbose "Connecting to $computer over $protocol"
+        $session = New-CimSession -ComputerName $computer `
+                                  -SessionOption $option
+  
+        Write-Verbose "Querying from $computer"
+        $os_params = @{'ClassName'='Win32_OperatingSystem'
+                       'CimSession'=$session}
+        $os = Get-CimInstance @os_params
+
+        $cs_params = @{'ClassName'='Win32_ComputerSystem'
+                       'CimSession'=$session}
+        $cs = Get-CimInstance @cs_params
+
+        $sysdrive = $os.SystemDrive
+        $drive_params = @{'ClassName'='Win32_LogicalDisk'
+                          'Filter'="DeviceId='$sysdrive'"
+                          'CimSession'=$session}
+        $drive = Get-CimInstance @drive_params
+
+        $proc_params = @{'ClassName'='Win32_Processor'
+                         'CimSession'=$session}
+        $proc = Get-CimInstance @proc_params |
+                Select-Object -first 1
+
+  
+        Write-Verbose "Closing session to $computer"
+        $session | Remove-CimSession
+  
+        Write-Verbose "Outputting for $computer"
+        $obj = [pscustomobject]@{'ComputerName'=$computer
+                   'OSVersion'=$os.version
+                   'SPVersion'=$os.servicepackmajorversion
+                   'OSBuild'=$os.buildnumber
+                   'Manufacturer'=$cs.manufacturer
+                   'Model'=$cs.model
+                   'Procs'=$cs.numberofprocessors
+                   'Cores'=$cs.numberoflogicalprocessors
+                   'RAM'=($cs.totalphysicalmemory / 1GB)
+                   'Arch'=$proc.addresswidth
+                   'SysDriveFreeSpace'=$drive.freespace}
+        Write-Output $obj
+ 
+    } #foreach
+} #PROCESS
+
+END {}
+
+} #function
+
+
+
+# prettier...
+&lt;#
+.SYNOPSIS
+Retrieves specific information about one or more
+computers, using WMI or CIM.
+
+.DESCRIPTION
+This command uses either WMI or CIM to retrieve
+specific information about one or more computers.
+You must run this command as a user who has permission
+to remotely query CIM or WMI on the machines involved.
+You can specify a starting protocol (CIM by default),
+and specify that, in the event of a failure, the other
+protocol be used on a per-machine basis.
+
+.PARAMETER ComputerName
+One or more computer names. When using WMI, this can
+also be IP addresses. IP addresses may not work for CIM.
+
+.PARAMETER LogFailuresToPath
+A path and filename to write failed computer names to.
+If omitted, no log will be written.
+
+.PARAMETER Protocol
+Valid values: Wsman (uses CIM) or Dcom (uses WMI). Will
+be used for all machines. "Wsman" is the default.
+
+.PARAMETER ProtocolFallback
+Specify this to automatically try the other protocol if
+a machine fails.
+
+.EXAMPLE
+Get-MachineInfo -ComputerName ONE,TWO,THREE
+This example will query three machines.
+
+.EXAMPLE
+Get-ADUser -filter * | Select -Expand Name | Get-MachineInfo
+This example will attempt to query all machines in AD.
+#&gt;
+
+
+
+# more sections...
+&lt;#
+.INPUTS
+System.String
+
+.NOTES
+version     : 1.0.0
+last updated: 1 February, 2017
+
+.LINK
+https://powershell.org/forums/
+.LINK
+Get-CimInstance
+.LINK
+Get-WmiObject
+
+#&gt;</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Remoting_CIM</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>CIM_ErrorHandling</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Remoting_CIM</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>CIM_ErrorHandling</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>'Errors from CIM remoting tend to be .NET types of errors
+'This one lets you switch from one protocol to the other
+
+#' notice error behavior
+Get-Service -Name BITS,Nobody,WinRM
+
+
+
+#' try each in turn
+Get-Service -Name BITS,Nobody,WinRM -EA Continue
+Get-Service -Name BITS,Nobody,WinRM -EA SilentlyContinue
+Get-Service -Name BITS,Nobody,WinRM -EA Inquire
+Get-Service -Name BITS,Nobody,WinRM -EA Stop
+
+
+
+#' moving from this... The processing would continue even if there is an error
+        Write-Verbose "Connecting to $computer over $protocol"
+        $session = New-CimSession -ComputerName $computer `
+                                  -SessionOption $option
+
+
+#' to this... This should be used when just one thing, on one computer is happening.
+        Write-Verbose "Connecting to $computer over $protocol"
+        $params = @{'ComputerName'=$Computer
+                    'SessionOption'=$option
+                    'ErrorAction'='Stop'}       #'' Put a terminating action into the session, when the script has a problem, rather than allowing processing to continue.
+        $session = New-CimSession @params
+
+
+
+#' observe structure - will not execute as-is
+ PROCESS {
+    foreach ($computer in $computername) {
+ 
+        if ($protocol -eq 'Dcom') {
+            $option = New-CimSessionOption -Protocol Dcom
+        } else {
+            $option = New-CimSessionOption -Protocol Wsman
+        }
+ 
+        Try {
+            Write-Verbose "Connecting to $computer over $protocol"
+            $params = @{'ComputerName'=$Computer
+                        'SessionOption'=$option
+                        'ErrorAction'='Stop'}
+            $session = New-CimSession @params            #'' so if it were to stop here it would jump to the 'Catch' section
+  
+            Write-Verbose "Querying from $computer"
+            $os_params = @{'ClassName'='Win32_OperatingSystem'
+                           'CimSession'=$session}
+            $os = Get-CimInstance @os_params
+
+            $cs_params = @{'ClassName'='Win32_ComputerSystem'
+                           'CimSession'=$session}
+            $cs = Get-CimInstance @cs_params
+
+            $sysdrive = $os.SystemDrive
+            $drive_params = @{'ClassName'='Win32_LogicalDisk'
+                              'Filter'="DeviceId='$sysdrive'"
+                              'CimSession'=$session}
+            $drive = Get-CimInstance @drive_params
+
+            $proc_params = @{'ClassName'='Win32_Processor'
+                             'CimSession'=$session}
+            $proc = Get-CimInstance @proc_params |
+                    Select-Object -first 1
+
+  
+            Write-Verbose "Closing session to $computer"
+            $session | Remove-CimSession
+  
+            Write-Verbose "Outputting for $computer"
+            $obj = [pscustomobject]@{'ComputerName'=$computer
+                       'OSVersion'=$os.version
+                       'SPVersion'=$os.servicepackmajorversion
+                       'OSBuild'=$os.buildnumber
+                       'Manufacturer'=$cs.manufacturer
+                       'Model'=$cs.model
+                       'Procs'=$cs.numberofprocessors
+                       'Cores'=$cs.numberoflogicalprocessors
+                       'RAM'=($cs.totalphysicalmemory / 1GB)
+                       'Arch'=$proc.addresswidth
+                       'SysDriveFreeSpace'=$drive.freespace}
+            Write-Output $obj
+        } Catch {
+                                                 #'Empty CATCH section
+        } #'try/catch
+ 
+    } #'foreach
+} #'PROCESS
+
+
+#'' HERE IS A CATCH section that has been filled out.
+
+#' observe catch behavior - will not execute as-is
+        } Catch {
+            Write-Warning "FAILED $computer on $protocol"
+            
+            #' Did we specify protocol fallback?
+            #' If so, try again. If we specified logging,
+            #' we won't log a problem here - we'll let
+            #' the logging occur if this fallback also
+            #' fails
+            If ($ProtocolFallback) {
+                If ($Protocol -eq 'Dcom') {
+                    $newprotocol = 'Wsman'
+                } else {
+                    $newprotocol = 'Dcom'
+                } #'if protocol
+
+                Write-Verbose "Trying again with $newprotocol"
+                $params = @{'ComputerName'=$Computer
+                            'Protocol'=$newprotocol
+                            'ProtocolFallback'=$False}
+                
+                If ($PSBoundParameters.ContainsKey('LogFailuresToPath')){
+                    $params += @{'LogFailuresToPath'=$LogFailuresToPath}
+                } #'if logging
+
+                Get-MachineInfo @params
+            } #'if protocolfallback
+
+            #' if we didn't specify fallback, but we
+            #' did specify logging, then log the error,
+            #' because we won't be trying again
+            If (-not $ProtocolFallback -and
+                $PSBoundParameters.ContainsKey('LogFailuresToPath')){
+                Write-Verbose "Logging to $LogFailuresToPath"
+                $computer | Out-File $LogFailuresToPath -Append
+            } #' if write to log
+
+        } #'try/catch
+
+
+
+
+#' pseudo-code
+Try {
+	$ErrorActionPreference = "Stop"
+	#' run something that doesn't have -ErrorAction
+	$ErrorActionPreference = "Continue"
+} Catch {
+	#' ...
+}
+
+
+
+#' pseudo-code (tend to be .NET types of errors)
+Try {
+	#' something here generates an exception
+} Catch [Exception.Type.One] {
+	#' deal with that exception here
+} Catch [Exception.Type.Two] {
+	#' deal with the other exception here
+} Catch {
+	#' deal with anything else here
+} Finally {
+	#' run something else
+}
+
+
+
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Remoting_CIM</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>CIM_ErrorHandling_assumes_you_start_with_WSman_Protocol</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Remoting_CIM</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>CIM_ErrorHandling_assumes_you_start_with_WSman_Protocol</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>'In this revision, we changed our New-CimSessionOption to use a variable for the protocol.
+'We manually set this to “Wsman” to begin with, but in the event of a failure, we switch it to “Dcom.” 
+' If it fails again, we set the protocol to “Stop,” which triggers an exit from our Do loop, 
+'	and also take the opportunity to log the computer name, if we were asked to do so. 
+'Writes error to Log	
+
+
+function Set-TMServiceLogon {
+&lt;#'
+.SYNOPSIS
+Sets service login name and password.
+.DESCRIPTION
+This command uses either CIM (default) or WMI to
+set the service password, and optionally the logon
+user name, for a service, which can be running on
+one or more remote machines. You must run this command
+as a user who has permission to peform this task,
+remotely, on the computers involved.
+.PARAMETER ServiceName
+The name of the service. Query the Win32_Service class
+to verify that you know the correct name.
+.PARAMETER ComputerName
+One or more computer names. Using IP addresses will
+fail with CIM; they will work with WMI. CIM is always
+attempted first. 
+.PARAMETER NewPassword
+A plain-text string of the new password.
+.PARAMETER NewUser
+Optional; the new logon user name, in DOMAIN\USER
+format.
+.PARAMETER ErrorLogFilePath
+If provided, this is a path and filename of a text
+file where failed computer names will be logged.
+#'&gt;
+    [CmdletBinding()]
+    Param(
+        [Parameter(Mandatory=$True,
+                   ValueFromPipelineByPropertyName=$True)]
+        [string]$ServiceName,
+
+        [Parameter(Mandatory=$True,
+                   ValueFromPipeline=$True,
+                   ValueFromPipelineByPropertyName=$True)]
+        [string[]]$ComputerName,
+
+        [Parameter(ValueFromPipelineByPropertyName=$True)]
+        [string]$NewPassword,
+
+        [Parameter(ValueFromPipelineByPropertyName=$True)]
+        [string]$NewUser,
+
+        [string]$ErrorLogFilePath
+    )
+
+BEGIN{}
+
+PROCESS{
+    ForEach ($computer in $ComputerName) {
+
+        Do {
+            Write-Verbose "Connect to $computer on WS-MAN"
+            $protocol = "Wsman"
+
+            Try {
+                $option = New-CimSessionOption -Protocol $protocol
+                $session = New-CimSession -SessionOption $option `
+                                          -ComputerName $Computer `
+                                          -ErrorAction Stop
+
+                If ($PSBoundParameters.ContainsKey('NewUser')) {
+                    $args = @{'StartName'=$NewUser
+                              'StartPassword'=$NewPassword}
+                } Else {
+                    $args = @{'StartPassword'=$NewPassword}
+                    Write-Warning "Not setting a new user name"
+                }
+
+                Write-Verbose "Setting $servicename on $computer"
+                $params = @{'CimSession'=$session
+                            'MethodName'='Change'
+                            'Query'="SELECT * FROM Win32_Service " +
+                                    "WHERE Name = '$ServiceName'"
+                            'Arguments'=$args}
+                $ret = Invoke-CimMethod @params
+
+                switch ($ret.ReturnValue) {
+                    0  { $status = "Success" }
+                    22 { $status = "Invalid Account" }
+                    Default { $status = "Failed: $($ret.ReturnValue)" }
+                }
+
+                $props = @{'ComputerName'=$computer
+                           'Status'=$status}
+                $obj = New-Object -TypeName PSObject -Property $props
+                Write-Output $obj
+
+                Write-Verbose "Closing connection to $computer"
+                $session | Remove-CimSession
+		$protocol = "Stop"
+            } Catch {
+                #' change protocol - if we've tried both
+                #' and logging was specified, log the computer
+                Switch ($protocol) {
+                    'Wsman' { $protocol = 'Dcom' }
+                    'Dcom'  { 
+                        $protocol = 'Stop'
+
+                        if ($PSBoundParameters.ContainsKey('ErrorLogFilePath')) {
+                            Write-Warning "$computer failed; logged to $ErrorLogFilePath"
+                            $computer | Out-File $ErrorLogFilePath -Append
+                        } #' if logging
+                     }            
+                } #'switch
+
+            } #' try/catch
+        } Until ($protocol -eq 'Stop')
+    } #'foreach
+} #'PROCESS
+
+END{} 
+
+} #'function</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Validation</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>Example_likeTheSnippet</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Validation</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>Example_likeTheSnippet</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+Function Get-DiskCheck {
+
+[cmdletbinding(DefaultParameterSetName = "name")]
+
+Param(
+[Parameter(Position = 0, Mandatory, 
+HelpMessage = "Enter a computer name to check",
+ParameterSetName = "name",
+ValueFromPipeline)]
+[Alias("cn")]
+[ValidateNotNullorEmpty()]
+[string[]]$Computername,
+
+[Parameter(Mandatory,
+HelpMessage = "Enter the path to a text file of computer names",
+ParameterSetName = "file"
+)]
+[ValidateScript({
+if (Test-Path $_) {
+   $True
+}
+else {
+   Throw "Cannot validate path $_"
+}
+})]     
+[ValidatePattern("\.txt$")]
+[string]$Path,
+
+[ValidateRange(10,50)]
+[int]$Threshhold = 25,
+
+[ValidateSet("C:","D:","E:","F:")]
+[string]$Drive = "C:",
+
+[switch]$Test
+)
+
+Begin {
+    Write-Verbose "[BEGIN  ] Starting: $($MyInvocation.Mycommand)"  
+
+    $cimParam = @{
+        Classname = "Win32_LogicalDisk"
+        Filter = "DeviceID='$Drive'"
+        Computername = $Null
+        ErrorAction = "Stop"
+    }
+} #begin
+
+Process {
+
+    if ($PSCmdlet.ParameterSetName -eq 'name') {
+        $names = $Computername
+    }
+    else {
+        #get list of names and trim off any extra spaces
+        Write-Verbose "[PROCESS] Importing names from $path"
+        $names = Get-Content -Path $path | Where {$_ -match "\w+"} | foreach {$_.Trim()}
+
+    }
+
+    if ($test) {
+        Write-Verbose "[PROCESS] Testing connectivity"
+        #ignore errors for offline computers
+        $names = $names | Where {Test-WSMan $_ -ErrorAction SilentlyContinue}
+    }
+    
+    foreach ($computer in $names) {
+        $cimParam.Computername = $Computer
+        Write-Verbose "[PROCESS] Querying $($computer.toUpper())"
+        Try {
+            $data = Get-Ciminstance @cimParam
+
+            #write custom result to the pipeline
+            $data | Select PSComputername,
+            DeviceID,Size,Freespace,
+            @{Name="PctFree";Expression = {[math]::Round(($_.freespace/$_.size)*100,2)}},
+            @{Name="OK";Expression = {
+              [int]$p = ($_.freespace/$_.size)*100
+              if ($p -ge $Threshhold) {
+                $True
+              } else {
+                $false
+              }
+            }},@{Name="Date";Expression={(Get-Date)}}
+        }
+        Catch {
+            Write-Warning "[$($computer.toUpper())] Failed. $($_.Exception.message)"
+        }
+    } #foreach computer
+
+} #process
+
+End {
+    Write-Verbose "[END    ] Ending: $($MyInvocation.Mycommand)"
+} #end
+
+}
+
+'OUTPUT from help for this function:
+---------------------------------------
+#'&gt;help Get-DiskCheck -Full
+#'
+#'NAME
+#'    Get-DiskCheck
+#'    
+#'SYNTAX
+#'    Get-DiskCheck [-Computername] &lt;string[]&gt; [-Threshhold &lt;int&gt;] [-Drive &lt;string&gt; {C: | D: | E: | F:}] [-Test]  [&lt;CommonParameters&gt;]
+#'    
+#'    Get-DiskCheck -Path &lt;string&gt; [-Threshhold &lt;int&gt;] [-Drive &lt;string&gt; {C: | D: | E: | F:}] [-Test]  [&lt;CommonParameters&gt;]
+#'    
+#'    
+#'PARAMETERS
+#'    -Computername &lt;string[]&gt;
+#'        Enter a computer name to check
+#'        
+#'        Required?                    true
+#'        Position?                    0
+#'        Accept pipeline input?       true (ByValue)
+#'        Parameter set name           name
+#'        Aliases                      cn
+#'        Dynamic?                     false
+#'        
+#'    -Drive &lt;string&gt;
+#'        
+#'        Required?                    false
+#'        Position?                    Named
+#'        Accept pipeline input?       false
+#'        Parameter set name           (All)
+#'        Aliases                      None
+#'        Dynamic?                     false
+#'        
+#'    -Path &lt;string&gt;
+#'        Enter the path to a text file of computer names
+#'        
+#'        Required?                    true
+#'        Position?                    Named
+#'        Accept pipeline input?       false
+#'        Parameter set name           file
+#'        Aliases                      None
+#'        Dynamic?                     false
+#'        
+#'    -Test
+#'        
+#'        Required?                    false
+#'        Position?                    Named
+#'        Accept pipeline input?       false
+#'        Parameter set name           (All)
+#'        Aliases                      None
+#'        Dynamic?                     false
+#'        
+#'    -Threshhold &lt;int&gt;
+#'        
+#'        Required?                    false
+#'        Position?                    Named
+#'        Accept pipeline input?       false
+#'        Parameter set name           (All)
+#'        Aliases                      None
+#'        Dynamic?                     false
+#'        
+#'    &lt;CommonParameters&gt;
+#'        This cmdlet supports the common parameters: Verbose, Debug,
+#'        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+#'        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+#'        about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216). 
+#'    
+#'    
+#'INPUTS
+#'    System.String[]
+#'    
+#'    
+#'OUTPUTS
+#'    System.Object
+#'    
+#'ALIASES
+#'    None
+#'    
+#'
+#'REMARKS
+#'    None
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Computer_info</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>CIM_computer_Info</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Computer_info</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>CIM_computer_Info</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>From Directions Training:
+
+
+
+======================================================================
+#' final code
+function Get-MachineInfo {
+    [CmdletBinding()]
+    Param(
+        [Parameter(ValueFromPipeline=$True,
+                   Mandatory=$True)]
+        [Alias('CN','MachineName','Name')]
+        [string[]]$ComputerName,
+        
+        [string]$LogFailuresToPath,
+
+        [ValidateSet('Wsman','Dcom')]
+        [string]$Protocol = "Wsman",
+
+        [switch]$ProtocolFallback
+    )
+ 
+ BEGIN {}
+
+ PROCESS {
+    foreach ($computer in $computername) {
+ 
+        #' Establish session protocol
+        if ($protocol -eq 'Dcom') {
+            $option = New-CimSessionOption -Protocol Dcom
+        } else {
+            $option = New-CimSessionOption -Protocol Wsman
+        }
+ 
+        #' Connect session
+        $session = New-CimSession -ComputerName $computer `
+                                  -SessionOption $option
+  
+        #' Query data
+        $os_params = @{'ClassName'='Win32_OperatingSystem'
+                       'CimSession'=$session}
+        $os = Get-CimInstance @os_params
+
+        $cs_params = @{'ClassName'='Win32_ComputerSystem'
+                       'CimSession'=$session}
+        $cs = Get-CimInstance @cs_params
+
+        $sysdrive = $os.SystemDrive
+        $drive_params = @{'ClassName'='Win32_LogicalDisk'
+                          'Filter'="DeviceId='$sysdrive'"
+                          'CimSession'=$session}
+        $drive = Get-CimInstance @drive_params
+
+        $proc_params = @{'ClassName'='Win32_Processor'
+                         'CimSession'=$session}
+        $proc = Get-CimInstance @proc_params |
+                Select-Object -first 1
+
+  
+        #' Close session
+        $session | Remove-CimSession
+  
+        #' Output data
+        $props = @{'ComputerName'=$computer
+                   'OSVersion'=$os.version
+                   'SPVersion'=$os.servicepackmajorversion
+                   'OSBuild'=$os.buildnumber
+                   'Manufacturer'=$cs.manufacturer
+                   'Model'=$cs.model
+                   'Procs'=$cs.numberofprocessors
+                   'Cores'=$cs.numberoflogicalprocessors
+                   'RAM'=($cs.totalphysicalmemory / 1GB)
+                   'Arch'=$proc.addresswidth
+                   'SysDriveFreeSpace'=$drive.freespace}
+        $obj = New-Object -TypeName PSObject -Property $props
+        Write-Output $obj                           #' &lt;=== Put HashTable object for output
+ 
+    } #'foreach
+} #'PROCESS
+
+END {}
+
+} #'function
+
+
+====NOTES=====================================================================
+
+#' functional overview of tool - will not execute as-is
+        #' Query data
+        $os = Get-CimInstance -ClassName Win32_OperatingSystem `
+                              -CimSession $session
+  
+        #' Close session
+        $session | Remove-CimSession
+  
+        #' Output data
+        $os | Select-Object -Prop @{n='ComputerName';e={$computer}},
+                                Version,ServicePackMajorVersion
+
+
+#' params into hash table
+$params = @{'ClassName'='Win32_OperatingSystem'
+            'ComputerName'='CLIENT1'}
+
+
+#' switch params in hash table
+$params = @{'ClassName'='Win32_OperatingSystem'
+            'ComputerName'='CLIENT1'
+            'Verbose' = $True}
+
+
+
+#' splatting hash table of params
+Get-CimInstance @params
+
+
+
+#' revised snippet - will not execute as-is
+        #' Query data
+        $os_params = @{'ClassName'='Win32_OperatingSystem'
+                       'CimSession'=$session}
+        $os = Get-CimInstance @os_params
+
+        $cs_params = @{'ClassName'='Win32_ComputerSystem'
+                       'CimSession'=$session}
+        $cs = Get-CimInstance @cs_params
+
+        $sysdrive = $os.SystemDrive
+        $drive_params = @{'ClassName'='Win32_LogicalDisk'
+                          'Filter'="DeviceId='$sysdrive'"
+                          'CimSession'=$session}        $drive = Get-CimInstance @drive_params
+
+        $proc_params = @{'ClassName'='Win32_Processor'
+                         'CimSession'=$session}
+        $proc = Get-CimInstance @proc_params |
+                Select-Object -first 1
+
+
+
+#' constructing custom object
+        #' Output data
+        $props = @{'ComputerName'=$computer
+                   'OSVersion'=$os.version
+                   'SPVersion'=$os.servicepackmajorversion
+                   'OSBuild'=$os.buildnumber
+                   'Manufacturer'=$cs.manufacturer
+                   'Model'=$cs.model
+                   'Procs'=$cs.numberofprocessors
+                   'Cores'=$cs.numberoflogicalprocessors
+                   'RAM'=($cs.totalphysicalmemory / 1GB)
+                   'Arch'=$proc.addresswidth
+                   'SysDriveFreeSpace'=$drive.freespace}
+        $obj = New-Object -TypeName PSObject -Property $props
+        Write-Output $obj</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Remoting_CIM</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>custom_Get-MachineInfo_with_Help_and_ErrorHandling_and_LogFile</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Remoting_CIM</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>custom_Get-MachineInfo_with_Help_and_ErrorHandling_and_LogFile</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>function Get-MachineInfo {
+&lt;#
+.SYNOPSIS
+Retrieves specific information about one or more
+computers, using WMI or CIM.
+.DESCRIPTION
+This command uses either WMI or CIM to retrieve
+specific information about one or more computers.
+You must run this command as a user who has permission
+to remotely query CIM or WMI on the machines involved.
+You can specify a starting protocol (CIM by default),
+and specify that, in the event of a failure, the other
+protocol be used on a per-machine basis.
+.PARAMETER ComputerName
+One or more computer names. When using WMI, this can
+also be IP addresses. IP addresses may not work for CIM.
+.PARAMETER LogFailuresToPath
+A path and filename to write failed computer names to.
+If omitted, no log will be written.
+.PARAMETER Protocol
+Valid values: Wsman (uses CIM) or Dcom (uses WMI). Will
+be used for all machines. "Wsman" is the default.
+.PARAMETER ProtocolFallback
+Specify this to automatically try the other protocol if
+a machine fails.
+.EXAMPLE
+Get-MachineInfo -ComputerName ONE,TWO,THREE
+This example will query three machines.
+.EXAMPLE
+Get-ADUser -filter * | Select -Expand Name | Get-MachineInfo
+This example will attempt to query all machines in AD.
+#&gt;
+    [CmdletBinding()]
+    Param(
+        [Parameter(ValueFromPipeline=$True,
+                   Mandatory=$True)]
+        [Alias('CN','MachineName','Name')]
+        [string[]]$ComputerName,
+        
+        [string]$LogFailuresToPath,
+
+        [ValidateSet('Wsman','Dcom')]
+        [string]$Protocol = "Wsman",
+
+        [switch]$ProtocolFallback
+    )
+ 
+ BEGIN {}
+
+ PROCESS {
+    foreach ($computer in $computername) {
+ 
+        if ($protocol -eq 'Dcom') {
+            $option = New-CimSessionOption -Protocol Dcom
+        } else {
+            $option = New-CimSessionOption -Protocol Wsman
+        }
+ 
+        Try {
+            Write-Verbose "Connecting to $computer over $protocol"
+            $params = @{'ComputerName'=$Computer
+                        'SessionOption'=$option
+                        'ErrorAction'='Stop'}
+            $session = New-CimSession @params
+  
+            Write-Verbose "Querying from $computer"
+            $os_params = @{'ClassName'='Win32_OperatingSystem'
+                           'CimSession'=$session}
+            $os = Get-CimInstance @os_params
+
+            $cs_params = @{'ClassName'='Win32_ComputerSystem'
+                           'CimSession'=$session}
+            $cs = Get-CimInstance @cs_params
+
+            $sysdrive = $os.SystemDrive
+            $drive_params = @{'ClassName'='Win32_LogicalDisk'
+                              'Filter'="DeviceId='$sysdrive'"
+                              'CimSession'=$session}
+            $drive = Get-CimInstance @drive_params
+
+            $proc_params = @{'ClassName'='Win32_Processor'
+                             'CimSession'=$session}
+            $proc = Get-CimInstance @proc_params |
+                    Select-Object -first 1
+
+  
+            Write-Verbose "Closing session to $computer"
+            $session | Remove-CimSession
+  
+            Write-Verbose "Outputting for $computer"
+            $obj = [pscustomobject]@{'ComputerName'=$computer
+                       'OSVersion'=$os.version
+                       'SPVersion'=$os.servicepackmajorversion
+                       'OSBuild'=$os.buildnumber
+                       'Manufacturer'=$cs.manufacturer
+                       'Model'=$cs.model
+                       'Procs'=$cs.numberofprocessors
+                       'Cores'=$cs.numberoflogicalprocessors
+                       'RAM'=($cs.totalphysicalmemory / 1GB)
+                       'Arch'=$proc.addresswidth
+                       'SysDriveFreeSpace'=$drive.freespace}
+            Write-Output $obj
+        } Catch {
+            Write-Warning "FAILED $computer on $protocol"
+            
+            # Did we specify protocol fallback?
+            # If so, try again. If we specified logging,
+            # we won't log a problem here - we'll let
+            # the logging occur if this fallback also
+            # fails
+            If ($ProtocolFallback) {
+                If ($Protocol -eq 'Dcom') {
+                    $newprotocol = 'Wsman'
+                } else {
+                    $newprotocol = 'Dcom'
+                } #if protocol
+
+                Write-Verbose "Trying again with $newprotocol"
+                $params = @{'ComputerName'=$Computer
+                            'Protocol'=$newprotocol
+                            'ProtocolFallback'=$False}
+                
+                If ($PSBoundParameters.ContainsKey('LogFailuresToPath')){
+                    $params += @{'LogFailuresToPath'=$LogFailuresToPath}
+                } #if logging
+
+                Get-MachineInfo @params
+            } #if protocolfallback
+
+            # if we didn't specify fallback, but we
+            # did specify logging, then log the error,
+            # because we won't be trying again
+            If (-not $ProtocolFallback -and
+                $PSBoundParameters.ContainsKey('LogFailuresToPath')){
+                Write-Verbose "Logging to $LogFailuresToPath"
+                $computer | Out-File $LogFailuresToPath -Append
+            } # if write to log
+
+        } #try/catch
+ 
+    } #foreach
+} #PROCESS
+
+END {}
+
+} #function</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Computer_info</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>CIM_Computer_Info_v2____with__BIOSReleaseDate</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Computer_info</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>CIM_Computer_Info_v2____with__BIOSReleaseDate</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>#'Usage===========================================================================
+#'         &gt; Get-MachineInfo -ComputerName 10.11.56.176 -Protocol Dcom -Verbose
+#'===========================================================================
+
+function Get-MachineInfo {
+&lt;#
+.SYNOPSIS
+Retrieves specific information about one or more
+computers, using WMI or CIM.
+.DESCRIPTION
+This command uses either WMI or CIM to retrieve
+specific information about one or more computers.
+You must run this command as a user who has permission
+to remotely query CIM or WMI on the machines involved.
+You can specify a starting protocol (CIM by default),
+and specify that, in the event of a failure, the other
+protocol be used on a per-machine basis.
+.PARAMETER ComputerName
+One or more computer names. When using WMI, this can
+also be IP addresses. IP addresses may not work for CIM.
+.PARAMETER LogFailuresToPath
+A path and filename to write failed computer names to.
+If omitted, no log will be written.
+.PARAMETER Protocol
+Valid values: Wsman (uses CIM) or Dcom (uses WMI). Will
+be used for all machines. "Wsman" is the default.
+.PARAMETER ProtocolFallback
+Specify this to automatically try the other protocol if
+a machine fails.
+.EXAMPLE
+Get-MachineInfo -ComputerName ONE,TWO,THREE
+This example will query three machines.
+.EXAMPLE
+Get-ADUser -filter * | Select -Expand Name | Get-MachineInfo
+This example will attempt to query all machines in AD.
+#&gt;
+    [CmdletBinding()]
+    Param(
+        [Parameter(ValueFromPipeline=$True,
+                   Mandatory=$True)]
+        [Alias('CN','MachineName','Name')]
+        [string[]]$ComputerName,
+        
+        [string]$LogFailuresToPath,
+
+        [ValidateSet('Wsman','Dcom')]
+        [string]$Protocol = "Wsman",
+
+        [switch]$ProtocolFallback
+    )
+ 
+ BEGIN {}
+
+ PROCESS {
+    foreach ($computer in $computername) {
+ 
+        if ($protocol -eq 'Dcom') {
+            $option = New-CimSessionOption -Protocol Dcom
+        } else {
+            $option = New-CimSessionOption -Protocol Wsman
+        }
+ 
+        Try {
+            Write-Verbose "Connecting to $computer over $protocol"
+            $params = @{'ComputerName'=$Computer
+                        'SessionOption'=$option
+                        'ErrorAction'='Stop'}
+            $session = New-CimSession @params
+  
+            Write-Verbose "Querying from $computer"
+            $os_params = @{'ClassName'='Win32_OperatingSystem'
+                           'CimSession'=$session}
+            $os = Get-CimInstance @os_params
+
+            $cs_params = @{'ClassName'='Win32_ComputerSystem'
+                           'CimSession'=$session}
+            $cs = Get-CimInstance @cs_params
+
+            $sysdrive = $os.SystemDrive
+            $drive_params = @{'ClassName'='Win32_LogicalDisk'
+                              'Filter'="DeviceId='$sysdrive'"
+                              'CimSession'=$session}
+            $drive = Get-CimInstance @drive_params
+
+            $proc_params = @{'ClassName'='Win32_Processor'
+                             'CimSession'=$session}
+            $proc = Get-CimInstance @proc_params |
+                    Select-Object -first 1
+            #'----------------------------------
+            #'CIM_BIOSElement
+            #'CIM_BIOSFeature
+            #'CIM_BIOSFeatureBIOSElements
+            #'CIM_BIOSLoadedInNV
+            #'Get-CimClass win32_bios
+
+            #'Get-CimClass CIM_BIOSElement | select -First 1 -ExpandProperty CimClassProperties | Select InstallDate
+            $BIOS_params = @{'ClassName'='CIM_BIOSElement'
+                             'CimSession'=$session}
+            $BIOS = Get-CimInstance @BIOS_params | Select-Object -first 1
+
+            $BIOS | select -First 1 -ExpandProperty ReleaseDate 
+
+            #'----------------------------------
+  
+            Write-Verbose "Closing session to $computer"
+            $session | Remove-CimSession
+  
+            Write-Verbose "Outputting for $computer"
+            $obj = [pscustomobject]@{'ComputerName'=$computer
+                       'OSVersion'=$os.version
+                       'SPVersion'=$os.servicepackmajorversion
+                       'OSBuild'=$os.buildnumber
+                       'Manufacturer'=$cs.manufacturer
+                       'Model'=$cs.model
+                        #'----------------------------------
+                       'BIOSReleaseDate' = $BIOS | select -First 1 -ExpandProperty ReleaseDate 
+                        #'----------------------------------
+                       'Procs'=$cs.numberofprocessors
+                       'Cores'=$cs.numberoflogicalprocessors
+                       'RAM'=($cs.totalphysicalmemory / 1GB)
+                       'Arch'=$proc.addresswidth
+                       'SysDriveFreeSpace'=$drive.freespace}
+            Write-Output $obj
+        } Catch {
+            Write-Warning "FAILED $computer on $protocol"
+            
+            # Did we specify protocol fallback?
+            # If so, try again. If we specified logging,
+            # we won't log a problem here - we'll let
+            # the logging occur if this fallback also
+            # fails
+            If ($ProtocolFallback) {
+                If ($Protocol -eq 'Dcom') {
+                    $newprotocol = 'Wsman'
+                } else {
+                    $newprotocol = 'Dcom'
+                } #if protocol
+
+                Write-Verbose "Trying again with $newprotocol"
+                $params = @{'ComputerName'=$Computer
+                            'Protocol'=$newprotocol
+                            'ProtocolFallback'=$False}
+                
+                If ($PSBoundParameters.ContainsKey('LogFailuresToPath')){
+                    $params += @{'LogFailuresToPath'=$LogFailuresToPath}
+                } #if logging
+
+                Get-MachineInfo @params
+            } #if protocolfallback
+
+            # if we didn't specify fallback, but we
+            # did specify logging, then log the error,
+            # because we won't be trying again
+            If (-not $ProtocolFallback -and
+                $PSBoundParameters.ContainsKey('LogFailuresToPath')){
+                Write-Verbose "Logging to $LogFailuresToPath"
+                $computer | Out-File $LogFailuresToPath -Append
+            } # if write to log
+
+        } #try/catch
+ 
+    } #foreach
+} #PROCESS
+
+END {}
+
+} #function</Code>
+      </SnippetValue>
+    </value>
+  </item>
+</dictionary>
