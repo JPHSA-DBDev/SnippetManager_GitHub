@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <Category>POWERSHELL_calculations</Category>
+  <Category>POWERSHELL_WMI</Category>
   <Language>VBSCRIPT</Language>
   <Public>false</Public>
-  <Name>Measure-Object_sum_average_first_last_Example</Name>
+  <Name>about_POWERSHELL_WMI</Name>
   <Group>My Snippets</Group>
 </SnippetKey>
