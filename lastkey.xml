@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <Category>POWERSHELL_WMI</Category>
+  <Category>POWERSHELL_Remoting</Category>
   <Language>VBSCRIPT</Language>
   <Public>false</Public>
-  <Name>WMIExplorer.ps1</Name>
+  <Name>WORKGROUP_machines</Name>
   <Group>My Snippets</Group>
 </SnippetKey>
