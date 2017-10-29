@@ -3,6 +3,6 @@
   <Category>POWERSHELL_Remoting</Category>
   <Language>VBSCRIPT</Language>
   <Public>false</Public>
-  <Name>WORKGROUP_machines</Name>
+  <Name>Remoting_Overview</Name>
   <Group>My Snippets</Group>
 </SnippetKey>
