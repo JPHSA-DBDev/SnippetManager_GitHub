@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <Category>POWERSHELL_Files_Folders_Directories</Category>
-  <Language>VBSCRIPT</Language>
+  <Category>EXPORT_Excel_CSV_TEXT</Category>
+  <Language>SQLSERVER2K SQL</Language>
   <Public>false</Public>
-  <Name>FIND_a_file</Name>
+  <Name>Export_Excell_icrosoft.ACE.OLEDB.12.0</Name>
   <Group>My Snippets</Group>
 </SnippetKey>
