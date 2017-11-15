@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <Category>DATES</Category>
-  <Language>SQLSERVER2K SQL</Language>
+  <Category>SSMS</Category>
+  <Language>TEXT</Language>
   <Public>false</Public>
-  <Name>DATETIME_to_DATE_string</Name>
+  <Name>save_results_with_Column_headers_forExample_For_CSV_files</Name>
   <Group>My Snippets</Group>
 </SnippetKey>
