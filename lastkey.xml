@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <Category>SSMS</Category>
-  <Language>TEXT</Language>
+  <Category>VBA_ACCESS_Button</Category>
+  <Language>VB</Language>
   <Public>false</Public>
-  <Name>save_results_with_Column_headers_forExample_For_CSV_files</Name>
+  <Name>Export_records_to_Excel_on_Desktop</Name>
   <Group>My Snippets</Group>
 </SnippetKey>
