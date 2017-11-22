@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <Category>CODE_dotNet</Category>
-  <Language>C#</Language>
+  <Category>HTML_Misc</Category>
+  <Language>ASP</Language>
   <Public>false</Public>
-  <Name>Setting_up_a_Build</Name>
+  <Name>Hover_Over_Title</Name>
   <Group>My Snippets</Group>
 </SnippetKey>
