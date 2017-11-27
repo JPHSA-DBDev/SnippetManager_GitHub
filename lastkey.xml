@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <Category>CODE_Empty_ASP.NET_Core_Web_Application</Category>
-  <Language>C#</Language>
+  <Category>Windows_10</Category>
+  <Language>TEXT</Language>
   <Public>false</Public>
-  <Name>CODE_01__Controllers/AppController.cs</Name>
+  <Name>DotNet3_for_SnippetManager</Name>
   <Group>My Snippets</Group>
 </SnippetKey>
