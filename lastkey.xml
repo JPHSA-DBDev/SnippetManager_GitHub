@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <Category>Windows_10</Category>
-  <Language>TEXT</Language>
+  <Category>UTILITIES</Category>
+  <Language>SQLSERVER2K SQL</Language>
   <Public>false</Public>
-  <Name>DotNet3_for_SnippetManager</Name>
+  <Name>Find Column From All Tables of Database</Name>
   <Group>My Snippets</Group>
 </SnippetKey>
