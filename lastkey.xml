@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <Category>CODE_Empty_ASP.NET_Core_Web_Application</Category>
-  <Language>C#</Language>
+  <Category>FileZilla</Category>
+  <Language>TEXT</Language>
   <Public>false</Public>
-  <Name>CORE_01__Data/DutchRepository.cs</Name>
+  <Name>about_FileZilla</Name>
   <Group>My Snippets</Group>
 </SnippetKey>
