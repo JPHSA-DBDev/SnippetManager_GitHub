@@ -3,54 +3,3030 @@
   <item>
     <key>
       <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>SOMEE.COM</Category>
-        <Language>TEXT</Language>
+        <Category>ASPNET_C#_LinkButton_ButtonField_HyperLink_and_Their_events</Category>
+        <Language>ASP</Language>
         <Public>false</Public>
-        <Name>MVC4 site publish to Somee</Name>
+        <Name>Button_ButtonField_in_GridView_Respond_to_Events</Name>
         <Group>My Snippets</Group>
       </SnippetKey>
     </key>
     <value>
       <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
         <Key>
-          <Category>SOMEE.COM</Category>
-          <Language>TEXT</Language>
+          <Category>ASPNET_C#_LinkButton_ButtonField_HyperLink_and_Their_events</Category>
+          <Language>ASP</Language>
           <Public>false</Public>
-          <Name>MVC4 site publish to Somee</Name>
+          <Name>Button_ButtonField_in_GridView_Respond_to_Events</Name>
           <Group>My Snippets</Group>
         </Key>
         <Keywords />
         <Imports />
-        <Code>http://stackoverflow.com/questions/23139910/mvc4-site-publish-to-somee
+        <Code>
 
-As @Ehsan Sajjad said there was a problem with the FTP. Site path is required in Somee.
+&lt;!-- from: http://msdn.microsoft.com/en-us/library/vstudio/bb907626%28v=vs.100%29.aspx
 
-Here is the way to configure the publish tool under the connection section:
+You can add custom functionality to a GridView control in the following ways:
+    By adding a ButtonField field to the GridView control.
+    By adding a Button, LinkButton, or ImageButton controls to a template in the GridView control.
+    
+You can use the CommandName property of the event argument to identify the button's function in the event handler method.
 
-Publish method: FTP
-Server: ftp://[YOUR USERNAME].somee.com
-Site path: /www.[YOUR USERNAME].somee.com/ 
-Passive mode: Checked 
-User name: [YOUR USERNAME] 
-Password: [YOUR PASSWORD] 
+If you are working with ButtonField or TemplateField objects, you can also use the CommandEventArgs.CommandArgument property to identify the current row.
 
-You may try other alternative to upload your files, please just download Filezilla tools and then please upload it to your root folder
+When you are using a ButtonField object, the CommandEventArgs.CommandArgument property is set automatically to the row index.
+When you are using a TemplateField object, the CommandEventArgs.CommandArgument property is not automatically set by the control.
+	In that case, if you have to determine the row index in the event handler, 
+	you can set the CommandArgument property of the button to the row index by using a data-binding expression.
+
+EXAMPLE: buttonfield - 
+--&gt;		
 
 
-========================================================================================
+&lt;%@ Page language="C#" %&gt;
 
-Publish method: FTP
-Server:  ftp://domain.somee.com						{ FiveHappiness.somee.com }
-Site path: Protected.domain.somee.com
-Passive mode: Checked 
-User name: [YOUR USERNAME] 
-Password: [YOUR PASSWORD] 
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;
+&lt;script runat="server"&gt;
 
-As I publish above and i succeeded..
-======================================================================================
+  void ContactsGridView_RowCommand(Object sender, GridViewCommandEventArgs e)
+  {
+    // If multiple buttons are used in a GridView control, use the
+    // CommandName property to determine which button was clicked.
+    if(e.CommandName=="Add")
+    {
+      // Convert the row index stored in the CommandArgument
+      // property to an Integer.
+      int index = Convert.ToInt32(e.CommandArgument);
 
-or site path: www. your domain.somee.com –  Tarık Eren Tan Nov 1 '14 at 23:53
+      // Retrieve the row that contains the button clicked 
+      // by the user from the Rows collection.
+      GridViewRow row = ContactsGridView.Rows[index];
+
+      // Create a new ListItem object for the contact in the row.     
+      ListItem item = new ListItem();
+      item.Text = Server.HtmlDecode(row.Cells[2].Text) + " " + Server.HtmlDecode(row.Cells[3].Text);
+
+      // If the contact is not already in the ListBox, add the ListItem 
+      // object to the Items collection of the ListBox control. 
+      if (!ContactsListBox.Items.Contains(item))
+      {
+        ContactsListBox.Items.Add(item);
+      }
+    }
+  }    
+&lt;/script&gt;
+
+&lt;html xmlns="http://www.w3.org/1999/xhtml" &gt;
+  &lt;head runat="server"&gt;
+    &lt;title&gt;GridView RowCommand Example&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;form id="form1" runat="server"&gt;
+
+      &lt;h3&gt;GridView RowCommand Example&lt;/h3&gt;
+
+      &lt;table width="100%"&gt;
+        &lt;tr&gt;
+          &lt;td style="width:50%"&gt;
+
+            &lt;asp:gridview id="ContactsGridView" 
+              datasourceid="ContactsSource"
+              allowpaging="true" 
+              autogeneratecolumns="false"
+              onrowcommand="ContactsGridView_RowCommand"
+              runat="server"&gt;
+
+              &lt;columns&gt;
+                &lt;asp:buttonfield buttontype="Link" 
+                  commandname="Add" 
+                  text="Add"/&gt;
+                &lt;asp:boundfield datafield="ContactID" 
+                  headertext="Contact ID"/&gt;
+                &lt;asp:boundfield datafield="FirstName" 
+                  headertext="First Name"/&gt; 
+                &lt;asp:boundfield datafield="LastName" 
+                  headertext="Last Name"/&gt;
+              &lt;/columns&gt;
+
+            &lt;/asp:gridview&gt;
+
+          &lt;/td&gt;
+
+          &lt;td style="vertical-align:top; width:50%"&gt;
+
+            Contacts: &lt;br/&gt;
+            &lt;asp:listbox id="ContactsListBox"
+              runat="server" Height="200px" Width="200px"/&gt;
+
+          &lt;/td&gt;
+        &lt;/tr&gt;
+      &lt;/table&gt;
+
+      &lt;!-- This example uses Microsoft SQL Server and connects    --&gt;
+      &lt;!-- to the AdventureWorks sample database. Use an ASP.NET  --&gt;
+      &lt;!-- expression to retrieve the connection string value     --&gt;
+      &lt;!-- from the Web.config file.                              --&gt;
+      &lt;asp:sqldatasource id="ContactsSource"
+        selectcommand="Select [ContactID], [FirstName], [LastName] From Person.Contact"
+        connectionstring="&lt;%$ ConnectionStrings:AdventureWorks_DataConnectionString%&gt;" 
+        runat="server"/&gt;
+
+    &lt;/form&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+
+........................................................................................................
+
+&lt;!--
+EXAMPLE: Button - to pass the RowIndex in as Command Argument
+--&gt;	
+
+&lt;asp:TemplateField&gt;
+  &lt;ItemTemplate&gt;
+    &lt;asp:Button ID="AddButton" runat="server" 
+      CommandName="AddToCart" 
+      CommandArgument="&lt;%# ((GridViewRow) Container).RowIndex %&gt;"
+      Text="Add to Cart" /&gt;
+  &lt;/ItemTemplate&gt; 
+&lt;/asp:TemplateField&gt;
+
+&lt;!--	
+Create a method for the RowCommand event of the GridView control. In the method, do the following:
+    Check the CommandName property of the event-argument object to see what string was passed.
+    Retrieve the index of the row that contains the button by using the CommandArgument property, if required.
+    Perform the appropriate logic for the button that the user clicked. 
+--&gt;
+protected void GridView1_RowCommand(object sender, 
+  GridViewCommandEventArgs e)
+{
+  if (e.CommandName == "AddToCart")
+  {
+    // Retrieve the row index stored in the 
+    // CommandArgument property.
+    int index = Convert.ToInt32(e.CommandArgument);
+
+    // Retrieve the row that contains the button 
+    // from the Rows collection.
+    GridViewRow row = GridView1.Rows[index];
+
+    // Add code here to add the item to the shopping cart.
+  }
+
+  }
+
+&lt;!--	
+
+--&gt;
+
+
+&lt;!--	
+
+--&gt;
+
+
+&lt;!--	
+
+--&gt;
+
+
+&lt;!--	
+
+--&gt;
+
+
+&lt;!--	
+
+--&gt;</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>EF_ReversePOCO_and_SinglePageMVC</Category>
+        <Language>C#</Language>
+        <Public>false</Public>
+        <Name>01_OneToMany_HeaderDetail__//MVC_EF_Parent_Child.Parent_Child_DL/parentChild_DBContext.tt</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>EF_ReversePOCO_and_SinglePageMVC</Category>
+          <Language>C#</Language>
+          <Public>false</Public>
+          <Name>01_OneToMany_HeaderDetail__//MVC_EF_Parent_Child.Parent_Child_DL/parentChild_DBContext.tt</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>&lt;#@ include file="..\\MVC_EF_Parent_Child\\EF.Reverse.POCO.Core.ttinclude" #&gt;
+&lt;#
+    // v2.27.0
+    // Please make changes to the settings below.
+    // All you have to do is save this file, and the output file(s) is/are generated. Compiling does not regenerate the file(s).
+    // A course for this generator is available on Pluralsight at https://www.pluralsight.com/courses/code-first-entity-framework-legacy-databases
+
+    // Main settings **********************************************************************************************************************
+    ConnectionStringName = "connParent_Child";   // Searches for this connection string in config files listed below in the ConfigFilenameSearchOrder setting
+    // ConnectionStringName is the only required setting.
+    // As an alternative to ConnectionStringName above, which must match your app/web.config connection string name, you can override them below
+    //ConnectionString = "Data Source=(local);Initial Catalog=Northwind;Integrated Security=True;Application Name=EntityFramework Reverse POCO Generator";
+    //ProviderName = "System.Data.SqlClient";
+
+    // Namespace = ""; // Override the default namespace here
+    DbContextName = "parentChildDbContext";
+    //DbContextInterfaceName = "IMyDbContext"; //Defaults to "I" + DbContextName
+    DbContextInterfaceBaseClasses = "System.IDisposable";    // Specify what the base classes are for your database context interface
+	//DbContextBaseClass = "CustomDbContext";
+    DbContextBaseClass = "System.Data.Entity.DbContext";   // Specify what the base class is for your DbContext. For ASP.NET Identity use "IdentityDbContext&lt;ApplicationUser&gt;"
+    //DefaultConstructorArgument = "EnvironmentConnectionStrings.MyDbContext"; //defaults to "Name=" + ConnectionStringName
+    TargetFrameworkVersion = "4.61"; // Please set this to your .NET framework version, 4.0, 4.5, 4.51, etc.
+    ConfigurationClassName = "Configuration"; // Configuration, Mapping, Map, etc. This is appended to the Poco class name to configure the mappings.
+    ConfigFilenameSearchOrder = new[] { "app.config", "web.config", "app.config.transform", "web.config.transform" }; // Add more here if required. The config files are searched for in the local project first, then the whole solution second.
+    MakeClassesPartial = false;
+    MakeDbContextInterfacePartial = false;
+    GenerateSeparateFiles = true;
+    UseMappingTables = false; // If true, mapping will be used and no mapping tables will be generated. If false, all tables will be generated.
+    UsePascalCase = true;    // This will rename the generated C# tables &amp; properties to use PascalCase. If false table &amp; property names will be left alone.
+    UseDataAnnotations = true; // If true, will add data annotations to the poco classes.
+    UseDataAnnotationsSchema = true; // UseDataAnnotations must also be true. If true, will add data annotations schema to the poco classes.
+    IncludeComments = CommentsStyle.AtEndOfField; // Adds comments to the generated code
+    IncludeExtendedPropertyComments = CommentsStyle.InSummaryBlock; // Adds extended properties as comments to the generated code
+    IncludeViews = true;
+    IncludeSynonyms = false;
+    IncludeStoredProcedures = true;
+    IncludeTableValuedFunctions = false; // If true, you must set IncludeStoredProcedures = true, and install the "EntityFramework.CodeFirstStoreFunctions" Nuget Package.
+    DisableGeographyTypes = false; // Turns off use of System.Data.Entity.Spatial.DbGeography and System.Data.Entity.Spatial.DbGeometry as OData doesn't support entities with geometry/geography types.
+    CollectionType = "System.Collections.Generic.List";  // Determines the type of collection for the Navigation Properties. "ObservableCollection" for example. Add "System.Collections.ObjectModel" to AdditionalNamespaces if setting the CollectionType = "ObservableCollection".
+    NullableShortHand = true; //true =&gt; T?, false =&gt; Nullable&lt;T&gt;
+    AddUnitTestingDbContext = false; // Will add a FakeDbContext and FakeDbSet for easy unit testing
+    IncludeQueryTraceOn9481Flag = false; // If SqlServer 2014 appears frozen / take a long time when this file is saved, try setting this to true (you will also need elevated privileges).
+    IncludeCodeGeneratedAttribute = true; // If true, will include the GeneratedCode attribute, false to remove it.
+    UsePrivateSetterForComputedColumns = true; // If the columns is computed, use a private setter.
+    AdditionalNamespaces = new[] { "" };  // To include extra namespaces, include them here. i.e. "Microsoft.AspNet.Identity.EntityFramework"
+    AdditionalContextInterfaceItems = new[] // To include extra db context interface items, include them here. Also set MakeClassesPartial=true, and implement the partial DbContext class functions.
+    {
+        ""  //  example: "void SetAutoDetectChangesEnabled(bool flag);"
+    };
+    // If you need to serialize your entities with the JsonSerializer from Newtonsoft, this would serialize
+    // all properties including the Reverse Navigation and Foreign Keys. The simplest way to exclude them is
+    // to use the data annotation [JsonIgnore] on reverse navigation and foreign keys.
+    AdditionalReverseNavigationsDataAnnotations = new string[] // Data Annotations for all ReverseNavigationProperty.
+    {
+        // "JsonIgnore" // Also add "Newtonsoft.Json" to the AdditionalNamespaces array above
+    };
+    AdditionalForeignKeysDataAnnotations = new string[] // Data Annotations for all ForeignKeys.
+    {
+        // "JsonIgnore" // Also add "Newtonsoft.Json" to the AdditionalNamespaces array above
+    };
+
+    // Migrations *************************************************************************************************************************
+    MigrationConfigurationFileName = ""; // null or empty to not create migrations
+    MigrationStrategy = "MigrateDatabaseToLatestVersion"; // MigrateDatabaseToLatestVersion, CreateDatabaseIfNotExists or DropCreateDatabaseIfModelChanges
+    ContextKey = ""; // Sets the string used to distinguish migrations belonging to this configuration from migrations belonging to other configurations using the same database. This property enables migrations from multiple different models to be applied to applied to a single database.
+    AutomaticMigrationsEnabled = true;
+    AutomaticMigrationDataLossAllowed = true; // if true, can drop fields and lose data during automatic migration
+
+    // Pluralization **********************************************************************************************************************
+    // To turn off pluralization, use:
+    //      Inflector.PluralizationService = null;
+    // Default pluralization, use:
+    //      Inflector.PluralizationService = new EnglishPluralizationService();
+    // For Spanish pluralization:
+    //      1. Intall the "EF6.Contrib" Nuget Package.
+    //      2. Add the following to the top of this file and adjust path, and remove the space between the angle bracket and # at the beginning and end.
+    //         &lt; #@ assembly name="your full path to \EntityFramework.Contrib.dll" # &gt;
+    //      3. Change the line below to: Inflector.PluralizationService = new SpanishPluralizationService();
+    //Inflector.PluralizationService = new EnglishPluralizationService();
+    // If pluralisation does not do the right thing, override it here by adding in a custom entry.
+    //Inflector.PluralizationService = new EnglishPluralizationService(new[]
+    //{
+    //    // Create custom ("Singular", "Plural") forms for one-off words as needed.
+    //    new CustomPluralizationEntry("Course", "Courses"),
+    //    new CustomPluralizationEntry("Status", "Status") // Use same value to prevent pluralisation
+    //});
+	//Inflector.PluralizationService = new EnglishPluralizationService(new[]
+	//	{
+	//	new CustomPluralizationEntry("T0Parent", "Parent")
+	//	});
+
+    // Elements to generate ***************************************************************************************************************
+    // Add the elements that should be generated when the template is executed.
+    // Multiple projects can now be used that separate the different concerns.
+    ElementsToGenerate = Elements.Poco | Elements.Context | Elements.UnitOfWork | Elements.PocoConfiguration;
+
+    // Use these namespaces to specify where the different elements now live. These may even be in different assemblies.
+    // Please note this does not create the files in these locations, it only adds a using statement to say where they are.
+    // The way to do this is to add the "EntityFramework Reverse POCO Code First Generator" into each of these folders.
+    // Then set the .tt to only generate the relevant section you need by setting
+    //      ElementsToGenerate = Elements.Poco; in your Entity folder,
+    //      ElementsToGenerate = Elements.Context | Elements.UnitOfWork; in your Context folder,
+    //      ElementsToGenerate = Elements.PocoConfiguration; in your Maps folder.
+    //      PocoNamespace = "YourProject.Entities";
+    //      ContextNamespace = "YourProject.Context";
+    //      UnitOfWorkNamespace = "YourProject.Context";
+    //      PocoConfigurationNamespace = "YourProject.Maps";
+    // You also need to set the following to the namespace where they now live:
+    PocoNamespace = "MVC_EF_Parent_Child.Parent_Child_DL";
+    ContextNamespace = "MVC_EF_Parent_Child.Parent_Child_DL";
+    UnitOfWorkNamespace = "MVC_EF_Parent_Child.Parent_Child_DL";
+    PocoConfigurationNamespace = "MVC_EF_Parent_Child.Parent_Child_DL";
+
+
+    // Schema *****************************************************************************************************************************
+    // If there are multiple schemas, then the table name is prefixed with the schema, except for dbo.
+    // Ie. dbo.hello will be Hello.
+    //     abc.hello will be AbcHello.
+    PrependSchemaName = true;   // Control if the schema name is prepended to the table name
+
+
+    // Filtering **************************************************************************************************************************
+    // Use the following table/view name regex filters to include or exclude tables/views
+    // Exclude filters are checked first and tables matching filters are removed.
+    //  * If left null, none are excluded.
+    //  * If not null, any tables matching the regex are excluded.
+    // Include filters are checked second.
+    //  * If left null, all are included.
+    //  * If not null, only the tables matching the regex are included.
+    // For clarity: if you want to include all the customer tables, but not the customer billing tables.
+    //      TableFilterInclude = new Regex("^[Cc]ustomer.*"); // This includes all the customer and customer billing tables
+    //      TableFilterExclude = new Regex(".*[Bb]illing.*"); // This excludes all the billing tables
+    //
+    // Example:     TableFilterExclude = new Regex(".*auto.*");
+    //              TableFilterInclude = new Regex("(.*_FR_.*)|(data_.*)");
+    //              TableFilterInclude = new Regex("^table_name1$|^table_name2$|etc");
+    //              ColumnFilterExclude = new Regex("^FK_.*$");
+    SchemaFilterExclude = null;
+    SchemaFilterInclude = null;
+    TableFilterExclude = null;
+    TableFilterInclude = null;
+    ColumnFilterExclude = null;
+
+    // Filtering of tables using a function. This can be used in conjunction with the Regex's above.
+    // Regex are used first to filter the list down, then this function is run last.
+    // Return true to include the table, return false to exclude it.
+    TableFilter = (Table t) =&gt;
+    {
+        // Example: Exclude any table in dbo schema with "order" in its name.
+        //if(t.Schema.Equals("dbo", StringComparison.InvariantCultureIgnoreCase) &amp;&amp; t.NameHumanCase.ToLowerInvariant().Contains("order"))
+        //    return false;
+
+        return true;
+    };
+
+
+    // Stored Procedures ******************************************************************************************************************
+    // Use the following regex filters to include or exclude stored procedures
+    StoredProcedureFilterExclude = null;
+    StoredProcedureFilterInclude = null;
+
+    // Filtering of stored procedures using a function. This can be used in conjunction with the Regex's above.
+    // Regex are used first to filter the list down, then this function is run last.
+    // Return true to include the stored procedure, return false to exclude it.
+    StoredProcedureFilter = (StoredProcedure sp) =&gt;
+    {
+        // Example: Exclude any stored procedure in dbo schema with "order" in its name.
+        //if(sp.Schema.Equals("dbo", StringComparison.InvariantCultureIgnoreCase) &amp;&amp; sp.NameHumanCase.ToLowerInvariant().Contains("order"))
+        //    return false;
+
+        return true;
+    };
+
+
+    // Table renaming *********************************************************************************************************************
+    // Use the following function to rename tables such as tblOrders to Orders, Shipments_AB to Shipments, etc.
+    // Example:
+    TableRename = (name, schema) =&gt;
+    {
+        // Example
+        //if (name.StartsWith("tbl"))
+        //    name = name.Remove(0, 3);
+        //name = name.Replace("_AB", "");
+
+        // If you turn pascal casing off (UsePascalCase = false), and use the pluralisation service, and some of your
+        // tables names are all UPPERCASE, some words ending in IES such as CATEGORIES get singularised as CATEGORy.
+        // Therefore you can make them lowercase by using the following
+        // return Inflector.MakeLowerIfAllCaps(name);
+
+        // If you are using the pluralisation service and you want to rename a table, make sure you rename the table to the plural form.
+        // For example, if the table is called Treez (with a z), and your pluralisation entry is
+        //     new CustomPluralizationEntry("Tree", "Trees")
+        // Use this TableRename function to rename Treez to the plural (not singular) form, Trees:
+        // if (name == "Treez") return "Trees";
+		//if (name == "T0Parent") return "Parent";
+        return name;
+    };
+
+    // Column modification*****************************************************************************************************************
+    // Use the following list to replace column byte types with Enums.
+    // As long as the type can be mapped to your new type, all is well.
+    //EnumsDefinitions.Add(new EnumDefinition { Schema = "dbo", Table = "match_table_name", Column = "match_column_name", EnumType = "name_of_enum" });
+    //EnumsDefinitions.Add(new EnumDefinition { Schema = "dbo", Table = "OrderHeader", Column = "OrderStatus", EnumType = "OrderStatusType" }); // This will replace OrderHeader.OrderStatus type to be an OrderStatusType enum
+
+    // Use the following function if you need to apply additional modifications to a column
+    // eg. normalise names etc.
+    UpdateColumn = (Column column, Table table) =&gt;
+    {
+        // Example
+        //if (column.IsPrimaryKey &amp;&amp; column.NameHumanCase == "PkId")
+        //    column.NameHumanCase = "Id";
+
+        // .IsConcurrencyToken() must be manually configured. However .IsRowVersion() can be automatically detected.
+        //if (table.NameHumanCase.Equals("SomeTable", StringComparison.InvariantCultureIgnoreCase) &amp;&amp; column.NameHumanCase.Equals("SomeColumn", StringComparison.InvariantCultureIgnoreCase))
+        //    column.IsConcurrencyToken = true;
+
+        // Remove table name from primary key
+        //if (column.IsPrimaryKey &amp;&amp; column.NameHumanCase.Equals(table.NameHumanCase + "Id", StringComparison.InvariantCultureIgnoreCase))
+        //    column.NameHumanCase = "Id";
+
+        // Remove column from poco class as it will be inherited from a base class
+        //if (column.IsPrimaryKey &amp;&amp; table.NameHumanCase.Equals("SomeTable", StringComparison.InvariantCultureIgnoreCase))
+        //    column.Hidden = true;
+
+        // Perform Enum property type replacement
+        var enumDefinition = EnumsDefinitions.FirstOrDefault(e =&gt;
+            (e.Schema.Equals(table.Schema, StringComparison.InvariantCultureIgnoreCase)) &amp;&amp;
+            (e.Table.Equals(table.Name, StringComparison.InvariantCultureIgnoreCase) || e.Table.Equals(table.NameHumanCase, StringComparison.InvariantCultureIgnoreCase)) &amp;&amp;
+            (e.Column.Equals(column.Name, StringComparison.InvariantCultureIgnoreCase) || e.Column.Equals(column.NameHumanCase, StringComparison.InvariantCultureIgnoreCase)));
+
+        if (enumDefinition != null)
+        {
+            column.PropertyType = enumDefinition.EnumType;
+            if(!string.IsNullOrEmpty(column.Default))
+                column.Default = "(" + enumDefinition.EnumType + ") " + column.Default;
+        }
+
+        return column;
+    };
+
+    // StoredProcedure renaming ************************************************************************************************************
+    // Use the following function to rename stored procs such as sp_CreateOrderHistory to CreateOrderHistory, my_sp_shipments to Shipments, etc.
+    // Example:
+    /*StoredProcedureRename = (name, schema) =&gt;
+    {
+        if (name.StartsWith("sp_"))
+            name = name.Remove(0, 3);
+        return name.Replace("my_sp_", "");
+    };*/
+    StoredProcedureRename = (name, schema) =&gt; name;   // Do nothing by default
+
+    // Use the following function to rename the return model automatically generated for stored procedure.
+    // By default it's &lt;proc_name&gt;ReturnModel.
+    // Example:
+    /*StoredProcedureReturnModelRename = (name, sp) =&gt;
+    {
+        if (sp.NameHumanCase.Equals("ComputeValuesForDate", StringComparison.InvariantCultureIgnoreCase))
+            return "ValueSet";
+        if (sp.NameHumanCase.Equals("SalesByYear", StringComparison.InvariantCultureIgnoreCase))
+            return "SalesSet";
+
+        return name;
+    };*/
+    StoredProcedureReturnModelRename = (name, sp) =&gt; name; // Do nothing by default
+
+    // StoredProcedure return types *******************************************************************************************************
+    // Override generation of return models for stored procedures that return entities.
+    // If a stored procedure returns an entity, add it to the list below.
+    // This will suppress the generation of the return model, and instead return the entity.
+    // Example:                       Proc name      Return this entity type instead
+    //StoredProcedureReturnTypes.Add("SalesByYear", "SummaryOfSalesByYear");
+
+
+    // WCF ********************************************************************************************************************************
+    // This is only intended as a helper, to get you started creating WCF contracts, and to save a lot of typing.
+    AddWcfDataAttributes = false;
+    ExtraWcfDataContractAttributes = "";    // This string is inserted into the  [DataContract] attribute, before the closing square bracket.
+    // Example: "";                                           = [DataContract]
+    //          "(Namespace = \"http://www.contoso.com\")";   = [DataContract(Namespace = "http://www.contoso.com")]
+    //          "(Namespace = Constants.ServiceNamespace)";   = [DataContract(Namespace = Constants.ServiceNamespace)]
+
+
+    // Callbacks **********************************************************************************************************************
+    // This method will be called right before we write the POCO header.
+    Action&lt;Table&gt; WritePocoClassAttributes = t =&gt;
+    {
+        if (UseDataAnnotations)
+        {
+            foreach (var dataAnnotation in t.DataAnnotations)
+            {
+                WriteLine("    [" + dataAnnotation + "]");
+            }
+        }
+
+        // if(t.ClassName.StartsWith("Order"))
+        //     WriteLine("    [SomeAttribute]");
+    };
+
+    // Writes optional base classes
+    Func&lt;Table, string&gt; WritePocoBaseClasses = t =&gt;
+    {
+        //if (t.ClassName == "User")
+        //    return ": IdentityUser&lt;int, CustomUserLogin, CustomUserRole, CustomUserClaim&gt;";
+        return "";
+    };
+
+    // Writes any boilerplate stuff
+    Action&lt;Table&gt; WritePocoBaseClassBody = t =&gt;
+    {
+        // Do nothing by default
+        // Example:
+        // WriteLine("        // " + t.ClassName);
+    };
+
+    Func&lt;Column, string&gt; WritePocoColumn = c =&gt;
+    {
+        bool commentWritten = false;
+        if((IncludeExtendedPropertyComments == CommentsStyle.InSummaryBlock || IncludeComments == CommentsStyle.InSummaryBlock) &amp;&amp; !string.IsNullOrEmpty(c.SummaryComments))
+        {
+            WriteLine(string.Empty);
+            WriteLine("        ///&lt;summary&gt;");
+            WriteLine("        /// {0}", c.SummaryComments);
+            WriteLine("        ///&lt;/summary&gt;");
+            commentWritten = true;
+        }
+        if (UseDataAnnotations)
+        {
+            if(c.Ordinal &gt; 1 &amp;&amp; !commentWritten)
+                WriteLine(string.Empty);    // Leave a blank line before the next property
+
+            foreach (var dataAnnotation in c.DataAnnotations)
+            {
+                WriteLine("        [" + dataAnnotation + "]");
+            }
+        }
+
+        // Example of adding a [Required] data annotation attribute to all non-null fields
+        //if (!c.IsNullable)
+        //    return "        [System.ComponentModel.DataAnnotations.Required] " + c.Entity;
+
+        return "        " + c.Entity;
+    };
+
+    ForeignKeyFilter = (ForeignKey fk) =&gt;
+    {
+        // Return null to exclude this foreign key, or set IncludeReverseNavigation = false
+        // to include the foeriegn key but not generate reverse navigation properties.
+        // Example, to exclude all foreign keys for the Categories table, use:
+        // if (fk.PkTableName == "Categories")
+        //    return null;
+
+        // Example, to exclude reverse navigation properties for tables ending with Type, use:
+        // if (fk.PkTableName.EndsWith("Type"))
+        //    fk.IncludeReverseNavigation = false;
+
+        return fk;
+    };
+
+    ForeignKeyName = (tableName, foreignKey, foreignKeyName, attempt) =&gt;
+    {
+        string fkName;
+
+        // 5 Attempts to correctly name the foreign key
+        switch (attempt)
+        {
+            case 1:
+                // Try without appending foreign key name
+                fkName = tableName;
+                break;
+
+            case 2:
+                // Only called if foreign key name ends with "id"
+                // Use foreign key name without "id" at end of string
+                fkName = foreignKeyName.Remove(foreignKeyName.Length-2, 2);
+                break;
+
+            case 3:
+                // Use foreign key name only
+                fkName = foreignKeyName;
+                break;
+
+            case 4:
+                // Use table name and foreign key name
+                fkName = tableName + "_" + foreignKeyName;
+                break;
+
+            case 5:
+                // Used in for loop 1 to 99 to append a number to the end
+                fkName = tableName;
+                break;
+
+            default:
+                // Give up
+                fkName = tableName;
+                break;
+        }
+
+        // Apply custom foreign key renaming rules. Can be useful in applying pluralization.
+        // For example:
+        /*if (tableName == "Employee" &amp;&amp; foreignKey.FkColumn == "ReportsTo")
+            return "Manager";
+
+        if (tableName == "Territories" &amp;&amp; foreignKey.FkTableName == "EmployeeTerritories")
+            return "Locations";
+
+        if (tableName == "Employee" &amp;&amp; foreignKey.FkTableName == "Orders" &amp;&amp; foreignKey.FkColumn == "EmployeeID")
+            return "ContactPerson";
+        */
+
+        return fkName;
+    };
+
+    // Return true to include this table in the db context
+    ConfigurationFilter = (Table t) =&gt;
+    {
+        return true;
+    };
+
+    // That's it, nothing else to configure ***********************************************************************************************
+
+
+    // Read schema
+    var factory = GetDbProviderFactory();
+    var tables = LoadTables(factory);
+    var storedProcs = LoadStoredProcs(factory);
+
+    // Generate output
+    if (tables.Count &gt; 0 || storedProcs.Count &gt; 0)
+    {
+#&gt;
+&lt;#@ include file="..\\MVC_EF_Parent_Child\\EF.Reverse.POCO.ttinclude" #&gt;
+&lt;#@ import namespace="System.Xml.Schema" #&gt;
+&lt;# } #&gt;
 </Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>EF_ReversePOCO_and_SinglePageMVC</Category>
+        <Language>C#</Language>
+        <Public>false</Public>
+        <Name>02_SingleTable__server_DBContext.tt</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>EF_ReversePOCO_and_SinglePageMVC</Category>
+          <Language>C#</Language>
+          <Public>false</Public>
+          <Name>02_SingleTable__server_DBContext.tt</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>&lt;#@ include file="EF.Reverse.POCO.Core.ttinclude" #&gt;
+&lt;#
+    // v2.28.0
+    // Please make changes to the settings below.
+    // All you have to do is save this file, and the output file(s) is/are generated. Compiling does not regenerate the file(s).
+    // A course for this generator is available on Pluralsight at https://www.pluralsight.com/courses/code-first-entity-framework-legacy-databases
+
+    // Main settings **********************************************************************************************************************
+    ConnectionStringName = "connT1Servers";   // Searches for this connection string in config files listed below in the ConfigFilenameSearchOrder setting
+    // ConnectionStringName is the only required setting.
+    // As an alternative to ConnectionStringName above, which must match your app/web.config connection string name, you can override them below
+    //ConnectionString = "Data Source=(local);Initial Catalog=Northwind;Integrated Security=True;Application Name=EntityFramework Reverse POCO Generator";
+    //ProviderName = "System.Data.SqlClient";
+
+    // Namespace = ""; // Override the default namespace here
+    DbContextName = "serverDbContext";
+    //DbContextInterfaceName = "IMyDbContext"; // Defaults to "I" + DbContextName or set string empty to not implement any interface.
+    DbContextInterfaceBaseClasses = "System.IDisposable";    // Specify what the base classes are for your database context interface
+    DbContextBaseClass = "System.Data.Entity.DbContext";   // Specify what the base class is for your DbContext. For ASP.NET Identity use "IdentityDbContext&lt;ApplicationUser&gt;"
+    //DefaultConstructorArgument = "EnvironmentConnectionStrings.MyDbContext"; //defaults to "Name=" + ConnectionStringName
+    ConfigurationClassName = "Configuration"; // Configuration, Mapping, Map, etc. This is appended to the Poco class name to configure the mappings.
+    ConfigFilenameSearchOrder = new[] { "app.config", "web.config", "app.config.transform", "web.config.transform" }; // Add more here if required. The config files are searched for in the local project first, then the whole solution second.
+    MakeClassesPartial = false;
+    MakeDbContextInterfacePartial = false;
+    GenerateSeparateFiles = false;
+    UseMappingTables = true; // If true, mapping will be used and no mapping tables will be generated. If false, all tables will be generated.
+    UsePascalCase = true;    // This will rename the generated C# tables &amp; properties to use PascalCase. If false table &amp; property names will be left alone.
+    UseDataAnnotations = true; // If true, will add data annotations to the poco classes.
+    UseDataAnnotationsSchema = true; // UseDataAnnotations must also be true. If true, will add data annotations schema to the poco classes.
+    IncludeComments = CommentsStyle.AtEndOfField; // Adds comments to the generated code
+    IncludeExtendedPropertyComments = CommentsStyle.InSummaryBlock; // Adds extended properties as comments to the generated code
+    IncludeViews = false;
+    IncludeSynonyms = false;
+    IncludeStoredProcedures = false;
+    IncludeTableValuedFunctions = false; // If true, you must set IncludeStoredProcedures = true, and install the "EntityFramework.CodeFirstStoreFunctions" Nuget Package.
+    DisableGeographyTypes = false; // Turns off use of System.Data.Entity.Spatial.DbGeography and System.Data.Entity.Spatial.DbGeometry as OData doesn't support entities with geometry/geography types.
+    CollectionType = "System.Collections.Generic.List";  // Determines the type of collection for the Navigation Properties. "ObservableCollection" for example. Add "System.Collections.ObjectModel" to AdditionalNamespaces if setting the CollectionType = "ObservableCollection".
+    NullableShortHand = true; //true =&gt; T?, false =&gt; Nullable&lt;T&gt;
+    AddUnitTestingDbContext = false; // Will add a FakeDbContext and FakeDbSet for easy unit testing
+    IncludeQueryTraceOn9481Flag = false; // If SqlServer 2014 appears frozen / take a long time when this file is saved, try setting this to true (you will also need elevated privileges).
+    IncludeCodeGeneratedAttribute = true; // If true, will include the GeneratedCode attribute, false to remove it.
+    UsePrivateSetterForComputedColumns = true; // If the columns is computed, use a private setter.
+    AdditionalNamespaces = new[] { "" };  // To include extra namespaces, include them here. i.e. "Microsoft.AspNet.Identity.EntityFramework"
+    AdditionalContextInterfaceItems = new[] // To include extra db context interface items, include them here. Also set MakeClassesPartial=true, and implement the partial DbContext class functions.
+    {
+        ""  //  example: "void SetAutoDetectChangesEnabled(bool flag);"
+    };
+    // If you need to serialize your entities with the JsonSerializer from Newtonsoft, this would serialize
+    // all properties including the Reverse Navigation and Foreign Keys. The simplest way to exclude them is
+    // to use the data annotation [JsonIgnore] on reverse navigation and foreign keys.
+    AdditionalReverseNavigationsDataAnnotations = new string[] // Data Annotations for all ReverseNavigationProperty.
+    {
+        // "JsonIgnore" // Also add "Newtonsoft.Json" to the AdditionalNamespaces array above
+    };
+    AdditionalForeignKeysDataAnnotations = new string[] // Data Annotations for all ForeignKeys.
+    {
+        // "JsonIgnore" // Also add "Newtonsoft.Json" to the AdditionalNamespaces array above
+    };
+
+    // Migrations *************************************************************************************************************************
+    MigrationConfigurationFileName = ""; // null or empty to not create migrations
+    MigrationStrategy = "MigrateDatabaseToLatestVersion"; // MigrateDatabaseToLatestVersion, CreateDatabaseIfNotExists or DropCreateDatabaseIfModelChanges
+    ContextKey = ""; // Sets the string used to distinguish migrations belonging to this configuration from migrations belonging to other configurations using the same database. This property enables migrations from multiple different models to be applied to applied to a single database.
+    AutomaticMigrationsEnabled = true;
+    AutomaticMigrationDataLossAllowed = true; // if true, can drop fields and lose data during automatic migration
+
+    // Pluralization **********************************************************************************************************************
+    // To turn off pluralization, use:
+    //      Inflector.PluralizationService = null;
+    // Default pluralization, use:
+    //      Inflector.PluralizationService = new EnglishPluralizationService();
+    // For Spanish pluralization:
+    //      1. Intall the "EF6.Contrib" Nuget Package.
+    //      2. Add the following to the top of this file and adjust path, and remove the space between the angle bracket and # at the beginning and end.
+    //         &lt; #@ assembly name="your full path to \EntityFramework.Contrib.dll" # &gt;
+    //      3. Change the line below to: Inflector.PluralizationService = new SpanishPluralizationService();
+    Inflector.PluralizationService = new EnglishPluralizationService();
+    // If pluralisation does not do the right thing, override it here by adding in a custom entry.
+    //Inflector.PluralizationService = new EnglishPluralizationService(new[]
+    //{
+    //    // Create custom ("Singular", "Plural") forms for one-off words as needed.
+    //    new CustomPluralizationEntry("Course", "Courses"),
+    //    new CustomPluralizationEntry("Status", "Status") // Use same value to prevent pluralisation
+    //});
+
+
+    // Elements to generate ***************************************************************************************************************
+    // Add the elements that should be generated when the template is executed.
+    // Multiple projects can now be used that separate the different concerns.
+    ElementsToGenerate = Elements.Poco | Elements.Context | Elements.UnitOfWork | Elements.PocoConfiguration;
+
+    // Use these namespaces to specify where the different elements now live. These may even be in different assemblies.
+    // Please note this does not create the files in these locations, it only adds a using statement to say where they are.
+    // The way to do this is to add the "EntityFramework Reverse POCO Code First Generator" into each of these folders.
+    // Then set the .tt to only generate the relevant section you need by setting
+    //      ElementsToGenerate = Elements.Poco; in your Entity folder,
+    //      ElementsToGenerate = Elements.Context | Elements.UnitOfWork; in your Context folder,
+    //      ElementsToGenerate = Elements.PocoConfiguration; in your Maps folder.
+    //      PocoNamespace = "YourProject.Entities";
+    //      ContextNamespace = "YourProject.Context";
+    //      UnitOfWorkNamespace = "YourProject.Context";
+    //      PocoConfigurationNamespace = "YourProject.Maps";
+    // You also need to set the following to the namespace where they now live:
+    PocoNamespace = "";
+    ContextNamespace = "";
+    UnitOfWorkNamespace = "";
+    PocoConfigurationNamespace = "";
+
+
+    // Schema *****************************************************************************************************************************
+    // If there are multiple schemas, then the table name is prefixed with the schema, except for dbo.
+    // Ie. dbo.hello will be Hello.
+    //     abc.hello will be AbcHello.
+    PrependSchemaName = true;   // Control if the schema name is prepended to the table name
+
+
+    // Filtering **************************************************************************************************************************
+    // Use the following table/view name regex filters to include or exclude tables/views
+    // Exclude filters are checked first and tables matching filters are removed.
+    //  * If left null, none are excluded.
+    //  * If not null, any tables matching the regex are excluded.
+    // Include filters are checked second.
+    //  * If left null, all are included.
+    //  * If not null, only the tables matching the regex are included.
+    // For clarity: if you want to include all the customer tables, but not the customer billing tables.
+    //      TableFilterInclude = new Regex("^[Cc]ustomer.*"); // This includes all the customer and customer billing tables
+    //      TableFilterExclude = new Regex(".*[Bb]illing.*"); // This excludes all the billing tables
+    //
+    // Example:     TableFilterExclude = new Regex(".*auto.*");
+    //              TableFilterInclude = new Regex("(.*_FR_.*)|(data_.*)");
+    //              TableFilterInclude = new Regex("^table_name1$|^table_name2$|etc");
+    //              ColumnFilterExclude = new Regex("^FK_.*$");
+    SchemaFilterExclude = null;
+    SchemaFilterInclude = null;
+    TableFilterExclude = null;
+    //TableFilterInclude = null;
+	//TableFilterInclude = new Regex("^[Ss]erver.*");
+	TableFilterInclude = new Regex("(^T001.*)|(^T000.*)");	  //&lt;== This gets just the T1Server table
+	//TableFilterInclude = new Regex("(.*_FR_.*)|(data_.*)");
+    ColumnFilterExclude = null;
+
+    // Filtering of tables using a function. This can be used in conjunction with the Regex's above.
+    // Regex are used first to filter the list down, then this function is run last.
+    // Return true to include the table, return false to exclude it.
+    TableFilter = (Table t) =&gt;
+    {
+        // Example: Exclude any table in dbo schema with "order" in its name.
+        //if(t.Schema.Equals("dbo", StringComparison.InvariantCultureIgnoreCase) &amp;&amp; t.NameHumanCase.ToLowerInvariant().Contains("order"))
+        //    return false;
+
+        return true;
+    };
+
+
+    // Stored Procedures ******************************************************************************************************************
+    // Use the following regex filters to include or exclude stored procedures
+    StoredProcedureFilterExclude = null;
+    StoredProcedureFilterInclude = null;
+
+    // Filtering of stored procedures using a function. This can be used in conjunction with the Regex's above.
+    // Regex are used first to filter the list down, then this function is run last.
+    // Return true to include the stored procedure, return false to exclude it.
+    StoredProcedureFilter = (StoredProcedure sp) =&gt;
+    {
+        // Example: Exclude any stored procedure in dbo schema with "order" in its name.
+        //if(sp.Schema.Equals("dbo", StringComparison.InvariantCultureIgnoreCase) &amp;&amp; sp.NameHumanCase.ToLowerInvariant().Contains("order"))
+        //    return false;
+
+        return true;
+    };
+
+
+    // Table renaming *********************************************************************************************************************
+    // Use the following function to rename tables such as tblOrders to Orders, Shipments_AB to Shipments, etc.
+    // Example:
+    TableRename = (name, schema) =&gt;
+    {
+        // Example
+        //if (name.StartsWith("tbl"))
+        //    name = name.Remove(0, 3);
+        //name = name.Replace("_AB", "");
+
+        // If you turn pascal casing off (UsePascalCase = false), and use the pluralisation service, and some of your
+        // tables names are all UPPERCASE, some words ending in IES such as CATEGORIES get singularised as CATEGORy.
+        // Therefore you can make them lowercase by using the following
+        // return Inflector.MakeLowerIfAllCaps(name);
+
+        // If you are using the pluralisation service and you want to rename a table, make sure you rename the table to the plural form.
+        // For example, if the table is called Treez (with a z), and your pluralisation entry is
+        //     new CustomPluralizationEntry("Tree", "Trees")
+        // Use this TableRename function to rename Treez to the plural (not singular) form, Trees:
+        // if (name == "Treez") return "Trees";
+
+        return name;
+    };
+
+    // Column modification*****************************************************************************************************************
+    // Use the following list to replace column byte types with Enums.
+    // As long as the type can be mapped to your new type, all is well.
+    //EnumsDefinitions.Add(new EnumDefinition { Schema = "dbo", Table = "match_table_name", Column = "match_column_name", EnumType = "name_of_enum" });
+    //EnumsDefinitions.Add(new EnumDefinition { Schema = "dbo", Table = "OrderHeader", Column = "OrderStatus", EnumType = "OrderStatusType" }); // This will replace OrderHeader.OrderStatus type to be an OrderStatusType enum
+
+    // Use the following function if you need to apply additional modifications to a column
+    // eg. normalise names etc.
+    UpdateColumn = (Column column, Table table) =&gt;
+    {
+        // Example
+        //if (column.IsPrimaryKey &amp;&amp; column.NameHumanCase == "PkId")
+        //    column.NameHumanCase = "Id";
+
+        // .IsConcurrencyToken() must be manually configured. However .IsRowVersion() can be automatically detected.
+        //if (table.NameHumanCase.Equals("SomeTable", StringComparison.InvariantCultureIgnoreCase) &amp;&amp; column.NameHumanCase.Equals("SomeColumn", StringComparison.InvariantCultureIgnoreCase))
+        //    column.IsConcurrencyToken = true;
+
+        // Remove table name from primary key
+        //if (column.IsPrimaryKey &amp;&amp; column.NameHumanCase.Equals(table.NameHumanCase + "Id", StringComparison.InvariantCultureIgnoreCase))
+        //    column.NameHumanCase = "Id";
+
+        // Remove column from poco class as it will be inherited from a base class
+        //if (column.IsPrimaryKey &amp;&amp; table.NameHumanCase.Equals("SomeTable", StringComparison.InvariantCultureIgnoreCase))
+        //    column.Hidden = true;
+
+        // Apply the "override" access modifier to a specific column.
+        // if (column.NameHumanCase == "id")
+        //    column.OverrideModifier = true;
+        // This will create: public override long id { get; set; }
+
+        // Perform Enum property type replacement
+        var enumDefinition = EnumsDefinitions.FirstOrDefault(e =&gt;
+            (e.Schema.Equals(table.Schema, StringComparison.InvariantCultureIgnoreCase)) &amp;&amp;
+            (e.Table.Equals(table.Name, StringComparison.InvariantCultureIgnoreCase) || e.Table.Equals(table.NameHumanCase, StringComparison.InvariantCultureIgnoreCase)) &amp;&amp;
+            (e.Column.Equals(column.Name, StringComparison.InvariantCultureIgnoreCase) || e.Column.Equals(column.NameHumanCase, StringComparison.InvariantCultureIgnoreCase)));
+
+        if (enumDefinition != null)
+        {
+            column.PropertyType = enumDefinition.EnumType;
+            if(!string.IsNullOrEmpty(column.Default))
+                column.Default = "(" + enumDefinition.EnumType + ") " + column.Default;
+        }
+
+        return column;
+    };
+
+    // StoredProcedure renaming ************************************************************************************************************
+    // Use the following function to rename stored procs such as sp_CreateOrderHistory to CreateOrderHistory, my_sp_shipments to Shipments, etc.
+    // Example:
+    /*StoredProcedureRename = (sp) =&gt;
+    {
+        if (sp.NameHumanCase.StartsWith("sp_"))
+            return sp.NameHumanCase.Remove(0, 3);
+        return sp.NameHumanCase.Replace("my_sp_", "");
+    };*/
+    StoredProcedureRename = (sp) =&gt; sp.NameHumanCase;   // Do nothing by default
+
+    // Use the following function to rename the return model automatically generated for stored procedure.
+    // By default it's &lt;proc_name&gt;ReturnModel.
+    // Example:
+    /*StoredProcedureReturnModelRename = (name, sp) =&gt;
+    {
+        if (sp.NameHumanCase.Equals("ComputeValuesForDate", StringComparison.InvariantCultureIgnoreCase))
+            return "ValueSet";
+        if (sp.NameHumanCase.Equals("SalesByYear", StringComparison.InvariantCultureIgnoreCase))
+            return "SalesSet";
+
+        return name;
+    };*/
+    StoredProcedureReturnModelRename = (name, sp) =&gt; name; // Do nothing by default
+
+    // StoredProcedure return types *******************************************************************************************************
+    // Override generation of return models for stored procedures that return entities.
+    // If a stored procedure returns an entity, add it to the list below.
+    // This will suppress the generation of the return model, and instead return the entity.
+    // Example:                       Proc name      Return this entity type instead
+    //StoredProcedureReturnTypes.Add("SalesByYear", "SummaryOfSalesByYear");
+
+
+    // WCF ********************************************************************************************************************************
+    // This is only intended as a helper, to get you started creating WCF contracts, and to save a lot of typing.
+    AddWcfDataAttributes = false;
+    ExtraWcfDataContractAttributes = "";    // This string is inserted into the  [DataContract] attribute, before the closing square bracket.
+    // Example: "";                                           = [DataContract]
+    //          "(Namespace = \"http://www.contoso.com\")";   = [DataContract(Namespace = "http://www.contoso.com")]
+    //          "(Namespace = Constants.ServiceNamespace)";   = [DataContract(Namespace = Constants.ServiceNamespace)]
+
+
+    // Callbacks **********************************************************************************************************************
+    // This method will be called right before we write the POCO header.
+    Action&lt;Table&gt; WritePocoClassAttributes = t =&gt;
+    {
+        if (UseDataAnnotations)
+        {
+            foreach (var dataAnnotation in t.DataAnnotations)
+            {
+                WriteLine("    [" + dataAnnotation + "]");
+            }
+        }
+
+        // if(t.ClassName.StartsWith("Order"))
+        //     WriteLine("    [SomeAttribute]");
+    };
+
+    // Writes optional base classes
+    Func&lt;Table, string&gt; WritePocoBaseClasses = t =&gt;
+    {
+        //if (t.ClassName == "User")
+        //    return ": IdentityUser&lt;int, CustomUserLogin, CustomUserRole, CustomUserClaim&gt;";
+        return "";
+    };
+
+    // Writes any boilerplate stuff
+    Action&lt;Table&gt; WritePocoBaseClassBody = t =&gt;
+    {
+        // Do nothing by default
+        // Example:
+        // WriteLine("        // " + t.ClassName);
+    };
+
+    Func&lt;Column, string&gt; WritePocoColumn = c =&gt;
+    {
+        bool commentWritten = false;
+        if((IncludeExtendedPropertyComments == CommentsStyle.InSummaryBlock || IncludeComments == CommentsStyle.InSummaryBlock) &amp;&amp; !string.IsNullOrEmpty(c.SummaryComments))
+        {
+            WriteLine(string.Empty);
+            WriteLine("        ///&lt;summary&gt;");
+            WriteLine("        /// {0}", c.SummaryComments);
+            WriteLine("        ///&lt;/summary&gt;");
+            commentWritten = true;
+        }
+        if (UseDataAnnotations)
+        {
+            if(c.Ordinal &gt; 1 &amp;&amp; !commentWritten)
+                WriteLine(string.Empty);    // Leave a blank line before the next property
+
+            foreach (var dataAnnotation in c.DataAnnotations)
+            {
+                WriteLine("        [" + dataAnnotation + "]");
+            }
+        }
+
+        // Example of adding a [Required] data annotation attribute to all non-null fields
+        //if (!c.IsNullable)
+        //    return "        [System.ComponentModel.DataAnnotations.Required] " + c.Entity;
+		//gigCustom
+        if (c.Name == "Install_Date")
+        {
+			
+            return "        [DataType(DataType.Date)] " + Environment.NewLine + "        " +  c.Entity;
+        }
+        return "        " + c.Entity;
+    };
+
+    ForeignKeyFilter = (ForeignKey fk) =&gt;
+    {
+        // Return null to exclude this foreign key, or set IncludeReverseNavigation = false
+        // to include the foeriegn key but not generate reverse navigation properties.
+        // Example, to exclude all foreign keys for the Categories table, use:
+        // if (fk.PkTableName == "Categories")
+        //    return null;
+
+        // Example, to exclude reverse navigation properties for tables ending with Type, use:
+        // if (fk.PkTableName.EndsWith("Type"))
+        //    fk.IncludeReverseNavigation = false;
+
+        return fk;
+    };
+
+    ForeignKeyName = (tableName, foreignKey, foreignKeyName, attempt) =&gt;
+    {
+        string fkName;
+
+        // 5 Attempts to correctly name the foreign key
+        switch (attempt)
+        {
+            case 1:
+                // Try without appending foreign key name
+                fkName = tableName;
+                break;
+
+            case 2:
+                // Only called if foreign key name ends with "id"
+                // Use foreign key name without "id" at end of string
+                fkName = foreignKeyName.Remove(foreignKeyName.Length-2, 2);
+                break;
+
+            case 3:
+                // Use foreign key name only
+                fkName = foreignKeyName;
+                break;
+
+            case 4:
+                // Use table name and foreign key name
+                fkName = tableName + "_" + foreignKeyName;
+                break;
+
+            case 5:
+                // Used in for loop 1 to 99 to append a number to the end
+                fkName = tableName;
+                break;
+
+            default:
+                // Give up
+                fkName = tableName;
+                break;
+        }
+
+        // Apply custom foreign key renaming rules. Can be useful in applying pluralization.
+        // For example:
+        /*if (tableName == "Employee" &amp;&amp; foreignKey.FkColumn == "ReportsTo")
+            return "Manager";
+
+        if (tableName == "Territories" &amp;&amp; foreignKey.FkTableName == "EmployeeTerritories")
+            return "Locations";
+
+        if (tableName == "Employee" &amp;&amp; foreignKey.FkTableName == "Orders" &amp;&amp; foreignKey.FkColumn == "EmployeeID")
+            return "ContactPerson";
+        */
+
+        return fkName;
+    };
+
+    // Return true to include this table in the db context
+    ConfigurationFilter = (Table t) =&gt;
+    {
+        return true;
+    };
+
+    // That's it, nothing else to configure ***********************************************************************************************
+
+
+    // Read schema
+    var factory = GetDbProviderFactory();
+    var tables = LoadTables(factory);
+    var storedProcs = LoadStoredProcs(factory);
+
+    // Generate output
+    if (tables.Count &gt; 0 || storedProcs.Count &gt; 0)
+    {
+#&gt;
+&lt;#@ include file="EF.Reverse.POCO.ttinclude" #&gt;
+&lt;#@ import namespace="System.Xml.Schema" #&gt;
+&lt;# } #&gt;
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>EF6_CodeFirst_with_ReverseEngineerFromDatabase</Category>
+        <Language>C#</Language>
+        <Public>false</Public>
+        <Name>11_ManyToMany___parentChild_DBContext.tt</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>EF6_CodeFirst_with_ReverseEngineerFromDatabase</Category>
+          <Language>C#</Language>
+          <Public>false</Public>
+          <Name>11_ManyToMany___parentChild_DBContext.tt</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>//11_ManyToMany___parentChild_DBContext.tt
+
+&lt;#@ include file="..\\Console_EF_Parent_Child\\EF.Reverse.POCO.Core.ttinclude" #&gt;
+&lt;#
+    // v2.27.0
+    // Please make changes to the settings below.
+    // All you have to do is save this file, and the output file(s) is/are generated. Compiling does not regenerate the file(s).
+    // A course for this generator is available on Pluralsight at https://www.pluralsight.com/courses/code-first-entity-framework-legacy-databases
+
+    // Main settings **********************************************************************************************************************
+    ConnectionStringName = "connParent_Child";   // Searches for this connection string in config files listed below in the ConfigFilenameSearchOrder setting
+    // ConnectionStringName is the only required setting.
+    // As an alternative to ConnectionStringName above, which must match your app/web.config connection string name, you can override them below
+    //ConnectionString = "Data Source=(local);Initial Catalog=Northwind;Integrated Security=True;Application Name=EntityFramework Reverse POCO Generator";
+    //ProviderName = "System.Data.SqlClient";
+
+    // Namespace = ""; // Override the default namespace here
+    DbContextName = "parentChildDbContext";
+    //DbContextInterfaceName = "IMyDbContext"; //Defaults to "I" + DbContextName
+    DbContextInterfaceBaseClasses = "System.IDisposable";    // Specify what the base classes are for your database context interface
+    DbContextBaseClass = "System.Data.Entity.DbContext";   // Specify what the base class is for your DbContext. For ASP.NET Identity use "IdentityDbContext&lt;ApplicationUser&gt;"
+    //DefaultConstructorArgument = "EnvironmentConnectionStrings.MyDbContext"; //defaults to "Name=" + ConnectionStringName
+    TargetFrameworkVersion = "4.61"; // Please set this to your .NET framework version, 4.0, 4.5, 4.51, etc.
+    ConfigurationClassName = "Configuration"; // Configuration, Mapping, Map, etc. This is appended to the Poco class name to configure the mappings.
+    ConfigFilenameSearchOrder = new[] { "app.config", "web.config", "app.config.transform", "web.config.transform" }; // Add more here if required. The config files are searched for in the local project first, then the whole solution second.
+    MakeClassesPartial = false;
+    MakeDbContextInterfacePartial = false;
+    GenerateSeparateFiles = true;
+    UseMappingTables = true; // If true, mapping will be used and no mapping tables will be generated. If false, all tables will be generated.
+    UsePascalCase = true;    // This will rename the generated C# tables &amp; properties to use PascalCase. If false table &amp; property names will be left alone.
+    UseDataAnnotations = true; // If true, will add data annotations to the poco classes.
+    UseDataAnnotationsSchema = true; // UseDataAnnotations must also be true. If true, will add data annotations schema to the poco classes.
+    IncludeComments = CommentsStyle.AtEndOfField; // Adds comments to the generated code
+    IncludeExtendedPropertyComments = CommentsStyle.InSummaryBlock; // Adds extended properties as comments to the generated code
+    IncludeViews = true;
+    IncludeSynonyms = false;
+    IncludeStoredProcedures = true;
+    IncludeTableValuedFunctions = false; // If true, you must set IncludeStoredProcedures = true, and install the "EntityFramework.CodeFirstStoreFunctions" Nuget Package.
+    DisableGeographyTypes = false; // Turns off use of System.Data.Entity.Spatial.DbGeography and System.Data.Entity.Spatial.DbGeometry as OData doesn't support entities with geometry/geography types.
+    CollectionType = "System.Collections.Generic.List";  // Determines the type of collection for the Navigation Properties. "ObservableCollection" for example. Add "System.Collections.ObjectModel" to AdditionalNamespaces if setting the CollectionType = "ObservableCollection".
+    NullableShortHand = true; //true =&gt; T?, false =&gt; Nullable&lt;T&gt;
+    AddUnitTestingDbContext = false; // Will add a FakeDbContext and FakeDbSet for easy unit testing
+    IncludeQueryTraceOn9481Flag = false; // If SqlServer 2014 appears frozen / take a long time when this file is saved, try setting this to true (you will also need elevated privileges).
+    IncludeCodeGeneratedAttribute = true; // If true, will include the GeneratedCode attribute, false to remove it.
+    UsePrivateSetterForComputedColumns = true; // If the columns is computed, use a private setter.
+    AdditionalNamespaces = new[] { "" };  // To include extra namespaces, include them here. i.e. "Microsoft.AspNet.Identity.EntityFramework"
+    AdditionalContextInterfaceItems = new[] // To include extra db context interface items, include them here. Also set MakeClassesPartial=true, and implement the partial DbContext class functions.
+    {
+        ""  //  example: "void SetAutoDetectChangesEnabled(bool flag);"
+    };
+    // If you need to serialize your entities with the JsonSerializer from Newtonsoft, this would serialize
+    // all properties including the Reverse Navigation and Foreign Keys. The simplest way to exclude them is
+    // to use the data annotation [JsonIgnore] on reverse navigation and foreign keys.
+    AdditionalReverseNavigationsDataAnnotations = new string[] // Data Annotations for all ReverseNavigationProperty.
+    {
+        // "JsonIgnore" // Also add "Newtonsoft.Json" to the AdditionalNamespaces array above
+    };
+    AdditionalForeignKeysDataAnnotations = new string[] // Data Annotations for all ForeignKeys.
+    {
+        // "JsonIgnore" // Also add "Newtonsoft.Json" to the AdditionalNamespaces array above
+    };
+
+    // Migrations *************************************************************************************************************************
+    MigrationConfigurationFileName = ""; // null or empty to not create migrations
+    MigrationStrategy = "MigrateDatabaseToLatestVersion"; // MigrateDatabaseToLatestVersion, CreateDatabaseIfNotExists or DropCreateDatabaseIfModelChanges
+    ContextKey = ""; // Sets the string used to distinguish migrations belonging to this configuration from migrations belonging to other configurations using the same database. This property enables migrations from multiple different models to be applied to applied to a single database.
+    AutomaticMigrationsEnabled = true;
+    AutomaticMigrationDataLossAllowed = true; // if true, can drop fields and lose data during automatic migration
+
+    // Pluralization **********************************************************************************************************************
+    // To turn off pluralization, use:
+    //      Inflector.PluralizationService = null;
+    // Default pluralization, use:
+    //      Inflector.PluralizationService = new EnglishPluralizationService();
+    // For Spanish pluralization:
+    //      1. Intall the "EF6.Contrib" Nuget Package.
+    //      2. Add the following to the top of this file and adjust path, and remove the space between the angle bracket and # at the beginning and end.
+    //         &lt; #@ assembly name="your full path to \EntityFramework.Contrib.dll" # &gt;
+    //      3. Change the line below to: Inflector.PluralizationService = new SpanishPluralizationService();
+    Inflector.PluralizationService = new EnglishPluralizationService();
+    // If pluralisation does not do the right thing, override it here by adding in a custom entry.
+    //Inflector.PluralizationService = new EnglishPluralizationService(new[]
+    //{
+    //    // Create custom ("Singular", "Plural") forms for one-off words as needed.
+    //    new CustomPluralizationEntry("Course", "Courses"),
+    //    new CustomPluralizationEntry("Status", "Status") // Use same value to prevent pluralisation
+    //});
+
+
+    // Elements to generate ***************************************************************************************************************
+    // Add the elements that should be generated when the template is executed.
+    // Multiple projects can now be used that separate the different concerns.
+    ElementsToGenerate = Elements.Poco | Elements.Context | Elements.UnitOfWork | Elements.PocoConfiguration;
+
+    // Use these namespaces to specify where the different elements now live. These may even be in different assemblies.
+    // Please note this does not create the files in these locations, it only adds a using statement to say where they are.
+    // The way to do this is to add the "EntityFramework Reverse POCO Code First Generator" into each of these folders.
+    // Then set the .tt to only generate the relevant section you need by setting
+    //      ElementsToGenerate = Elements.Poco; in your Entity folder,
+    //      ElementsToGenerate = Elements.Context | Elements.UnitOfWork; in your Context folder,
+    //      ElementsToGenerate = Elements.PocoConfiguration; in your Maps folder.
+    //      PocoNamespace = "YourProject.Entities";
+    //      ContextNamespace = "YourProject.Context";
+    //      UnitOfWorkNamespace = "YourProject.Context";
+    //      PocoConfigurationNamespace = "YourProject.Maps";
+    // You also need to set the following to the namespace where they now live:
+    PocoNamespace = "Console_EF_Parent_Child.Parent_Child_DL";
+    ContextNamespace = "Console_EF_Parent_Child.Parent_Child_DL";
+    UnitOfWorkNamespace = "Console_EF_Parent_Child.Parent_Child_DL";
+    PocoConfigurationNamespace = "Console_EF_Parent_Child.Parent_Child_DL";
+
+
+    // Schema *****************************************************************************************************************************
+    // If there are multiple schemas, then the table name is prefixed with the schema, except for dbo.
+    // Ie. dbo.hello will be Hello.
+    //     abc.hello will be AbcHello.
+    PrependSchemaName = true;   // Control if the schema name is prepended to the table name
+
+
+    // Filtering **************************************************************************************************************************
+    // Use the following table/view name regex filters to include or exclude tables/views
+    // Exclude filters are checked first and tables matching filters are removed.
+    //  * If left null, none are excluded.
+    //  * If not null, any tables matching the regex are excluded.
+    // Include filters are checked second.
+    //  * If left null, all are included.
+    //  * If not null, only the tables matching the regex are included.
+    // For clarity: if you want to include all the customer tables, but not the customer billing tables.
+    //      TableFilterInclude = new Regex("^[Cc]ustomer.*"); // This includes all the customer and customer billing tables
+    //      TableFilterExclude = new Regex(".*[Bb]illing.*"); // This excludes all the billing tables
+    //
+    // Example:     TableFilterExclude = new Regex(".*auto.*");
+    //              TableFilterInclude = new Regex("(.*_FR_.*)|(data_.*)");
+    //              TableFilterInclude = new Regex("^table_name1$|^table_name2$|etc");
+    //              ColumnFilterExclude = new Regex("^FK_.*$");
+    SchemaFilterExclude = null;
+    SchemaFilterInclude = null;
+    TableFilterExclude = null;
+    TableFilterInclude = null;
+    ColumnFilterExclude = null;
+
+    // Filtering of tables using a function. This can be used in conjunction with the Regex's above.
+    // Regex are used first to filter the list down, then this function is run last.
+    // Return true to include the table, return false to exclude it.
+    TableFilter = (Table t) =&gt;
+    {
+        // Example: Exclude any table in dbo schema with "order" in its name.
+        //if(t.Schema.Equals("dbo", StringComparison.InvariantCultureIgnoreCase) &amp;&amp; t.NameHumanCase.ToLowerInvariant().Contains("order"))
+        //    return false;
+
+        return true;
+    };
+
+
+    // Stored Procedures ******************************************************************************************************************
+    // Use the following regex filters to include or exclude stored procedures
+    StoredProcedureFilterExclude = null;
+    StoredProcedureFilterInclude = null;
+
+    // Filtering of stored procedures using a function. This can be used in conjunction with the Regex's above.
+    // Regex are used first to filter the list down, then this function is run last.
+    // Return true to include the stored procedure, return false to exclude it.
+    StoredProcedureFilter = (StoredProcedure sp) =&gt;
+    {
+        // Example: Exclude any stored procedure in dbo schema with "order" in its name.
+        //if(sp.Schema.Equals("dbo", StringComparison.InvariantCultureIgnoreCase) &amp;&amp; sp.NameHumanCase.ToLowerInvariant().Contains("order"))
+        //    return false;
+
+        return true;
+    };
+
+
+    // Table renaming *********************************************************************************************************************
+    // Use the following function to rename tables such as tblOrders to Orders, Shipments_AB to Shipments, etc.
+    // Example:
+    TableRename = (name, schema) =&gt;
+    {
+        // Example
+        //if (name.StartsWith("tbl"))
+        //    name = name.Remove(0, 3);
+        //name = name.Replace("_AB", "");
+
+        // If you turn pascal casing off (UsePascalCase = false), and use the pluralisation service, and some of your
+        // tables names are all UPPERCASE, some words ending in IES such as CATEGORIES get singularised as CATEGORy.
+        // Therefore you can make them lowercase by using the following
+        // return Inflector.MakeLowerIfAllCaps(name);
+
+        // If you are using the pluralisation service and you want to rename a table, make sure you rename the table to the plural form.
+        // For example, if the table is called Treez (with a z), and your pluralisation entry is
+        //     new CustomPluralizationEntry("Tree", "Trees")
+        // Use this TableRename function to rename Treez to the plural (not singular) form, Trees:
+        // if (name == "Treez") return "Trees";
+
+        return name;
+    };
+
+    // Column modification*****************************************************************************************************************
+    // Use the following list to replace column byte types with Enums.
+    // As long as the type can be mapped to your new type, all is well.
+    //EnumsDefinitions.Add(new EnumDefinition { Schema = "dbo", Table = "match_table_name", Column = "match_column_name", EnumType = "name_of_enum" });
+    //EnumsDefinitions.Add(new EnumDefinition { Schema = "dbo", Table = "OrderHeader", Column = "OrderStatus", EnumType = "OrderStatusType" }); // This will replace OrderHeader.OrderStatus type to be an OrderStatusType enum
+
+    // Use the following function if you need to apply additional modifications to a column
+    // eg. normalise names etc.
+    UpdateColumn = (Column column, Table table) =&gt;
+    {
+        // Example
+        //if (column.IsPrimaryKey &amp;&amp; column.NameHumanCase == "PkId")
+        //    column.NameHumanCase = "Id";
+
+        // .IsConcurrencyToken() must be manually configured. However .IsRowVersion() can be automatically detected.
+        //if (table.NameHumanCase.Equals("SomeTable", StringComparison.InvariantCultureIgnoreCase) &amp;&amp; column.NameHumanCase.Equals("SomeColumn", StringComparison.InvariantCultureIgnoreCase))
+        //    column.IsConcurrencyToken = true;
+
+        // Remove table name from primary key
+        //if (column.IsPrimaryKey &amp;&amp; column.NameHumanCase.Equals(table.NameHumanCase + "Id", StringComparison.InvariantCultureIgnoreCase))
+        //    column.NameHumanCase = "Id";
+
+        // Remove column from poco class as it will be inherited from a base class
+        //if (column.IsPrimaryKey &amp;&amp; table.NameHumanCase.Equals("SomeTable", StringComparison.InvariantCultureIgnoreCase))
+        //    column.Hidden = true;
+
+        // Perform Enum property type replacement
+        var enumDefinition = EnumsDefinitions.FirstOrDefault(e =&gt;
+            (e.Schema.Equals(table.Schema, StringComparison.InvariantCultureIgnoreCase)) &amp;&amp;
+            (e.Table.Equals(table.Name, StringComparison.InvariantCultureIgnoreCase) || e.Table.Equals(table.NameHumanCase, StringComparison.InvariantCultureIgnoreCase)) &amp;&amp;
+            (e.Column.Equals(column.Name, StringComparison.InvariantCultureIgnoreCase) || e.Column.Equals(column.NameHumanCase, StringComparison.InvariantCultureIgnoreCase)));
+
+        if (enumDefinition != null)
+        {
+            column.PropertyType = enumDefinition.EnumType;
+            if(!string.IsNullOrEmpty(column.Default))
+                column.Default = "(" + enumDefinition.EnumType + ") " + column.Default;
+        }
+
+        return column;
+    };
+
+    // StoredProcedure renaming ************************************************************************************************************
+    // Use the following function to rename stored procs such as sp_CreateOrderHistory to CreateOrderHistory, my_sp_shipments to Shipments, etc.
+    // Example:
+    /*StoredProcedureRename = (name, schema) =&gt;
+    {
+        if (name.StartsWith("sp_"))
+            name = name.Remove(0, 3);
+        return name.Replace("my_sp_", "");
+    };*/
+    StoredProcedureRename = (name, schema) =&gt; name;   // Do nothing by default
+
+    // Use the following function to rename the return model automatically generated for stored procedure.
+    // By default it's &lt;proc_name&gt;ReturnModel.
+    // Example:
+    /*StoredProcedureReturnModelRename = (name, sp) =&gt;
+    {
+        if (sp.NameHumanCase.Equals("ComputeValuesForDate", StringComparison.InvariantCultureIgnoreCase))
+            return "ValueSet";
+        if (sp.NameHumanCase.Equals("SalesByYear", StringComparison.InvariantCultureIgnoreCase))
+            return "SalesSet";
+
+        return name;
+    };*/
+    StoredProcedureReturnModelRename = (name, sp) =&gt; name; // Do nothing by default
+
+    // StoredProcedure return types *******************************************************************************************************
+    // Override generation of return models for stored procedures that return entities.
+    // If a stored procedure returns an entity, add it to the list below.
+    // This will suppress the generation of the return model, and instead return the entity.
+    // Example:                       Proc name      Return this entity type instead
+    //StoredProcedureReturnTypes.Add("SalesByYear", "SummaryOfSalesByYear");
+
+
+    // WCF ********************************************************************************************************************************
+    // This is only intended as a helper, to get you started creating WCF contracts, and to save a lot of typing.
+    AddWcfDataAttributes = false;
+    ExtraWcfDataContractAttributes = "";    // This string is inserted into the  [DataContract] attribute, before the closing square bracket.
+    // Example: "";                                           = [DataContract]
+    //          "(Namespace = \"http://www.contoso.com\")";   = [DataContract(Namespace = "http://www.contoso.com")]
+    //          "(Namespace = Constants.ServiceNamespace)";   = [DataContract(Namespace = Constants.ServiceNamespace)]
+
+
+    // Callbacks **********************************************************************************************************************
+    // This method will be called right before we write the POCO header.
+    Action&lt;Table&gt; WritePocoClassAttributes = t =&gt;
+    {
+        if (UseDataAnnotations)
+        {
+            foreach (var dataAnnotation in t.DataAnnotations)
+            {
+                WriteLine("    [" + dataAnnotation + "]");
+            }
+        }
+
+        // if(t.ClassName.StartsWith("Order"))
+        //     WriteLine("    [SomeAttribute]");
+    };
+
+    // Writes optional base classes
+    Func&lt;Table, string&gt; WritePocoBaseClasses = t =&gt;
+    {
+        //if (t.ClassName == "User")
+        //    return ": IdentityUser&lt;int, CustomUserLogin, CustomUserRole, CustomUserClaim&gt;";
+        return "";
+    };
+
+    // Writes any boilerplate stuff
+    Action&lt;Table&gt; WritePocoBaseClassBody = t =&gt;
+    {
+        // Do nothing by default
+        // Example:
+        // WriteLine("        // " + t.ClassName);
+    };
+
+    Func&lt;Column, string&gt; WritePocoColumn = c =&gt;
+    {
+        bool commentWritten = false;
+        if((IncludeExtendedPropertyComments == CommentsStyle.InSummaryBlock || IncludeComments == CommentsStyle.InSummaryBlock) &amp;&amp; !string.IsNullOrEmpty(c.SummaryComments))
+        {
+            WriteLine(string.Empty);
+            WriteLine("        ///&lt;summary&gt;");
+            WriteLine("        /// {0}", c.SummaryComments);
+            WriteLine("        ///&lt;/summary&gt;");
+            commentWritten = true;
+        }
+        if (UseDataAnnotations)
+        {
+            if(c.Ordinal &gt; 1 &amp;&amp; !commentWritten)
+                WriteLine(string.Empty);    // Leave a blank line before the next property
+
+            foreach (var dataAnnotation in c.DataAnnotations)
+            {
+                WriteLine("        [" + dataAnnotation + "]");
+            }
+        }
+
+        // Example of adding a [Required] data annotation attribute to all non-null fields
+        //if (!c.IsNullable)
+        //    return "        [System.ComponentModel.DataAnnotations.Required] " + c.Entity;
+
+        return "        " + c.Entity;
+    };
+
+    ForeignKeyFilter = (ForeignKey fk) =&gt;
+    {
+        // Return null to exclude this foreign key, or set IncludeReverseNavigation = false
+        // to include the foeriegn key but not generate reverse navigation properties.
+        // Example, to exclude all foreign keys for the Categories table, use:
+        // if (fk.PkTableName == "Categories")
+        //    return null;
+
+        // Example, to exclude reverse navigation properties for tables ending with Type, use:
+        // if (fk.PkTableName.EndsWith("Type"))
+        //    fk.IncludeReverseNavigation = false;
+
+        return fk;
+    };
+
+    ForeignKeyName = (tableName, foreignKey, foreignKeyName, attempt) =&gt;
+    {
+        string fkName;
+
+        // 5 Attempts to correctly name the foreign key
+        switch (attempt)
+        {
+            case 1:
+                // Try without appending foreign key name
+                fkName = tableName;
+                break;
+
+            case 2:
+                // Only called if foreign key name ends with "id"
+                // Use foreign key name without "id" at end of string
+                fkName = foreignKeyName.Remove(foreignKeyName.Length-2, 2);
+                break;
+
+            case 3:
+                // Use foreign key name only
+                fkName = foreignKeyName;
+                break;
+
+            case 4:
+                // Use table name and foreign key name
+                fkName = tableName + "_" + foreignKeyName;
+                break;
+
+            case 5:
+                // Used in for loop 1 to 99 to append a number to the end
+                fkName = tableName;
+                break;
+
+            default:
+                // Give up
+                fkName = tableName;
+                break;
+        }
+
+        // Apply custom foreign key renaming rules. Can be useful in applying pluralization.
+        // For example:
+        /*if (tableName == "Employee" &amp;&amp; foreignKey.FkColumn == "ReportsTo")
+            return "Manager";
+
+        if (tableName == "Territories" &amp;&amp; foreignKey.FkTableName == "EmployeeTerritories")
+            return "Locations";
+
+        if (tableName == "Employee" &amp;&amp; foreignKey.FkTableName == "Orders" &amp;&amp; foreignKey.FkColumn == "EmployeeID")
+            return "ContactPerson";
+        */
+
+        return fkName;
+    };
+
+    // Return true to include this table in the db context
+    ConfigurationFilter = (Table t) =&gt;
+    {
+        return true;
+    };
+
+    // That's it, nothing else to configure ***********************************************************************************************
+
+
+    // Read schema
+    var factory = GetDbProviderFactory();
+    var tables = LoadTables(factory);
+    var storedProcs = LoadStoredProcs(factory);
+
+    // Generate output
+    if (tables.Count &gt; 0 || storedProcs.Count &gt; 0)
+    {
+#&gt;
+&lt;#@ include file="..\\Console_EF_Parent_Child\\EF.Reverse.POCO.ttinclude" #&gt;
+&lt;#@ import namespace="System.Xml.Schema" #&gt;
+&lt;# } #&gt;
+
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>EF6_CodeFirst_with_ReverseEngineerFromDatabase</Category>
+        <Language>C#</Language>
+        <Public>false</Public>
+        <Name>11_ManyToMany___parentLinkChild_DBContext.tt</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>EF6_CodeFirst_with_ReverseEngineerFromDatabase</Category>
+          <Language>C#</Language>
+          <Public>false</Public>
+          <Name>11_ManyToMany___parentLinkChild_DBContext.tt</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>11_ManyToMany___parentLinkChild_DBContext.tt
+
+
+&lt;#@ include file="..\\Console_EF_Parent_Child\\EF.Reverse.POCO.Core.ttinclude" #&gt;
+&lt;#
+    // v2.27.0
+    // Please make changes to the settings below.
+    // All you have to do is save this file, and the output file(s) is/are generated. Compiling does not regenerate the file(s).
+    // A course for this generator is available on Pluralsight at https://www.pluralsight.com/courses/code-first-entity-framework-legacy-databases
+
+    // Main settings **********************************************************************************************************************
+    ConnectionStringName = "connParent_link_Child";   // Searches for this connection string in config files listed below in the ConfigFilenameSearchOrder setting
+    // ConnectionStringName is the only required setting.
+    // As an alternative to ConnectionStringName above, which must match your app/web.config connection string name, you can override them below
+    //ConnectionString = "Data Source=(local);Initial Catalog=Northwind;Integrated Security=True;Application Name=EntityFramework Reverse POCO Generator";
+    //ProviderName = "System.Data.SqlClient";
+
+    // Namespace = ""; // Override the default namespace here
+    DbContextName = "parentLinkChildDbContext";
+    //DbContextInterfaceName = "IMyDbContext"; //Defaults to "I" + DbContextName
+    DbContextInterfaceBaseClasses = "System.IDisposable";    // Specify what the base classes are for your database context interface
+    DbContextBaseClass = "System.Data.Entity.DbContext";   // Specify what the base class is for your DbContext. For ASP.NET Identity use "IdentityDbContext&lt;ApplicationUser&gt;"
+    //DefaultConstructorArgument = "EnvironmentConnectionStrings.MyDbContext"; //defaults to "Name=" + ConnectionStringName
+    TargetFrameworkVersion = "4.61"; // Please set this to your .NET framework version, 4.0, 4.5, 4.51, etc.
+    ConfigurationClassName = "Configuration"; // Configuration, Mapping, Map, etc. This is appended to the Poco class name to configure the mappings.
+    ConfigFilenameSearchOrder = new[] { "app.config", "web.config", "app.config.transform", "web.config.transform" }; // Add more here if required. The config files are searched for in the local project first, then the whole solution second.
+    MakeClassesPartial = false;
+    MakeDbContextInterfacePartial = false;
+    GenerateSeparateFiles = true;
+    UseMappingTables = false; // If true, mapping will be used and no mapping tables will be generated. If false, all tables will be generated.
+    UsePascalCase = true;    // This will rename the generated C# tables &amp; properties to use PascalCase. If false table &amp; property names will be left alone.
+    UseDataAnnotations = false; // If true, will add data annotations to the poco classes.
+    UseDataAnnotationsSchema = false; // UseDataAnnotations must also be true. If true, will add data annotations schema to the poco classes.
+    IncludeComments = CommentsStyle.AtEndOfField; // Adds comments to the generated code
+    IncludeExtendedPropertyComments = CommentsStyle.InSummaryBlock; // Adds extended properties as comments to the generated code
+    IncludeViews = true;
+    IncludeSynonyms = false;
+    IncludeStoredProcedures = true;
+    IncludeTableValuedFunctions = false; // If true, you must set IncludeStoredProcedures = true, and install the "EntityFramework.CodeFirstStoreFunctions" Nuget Package.
+    DisableGeographyTypes = false; // Turns off use of System.Data.Entity.Spatial.DbGeography and System.Data.Entity.Spatial.DbGeometry as OData doesn't support entities with geometry/geography types.
+    CollectionType = "System.Collections.Generic.List";  // Determines the type of collection for the Navigation Properties. "ObservableCollection" for example. Add "System.Collections.ObjectModel" to AdditionalNamespaces if setting the CollectionType = "ObservableCollection".
+    NullableShortHand = true; //true =&gt; T?, false =&gt; Nullable&lt;T&gt;
+    AddUnitTestingDbContext = false; // Will add a FakeDbContext and FakeDbSet for easy unit testing
+    IncludeQueryTraceOn9481Flag = false; // If SqlServer 2014 appears frozen / take a long time when this file is saved, try setting this to true (you will also need elevated privileges).
+    IncludeCodeGeneratedAttribute = true; // If true, will include the GeneratedCode attribute, false to remove it.
+    UsePrivateSetterForComputedColumns = true; // If the columns is computed, use a private setter.
+    AdditionalNamespaces = new[] { "" };  // To include extra namespaces, include them here. i.e. "Microsoft.AspNet.Identity.EntityFramework"
+    AdditionalContextInterfaceItems = new[] // To include extra db context interface items, include them here. Also set MakeClassesPartial=true, and implement the partial DbContext class functions.
+    {
+        ""  //  example: "void SetAutoDetectChangesEnabled(bool flag);"
+    };
+    // If you need to serialize your entities with the JsonSerializer from Newtonsoft, this would serialize
+    // all properties including the Reverse Navigation and Foreign Keys. The simplest way to exclude them is
+    // to use the data annotation [JsonIgnore] on reverse navigation and foreign keys.
+    AdditionalReverseNavigationsDataAnnotations = new string[] // Data Annotations for all ReverseNavigationProperty.
+    {
+        // "JsonIgnore" // Also add "Newtonsoft.Json" to the AdditionalNamespaces array above
+    };
+    AdditionalForeignKeysDataAnnotations = new string[] // Data Annotations for all ForeignKeys.
+    {
+        // "JsonIgnore" // Also add "Newtonsoft.Json" to the AdditionalNamespaces array above
+    };
+
+    // Migrations *************************************************************************************************************************
+    MigrationConfigurationFileName = ""; // null or empty to not create migrations
+    MigrationStrategy = "MigrateDatabaseToLatestVersion"; // MigrateDatabaseToLatestVersion, CreateDatabaseIfNotExists or DropCreateDatabaseIfModelChanges
+    ContextKey = ""; // Sets the string used to distinguish migrations belonging to this configuration from migrations belonging to other configurations using the same database. This property enables migrations from multiple different models to be applied to applied to a single database.
+    AutomaticMigrationsEnabled = true;
+    AutomaticMigrationDataLossAllowed = true; // if true, can drop fields and lose data during automatic migration
+
+    // Pluralization **********************************************************************************************************************
+    // To turn off pluralization, use:
+    //      Inflector.PluralizationService = null;
+    // Default pluralization, use:
+    //      Inflector.PluralizationService = new EnglishPluralizationService();
+    // For Spanish pluralization:
+    //      1. Intall the "EF6.Contrib" Nuget Package.
+    //      2. Add the following to the top of this file and adjust path, and remove the space between the angle bracket and # at the beginning and end.
+    //         &lt; #@ assembly name="your full path to \EntityFramework.Contrib.dll" # &gt;
+    //      3. Change the line below to: Inflector.PluralizationService = new SpanishPluralizationService();
+    
+	Inflector.PluralizationService = new EnglishPluralizationService();
+	
+	//Inflector.PluralizationService = new EnglishPluralizationService(new[]
+	//{
+	//	new CustomPluralizationEntry("T0Parent", "Parents"),
+	//	new CustomPluralizationEntry("LNK02_T0_T1", "Links"),
+    //    new CustomPluralizationEntry("T3_child_detail", "Children")
+	//});
+
+	// If pluralisation does not do the right thing, override it here by adding in a custom entry.
+    //Inflector.PluralizationService = new EnglishPluralizationService(new[]
+    //{
+    //    // Create custom ("Singular", "Plural") forms for one-off words as needed.
+    //    new CustomPluralizationEntry("Course", "Courses"),
+    //    new CustomPluralizationEntry("Status", "Status") // Use same value to prevent pluralisation
+    //});
+
+
+    // Elements to generate ***************************************************************************************************************
+    // Add the elements that should be generated when the template is executed.
+    // Multiple projects can now be used that separate the different concerns.
+    ElementsToGenerate = Elements.Poco | Elements.Context | Elements.UnitOfWork | Elements.PocoConfiguration;
+
+    // Use these namespaces to specify where the different elements now live. These may even be in different assemblies.
+    // Please note this does not create the files in these locations, it only adds a using statement to say where they are.
+    // The way to do this is to add the "EntityFramework Reverse POCO Code First Generator" into each of these folders.
+    // Then set the .tt to only generate the relevant section you need by setting
+    //      ElementsToGenerate = Elements.Poco; in your Entity folder,
+    //      ElementsToGenerate = Elements.Context | Elements.UnitOfWork; in your Context folder,
+    //      ElementsToGenerate = Elements.PocoConfiguration; in your Maps folder.
+    //      PocoNamespace = "YourProject.Entities";
+    //      ContextNamespace = "YourProject.Context";
+    //      UnitOfWorkNamespace = "YourProject.Context";
+    //      PocoConfigurationNamespace = "YourProject.Maps";
+    // You also need to set the following to the namespace where they now live:
+    PocoNamespace = "Console_EF_Parent_Child.Parent_LINK_Child_DL";
+    ContextNamespace = "Console_EF_Parent_Child.Parent_LINK_Child_DL";
+    UnitOfWorkNamespace = "Console_EF_Parent_Child.Parent_LINK_Child_DL";
+    PocoConfigurationNamespace = "Console_EF_Parent_Child.Parent_LINK_Child_DL";
+
+
+    // Schema *****************************************************************************************************************************
+    // If there are multiple schemas, then the table name is prefixed with the schema, except for dbo.
+    // Ie. dbo.hello will be Hello.
+    //     abc.hello will be AbcHello.
+    PrependSchemaName = true;   // Control if the schema name is prepended to the table name
+
+
+    // Filtering **************************************************************************************************************************
+    // Use the following table/view name regex filters to include or exclude tables/views
+    // Exclude filters are checked first and tables matching filters are removed.
+    //  * If left null, none are excluded.
+    //  * If not null, any tables matching the regex are excluded.
+    // Include filters are checked second.
+    //  * If left null, all are included.
+    //  * If not null, only the tables matching the regex are included.
+    // For clarity: if you want to include all the customer tables, but not the customer billing tables.
+    //      TableFilterInclude = new Regex("^[Cc]ustomer.*"); // This includes all the customer and customer billing tables
+    //      TableFilterExclude = new Regex(".*[Bb]illing.*"); // This excludes all the billing tables
+    //
+    // Example:     TableFilterExclude = new Regex(".*auto.*");
+    //              TableFilterInclude = new Regex("(.*_FR_.*)|(data_.*)");
+    //              TableFilterInclude = new Regex("^table_name1$|^table_name2$|etc");
+    //              ColumnFilterExclude = new Regex("^FK_.*$");
+    SchemaFilterExclude = null;
+    SchemaFilterInclude = null;
+    TableFilterExclude = null;
+    TableFilterInclude = null;
+    ColumnFilterExclude = null;
+
+    // Filtering of tables using a function. This can be used in conjunction with the Regex's above.
+    // Regex are used first to filter the list down, then this function is run last.
+    // Return true to include the table, return false to exclude it.
+    TableFilter = (Table t) =&gt;
+    {
+        // Example: Exclude any table in dbo schema with "order" in its name.
+        //if(t.Schema.Equals("dbo", StringComparison.InvariantCultureIgnoreCase) &amp;&amp; t.NameHumanCase.ToLowerInvariant().Contains("order"))
+        //    return false;
+
+        return true;
+    };
+
+
+    // Stored Procedures ******************************************************************************************************************
+    // Use the following regex filters to include or exclude stored procedures
+    StoredProcedureFilterExclude = null;
+    StoredProcedureFilterInclude = null;
+
+    // Filtering of stored procedures using a function. This can be used in conjunction with the Regex's above.
+    // Regex are used first to filter the list down, then this function is run last.
+    // Return true to include the stored procedure, return false to exclude it.
+    StoredProcedureFilter = (StoredProcedure sp) =&gt;
+    {
+        // Example: Exclude any stored procedure in dbo schema with "order" in its name.
+        //if(sp.Schema.Equals("dbo", StringComparison.InvariantCultureIgnoreCase) &amp;&amp; sp.NameHumanCase.ToLowerInvariant().Contains("order"))
+        //    return false;
+
+        return true;
+    };
+
+
+    // Table renaming *********************************************************************************************************************
+    // Use the following function to rename tables such as tblOrders to Orders, Shipments_AB to Shipments, etc.
+    // Example:
+    TableRename = (name, schema) =&gt;
+    {
+        // Example
+        //if (name.StartsWith("tbl"))
+        //    name = name.Remove(0, 3);
+        //name = name.Replace("_AB", "");
+
+        //if (name == "T3ChildDetail") return "Children";
+        //new CustomPluralizationEntry("T3_child_detail", "Children");
+
+        // If you turn pascal casing off (UsePascalCase = false), and use the pluralisation service, and some of your
+        // tables names are all UPPERCASE, some words ending in IES such as CATEGORIES get singularised as CATEGORy.
+        // Therefore you can make them lowercase by using the following
+        // return Inflector.MakeLowerIfAllCaps(name);
+
+        // If you are using the pluralisation service and you want to rename a table, make sure you rename the table to the plural form.
+        // For example, if the table is called Treez (with a z), and your pluralisation entry is
+        //     new CustomPluralizationEntry("Tree", "Trees")
+        // Use this TableRename function to rename Treez to the plural (not singular) form, Trees:
+        // if (name == "Treez") return "Trees";
+
+        return name;
+    };
+
+    // Column modification*****************************************************************************************************************
+    // Use the following list to replace column byte types with Enums.
+    // As long as the type can be mapped to your new type, all is well.
+    //EnumsDefinitions.Add(new EnumDefinition { Schema = "dbo", Table = "match_table_name", Column = "match_column_name", EnumType = "name_of_enum" });
+    //EnumsDefinitions.Add(new EnumDefinition { Schema = "dbo", Table = "OrderHeader", Column = "OrderStatus", EnumType = "OrderStatusType" }); // This will replace OrderHeader.OrderStatus type to be an OrderStatusType enum
+
+    // Use the following function if you need to apply additional modifications to a column
+    // eg. normalise names etc.
+    UpdateColumn = (Column column, Table table) =&gt;
+    {
+        // Example
+        //if (column.IsPrimaryKey &amp;&amp; column.NameHumanCase == "PkId")
+        //    column.NameHumanCase = "Id";
+
+        // .IsConcurrencyToken() must be manually configured. However .IsRowVersion() can be automatically detected.
+        //if (table.NameHumanCase.Equals("SomeTable", StringComparison.InvariantCultureIgnoreCase) &amp;&amp; column.NameHumanCase.Equals("SomeColumn", StringComparison.InvariantCultureIgnoreCase))
+        //    column.IsConcurrencyToken = true;
+
+        // Remove table name from primary key
+        //if (column.IsPrimaryKey &amp;&amp; column.NameHumanCase.Equals(table.NameHumanCase + "Id", StringComparison.InvariantCultureIgnoreCase))
+        //    column.NameHumanCase = "Id";
+
+        // Remove column from poco class as it will be inherited from a base class
+        //if (column.IsPrimaryKey &amp;&amp; table.NameHumanCase.Equals("SomeTable", StringComparison.InvariantCultureIgnoreCase))
+        //    column.Hidden = true;
+
+        // Perform Enum property type replacement
+        var enumDefinition = EnumsDefinitions.FirstOrDefault(e =&gt;
+            (e.Schema.Equals(table.Schema, StringComparison.InvariantCultureIgnoreCase)) &amp;&amp;
+            (e.Table.Equals(table.Name, StringComparison.InvariantCultureIgnoreCase) || e.Table.Equals(table.NameHumanCase, StringComparison.InvariantCultureIgnoreCase)) &amp;&amp;
+            (e.Column.Equals(column.Name, StringComparison.InvariantCultureIgnoreCase) || e.Column.Equals(column.NameHumanCase, StringComparison.InvariantCultureIgnoreCase)));
+
+        if (enumDefinition != null)
+        {
+            column.PropertyType = enumDefinition.EnumType;
+            if(!string.IsNullOrEmpty(column.Default))
+                column.Default = "(" + enumDefinition.EnumType + ") " + column.Default;
+        }
+
+        return column;
+    };
+
+    // StoredProcedure renaming ************************************************************************************************************
+    // Use the following function to rename stored procs such as sp_CreateOrderHistory to CreateOrderHistory, my_sp_shipments to Shipments, etc.
+    // Example:
+    /*StoredProcedureRename = (name, schema) =&gt;
+    {
+        if (name.StartsWith("sp_"))
+            name = name.Remove(0, 3);
+        return name.Replace("my_sp_", "");
+    };*/
+    StoredProcedureRename = (name, schema) =&gt; name;   // Do nothing by default
+
+    // Use the following function to rename the return model automatically generated for stored procedure.
+    // By default it's &lt;proc_name&gt;ReturnModel.
+    // Example:
+    /*StoredProcedureReturnModelRename = (name, sp) =&gt;
+    {
+        if (sp.NameHumanCase.Equals("ComputeValuesForDate", StringComparison.InvariantCultureIgnoreCase))
+            return "ValueSet";
+        if (sp.NameHumanCase.Equals("SalesByYear", StringComparison.InvariantCultureIgnoreCase))
+            return "SalesSet";
+
+        return name;
+    };*/
+    StoredProcedureReturnModelRename = (name, sp) =&gt; name; // Do nothing by default
+
+    // StoredProcedure return types *******************************************************************************************************
+    // Override generation of return models for stored procedures that return entities.
+    // If a stored procedure returns an entity, add it to the list below.
+    // This will suppress the generation of the return model, and instead return the entity.
+    // Example:                       Proc name      Return this entity type instead
+    //StoredProcedureReturnTypes.Add("SalesByYear", "SummaryOfSalesByYear");
+
+
+    // WCF ********************************************************************************************************************************
+    // This is only intended as a helper, to get you started creating WCF contracts, and to save a lot of typing.
+    AddWcfDataAttributes = false;
+    ExtraWcfDataContractAttributes = "";    // This string is inserted into the  [DataContract] attribute, before the closing square bracket.
+    // Example: "";                                           = [DataContract]
+    //          "(Namespace = \"http://www.contoso.com\")";   = [DataContract(Namespace = "http://www.contoso.com")]
+    //          "(Namespace = Constants.ServiceNamespace)";   = [DataContract(Namespace = Constants.ServiceNamespace)]
+
+
+    // Callbacks **********************************************************************************************************************
+    // This method will be called right before we write the POCO header.
+    Action&lt;Table&gt; WritePocoClassAttributes = t =&gt;
+    {
+        if (UseDataAnnotations)
+        {
+            foreach (var dataAnnotation in t.DataAnnotations)
+            {
+                WriteLine("    [" + dataAnnotation + "]");
+            }
+        }
+
+        // if(t.ClassName.StartsWith("Order"))
+        //     WriteLine("    [SomeAttribute]");
+    };
+
+    // Writes optional base classes
+    Func&lt;Table, string&gt; WritePocoBaseClasses = t =&gt;
+    {
+        //if (t.ClassName == "User")
+        //    return ": IdentityUser&lt;int, CustomUserLogin, CustomUserRole, CustomUserClaim&gt;";
+        return "";
+    };
+
+    // Writes any boilerplate stuff
+    Action&lt;Table&gt; WritePocoBaseClassBody = t =&gt;
+    {
+        // Do nothing by default
+        // Example:
+        // WriteLine("        // " + t.ClassName);
+    };
+
+    Func&lt;Column, string&gt; WritePocoColumn = c =&gt;
+    {
+        bool commentWritten = false;
+        if((IncludeExtendedPropertyComments == CommentsStyle.InSummaryBlock || IncludeComments == CommentsStyle.InSummaryBlock) &amp;&amp; !string.IsNullOrEmpty(c.SummaryComments))
+        {
+            WriteLine(string.Empty);
+            WriteLine("        ///&lt;summary&gt;");
+            WriteLine("        /// {0}", c.SummaryComments);
+            WriteLine("        ///&lt;/summary&gt;");
+            commentWritten = true;
+        }
+        if (UseDataAnnotations)
+        {
+            if(c.Ordinal &gt; 1 &amp;&amp; !commentWritten)
+                WriteLine(string.Empty);    // Leave a blank line before the next property
+
+            foreach (var dataAnnotation in c.DataAnnotations)
+            {
+                WriteLine("        [" + dataAnnotation + "]");
+            }
+        }
+
+        // Example of adding a [Required] data annotation attribute to all non-null fields
+        //if (!c.IsNullable)
+        //    return "        [System.ComponentModel.DataAnnotations.Required] " + c.Entity;
+
+        return "        " + c.Entity;
+    };
+
+    ForeignKeyFilter = (ForeignKey fk) =&gt;
+    {
+        // Return null to exclude this foreign key, or set IncludeReverseNavigation = false
+        // to include the foeriegn key but not generate reverse navigation properties.
+        // Example, to exclude all foreign keys for the Categories table, use:
+        // if (fk.PkTableName == "Categories")
+        //    return null;
+
+        // Example, to exclude reverse navigation properties for tables ending with Type, use:
+        // if (fk.PkTableName.EndsWith("Type"))
+        //    fk.IncludeReverseNavigation = false;
+
+        return fk;
+    };
+
+    ForeignKeyName = (tableName, foreignKey, foreignKeyName, attempt) =&gt;
+    {
+        string fkName;
+
+        // 5 Attempts to correctly name the foreign key
+        switch (attempt)
+        {
+            case 1:
+                // Try without appending foreign key name
+                fkName = tableName;
+                break;
+
+            case 2:
+                // Only called if foreign key name ends with "id"
+                // Use foreign key name without "id" at end of string
+                fkName = foreignKeyName.Remove(foreignKeyName.Length-2, 2);
+                break;
+
+            case 3:
+                // Use foreign key name only
+                fkName = foreignKeyName;
+                break;
+
+            case 4:
+                // Use table name and foreign key name
+                fkName = tableName + "_" + foreignKeyName;
+                break;
+
+            case 5:
+                // Used in for loop 1 to 99 to append a number to the end
+                fkName = tableName;
+                break;
+
+            default:
+                // Give up
+                fkName = tableName;
+                break;
+        }
+
+        // Apply custom foreign key renaming rules. Can be useful in applying pluralization.
+        // For example:
+        /*if (tableName == "Employee" &amp;&amp; foreignKey.FkColumn == "ReportsTo")
+            return "Manager";
+
+        if (tableName == "Territories" &amp;&amp; foreignKey.FkTableName == "EmployeeTerritories")
+            return "Locations";
+
+        if (tableName == "Employee" &amp;&amp; foreignKey.FkTableName == "Orders" &amp;&amp; foreignKey.FkColumn == "EmployeeID")
+            return "ContactPerson";
+        */
+
+        return fkName;
+    };
+
+    // Return true to include this table in the db context
+    ConfigurationFilter = (Table t) =&gt;
+    {
+        return true;
+    };
+
+    // That's it, nothing else to configure ***********************************************************************************************
+
+
+    // Read schema
+    var factory = GetDbProviderFactory();
+    var tables = LoadTables(factory);
+    var storedProcs = LoadStoredProcs(factory);
+
+    // Generate output
+    if (tables.Count &gt; 0 || storedProcs.Count &gt; 0)
+    {
+#&gt;
+&lt;#@ include file="..\\Console_EF_Parent_Child\\EF.Reverse.POCO.ttinclude" #&gt;
+&lt;#@ import namespace="System.Xml.Schema" #&gt;
+&lt;# } #&gt;
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>EF6_CodeFirst_with_ReverseEngineerFromDatabase</Category>
+        <Language>C#</Language>
+        <Public>false</Public>
+        <Name>Reverse_Engineer_Northwind_Database___Settings_in_tt_file</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>EF6_CodeFirst_with_ReverseEngineerFromDatabase</Category>
+          <Language>C#</Language>
+          <Public>false</Public>
+          <Name>Reverse_Engineer_Northwind_Database___Settings_in_tt_file</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>//Reverse_Engineer_Northwind_Database___Settings_in_tt_file
+
+//REMEMBER: tables have to have PK to show up in EF
+
+//This is from the NW3.tt file:
+========================================================================================
+&lt;#@ include file="EF.Reverse.POCO.Core.ttinclude" #&gt;
+&lt;#
+    // v2.26.0
+    // Please make changes to the settings below.
+    // All you have to do is save this file, and the output file(s) is/are generated. Compiling does not regenerate the file(s).
+    // A course for this generator is available on Pluralsight at https://www.pluralsight.com/courses/code-first-entity-framework-legacy-databases
+
+  // Main settings **********************************************************************************************************************
+    ConnectionStringName = "NorthwindDbContext";   // Searches for this connection string in config files listed below in the ConfigFilenameSearchOrder setting
+    //ConnectionStringName is the only required setting
+    		//gig:  If you want a different name for the 'name' attribute, of the &lt;connectionString&gt; tag in App.config
+    		//gig:  If the connection string is in App.config, but a different Project (in the same solution)
+    		//gig:    The search order for the ConnectionString is the local project first, then in each project
+    		//gig:    in the solution. It looks in the App.config, or web.config for each project
+    		//gig:    see the setting 'ConfigFilenameSearchOrder' for the files to search 
+    // Namespace = ""; // Override the default namespace here.
+    		//gig: 1] If I un-comment it out, I can specify the namespace for the Generated NW3.cs file 
+    		//gig: 2] On the other hand, I can let it auto-name the namespace: 
+    		//gig: 		By default it comes from the Project Name.
+    		//gig: 3] If I move the NW3.tt, and NW3.cs file into a new folder named "Data" {which itself is in the root}
+    		//gig:		where I re-write the first and last line that reference the include files:
+    		//gig:		&lt;#@ include file="..\EF.Reverse.POCO.Core.ttinclude" #&gt;   {&lt;=== First one}
+    		//gig:  	&lt;#@ include file="..\EF.Reverse.POCO.ttinclude" #&gt;		  {&lt;=== Last one}    
+    		//gig:		THEN the namespace for the generated files would be: "namespace NW3.Data"    				
+    		//gig:		This requires that I leave the 'Namespace' setting line commented out, so that it just auto-names the namespace, 
+			//gig:  Just remember if I change the namespace, I may have to change the 'using' statement in the program (e.g. using NW3.Data; rather than using NW3))
+    DbContextName = "NorthwindDbContext";
+			//gig:  This is used in the interface of the generated code:
+			//gig: 		a) public interface INorthwindDbContext : System.IDisposable  
+			//gig:      b) public class NorthwindDbContext : System.Data.Entity.DbContext, INorthwindDbContext
+			//gig:  So a change here would require that the following line in the program is changed:
+			//gig:		=&gt; using (var db = new NorthwindDbContext())  
+    //DbContextInterfaceName = "IMyDbContext"; //Defaults to "I" + DbContextName
+    DbContextInterfaceBaseClasses = "System.IDisposable";    // Specify what the base classes are for your database context interface
+			//gig:  This is the setting for the interface  
+			//gig:  or could add another interface:   
+			//gig:  e.g. DbContextInterfaceBaseClasses = "System.IDisposable, ISaveChangesCount";
+			//gig:  IF you add another Interface to inherit from then:
+			//gig: 		1] Create a file (e.g. ISaveChangesCount.cs), with a public interface: ISaveChangesCount
+			//gig:			populate it with some properties, methods, or whatever (e.g. "int GetSaveChangesCount();" )
+			//gig:			This will satisfy the requirement for the "interface INorthwindDbContext", 
+			//gig:			but not for the class NorthwindDBContext. So NorthwindDBContext has to be partial inorder to add it to the partial class.
+			//gig:		2] MakeClassesPartial = true;
+			//gig:		3] Create a CustomDbContext.cs file (or put it in another file), in the same namespace, and in it create a partial class: "CustomDbContext" which inherits from "DbContext"    
+    		//gig:			Make sure that the new "CustomDbContext" implements the constructors that you want to modify
+    		//gig:			and implement the members that you want to override
+    		//gig:		4] Now you have to fix the "FakeNorthwindDbContext". So you have to create a Partial Class for that.
+    DbContextBaseClass = "System.Data.Entity.DbContext";   // Specify what the base class is for your DbContext. For ASP.NET Identity use "IdentityDbContext&lt;ApplicationUser&gt;"
+			//gig:	Suppose I wanted a custom base class that implements logging		
+			//gig:	If you change it you have to create one as well, and have it inherit from DbContext	       
+    //DefaultConstructorArgument = "EnvironmentConnectionStrings.MyDbContext"; //defaults to "Name=" + ConnectionStringName
+    TargetFrameworkVersion = "4.51"; // Please set this to your .NET framework version, 4.0, 4.5, 4.51, etc.
+    ConfigurationClassName = "Configuration"; // Configuration, Mapping, Map, etc. This is appended to the Poco class name to configure the mappings.
+    		//gig:	E.g. there is a 'Supplier' class, and 'SupplierConfiguration' class to configure it.
+    		//gig:  The name of the second table is equal to the 'Table Name' concatenated to the word 'Configuration'
+    		//gig:  	but if you want to call it 'Map' which would result in the class: 'SupplierMap'
+    ConfigFilenameSearchOrder = new[] { "app.config", "web.config", "app.config.transform", "web.config.transform" }; // Add more here if required. The config files are searched for in the local project first, then the whole solution second.
+    MakeClassesPartial = false;
+			//gig: Use this to generate all Partial classes
+			//gig: This causes the creation of two methods in the NW3.cs file:		
+			//gig:	'InitializePartial(), and OnModelCreatingPartial()
+			//gig:	So to add something into DBContext, 
+			//gig:		1]  MakeClassesPartial=true;
+			//gig:		2] 	DbContextBaseClass = "CustomDBContext";
+			//gig:		3]  Create a CustomDbContext.cs file (or put it in another file), in the same namespace, and in it create a partial class: "CustomDbContext" which inherits from "DbContext"    
+    		//gig:			Make sure that the new "CustomDbContext" implements the constructors that you want to modify
+    		//gig:			and implement the members that you want to override
+    		//gig:		4]  You can also put the partial for "NorthwindDbContext", and "FakeNorthwindDbContext" in the file "CustomDbContext.cs"
+    		//gig:			and implement the same changes in there as in the CustomDbContext.
+    MakeDbContextInterfacePartial = false;
+    GenerateSeparateFiles = false;
+    		//gig: by default all the POCO classes are generated in a single file: NW3.cs
+    		//gig:  if you set it to true you get seperate files for each SQL object
+    UseMappingTables = true; // If true, mapping will be used and no mapping tables will be generated. If false, all tables will be generated.
+    UsePascalCase = true;    // This will rename the generated C# tables &amp; properties to use PascalCase. If false table &amp; property names will be left alone.
+    		//gig:  Spaces in the names of the original tables or SP may cause problems
+    		//gig:	in that case delete the generated .cs files and try saving the .tt file again
+    UseDataAnnotations = false; // If true, will add data annotations to the poco classes.
+    UseDataAnnotationsSchema = false; // UseDataAnnotations must also be true. If true, will add data annotations schema to the poco classes.
+    IncludeComments = CommentsStyle.AtEndOfField; // Adds comments to the generated code
+    		//gig: enum is stored in: EF.Reverse.POCO.Core.ttinclude as "public enum CommentsStyle"
+    		//gig: with the following options: None,InSummaryBlock, AtEndOfField
+    IncludeExtendedPropertyComments = CommentsStyle.InSummaryBlock; // Adds extended properties as comments to the generated code
+    		//gig: if those comments are present in the SQL database, it adds them
+    		//gig: enum is stored in: EF.Reverse.POCO.Core.ttinclude as "public enum CommentsStyle"
+    IncludeViews = true;
+    		//gig:
+    IncludeSynonyms = false;
+    IncludeStoredProcedures = true;
+    IncludeTableValuedFunctions = false; // If true, you must set IncludeStoredProcedures = true, and install the "EntityFramework.CodeFirstStoreFunctions" Nuget Package.
+    		//gig: PM&gt; Install-Package EntityFramework.CodeFirstStoreFunctions
+    		//gig: I think this allows you to use the TVF in the C#, but if I just call them in SP then this is unnecessary.
+    DisableGeographyTypes = false; // Turns off use of System.Data.Entity.Spatial.DbGeography and System.Data.Entity.Spatial.DbGeometry as OData doesn't support entities with geometry/geography types.
+    CollectionType = "System.Collections.Generic.List";  // Determines the type of collection for the Navigation Properties. "ObservableCollection" for example. Add "System.Collections.ObjectModel" to AdditionalNamespaces if setting the CollectionType = "ObservableCollection".
+    		//gig: see example in chapter "Generating Code First Types from an existing Database" 
+    		//gig: 	in Pluralsight course: 'Code first entity framework legacy databases"
+    		//gig:	in section: "ColletionType"
+    NullableShortHand = true; //true =&gt; T?, false =&gt; Nullable&lt;T&gt;
+    AddUnitTestingDbContext = true; // Will add a FakeDbContext and FakeDbSet for easy unit testing
+    		//gig: It looks like the 'Fake' stuff is for unit testing?
+    IncludeQueryTraceOn9481Flag = false; // If SqlServer 2014 appears frozen / take a long time when this file is saved, try setting this to true (you will also need elevated privileges).
+    		//gig: SO if using SQL 2014, THEN SET IT TO TRUE !!!! It puts a flag into the statment to run it at a lower compatibililty level.
+    IncludeCodeGeneratedAttribute = true; // If true, will include the GeneratedCode attribute, false to remove it.
+    UsePrivateSetterForComputedColumns = true; // If the columns is computed, use a private setter.
+    AdditionalNamespaces = new[] { "" };  // To include extra namespaces, include them here. i.e. "Microsoft.AspNet.Identity.EntityFramework"
+    		//gig: This allows you to add more 'using' statements to your classes.
+    		//gig:	example:   = new[] { "System", "System.IO" };
+    AdditionalContextInterfaceItems = new[] // To include extra db context interface items, include them here. Also set MakeClassesPartial=true, and implement the partial DbContext class functions.
+    {
+        ""  //  example: "void SetAutoDetectChangesEnabled(bool flag);"
+    };
+    		//gig:	So use this to place a call to some method (e.g. "Whatever();", or whatever into the IxxxDbContext interface in the file NW3.cs file when it is rebuilt
+    		//gig:	Then implement the method in the partial class NorthwindDBContext, and FakeNorthwindDBContext
+    		//gig:		or at least stub it into the FakeNorthwindDBContext
+    		//gig:  MakeDbContextInterfacePartial=true;
+    		//gig:  You can put more than one into this array, by putting quotes aroud each, and seperating them with commas
+    // If you need to serialize your entities with the JsonSerializer from Newtonsoft, this would serialize
+    // all properties including the Reverse Navigation and Foreign Keys. The simplest way to exclude them is
+    // to use the data annotation [JsonIgnore] on reverse navigation and foreign keys.
+    AdditionalReverseNavigationsDataAnnotations = new string[] // Data Annotations for all ReverseNavigationProperty.
+    {
+        // "JsonIgnore" // Also add "Newtonsoft.Json" to the AdditionalNamespaces array above
+    };
+    AdditionalForeignKeysDataAnnotations = new string[] // Data Annotations for all ForeignKeys.
+    {
+        // "JsonIgnore" // Also add "Newtonsoft.Json" to the AdditionalNamespaces array above
+    };
+    
+    ...
+     // Filtering **************************************************************************************************************************
+    // Use the following table/view name regex filters to include or exclude tables/views
+    // Exclude filters are checked first and tables matching filters are removed.
+    //  * If left null, none are excluded.
+    //  * If not null, any tables matching the regex are excluded.
+    // Include filters are checked second.
+    //  * If left null, all are included.
+    //  * If not null, only the tables matching the regex are included.
+    // For clarity: if you want to include all the customer tables, but not the customer billing tables.
+    //      TableFilterInclude = new Regex("^[Cc]ustomer.*"); // This includes all the customer and customer billing tables
+    //      TableFilterExclude = new Regex(".*[Bb]illing.*"); // This excludes all the billing tables
+    //
+    // Example:     TableFilterExclude = new Regex(".*auto.*");
+    //              TableFilterInclude = new Regex("(.*_FR_.*)|(data_.*)");
+    //              TableFilterInclude = new Regex("^table_name1$|^table_name2$|etc");
+    //              ColumnFilterExclude = new Regex("^FK_.*$");
+    SchemaFilterExclude = null;
+    SchemaFilterInclude = null;
+    TableFilterExclude = null;
+    //TableFilterInclude = null;
+	//TableFilterInclude = new Regex("^[Ss]erver.*");
+	TableFilterInclude = new Regex("^T1.*");	  //&lt;== This gets just the T1Server table
+    ColumnFilterExclude = null;
+
+    // Filtering of tables using a function. This can be used in conjunction with the Regex's above.
+    // Regex are used first to filter the list down, then this function is run last.
+    // Return true to include the table, return false to exclude it.
+    TableFilter = (Table t) =&gt;
+    {
+        // Example: Exclude any table in dbo schema with "order" in its name.
+        //if(t.Schema.Equals("dbo", StringComparison.InvariantCultureIgnoreCase) &amp;&amp; t.NameHumanCase.ToLowerInvariant().Contains("order"))
+        //    return false;
+
+        return true;
+    };   
+    
+#&gt;
+&lt;#@ include file="EF.Reverse.POCO.ttinclude" #&gt;
+&lt;#@ import namespace="System.Xml.Schema" #&gt;
+&lt;# } #&gt;    </Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>Hex</Category>
+        <Language>VB.NET</Language>
+        <Public>false</Public>
+        <Name>String_to_Hex_AND_Hex_to_String</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>Hex</Category>
+          <Language>VB.NET</Language>
+          <Public>false</Public>
+          <Name>String_to_Hex_AND_Hex_to_String</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>    
+'. For example my name "MIKA" will be "4D494B41"
+'as hex string, but I don't find out how to do this opposite way? I mean
+'how to get "MIKA" of "4D494B41" hex string.
+    
+    
+    '1) Create a new Windows application
+    '2) Add a button
+    '3) Add this import:
+    'Imports System.text
+    '4) Now, paste in the following functions:
+
+    Private Function EncodeHexString(ByVal sText As String) As String
+        Dim intLength As Integer = sText.Length
+        If (intLength = 0) Then Return ""
+        Dim intCount As Integer = 0
+        Dim sb As New StringBuilder(intLength * 2)
+        Dim bBytes() As Byte = System.Text.Encoding.ASCII.GetBytes(sText)
+        For intCount = 0 To bBytes.Length - 1
+            sb.AppendFormat("{0:X2}", bBytes(intCount))
+        Next
+        Return sb.ToString()
+    End Function
+
+    Private Function DecodeHexString(ByVal sText As String) As String
+        Dim intLength As Integer = sText.Length
+        If (intLength = 0) Then Return ""
+        Dim intCount As Integer = 0
+        Dim sb As New StringBuilder(CType(intLength / 2, Integer))
+        Try
+            For intCount = 0 To sText.Length - 1 Step 2
+                sb.Append(Convert.ToChar(Byte.Parse(sText.Substring(intCount,
+                2), Globalization.NumberStyles.HexNumber)))
+            Next
+        Catch ex As Exception
+            Return ""
+        End Try
+        Return sb.ToString()
+    End Function
+
+5) Double-click button1 &amp; paste in this code:
+
+    Dim strMika As String = "Mika"
+    Dim strEncodedMika As String = EncodeHexString(strMika)
+        MessageBox.Show(strEncodedMika)
+    Dim strDecodedMika As String = DecodeHexString(strEncodedMika)
+        MessageBox.Show(strDecodedMika)</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Computer_info</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>Monitor_Info</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Computer_info</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>Monitor_Info</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+https://community.spiceworks.com/topic/658220-get-monitor-manufacturer-model-and-serial-number
+===============================for local machine
+function Decode {
+    If ($args[0] -is [System.Array]) {
+        [System.Text.Encoding]::ASCII.GetString($args[0])
+    }
+    Else {
+        "Not Found"
+    }
+}
+
+echo "Name, Serial"
+
+ForEach ($Monitor in Get-WmiObject WmiMonitorID -Namespace root\wmi) {  
+    $Name = Decode $Monitor.UserFriendlyName -notmatch 0
+    $Serial = Decode $Monitor.SerialNumberID -notmatch 0
+	
+    echo "$Name, $Serial"
+}
+
+===========================================================
+$Monitors = Get-WmiObject WmiMonitorID -Namespace root\wmi
+$LogFile = "C:\monitors.txt"
+
+"Manufacturer,Name,Serial" | Out-File $LogFile
+
+ForEach ($Monitor in $Monitors)
+{
+	$Manufacturer = ($Monitor.ManufacturerName -notmatch 0 | ForEach{[char]$_}) -join ""
+	$Name = ($Monitor.UserFriendlyName -notmatch 0 | ForEach{[char]$_}) -join ""
+	$Serial = ($Monitor.SerialNumberID -notmatch 0 | ForEach{[char]$_}) -join ""
+	
+	"$Manufacturer,$Name,$Serial" | Out-File $LogFile -append
+}</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_LogParser</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>LogParser_Functions</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_LogParser</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>LogParser_Functions</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>http://logparserplus.com/Functions#function_TRIM
+
+Function listing
+
+
+ADD
+ADD( addend1 &lt;any type&gt;, addend2 &lt;any type&gt; )
+Calculates the sum of two values. Returns a value of the same type as its arguments.
+Type: arithmetical
+
+See also: SUB DIV MUL
+AVG
+AVG( [ DISTINCT | ALL ] &lt;field_expr&gt; )
+Returns the average among all the values, or only the DISTINCT values, of the specified field-expression.
+Type: aggregate
+
+BIT_AND
+BIT_AND( arg1 &lt;INTEGER&gt;, arg2 &lt;INTEGER&gt; )
+Calculates the bitwise AND of two values.
+Type: arithmetical
+
+See also: BIT_NOT BIT_OR BIT_SHL BIT_SHR BIT_XOR
+BIT_NOT
+BIT_NOT( arg &lt;INTEGER&gt; )
+Calculates the bitwise NOT of a value.
+Type: arithmetical
+
+See also: BIT_AND BIT_OR BIT_SHL BIT_SHR BIT_XOR
+BIT_OR
+BIT_OR( arg1 &lt;INTEGER&gt;, arg2 &lt;INTEGER&gt; )
+Calculates the bitwise OR of two values.
+Type: arithmetical
+
+See also: BIT_AND BIT_NOT BIT_SHL BIT_SHR BIT_XOR
+BIT_SHL
+BIT_SHL( arg1 &lt;INTEGER&gt;, arg2 &lt;INTEGER&gt; )
+Shifts a value left by a specified number of bits.
+Type: arithmetical
+
+See also: BIT_AND BIT_NOT BIT_OR BIT_SHR BIT_XOR
+BIT_SHR
+BIT_SHR( arg1 &lt;INTEGER&gt;, arg2 &lt;INTEGER&gt; )
+Shifts a value right by a specified number of bits.
+Type: arithmetical
+
+See also: BIT_AND BIT_NOT BIT_OR BIT_SHL BIT_XOR
+BIT_XOR
+BIT_XOR( arg1 &lt;INTEGER&gt;, arg2 &lt;INTEGER&gt; )
+Calculates the bitwise XOR of two values.
+Type: arithmetical
+
+See also: BIT_AND BIT_NOT BIT_OR BIT_SHL BIT_SHR
+CASE
+CASE &lt;field_expression&gt; WHEN &lt;field_expression&gt; THEN &lt;field_expression&gt; [ ... ] [ ELSE &lt;field_expression&gt; ] END
+Compares the argument of the CASE statement with the arguments of the WHEN statements, returning the argument of a THEN statement when a match is found. If no match is found, returns the argument of the ELSE statement, or NULL if no ELSE statement is provided.
+Type: miscellaneous
+
+COALESCE
+COALESCE( arg1 &lt;any type&gt;, arg2 &lt;any type&gt; [, ....] )
+Returns the first non-NULL value among its arguments.
+Type: miscellaneous
+
+COMPUTER_NAME
+COMPUTER_NAME()
+Returns the NetBIOS name of the local computer.
+Type: system information
+
+COUNT
+COUNT( [ DISTINCT | ALL ] * ) | ( [ DISTINCT | ALL ] &lt;field_expr_list&gt; )
+Returns the number of items in a group.
+Type: aggregate
+COUNT(DISTINCT cs-uri-stem) AS [Distinct Requests]
+Returns a count of how many distinct files were requested.
+DIV
+DIV( dividend &lt;INTEGER | REAL&gt;, divisor &lt;INTEGER | REAL&gt; )
+Calculates the quotient of two values.
+Type: arithmetical
+DIV(sc-bytes, 1024) AS [KB Sent]
+Converts bytes sent from the server to the client to Kilobytes (KB).
+DIV(DIV(sc-bytes, 1024), 1024) AS [MB Sent]
+Converts bytes sent from the server to the client to Megabytes (MB).
+See also: MUL ADD SUB
+EXP
+EXP( argument &lt;INTEGER | REAL&gt; )
+Calculates e (the Natural logarithm base) raised to the power of the specified argument.
+Type: arithmetical
+
+See also: EXP10
+EXP10
+EXP10( argument &lt;INTEGER | REAL&gt; )
+Calculates 10 raised to the power of the specified argument.
+Type: arithmetical
+
+See also: EXP
+EXTRACT_EXTENSION
+EXTRACT_EXTENSION( filepath &lt;STRING&gt; )
+Returns the file extension portion of a file path.
+Type: string manipulation
+EXTRACT_EXTENSION(cs-uri-stem) AS [File Extension]
+Extracts the file extension for requests. Returns nothing for those without an extension.
+EXTRACT_EXTENSION(cs-uri-stem) NOT IN ('jpg';'png';'gif';'ico')
+When used in a WHERE clause, excludes requests for common image formats.
+See also: EXTRACT_FILENAME EXTRACT_PATH EXTRACT_PREFIX EXTRACT_SUFFIX EXTRACT_TOKEN EXTRACT_VALUE
+EXTRACT_FILENAME
+EXTRACT_FILENAME( filepath &lt;STRING&gt; )
+Returns the filename portion of a file path.
+Type: string manipulation
+EXTRACT_FILENAME(cs-uri-stem) AS [File Requested]
+Extracts the file name for requests.
+See also: EXTRACT_EXTENSION EXTRACT_PATH EXTRACT_PREFIX EXTRACT_SUFFIX EXTRACT_TOKEN EXTRACT_VALUE
+EXTRACT_PATH
+EXTRACT_PATH( filepath &lt;STRING&gt; )
+Returns the directory path portion of a file path.
+Type: string manipulation
+EXTRACT_PATH(cs-uri-stem) AS [Path Requested]
+Extracts the path of a request. The trailing slash (/) is removed.
+See also: EXTRACT_EXTENSION EXTRACT_FILENAME EXTRACT_PREFIX EXTRACT_SUFFIX EXTRACT_TOKEN EXTRACT_VALUE
+EXTRACT_PREFIX
+EXTRACT_PREFIX( argument &lt;STRING&gt;, index &lt;INTEGER&gt;, separator &lt;STRING&gt; )
+Returns a substring beginning at the first character and up to, but not including, the specified instance of the separator.
+Type: string manipulation
+
+See also: EXTRACT_SUFFIX EXTRACT_EXTENSION EXTRACT_FILENAME EXTRACT_PATH EXTRACT_TOKEN EXTRACT_VALUE
+EXTRACT_SUFFIX
+EXTRACT_SUFFIX( argument &lt;STRING&gt;, index &lt;INTEGER&gt;, separator &lt;STRING&gt; )
+Returns a substring beginning after the specified instance of the separator and up to the end of the string.
+Type: string manipulation
+
+See also: EXTRACT_PREFIX EXTRACT_EXTENSION EXTRACT_FILENAME EXTRACT_PATH EXTRACT_TOKEN EXTRACT_VALUE
+EXTRACT_TOKEN
+EXTRACT_TOKEN( argument &lt;STRING&gt;, index &lt;INTEGER&gt; [ , separator &lt;STRING&gt; ] )
+Splits the string into substrings at each point where the separator occurs, and returns the substring with the specified index.
+Type: string manipulation
+EXTRACT_TOKEN(cs(Referer), 2, '/') AS [Referring Domain]
+Returns full domain of the site referring traffic to this resource.
+See also: EXTRACT_EXTENSION EXTRACT_FILENAME EXTRACT_PATH EXTRACT_PREFIX EXTRACT_SUFFIX EXTRACT_VALUE
+EXTRACT_VALUE
+EXTRACT_VALUE( argument &lt;STRING&gt;, key &lt;STRING&gt; [ , separator &lt;STRING&gt; ] )
+Parses "key=value" pairs in the string, returning the value corresponding to the specified key.
+Type: string manipulation
+
+See also: EXTRACT_EXTENSION EXTRACT_FILENAME EXTRACT_PATH EXTRACT_PREFIX EXTRACT_SUFFIX EXTRACT_TOKEN
+FLOOR
+FLOOR( argument &lt;REAL&gt; )
+Returns the integral part of the specified argument.
+Type: arithmetical
+
+See also: ROUND QNTFLOOR_TO_DIGIT QNTROUND_TO_DIGIT
+GROUPING
+GROUPING( &lt;field_expr&gt; )
+Returns a value of 1 when the row is added by the ROLLUP operator of the GROUP BY clause, or 0 when the row is not the result of ROLLUP. GROUPING is used to distinguish the NULL values returned by ROLLUP from standard NULL values. The NULL returned as the result of a ROLLUP operation is a special use of NULL. It acts as a value placeholder in the result set and means "all".
+Type: aggregate
+
+HASHMD5_FILE
+HASHMD5_FILE( filePath &lt;STRING&gt; )
+Calculates the MD5 hash of the content of a file and returns its hexadecimal representation.
+Type: miscellaneous
+
+HASHSEQ
+HASHSEQ( value &lt;STRING&gt; )
+Returns a unique, sequential integer for each distinct value of the argument.
+Type: miscellaneous
+
+HEX_TO_ASC
+HEX_TO_ASC( hexString &lt;STRING&gt; )
+Converts the hexadecimal representation of a series of bytes into a string where the bytes belonging to the 0x20-0x7F range have been converted to ASCII characters.
+Type: string manipulation
+
+See also: HEX_TO_HEX16 HEX_TO_HEX32 HEX_TO_HEX8 HEX_TO_INT HEX_TO_PRINT
+HEX_TO_HEX16
+HEX_TO_HEX16( hexString &lt;STRING&gt; [ , bigEndian &lt;INTEGER&gt; ] )
+Converts the hexadecimal representation of a series of bytes into another hexadecimal representation in which bytes are grouped into 16-bit WORDs.
+Type: string manipulation
+
+See also: HEX_TO_ASC HEX_TO_HEX32 HEX_TO_HEX8 HEX_TO_INT HEX_TO_PRINT
+HEX_TO_HEX32
+HEX_TO_HEX32( hexString &lt;STRING&gt; [ , bigEndian &lt;INTEGER&gt; ] )
+Converts the hexadecimal representation of a series of bytes into another hexadecimal representation in which bytes are grouped into 32-bit DWORDs.
+Type: string manipulation
+
+See also: HEX_TO_ASC HEX_TO_HEX16 HEX_TO_HEX8 HEX_TO_INT HEX_TO_PRINT
+HEX_TO_HEX8
+HEX_TO_HEX8( hexString &lt;STRING&gt; )
+Converts the hexadecimal representation of a series of bytes into another hexadecimal representation in which bytes are grouped into 8-bit octets.
+Type: string manipulation
+
+See also: HEX_TO_ASC HEX_TO_HEX16 HEX_TO_HEX32 HEX_TO_INT HEX_TO_PRINT
+HEX_TO_INT
+HEX_TO_INT( hexString &lt;STRING&gt; )
+Converts the hexadecimal representation of an integer into the integer itself.
+Type: conversion
+
+See also: HEX_TO_ASC HEX_TO_HEX16 HEX_TO_HEX32 HEX_TO_HEX8 HEX_TO_PRINT
+HEX_TO_PRINT
+HEX_TO_PRINT( hexString &lt;STRING&gt; )
+Converts the hexadecimal representation of a series of bytes into a string where the bytes corresponding to printable ASCII characters have been converted to the characters themselves.
+Type: string manipulation
+
+See also: HEX_TO_ASC HEX_TO_HEX16 HEX_TO_HEX32 HEX_TO_HEX8 HEX_TO_INT
+IN_ROW_NUMBER
+IN_ROW_NUMBER()
+Returns the current input record number.
+Type: miscellaneous
+
+See also: OUT_ROW_NUMBER
+INDEX_OF
+INDEX_OF( string &lt;STRING&gt;, searchStr &lt;STRING&gt; )
+Returns the character position where the first occurrence of a search substring occurs in a string.
+Type: string manipulation
+
+See also: LAST_INDEX_OF
+INT_TO_IPV4
+INT_TO_IPV4( ipV4Address &lt;INTEGER&gt; )
+Converts a 32-bit integer into the string representation of an IPV4 address.
+Type: conversion
+
+See also: IPV4_TO_INT
+IPV4_TO_INT
+IPV4_TO_INT( ipV4Address &lt;STRING&gt; )
+Converts the string representation of an IPV4 address into a 32-bit integer.
+Type: conversion
+
+See also: INT_TO_IPV4
+LAST_INDEX_OF
+LAST_INDEX_OF( string &lt;STRING&gt;, searchStr &lt;STRING&gt; )
+Returns the character position where the last occurrence of a search substring occurs in a string.
+Type: string manipulation
+
+See also: INDEX_OF
+LOG
+LOG( argument &lt;INTEGER | REAL&gt; )
+Calculates the Natural logarithm of the specified argument.
+Type: arithmetical
+
+See also: LOG10
+LOG10
+LOG10( argument &lt;INTEGER | REAL&gt; )
+Calculates the base-10 logarithm of the specified argument.
+Type: arithmetical
+
+See also: LOG
+LTRIM
+LTRIM( string &lt;STRING&gt; )
+Removes whitespace characters from the beginning of a string.
+Type: string manipulation
+
+See also: RTRIM TRIM
+MAX
+MAX( [ DISTINCT | ALL ] &lt;field_expr&gt; )
+Returns the maximum value among all the values of the specified field-expression.
+Type: aggregate
+MAX(sc-bytes) AS [Maximum Bytes Sent]
+Returns the maximum number of bytes sent from the server to the client, across all requests.
+See also: MIN
+MIN
+MIN( [ DISTINCT | ALL ] &lt;field_expr&gt; )
+Returns the minimum value among all the values of the specified field-expression.
+Type: aggregate
+MIN(sc-bytes) AS [Minimum Bytes Sent]
+Returns the minimum number of bytes sent from the server to the client, across all requests.
+See also: MAX
+MOD
+MOD( dividend &lt;INTEGER | REAL&gt;, divisor &lt;INTEGER | REAL&gt; )
+Calculates the remainder of the division of two numbers.
+Type: arithmetical
+
+MUL
+MUL( multiplicand &lt;INTEGER | REAL&gt;, multiplier &lt;INTEGER | REAL&gt; )
+Calculates the product of two values.
+Type: arithmetical
+MUL(PROPCOUNT(*), 100)
+When used with another field and a simple GROUP BY, returns the percentage of requests by that field. See example query HTTP status codes and percentage of total.
+See also: DIV ADD SUB
+OUT_ROW_NUMBER
+OUT_ROW_NUMBER()
+Returns the current output record number.
+Type: miscellaneous
+
+See also: IN_ROW_NUMBER
+PROPCOUNT
+PROPCOUNT( * ) [ ON ( &lt;on_field_expr_list&gt; ) ] | ( &lt;field_expr_list&gt; ) [ ON ( &lt;on_field_expr_list&gt; ) ]
+Returns the ratio of the COUNT aggregate function calculated on a group to the COUNT aggregate function calculated on a hierarchically higher group.
+Type: aggregate
+
+PROPSUM
+PROPSUM( &lt;field_expr&gt; ) [ ON ( &lt;on_field_expr_list&gt; ) ]
+Returns the ratio of the SUM aggregate function calculated on a group to the SUM aggregate function calculated on a hierarchically higher group.
+Type: aggregate
+
+QNTFLOOR_TO_DIGIT
+QNTFLOOR_TO_DIGIT( value &lt;INTEGER&gt;, digits &lt;INTEGER&gt; )
+Truncates a number to a specified number of significant digits, masking the remaining digits to zero.
+Type: arithmetical
+
+See also: QNTROUND_TO_DIGIT FLOOR ROUND
+QNTROUND_TO_DIGIT
+QNTROUND_TO_DIGIT( value &lt;INTEGER&gt;, digits &lt;INTEGER&gt; )
+Rounds a number to a specified number of significant digits, masking the remaining digits to zero.
+Type: arithmetical
+
+See also: QNTFLOOR_TO_DIGIT FLOOR ROUND
+QUANTIZE
+QUANTIZE( argument &lt;INTEGER | REAL | TIMESTAMP&gt;, quantization &lt;INTEGER | REAL&gt; )
+Truncates a value to the nearest multiple of another value.
+Type: arithmetical
+QUANTIZE(TO_TIMESTAMP(date, time), 3600)
+Returns date/times to the hour. (In other words, drops the minutes.)
+REPLACE_CHR
+REPLACE_CHR( string &lt;STRING&gt;, searchCharacters &lt;STRING&gt;, replaceString &lt;STRING&gt; )
+Replaces each occurrence of a character in a given set of characters with a string.
+Type: string manipulation
+
+REPLACE_IF_NOT_NULL
+REPLACE_IF_NOT_NULL( argument &lt;any type&gt;, replaceValue &lt;any type&gt; )
+Returns the second argument when the first argument is not NULL, and NULL otherwise.
+Type: miscellaneous
+
+REPLACE_STR
+REPLACE_STR( string &lt;STRING&gt;, searchString &lt;STRING&gt;, replaceString &lt;STRING&gt; )
+Replaces each occurrence of a substring with a string.
+Type: string manipulation
+
+RESOLVE_SID
+RESOLVE_SID( sid &lt;STRING&gt; [ , computerName &lt;STRING&gt; ] )
+Resolves a SID and returns its full account name.
+Type: system information
+
+REVERSEDNS
+REVERSEDNS( ipAddress &lt;STRING&gt; )
+Resolves an IP address and returns the corresponding host name.
+Type: system information
+REVERSEDNS(c-ip)
+Returns the host name for the client's IP address.
+ROT13
+ROT13( string &lt;STRING&gt; )
+Encodes or decodes a string using the ROT13 algorithm.
+Type: string manipulation
+
+ROUND
+ROUND( argument &lt;REAL&gt; )
+Returns the integer closest to the specified argument.
+Type: arithmetical
+
+See also: FLOOR QNTFLOOR_TO_DIGIT QNTROUND_TO_DIGIT
+RTRIM
+RTRIM( string &lt;STRING&gt; )
+Removes whitespace characters from the end of a string.
+Type: string manipulation
+
+See also: LTRIM TRIM
+SEQUENCE
+SEQUENCE( [ startValue &lt;INTEGER&gt; ] )
+Returns a unique sequential integer associated with the current input record number.
+Type: miscellaneous
+
+SQR
+SQR( argument &lt;INTEGER | REAL&gt; )
+Calculates the square of the specified argument.
+Type: arithmetical
+
+SQRROOT
+SQRROOT( argument &lt;INTEGER | REAL&gt; )
+Calculates the square root of the specified argument.
+Type: arithmetical
+
+STRCAT
+STRCAT( string1 &lt;STRING&gt;, string2 &lt;STRING&gt; )
+Appends one string to another.
+Type: string manipulation
+
+STRCNT
+STRCNT( string &lt;STRING&gt;, token &lt;STRING&gt; )
+Returns the number of occurrences of a substring in a string.
+Type: string manipulation
+STRCNT(cs-uri-stem, '/') AS [Request Depth]
+Returns the depth of a requested file.
+STRLEN
+STRLEN( string &lt;STRING&gt; )
+Returns the length of a string.
+Type: string manipulation
+
+STRREPEAT
+STRREPEAT( string &lt;STRING&gt;, count &lt;INTEGER&gt; )
+Creates a string by repeating a substring a given number of times.
+Type: string manipulation
+
+STRREV
+STRREV( string &lt;STRING&gt; )
+Reverses the characters in a string.
+Type: string manipulation
+
+SUB
+SUB( minuend &lt;any type&gt;, subtrahend &lt;any type&gt; )
+Calculates the difference of two values.
+Type: arithmetical
+TO_DATE(SUB(TO_LOCALTIME(SYSTEM_TIMESTAMP()), TIMESTAMP('0000-01-08', 'yyyy-MM-dd')))
+Gets the date seven days ago, based on the current local date/time.
+See also: ADD DIV MUL
+SUBSTR
+SUBSTR( string &lt;STRING&gt;, start &lt;INTEGER&gt; [ , length &lt;INTEGER&gt; ])
+Returns a substring beginning at a specified location and having a specified length. The &lt;start&gt; of &lt;string&gt; begins at 0.
+Type: string manipulation
+
+SUM
+SUM( [ DISTINCT | ALL ] &lt;field_expr&gt; )
+Returns the sum of all the values, or only the DISTINCT values, of the specified field-expression.
+Type: aggregate
+SUM(sc-bytes) AS [Total Bytes Sent]
+Returns the total number of bytes sent from the server to the client.
+SYSTEM_DATE
+SYSTEM_DATE()
+Returns the current system date in Universal Time Coordinates (UTC) time.
+Type: system information
+
+See also: SYSTEM_TIME SYSTEM_TIMESTAMP
+SYSTEM_TIME
+SYSTEM_TIME()
+Returns the current system time of the day in Universal Time Coordinates (UTC) time.
+Type: system information
+
+See also: SYSTEM_DATE SYSTEM_TIMESTAMP
+SYSTEM_TIMESTAMP
+SYSTEM_TIMESTAMP()
+Returns the current system date and time in Universal Time Coordinates (UTC) time.
+Type: system information
+TO_LOCALTIME(SYSTEM_TIMESTAMP) AS [CurrentLocalTime]
+Get the current date and time, converted to local time.
+SUB(TO_LOCALTIME(SYSTEM_TIMESTAMP()), TIMESTAMP('0000-01-01 00:03', 'yyyy-MM-dd HH:mm'))
+Get the local time 3 minutes ago.
+See also: SYSTEM_DATE SYSTEM_TIME
+SYSTEM_UTCOFFSET
+SYSTEM_UTCOFFSET()
+Returns the current system timezone and daylight saving offset relative to Universal Time Coordinates (UTC) time.
+Type: system information
+
+TO_DATE
+TO_DATE( timestamp &lt;TIMESTAMP&gt; )
+Converts a full timestamp into a date-only timestamp.
+Type: conversion
+
+See also: TO_TIME
+TO_HEX
+TO_HEX( argument &lt;INTEGER | STRING&gt; )
+Returns the hexadecimal representation of an integer or of the characters in a string.
+Type: conversion
+
+TO_INT
+TO_INT( argument &lt;any type&gt; )
+Converts a value of the REAL, STRING, or TIMESTAMP data type into a value of the INTEGER data type.
+Type: conversion
+
+TO_LOCALTIME
+TO_LOCALTIME( timestamp &lt;TIMESTAMP&gt; )
+Converts a timestamp from Universal Time Coordinates (UTC) time into local time.
+Type: conversion
+TO_LOCALTIME(TO_TIMESTAMP(date, time)) AS [LocalTime]
+Create a timestamp from the date and time of a request and convert it to local time.
+See also: TO_UTCTIME
+TO_LOWERCASE
+TO_LOWERCASE( string &lt;STRING&gt; )
+Returns a string where all alphabetic characters have been converted to lowercase.
+Type: string manipulation
+
+See also: TO_UPPERCASE
+TO_REAL
+TO_REAL( argument &lt;any type&gt; )
+Converts a value of the INTEGER, STRING, or TIMESTAMP data type into a value of the REAL data type.
+Type: conversion
+
+TO_STRING
+TO_STRING( argument &lt;INTEGER | REAL&gt; ) | ( timestamp &lt;TIMESTAMP&gt;, format &lt;STRING&gt; )
+Converts a value of the REAL or INTEGER data type into a value of the STRING data type.
+Type: conversion
+TO_STRING(TO_LOCALTIME(TO_TIMESTAMP(date, time)), 'yyyy-MM-dd') AS [Day]
+Converts the date and time of a request to local time, and then outputs the day as a string (2010-03-22).
+TO_TIME
+TO_TIME( timestamp &lt;TIMESTAMP&gt; )
+Converts a full timestamp into a time-only timestamp.
+Type: conversion
+TO_TIME(TO_LOCALTIME(QUANTIZE(TO_TIMESTAMP(date, time), 3600))) AS [Hour]
+Create a timestamp from the date and time of a request, drops the minutes from the time, converts it to local time, and pulls just the time.
+See also: TO_LOCALTIME TO_DATE
+TO_TIMESTAMP
+TO_TIMESTAMP( dateTime1 &lt;TIMESTAMP&gt;, dateTime2 &lt;TIMESTAMP&gt; ) | ( string &lt;STRING&gt;, format &lt;STRING&gt; ) ( seconds &lt;INTEGER | REAL&gt; )
+Parses a string representing a timestamp and returns a value of the TIMESTAMP data type. See also Microsoft Log Parser timestamp formats by James Skemp. There seems to be no difference between using TO_TIMESTAMP() and just TIMESTAMP().
+Type: conversion
+TO_TIMESTAMP(date, time)
+Converts the date and time of a request into a timestamp, for use with other functions.
+TO_TIMESTAMP('2009-02-06', 'yyyy-MM-dd')
+Creates a timestamp of the date February 6, 2009.
+TO_TIMESTAMP('2010-02-15 10:15', 'yyyy-MM-dd HH:mm')
+Creates a timestamp of February 25, 2010, at 10:15 in the morning.
+TO_TIMESTAMP('24 Jun 2011 13:22:21', 'dd MMM yyyy HH:mm:ss')
+Creates a timestamp of a date/time in 'short' format.
+TO_UPPERCASE
+TO_UPPERCASE( string &lt;STRING&gt; )
+Returns a string where all alphabetic characters have been converted to uppercase.
+Type: string manipulation
+
+See also: TO_LOWERCASE
+TO_UTCTIME
+TO_UTCTIME( timestamp &lt;TIMESTAMP&gt; )
+Converts a timestamp from local time into Universal Time Coordinates (UTC) time.
+Type: conversion
+
+See also: TO_LOCALTIME
+TRIM
+TRIM( string &lt;STRING&gt; )
+Removes whitespace characters from the beginning and end of a string.
+Type: string manipulation
+
+See also: LTRIM RTRIM
+URLESCAPE
+URLESCAPE( url &lt;STRING&gt; [ , codepage &lt;INTEGER&gt; ] )
+Converts a string to the URL-encoded form suitable for transmission as an HTTP query string.
+Type: string manipulation
+
+See also: URLUNESCAPE
+URLUNESCAPE
+URLUNESCAPE( url &lt;STRING&gt; [ , codepage &lt;INTEGER&gt; ] )
+Converts a URL-encoded string into its plain, unencoded form.
+Type: string manipulation
+
+See also: URLESCAPE
+WIN32_ERROR_DESCRIPTION
+WIN32_ERROR_DESCRIPTION( win32ErrorCode &lt;INTEGER&gt; )
+Returns the text message associated with a numeric Windows error code.
+Type: miscellaneous</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>Windows</Category>
+        <Language>TEXT</Language>
+        <Public>false</Public>
+        <Name>Open_a_URL_in_a_Specific_Browser</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>Windows</Category>
+          <Language>TEXT</Language>
+          <Public>false</Public>
+          <Name>Open_a_URL_in_a_Specific_Browser</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>NOTE: see URI scheme snippet for more details and examples
+
+
+http://stackoverflow.com/questions/5881383/can-i-force-a-link-to-open-in-a-specific-browser
+
+if you are targeting your company's network it's possible to do this using custom protocol.
+
+Your link then would look like: ie://opens_in_ie.com
+
+
+Open_a_URL_in_a_Specific_Browser
+
+https://msdn.microsoft.com/en-us/library/aa767914(VS.85).aspx
+
+invoke another application to handle a custom URI scheme
+To do so, register the existing application as a URI pluggable protocol handler and associate it with the custom URI scheme
+Once the application has successfully launched, it can use command-line parameters to retrieve the URI that launched it. 
+
+
+Registering the Application Handling the Custom URI Scheme
+===========================================================
+
+
+To register an application to handle a particular URI scheme, add a new key, 
+	along with the appropriate subkeys and values, 
+	to HKEY_CLASSES_ROOT. The root key must match the URI scheme that is being added. 
+
+For instance, to add an "alert:" scheme, add an alert key to HKEY_CLASSES_ROOT, as follows:
+------------------------------------
+HKEY_CLASSES_ROOT
+   alert
+      URL Protocol = ""
+------------------------------------
+The URL Protocol string value indicates that this key declares a custom pluggable protocol handler. 
+ Without this key, the handler application will not launch. The value should be an empty string.
+ 
+ Keys should also be added for "DefaultIcon" and "shell". 
+ 
+ The Default string value of the "DefaultIcon" key must be the file name to use as an icon for this new URI scheme.
+ The string takes the form "path, iconindex" with a maximum length of MAX_PATH. 
+ 
+ The name of the first key under the shell key should be an action verb, such as "open". Under this key, a "command" key 
+ 	or a "DDEEXEC" key indicate how the handler should be invoked.
+ 	
+ Finally, the "Default" string value should contain the display name of the new URI scheme. 	 
+ 
+ The following example shows how to register an application, alert.exe in this case, to handle the "alert" scheme.
+ 
+ ------------------------------------------------------------------------
+ HKEY_CLASSES_ROOT
+   alert
+      (Default) = "URL:Alert Protocol"
+      URL Protocol = ""
+      DefaultIcon
+         (Default) = "alert.exe,1"
+      shell
+         open
+            command
+               (Default) = "C:\Program Files\Alert\alert.exe" "%1"
+  ------------------------------------------------------------------------
+  
+  When a user clicks a link containing your custom URI scheme, 
+  	Windows Internet Explorer launches the pluggable protocol handler registered for that URI scheme. 
+  If the specified open command specified in the registry contains a %1 parameter, 
+  	Internet Explorer passes the URI to the registered pluggable protocol handler application.
+  	
+  By adding the above settings to the registry, 
+  	navigating to URIs such as alert:Hello%20World would cause an attempt to launch alert.exe with the complete URI on the command line. 
+  	Internet Explorer percent-decodes the URI, 
+  	but the Windows Run... command does not. 
+  If a URI contains percent-encoded spaces, it may be split across more than one argument on the command line.	
+  
+  For example, if the link above is followed through Internet Explorer, the command line would be:
+  
+  "C:\Program Files\Alert\alert.exe" "alert:Hello World"</Code>
       </SnippetValue>
     </value>
   </item>
