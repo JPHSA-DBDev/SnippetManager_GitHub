@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <Category>CODE_Empty_ASP.NET_Core_Web_Application</Category>
+  <Category>CODE_04_Empty_ASP.NET_Core_AutoMapper</Category>
   <Language>C#</Language>
   <Public>false</Public>
-  <Name>CODE_01_about_LoggingErrors</Name>
+  <Name>CODE_04_Startup.cs</Name>
   <Group>My Snippets</Group>
 </SnippetKey>
