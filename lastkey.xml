@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <Category>CODE_04_Empty_ASP.NET_Core_AutoMapper</Category>
-  <Language>C#</Language>
+  <Category>Operators_Symbols_Logic</Category>
+  <Language>ORACLE SQL</Language>
   <Public>false</Public>
-  <Name>CODE_04_Startup.cs</Name>
+  <Name>Operators_Relational_Comparison_return_Boolean</Name>
   <Group>My Snippets</Group>
 </SnippetKey>
