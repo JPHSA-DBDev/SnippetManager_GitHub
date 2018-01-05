@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <Category>Operators_Symbols_Logic</Category>
-  <Language>ORACLE SQL</Language>
+  <Category>Stored_Procedure</Category>
+  <Language>SQLSERVER2K SQL</Language>
   <Public>false</Public>
-  <Name>Operators_Relational_Comparison_return_Boolean</Name>
+  <Name>DEV</Name>
   <Group>My Snippets</Group>
 </SnippetKey>
