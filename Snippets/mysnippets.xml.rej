@@ -1,0 +1,9 @@
+diff a/Snippets/mysnippets.xml b/Snippets/mysnippets.xml	(rejected hunks)
+@@ -526167,7 +526167,6 @@
+ 4) To reapply the Stash
+ 	-Right Click on the Stash in the Left pane (see notes above for creating the stash)
+ 		=&gt; Apply Stash on &lt;Branch Name&gt;: &lt;Stash Name&gt;
+-	- If you stage a line, you have to stage BOTH the red and the corresponding green line, i.e. the removal, and addition</Code>
+ 	- Now the unStashed change will show up as an Uncommitted change. If you wanted to you could discard it.</Code>
+       </SnippetValue>
+     </value>
