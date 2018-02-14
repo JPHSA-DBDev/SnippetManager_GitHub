@@ -1,2 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<dictionary />
+<dictionary>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>SQL_SECURITY</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>db_executor__role_create_and_use</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>SQL_SECURITY</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>db_executor__role_create_and_use</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>http://www.sqlmatters.com/Articles/Adding%20a%20db_executor%20role.aspx
+
+--The following SQL creates the new role in a database, and then grants it execute rights :
+
+
+-- Create a db_executor role
+CREATE ROLE db_executor
+
+-- Grant execute rights to the new role
+GRANT EXECUTE TO db_executor
+
+
+--A user can then be added to the new role, much like the db_datareader and db_datawriter roles.
+
+
+EXEC sp_addrolemember  @rolename ='db_executor',@membername ='SQLMatters'
+
+/*where  @membername Is the security account being added to the role
+security_account can be a database user, database role, Windows login, or Windows group.
+*/
+
+--------------------------------------------------------------------------------------------
+--prj_0013_MAINTENANCE_301_Create_Executor_Role.sql
+--from: http://www.sqlmatters.com/Articles/Adding%20a%20db_executor%20role.asp
+
+
+USE B2W_Reports
+go
+
+-- Create a db_executor role
+CREATE ROLE db_executor
+
+-- Grant execute rights to the new role
+GRANT EXECUTE TO db_executor 
+
+EXEC sp_addrolemember  @rolename ='db_executor',@membername ='NT AUTHORITY\Authenticated Users'
+--------------------------------------------------------------------------------------------</Code>
+      </SnippetValue>
+    </value>
+  </item>
+</dictionary>
