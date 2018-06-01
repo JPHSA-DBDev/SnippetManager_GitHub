@@ -1,2 +1,2539 @@
 <?xml version="1.0" encoding="utf-8"?>
-<dictionary />
+<dictionary>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>CLR_SQL_Examples</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>EX_2_Create_functions</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>CLR_SQL_Examples</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>EX_2_Create_functions</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>--prj_0037_403_Create_FunctiionFromCLR.sql
+/*
+	************************************************************************************
+	NOTE: 
+	Uses: 
+	Created: 4/10/2014
+	' used this on DEV instance, then will run this on PRODUCTION instance when ready
+	By: glenn garson
+	************************************************************************************
+*/
+
+use DB2_CRM
+ go
+ 
+
+ 
+ 
+  Create Function dbo.fn_Parse_BusinessCard(
+							@bReverseOrder as bit,
+							@Position_Prefix As nvarchar(25),
+							@Position_Role As nvarchar(100),
+							@Position_Character_Separator As nvarchar(25),
+							@Position_Descriptor As nvarchar(100),
+							@Position_Region_e38 As smallint,
+							@Position_Region As nvarchar(25),
+							@bUse_Credentials as bit,
+							@Position_Suffix As nvarchar(25),
+							@Position_Credentials As nvarchar(25),
+							@Position_Override As nvarchar(255)												
+						 )
+
+	Returns nvarchar(255)
+
+	AS EXTERNAL NAME [assembly_Prj_0037].[ns_CLR_Functions.Functions].[fn_Parse_BusinessCard]
+
+go
+  
+ 
+ Create Function dbo.fn_Parse_OrgChart(
+							@bReverseOrder as bit,
+							@Position_Role As nvarchar(100),
+							@Position_Character_Separator As nvarchar(25),
+							@Position_Descriptor As nvarchar(100)
+																	
+						 )
+
+	Returns nvarchar(255)
+
+	AS EXTERNAL NAME [assembly_Prj_0037].[ns_CLR_Functions.Functions].[fn_Parse_OrgChart]
+
+go
+ 
+ 
+ Create Function dbo.fn_Parse_CMIS(
+							@CMIS_Access_e39 As smallint,
+							@CMIS_Access As nvarchar(100),
+							@CMIS_Role_e40 As smallint,
+							@CMIS_Role As nvarchar(100)														
+						 )
+
+	Returns nvarchar(255)
+
+	AS EXTERNAL NAME [assembly_Prj_0037].[ns_CLR_Functions.Functions].[fn_Parse_CMIS]
+
+go
+
+ 
+     Create Function dbo.fn_Split(@StringToSplit nvarchar(max), @splitOnChars nvarchar(max) )
+       RETURNS Table (
+						Results nvarchar(max)
+					 )
+
+              
+      --AS EXTERNAL NAME [assembly_Prj_0037].[ns_CLR_Functions.c_CLRFunctions].[fn_Split]
+      AS EXTERNAL NAME [assembly_Prj_0037].[ns_CLR_Functions.Functions].[fn_Split]           
+            
+
+go
+
+
+
+Create Function dbo.fn_RegEx(
+							@Input As nvarchar(4000),
+							@Expression As nvarchar(1000)
+						 )
+
+	Returns Bit
+
+	AS EXTERNAL NAME [assembly_Prj_0037].[ns_CLR_Functions.Functions].[fn_RegEx]
+
+
+go</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>CLR_SQL_Examples</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>EX_2_TEST_the_Functions</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>CLR_SQL_Examples</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>EX_2_TEST_the_Functions</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>--prj_0037_406_TEST_FunctiionFromCLR.sql
+/*
+	************************************************************************************
+	NOTE: 
+	Uses: 
+	Created: 4/10/2014
+	' used this on DEV instance, then will run this on PRODUCTION instance when ready
+	By: glenn garson
+	************************************************************************************
+*/
+
+use DB2_CRM
+ go
+ 
+  --Create Function dbo.fn_Parse_OrgChart(
+		--					@bReverseOrder as bit,
+		--					@Position_Role As nvarchar(100),
+		--					@Position_Character_Separator As nvarchar(25),
+		--					@Position_Descriptor As nvarchar(100)
+																	
+		--				 )
+						 
+ select dbo.fn_Parse_OrgChart(1,'Role', '...-...','Descriptor')
+ 
+ 
+--select dbo.fn_Parse_BusinessCard(
+--								@bReverseOrder=1,
+--								@Position_Prefix='test1',
+--								@Position_Role=NULL,
+--								@Position_Character_Separator='test2',
+--								@Position_Descriptor='test3',
+--								@Position_Region_e38=99,
+--								@Position_Region=NULL,
+--								@bUse_Credentials=0,
+--								@Position_Suffix='test5',
+--								@Position_Credentials='test6',
+--								@Position_Override='test4'
+--								)
+ 
+ 
+ select dbo.fn_Parse_BusinessCard(1,'test1', NULL,'test2','test3',99,NULL,0,'test5','test6','')
+ 
+--select dbo.fn_Parse_BusinessCard(1,'test1', NULL,'test2','test3',99,NULL,0,'test5','test6','test4')
+ 
+Select dbo.fn_Parse_CMIS(1, 'The CMIS Access Level', 1, 'The CMIS Role')
+
+go 
+ 
+select * from dbo.fn_Split('1,2,3,4,5:6:7~8~9',',:~')          
+            
+
+go
+
+Select dbo.fn_RegEx('FarhanUddinKhan@Hotmail.com', '\w+([-+.'']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*')
+
+go
+
+
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>LOOPS</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>Select_Case</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>LOOPS</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>Select_Case</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>---------
+
+		
+(SELECT     'TheCalculation' = 
+	CASE 
+			WHEN (LEN(LNK05_Employee_Training.Certificate_Hyperlink_Suffix) &gt;= 4) THEN (
+																						'&lt;a href="file:///' +
+																						@UNC_Root +
+																						REPLACE(LNK05_Employee_Training.Certificate_Hyperlink_Suffix,'\','/') +
+																						'"&gt;CLICK&lt;/a&gt;'
+																						)         		 
+			ELSE 'No Certificate'
+
+		END) as Certificate		
+		
+		
+
+---------
+-- simple, on one line
+ CASE WHEN ObjectType = 'U' THEN 'USER_TABLE' WHEN ObjectType = 'V' THEN 'VIEW' END AS ObjectType,
+ CASE WHEN IndexType = 1 THEN 'CLUSTERED' WHEN IndexType = 2 THEN 'NONCLUSTERED' WHEN IndexType = 3 THEN 'XML' WHEN IndexType = 4 THEN 'SPATIAL' END AS IndexType,
+
+-- You only need to do the CAST if you want the result as a boolean value,
+-- if you are happy with an int, this works: 
+
+SELECT CAST(
+             CASE 
+                  WHEN Obsolete = 'N' or InStock = 'Y' 
+                     THEN 1 
+                  ELSE 0 
+             END AS bit) as Salable, * 
+FROM Product
+
+-- without the CAST 
+
+SELECT CASE 
+            WHEN Obsolete = 'N' or InStock = 'Y' 
+               THEN 1 
+               ELSE 0 
+       END as Salable, * 
+FROM Product
+
+
+
+--General version:
+
+SELECT CASE &lt;variable&gt; WHEN &lt;value&gt;      THEN &lt;returnvalue&gt;
+                       WHEN &lt;othervalue&gt; THEN &lt;returnthis&gt;
+                                         ELSE &lt;returndefaultcase&gt;
+       END
+FROM &lt;table&gt;
+
+--The extended case:
+
+
+SELECT CASE WHEN &lt;test&gt;      THEN &lt;returnvalue&gt;
+            WHEN &lt;othertest&gt; THEN &lt;returnthis&gt;
+                             ELSE &lt;returndefaultcase&gt;
+       END
+FROM &lt;table&gt;</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>Numeric</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>TryParseAsDecimal</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>Numeric</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>TryParseAsDecimal</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>This will check whether the string value can be converted to Decimal safely
+
+CREATE FUNCTION [dbo].[TryParseAsDecimal]
+(
+    @Value      NVARCHAR(4000)
+    ,@Precision INT
+    ,@Scale     INT
+)
+
+RETURNS BIT
+AS
+BEGIN
+
+    IF(ISNUMERIC(@Value) =0) BEGIN
+        RETURN CAST(0 AS BIT)
+    END
+    SELECT @Value = REPLACE(@Value,',','') --Removes the comma
+
+    --This function validates only the first part eg '1234567.8901111111'
+    --It validates only the values before the '.' ie '1234567.'
+    DECLARE @Index          INT
+    DECLARE @Part1Length    INT 
+    DECLARE @Part1          VARCHAR(4000)   
+
+    SELECT @Index = CHARINDEX('.', @Value, 0)
+    IF (@Index&gt;0) BEGIN
+        --If decimal places, extract the left part only and cast it to avoid leading zeros (eg.'0000000001' =&gt; '1')
+        SELECT @Part1 =LEFT(@Value, @Index-1);
+        SELECT @Part1=SUBSTRING(@Part1, PATINDEX('%[^0]%', @Part1+'.'), LEN(@Part1));
+        SELECT @Part1Length = LEN(@Part1);
+    END
+    ELSE BEGIN
+        SELECT @Part1 =CAST(@Value AS DECIMAL);
+        SELECT @Part1Length= LEN(@Part1)
+    END 
+
+    IF (@Part1Length &gt; (@Precision-@Scale)) BEGIN
+        RETURN CAST(0 AS BIT)
+    END
+
+    RETURN CAST(1 AS BIT)
+
+END</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>OLE_Automation</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>Word_Object_Model__Check_Spelling</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>OLE_Automation</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>Word_Object_Model__Check_Spelling</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>http://www.devx.com/getHelpOn/10MinuteSolution/20563
+
+DECLARE @Object int
+DECLARE @Hresult int
+DECLARE @Word varchar(255)
+DECLARE @SpelledCorrectly bit
+DECLARE @ErrorSource varchar (255)
+DECLARE @ErrorDesc varchar (255)
+
+SET @Word = 'philanthropist'
+--SET @Word = 'filanthropist'
+
+--Create the object
+EXEC @Hresult = sp_OACreate 'Word.Application', @Object OUT 
+--Call the object's property and return the value
+EXEC @Hresult = sp_OAMethod @Object, 'CheckSpelling', @SpelledCorrectly OUT, @Word
+--Destroy the object 
+EXEC @Hresult = sp_OADestroy @Object
+
+IF @Hresult &lt;&gt; 0
+BEGIN
+  EXEC sp_OAGetErrorInfo @Object, @ErrorSource OUT, @ErrorDesc OUT
+  PRINT 'Error Occurred Calling Object:  ' + @ErrorSource + ' ' + @ErrorDesc
+  RETURN
+END
+
+IF @SpelledCorrectly = 1
+BEGIN
+  PRINT 'The word ' + @Word + ' was spelled correctly.'
+END
+ELSE BEGIN
+  PRINT 'The word ' + @Word + ' was spelled incorrectly.'
+END
+/*
+The first parameter is the Word object created with the sp_OACreate stored procedure. 
+The next parameter is the method name, which is CheckSpelling in this case. 
+The variable @SpelledCorrectly contains the return value of the method, 
+	and is defined as bit because the return value of the CheckSpelling method is Boolean. 
+The remaining parameter is the only one this method requires, and it contains the word to be checked.
+
+By default, SQL Server loads COM objects as in-process servers. 
+This means that they are loaded in the SQL Server process space and have full access to this memory address. 
+A misbehaved DLL that doesn't handle memory correctly could overwrite a memory location used by another process or leak resources, 
+	resulting in memory exception errors. For this reason, 
+	Microsoft enables users to instantiate COM objects as out-of-process servers, 
+	which means they actually are created outside the SQL Server process space. 
+This process, by which an object is loaded and accessed out-of-process, is called remoting. SQL Server accomplishes it through the use of DCOM. 
+In this case, we loaded the object in a surrogate process space and marshaled calls between the DLL (the server) and SQL Server (which is the client in this case).
+
+To load a DLL as an out-of-process server, you must specify the context as a parameter when the object is created using sp_OACreate. The possible context values are:
+
+Parameter Value			Context
+1						In-process OLE server
+4						Out-of-process OLE server
+5						Both in-process and out-of-process server allowed
+
+When an object is loaded out of process, it has no access to SQL Server's memory space.
+	The following code explicitly tells SQL Server to create the Word object out of process:
+
+--Create the object	*/
+EXEC @Hresult = sp_OACreate 'Word.Application', @Object OUT, 4
+
+-- See more at: http://www.devx.com/getHelpOn/10MinuteSolution/20563#sthash.zvXt8MQA.dpuf</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>Stored_Procedure</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>call_a_StoredProcedure_on_rows_of_a_TABLE_00_MyVersion_as_TRANSACTION</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>Stored_Procedure</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>call_a_StoredProcedure_on_rows_of_a_TABLE_00_MyVersion_as_TRANSACTION</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>--a) the SP for individual Record
+--b) Batch Script to run the first SP
+
+--prj_0006_SP_0008_Create_TagSecurityRecord_v3.sql
+/*	This version has the RETURN statements working
+	************************************************************************************
+	NOTE: with Transaction, 
+		  if return 99 then it failed in first part, i.e. Insert into table [SW_TAG_SECURITY] failed
+		  if return 98 then it failed in first part, i.e. Insert into table [SW_GF_ACL] failed.	
+		  Return 0 if Transaction committed	  
+	Uses: 
+	Created: 9/8/2016
+	By: glenn garson
+	************************************************************************************
+*/
+
+
+
+USE barriere		--_sandbox
+GO
+
+----================================================	
+--DECLARE @NAME nvarchar(50)
+--DECLARE @TagName as nvarchar(50)
+--DECLARE @ISGROUP as BIT
+--DECLARE @USERGROUP as nvarchar(125)
+--DECLARE @PROJECT_ROLE as nvarchar(50)
+
+
+--SET @NAME = N'DOCUMENT_TYPE'		--generally either DOCUMENT_TYPE or {rarely} DOCTYPE
+--SET @TagName = N'Cost_Adjustments'	--Cost_Adjustments	-- then name of the tag
+--SET @ISGROUP = 1					-- 1 {if it is a group}
+--SET @USERGROUP = N'_ALL'			-- a document security group name
+--SET @PROJECT_ROLE = N''				-- empty, but I guess it could be the name of a project role
+
+----================================================
+
+alter Procedure prj_0006_SP_0008_Create_TagSecurityRecord(
+								@NAME  as nvarchar(50)
+								,@TagName  as nvarchar(500)
+								,@ISGROUP  as bit
+								,@USERGROUP  as nvarchar(125)
+								,@PROJECT_ROLE  as nvarchar(50)									
+	)
+
+as
+
+DECLARE @iSW_TAG_SECURITY_PK INT
+
+-- ********************************************************************************
+-- Start a transaction, if any code fails then we back out everything
+-- ********************************************************************************
+		BEGIN TRANSACTION TRANS_Create_TagSecurityRecord
+
+
+				--===============================================================================================================
+
+				INSERT into [SW_TAG_SECURITY] (
+										  [NAME]			--generally either DOCUMENT_TYPE or {rarely} DOCTYPE
+										  ,[VALUE]			-- then name of the tag
+										  ,[ISGROUP]		-- 1 {if it is a group}
+										  ,[USERGROUP]		-- a document security group name
+										  ,[PROJECT_ROLE]	-- empty, but I guess it could be the name of a project role
+										)
+				values(
+												@NAME
+												,@TagName
+												,@ISGROUP
+												,@USERGROUP
+												,@PROJECT_ROLE	
+						)
+				
+				
+				IF @@ERROR &lt;&gt; 0
+					BEGIN
+					--
+					-- Rollback the transaction and return to the caller
+					--
+					ROLLBACK TRANSACTION TRANS_Create_TagSecurityRecord
+					RAISERROR('Insert into table [SW_TAG_SECURITY] failed.',18,1)
+					RETURN 99											
+					END
+						
+				--===============================================================================================================	
+	
+					SELECT @iSW_TAG_SECURITY_PK = @@IDENTITY
+					PRINT 'The PK for the new Record is: ' + CAST(@iSW_TAG_SECURITY_PK as varchar(5))
+					--RETURN @iSW_TAG_SECURITY_PK   --&lt;== This can not work b/c the PK could be 98 or 99 and that would conflict with my notes
+				--===============================================================================================================			
+
+				DECLARE @ACLTYPE int
+				DECLARE @ITEMID int
+				DECLARE @HIDDEN bit
+				DECLARE @LIST bit
+				DECLARE @READACC bit
+				DECLARE @DELETEACC bit
+				DECLARE @PERMISSIONS bit
+				DECLARE @AUTHOR bit
+				DECLARE @EDITOR bit
+				DECLARE @MOVE bit
+
+				SET @ACLTYPE=2
+				SET @ITEMID=@iSW_TAG_SECURITY_PK
+				SET @ISGROUP=1
+				SET @HIDDEN=0
+				SET @LIST=1
+				SET @READACC=1
+				SET @DELETEACC=1
+				SET @PERMISSIONS=0
+				SET @AUTHOR=1		--CREATE
+				SET @EDITOR=1		--REVISE
+				SET @MOVE=1
+							
+				INSERT INTO SW_GF_ACL 
+				(
+					ACLTYPE,
+					ITEMID,
+					ISGROUP,
+					USERGROUP,
+					HIDDEN,
+					READACC,
+					DELETEACC,
+					PERMISSIONS,
+					AUTHOR,
+					EDITOR,
+					CANSUBSCRIBE,
+					FORCESUBSCRIBE,
+					LIST,
+					VIEWPERMS,
+					HIDECHILD,
+					SPARE1,
+					SPARE2,
+					SPARE3,
+					SPARE4,
+					APPID,
+					EDITMENU,
+					[MOVE]
+				)
+				VALUES
+				(
+					@ACLTYPE,
+					@ITEMID,
+					@ISGROUP,
+					@USERGROUP,
+					@HIDDEN,
+					@READACC,
+					@DELETEACC,
+					@PERMISSIONS,
+					@AUTHOR,
+					@EDITOR,
+					0,
+					0,
+					@LIST,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					'''',
+					0,
+					@MOVE
+				)			
+							
+				IF @@ERROR &lt;&gt; 0
+					BEGIN
+					--
+					-- Rollback the transaction and return to the caller
+					--
+					ROLLBACK TRANSACTION TRANS_Create_TagSecurityRecord
+					RAISERROR('Insert into table [SW_GF_ACL] failed.',18,1)
+					RETURN 98											
+					END							
+				--===============================================================================================================	
+
+
+		
+	-- ********************************************************************************
+	-- We made it to the end so commit the transaction
+	-- ********************************************************************************
+	COMMIT TRANSACTION TRANS_Create_TagSecurityRecord
+	
+	-- Return to the caller with a successful return code
+	--
+	RETURN 0		
+	
+	
+	\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+	
+	--prj_0006_315_BATCH_Create_Tag_Security_Records_v1.sql
+
+use barriere
+go
+
+
+DECLARE @tmp table (
+					 PK INT IDENTITY(1,1) PRIMARY KEY NOT NULL
+					, [NAME] nvarchar(50)
+					, [TagName]  nvarchar(50)
+					, [ISGROUP]  BIT
+					, [USERGROUP]  nvarchar(125)
+					, [PROJECT_ROLE]  nvarchar(50)					 									 					 					 					 					 					 
+					)
+					
+DECLARE @PK INT = 0					
+					
+DECLARE @NAME nvarchar(50) 
+DECLARE @TagName nvarchar(50)
+DECLARE @ISGROUP bit
+DECLARE @USERGROUP nvarchar(125)
+DECLARE @PROJECT_ROLE nvarchar(50)
+
+
+
+;with CTE_WorkFlowParms as
+(select 
+		cast(N'DOCUMENT_TYPE' as [nvarchar](50)) as [NAME]
+		, cast(N'MSA_COI' as [nvarchar](50)) as [TagName]
+		, cast(1 as [bit]) as [ISGROUP]
+		, cast(N'_ALL' as [nvarchar](125)) as [USERGROUP]
+		, cast(N'' as [nvarchar](50)) as [PROJECT_ROLE]
+
+union select N'DOCUMENT_TYPE',N'Certified Payroll Re',1,N'_ALL',N''
+--union select N'DOCUMENT_TYPE',N'MSA_COI',1,N'_ALL',N''			--This is a duplicate
+union select N'DOCUMENT_TYPE',N'Certified Payroll Re',1,N'_ALL',N''
+union select N'DOCUMENT_TYPE',N'Certified Payroll Reports',1,N'_ALL',N''
+union select N'DOCUMENT_TYPE',N'Change Orders',1,N'_ALL',N''
+union select N'DOCUMENT_TYPE',N'Contract Documents',1,N'_ALL',N''
+union select N'DOCUMENT_TYPE',N'Correspondence',1,N'_ALL',N''
+union select N'DOCUMENT_TYPE',N'Cost_Adjustments',1,N'_ALL',N''
+union select N'DOCUMENT_TYPE',N'Credit_Apps',1,N'_ALL',N''
+union select N'DOCUMENT_TYPE',N'Equipment Sale Documents',1,N'_ALL',N''
+
+)
+
+--select TOP(2)
+--		[NAME]
+--		,[TagName]
+--		,[ISGROUP]
+--		,[USERGROUP]
+--		,[PROJECT_ROLE]
+--from CTE_WorkFlowParms;
+
+
+INSERT INTO @tmp SELECT --TOP(3)
+					  [NAME]
+					, [TagName] 
+					, [ISGROUP]  
+					, [USERGROUP] 
+					, [PROJECT_ROLE] 	
+FROM CTE_WorkFlowParms
+
+--SELECT * FROM @tmp
+
+WHILE (1=1)
+BEGIN
+    SELECT 
+			@PK = PK    
+			,@NAME = NAME
+			,@TagName = TagName
+			,@ISGROUP = ISGROUP
+			,@USERGROUP = USERGROUP
+			,@PROJECT_ROLE = PROJECT_ROLE															
+			
+    FROM @tmp
+    WHERE PK = @PK + 1
+	--PRINT '============================================================PK = @PK + 1,   PK is: '  + CAST(@PK AS varchar(5))
+	--PRINT '@APM_TYPE: ' + @APM_TYPE
+	--PRINT '@APM_SUBTYPE: ' + @APM_SUBTYPE
+	--PRINT '@RULE_DESC: ' + @RULE_DESC
+	
+	
+		
+    IF @@rowcount = 0 BREAK;
+	PRINT '============================================================PK = @PK + 1,   PK is: '  + CAST(@PK AS varchar(5))
+	PRINT '@NAME: ' + @NAME
+	PRINT '@TagName: ' + @TagName
+	PRINT '@USERGROUP: ' + @USERGROUP    
+	PRINT '@@rowcount was not 0'
+    -- call your sproc
+    DECLARE @return_status int
+    exec @return_status =  prj_0006_SP_0008_Create_TagSecurityRecord @NAME, @TagName, @ISGROUP, @USERGROUP, @PROJECT_ROLE
+    IF @return_status = 99
+		BEGIN
+			PRINT 'SP Failed in the first part. Transaction did not commit'		
+		END
+     IF @return_status = 98
+		BEGIN
+			PRINT 'SP Failed in the second part. Transaction did not commit - DING, DING, DING'		
+		END   
+      IF @return_status = 0
+		BEGIN
+			PRINT 'SP succeeded. Transaction committed.'		
+		END    
+END</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>Stored_Procedure</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>ChooseCounty_To_Get_CheckBoxes_in_SSRS</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>Stored_Procedure</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>ChooseCounty_To_Get_CheckBoxes_in_SSRS</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code> --ChooseCounty_To_Get_CheckBoxes_in_SSRS
+
+-------------------------------------------------------------
+--IN SSRS:
+ The data type is Boolean of the parms
+ and the default value is false
+ 
+ -------------------------------------------------------------
+ --prj_8011_SP_305_PhysicianChampianEmail_ChooseCounty_v5.sql
+
+-- This SP will:
+
+--		Accept allow the user to choose counties
+--		And get back a list of County, Practices, Physican Champians, and their email address
+	
+
+/*
+	All WNC Counties
+	Buncombe
+	Henderson
+	Madison
+	McDowell
+	Mitchell
+	Polk
+	Rutherford
+	Transylvania
+	Yancy
+	Avery
+	************************************************************************************
+	NOTE: 
+	Uses: 
+	Modified 12/7/2012 to get rid of '%CCNC_NETWORK%' '%COUNTY GOVT%'  '%JUNK%'
+	Created: 8/22/2012
+	By: glenn garson
+	************************************************************************************
+*/
+
+SET NOCOUNT ON
+use DB2_CRM
+go
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+
+ALTER PROCEDURE [dbo].[SP_305_PhysicianChampianEmail_ChooseCounty](
+	  @All as bit
+	, @Buncombe as bit
+	, @Henderson as bit
+	, @Madison as bit
+	, @McDowell as bit
+	, @Mitchell as bit
+	, @Polk as bit
+	, @Rutherford as bit
+	, @Transylvania as bit
+	, @Yancy as bit
+	)
+	AS
+	
+-- START DEBUGGING SECTION -------------------	
+	
+	PRINT 'Input @All: ' + SUBSTRING('FalseTrue', @All * 5 + 1, 5)
+	PRINT 'Input @Buncombe: ' + SUBSTRING('FalseTrue', @Buncombe * 5 + 1, 5)
+	PRINT 'Input @Henderson: ' + SUBSTRING('FalseTrue', @Henderson * 5 + 1, 5)
+	PRINT 'Input @Madison: ' + SUBSTRING('FalseTrue', @Madison * 5 + 1, 5)
+	PRINT 'Input @McDowell: ' + SUBSTRING('FalseTrue', @McDowell * 5 + 1, 5)
+	PRINT 'Input @Mitchell: ' + SUBSTRING('FalseTrue', @Mitchell * 5 + 1, 5)
+	PRINT 'Input @Polk: ' + SUBSTRING('FalseTrue', @Polk * 5 + 1, 5)
+	PRINT 'Input @Rutherford: ' + SUBSTRING('FalseTrue', @Rutherford * 5 + 1, 5)
+	PRINT 'Input @Transylvania: ' + SUBSTRING('FalseTrue', @Transylvania * 5 + 1, 5)
+	PRINT 'Input @Yancy: ' + SUBSTRING('FalseTrue', @Yancy * 5 + 1, 5)
+-- END DEBUGGING SECTION -------------------
+
+
+-- 1] DELETE TEMP TABLE
+IF OBJECT_ID('tempdb..#T1') IS NOT NULL
+
+	DROP TABLE #T1
+    
+
+IF OBJECT_ID('tempdb..#T2') IS NOT NULL
+
+	DROP TABLE #T2
+    
+
+IF OBJECT_ID('tempdb..#T3') IS NOT NULL
+
+	DROP TABLE #T3
+
+
+
+--========================================================================
+-- Get list of Contacts for ALL the Practices
+-- 
+	SELECT 	distinct
+
+			--\\\\\\\\ Fields to Keep \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+			(SELECT     'TheCalculation' = 
+				CASE 
+    					WHEN 
+    						([T8_Contacts_Details].Contact_Type = 1) -- IF: Email Address - Primary
+    						and
+    						( T12_NotEmployees.Position = 2)		 -- IF: Physician-Champion
+    					THEN 
+    					'"' + T12_NotEmployees.FIRST_NAME + ' ' + T12_NotEmployees.LAST_NAME + '" &lt;' + T8_Contacts_Details.Contact_Detail + '&gt;'
+    					--T8_Contacts_Details.Contact_Detail	
+          		 
+				ELSE NULL
+
+			END) as Contact_Detail,
+			
+			
+			T1_Practice.Practice_CA_Number as CA_Number, 			
+			
+			(SELECT     'TheCalculation' = 
+				CASE 
+    					WHEN 
+    						([T8_Contacts_Details].Contact_Type = 1) -- IF: Email Address - Primary
+    						and
+    						( T12_NotEmployees.Position = 2)		 -- IF: Physician-Champion
+    					THEN T12_NotEmployees.LAST_NAME	
+          		 
+				ELSE NULL
+
+			END) as LAST_NAME,			
+			
+	
+			
+			(SELECT     'TheCalculation' = 
+				CASE 
+    					WHEN 
+    						([T8_Contacts_Details].Contact_Type = 1) -- IF: Email Address - Primary
+    						and
+    						( T12_NotEmployees.Position = 2)		 -- IF: Physician-Champion
+    					THEN T12_NotEmployees.FIRST_NAME	
+          		 
+				ELSE NULL
+
+			END) as FIRST_NAME,			
+				
+			T1_Practice.Practice_Official_CA_Name as Official_CA_Name,
+			T1_Practice.Practice_Alternate_Name_1 as Alternate_Name_1, 	
+			UPPER(T1_Practice.ProviderCountyName) as ProviderCountyName, 
+
+			(
+					Select 
+							--[Enum].EnumDescription 
+							--==
+							
+							(SELECT     'TheCalculation' = 
+									CASE 
+    										WHEN 
+    											([T8_Contacts_Details].Contact_Type = 1) -- IF: Email Address - Primary
+    											and
+    											( T12_NotEmployees.Position = 2)		 -- IF: Physician-Champion
+    										THEN [Enum].EnumDescription	
+					          		 
+									ELSE NULL
+
+								END) as EnumDescription
+							
+							--==
+					From Enum
+					where (
+							([Enum].EnumNameSpace_FK=4) 
+							and 
+							([Enum].EnumValue=[T8_Contacts_Details].Contact_Type)
+						   )
+			 ) as Contact_Type,
+
+			(SELECT     'TheCalculation' = 
+					CASE 
+     						WHEN (@All=1) THEN 1       					
+    						WHEN ([ProviderCountyName] Like '%Buncombe%') and (@Buncombe=1) THEN 1
+    						WHEN ([ProviderCountyName] Like '%Henderson%') and (@Henderson=1) THEN 1
+    						WHEN ([ProviderCountyName] Like '%Madison%') and (@Madison=1) THEN 1
+    						WHEN ([ProviderCountyName] Like '%McDowell%') and (@McDowell=1) THEN 1            						
+    						WHEN ([ProviderCountyName] Like '%Mitchell%') and (@Mitchell=1) THEN 1
+    						WHEN ([ProviderCountyName] Like '%Polk%') and (@Polk=1) THEN 1
+    						WHEN ([ProviderCountyName] Like '%Rutherford%') and (@Rutherford=1) THEN 1
+    						WHEN ([ProviderCountyName] Like '%Transylvania%') and (@Transylvania=1) THEN 1            						
+     						WHEN ([ProviderCountyName] Like '%Yancey%') and (@Yancy=1) THEN 1             						
+    						        		 
+					ELSE 0
+
+						END) as bKeeper	
+
+--\\\\\\\\ Fields to DROP \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\			
+			--,T12_NotEmployees.Position as Position
+
+			,(
+					Select 
+							--[Enum].EnumDescription 
+							--==
+							
+							(SELECT     'TheCalculation' = 
+									CASE 
+    										WHEN 
+    											([T8_Contacts_Details].Contact_Type = 1) -- IF: Email Address - Primary
+    											and
+    											( T12_NotEmployees.Position = 2)		 -- IF: Physician-Champion
+    										THEN [Enum].EnumDescription	
+					          		 
+									ELSE NULL
+
+								END) as EnumDescription
+							
+							--==							
+					From Enum
+					where (
+							([Enum].EnumNameSpace_FK=8) 
+							and 
+							( [Enum].EnumValue=T12_NotEmployees.Position )
+						   )
+			 ) as PositionDescription			
+
+			 , T1_Practice.T1_PK			
+			
+--\\\\\\\\ End of Fields\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\			
+			
+			
+	INTO #T1						               
+	FROM	
+
+			(
+				(
+					(
+						(
+							T1_Practice 
+							left outer join			--INNER JOIN
+							T5_Practice_Branch 
+							ON T1_Practice.T1_PK = T5_Practice_Branch.T1_FK 
+						)
+						left outer join			--INNER JOIN
+						LNK01_T5_T12_T13 
+						ON T5_Practice_Branch.T5_PK = LNK01_T5_T12_T13.T5_FK 
+					)
+					left outer join			--INNER JOIN --
+					T12_NotEmployees 
+					ON LNK01_T5_T12_T13.T12_FK = T12_NotEmployees.T12_PK 
+				)
+				left outer join			--INNER JOIN
+				T8_Contacts_Details 
+				ON 
+					(
+						(T12_NotEmployees.T12_PK = T8_Contacts_Details.T12_FK)
+					)
+			)
+
+		WHERE 
+				(
+						( T1_Practice.Active = 1)
+-- Added 12/7/2012 to get rid of these from the report						
+						and
+						(
+							(T1_Practice.Practice_Official_CA_Name not like '%CCNC_NETWORK%')
+							and
+							(T1_Practice.Practice_Official_CA_Name not like '%COUNTY GOVT%')
+							and
+							(T1_Practice.Practice_Official_CA_Name not like '%JUNK%')
+						)						
+
+				)
+		ORDER BY Official_CA_Name 
+--========================================================================
+
+Select *
+INTO #T2
+From #T1
+Where	(
+			(#T1.Contact_Detail is not null)
+			and 
+			(bKeeper=1)
+		)
+
+
+
+
+--========================================================================
+SELECT 
+		T1_Practice.T1_PK
+		,T1_Practice.Practice_CA_Number AS CA_NUMBER
+		,T1_Practice.Practice_Official_CA_Name as Official_CA_Name
+		,T1_Practice.Practice_Alternate_Name_1 as Alternate_Name_1
+		,T1_Practice.ProviderCountyName as ProviderCountyName
+		,(SELECT     'TheCalculation' = 
+					CASE 
+     						WHEN (@All=1) THEN 1       					
+    						WHEN ([T1_Practice].[ProviderCountyName] Like '%Buncombe%') and (@Buncombe=1) THEN 1
+    						WHEN ([T1_Practice].[ProviderCountyName] Like '%Henderson%') and (@Henderson=1) THEN 1
+    						WHEN ([T1_Practice].[ProviderCountyName] Like '%Madison%') and (@Madison=1) THEN 1
+    						WHEN ([T1_Practice].[ProviderCountyName] Like '%McDowell%') and (@McDowell=1) THEN 1            						
+    						WHEN ([T1_Practice].[ProviderCountyName] Like '%Mitchell%') and (@Mitchell=1) THEN 1
+    						WHEN ([T1_Practice].[ProviderCountyName] Like '%Polk%') and (@Polk=1) THEN 1
+    						WHEN ([T1_Practice].[ProviderCountyName] Like '%Rutherford%') and (@Rutherford=1) THEN 1
+    						WHEN ([T1_Practice].[ProviderCountyName] Like '%Transylvania%') and (@Transylvania=1) THEN 1            						
+     						WHEN ([T1_Practice].[ProviderCountyName] Like '%Yancey%') and (@Yancy=1) THEN 1             						
+    						        		 
+					ELSE 0
+
+						END) as bKeeper	
+INTO #T3
+From T1_Practice
+-- Added 12/7/2012 to get rid of these from the report
+WHERE
+						(
+							(T1_Practice.Practice_Official_CA_Name not like '%CCNC_NETWORK%')
+							and
+							(T1_Practice.Practice_Official_CA_Name not like '%COUNTY GOVT%')
+							and
+							(T1_Practice.Practice_Official_CA_Name not like '%JUNK%')
+						)						
+
+
+--========================================================================
+SELECT 
+		#T2.Contact_Detail
+		,#T3.CA_Number
+		,#T2.LAST_NAME
+		,#T2.FIRST_NAME
+		,#T3.Official_CA_Name
+		,#T3.Alternate_Name_1
+		,#T3.ProviderCountyName
+		,#T2.Contact_Type
+		,#T3.bKeeper
+		
+
+From 
+		(	
+			#T3
+			left outer join
+			#T2
+			ON #T3.T1_PK = #T2.T1_PK
+		)
+WHERE (
+		(#T3.bKeeper=1)
+	  )
+Order by Official_CA_Name</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>Stored_Procedure</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>DEV</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>Stored_Procedure</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>DEV</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>--prj_0006_REP_0014_ECLIPSE_REPORT_HR_Standard_View.sql
+
+/*
+	************************************************************************************
+	NOTE: 
+	Uses: 
+	Created: 09/1/2016
+	By: glenn garson
+	************************************************************************************
+*/
+
+use barriere
+go
+
+--------------------------------DEBUG PARMS START
+--DECLARE @BeginDate date
+--SELECT @BeginDate = '03-01-2016'
+
+--DECLARE @EndDate date
+--SELECT @EndDate = '06-15-2016'
+
+--DECLARE @BU as nvarchar(max)
+----SELECT @BU ='HCC'
+--SELECT @BU ='0_ALL'
+--------------------------------DEBUG PARMS END
+
+----================================================	
+--DECLARE @SearchString nvarchar(100)
+--DECLARE @use_LAST_NAME as BIT
+--DECLARE @use_FIRST_NAME as BIT
+--DECLARE @use_Job_Title as BIT
+--DECLARE @use_DEPARTMENT as BIT
+--DECLARE @use_Supervisor as BIT
+----DECLARE @Terminated as BIT
+--DECLARE @Terminated as nvarchar(12)		-- 0_All, 1_Terminated, 2_Active
+
+--SET @SearchString = ''		
+--SET @use_LAST_NAME = 0	
+--SET @use_FIRST_NAME = 1
+--SET @use_Job_Title = 0	
+--SET @use_DEPARTMENT = 0
+--SET @use_Supervisor = 0
+----SET @Terminated = 1
+--SET @Terminated  = '2_Active'			-- 0_All, 1_Terminated, 2_Active
+----================================================
+  
+  
+alter Procedure prj_0006_REP_0014_ECLIPSE_REPORT_HR_Standard_View(
+		 @SearchString as NVARCHAR(100),
+         @use_LAST_NAME as BIT,	
+         @use_FIRST_NAME as BIT,
+         @use_Job_Title as BIT,
+         @use_DEPARTMENT as BIT,
+         @use_Supervisor as BIT,
+         @Terminated as nvarchar(12)                 	
+	)
+
+	as
+	
+-- START DEBUGGING SECTION -------------------		
+	-- Get rid of any spaces the user may have left in there:
+	select @SearchString = LTRIM(RTRIM(@SearchString))
+	PRINT '2] Input @SearchString: [' + @SearchString + ']'
+-- END DEBUGGING SECTION -------------------		
+
+IF (LEN(@SearchString) &gt; 0) OR (@SearchString IS NOT NULL)			--Must also set the PARM to allow Nulls in SSRS
+
+		BEGIN
+				--=============WITH THE WHERE STATEMENT===================================
+
+
+			SELECT     
+					RESOURCE_CODE_EMPLOYEE_PM_SM AS Resource
+					, DEPARTMENT
+					, LAST_NAME
+					, FIRST_NAME
+					, SIN_SSN AS SSN
+					, STATUS_Active_Status AS Status
+					, UDF_RES_USER02_Employment_Status AS Employment_Status
+					, EMPLOYMENT_TYPE
+					, UDF_USER01_Job_Title AS Job_Title
+					, UDF_RES_USER01_Supervisor AS Supervisor
+					, MIN_HR_RATE
+					, ADDRESS1
+					, ADDRESS2
+					, ADDRESS3
+					, POSTAL_CODE AS Zip
+					, WORK_PHONE
+					, CELL_PHONE
+					, EMAIL_ADDRESS
+					, START_DATE
+					, SENIORITY
+					, TERMINATED
+					, UDF_RES_USER04_Benefit_Class AS Benefit_Class
+					, From_SM_PM
+			FROM         vw_0006_502_HR_ResourceMaster_PM_and_SM_EmpMaster
+			WHERE 
+			  (		
+					(
+							(
+								(upper(rtrim(ltrim([LAST_NAME]))) like '%' +  UPPER(RTRIM(LTRIM(@SearchString))) + '%')
+								AND
+								(@use_LAST_NAME = 1)
+							)		
+							OR 
+							(
+								(
+									(upper(rtrim(ltrim([FIRST_NAME]))) like '%' +  (upper(rtrim(ltrim(@SearchString)))) + '%')				
+								)
+								AND
+								(@use_FIRST_NAME = 1)
+							)				  
+							OR 
+								(
+									(upper(rtrim(ltrim([UDF_USER01_Job_Title]))) like '%' +  (upper(rtrim(ltrim(@SearchString)))) + '%') 
+									AND
+									(@use_Job_Title = 1)								
+								)
+							OR  (
+									(upper(rtrim(ltrim([DEPARTMENT]))) like '%' +  (upper(rtrim(ltrim(@SearchString)))) + '%') 	
+									AND
+									(@use_DEPARTMENT = 1)									
+								)
+							OR  (
+									(upper(rtrim(ltrim([UDF_RES_USER01_Supervisor]))) like '%' +  (upper(rtrim(ltrim(@SearchString)))) + '%') 	
+									AND
+									(@use_Supervisor = 1)									
+								)													
+
+						)	
+						AND
+						( -- 0_All, 1_Terminated, 2_Active
+							(
+								(@Terminated = '0_All')
+							)
+							OR
+							(
+								(@Terminated = '1_Terminated')
+								AND
+								(TERMINATED is NOT NULL)
+							)	
+							OR
+							(
+								(@Terminated = '2_Active')
+								AND
+								(TERMINATED is NULL)
+							)																			
+						)
+									
+					
+			  ) 
+			ORDER BY FIRST_NAME, LAST_NAME
+		--========================================================================
+		END
+ELSE
+		BEGIN
+
+		--===========WITHOUT THE WHERE============================================
+			SELECT     
+					RESOURCE_CODE_EMPLOYEE_PM_SM AS Resource
+					, DEPARTMENT
+					, LAST_NAME
+					, FIRST_NAME
+					, SIN_SSN AS SSN
+					, STATUS_Active_Status AS Status
+					, UDF_RES_USER02_Employment_Status AS Employment_Status
+					, EMPLOYMENT_TYPE
+					, UDF_USER01_Job_Title AS Job_Title
+					, UDF_RES_USER01_Supervisor AS Supervisor
+					, MIN_HR_RATE
+					, ADDRESS1
+					, ADDRESS2
+					, ADDRESS3
+					, POSTAL_CODE AS Zip
+					, WORK_PHONE
+					, CELL_PHONE
+					, EMAIL_ADDRESS
+					, START_DATE
+					, SENIORITY
+					, TERMINATED
+					, UDF_RES_USER04_Benefit_Class AS Benefit_Class
+					, From_SM_PM
+			FROM         vw_0006_502_HR_ResourceMaster_PM_and_SM_EmpMaster
+			WHERE 
+			--  (		
+			--		(
+			--				(
+			--					(upper(rtrim(ltrim([LAST_NAME]))) like '%' +  UPPER(RTRIM(LTRIM(@SearchString))) + '%')
+			--					AND
+			--					(@use_LAST_NAME = 1)
+			--				)		
+			--				OR 
+			--				(
+			--					(
+			--						(upper(rtrim(ltrim([FIRST_NAME]))) like '%' +  (upper(rtrim(ltrim(@SearchString)))) + '%')				
+			--					)
+			--					AND
+			--					(@use_FIRST_NAME = 1)
+			--				)				  
+			--				OR 
+			--					(
+			--						(upper(rtrim(ltrim([UDF_USER01_Job_Title]))) like '%' +  (upper(rtrim(ltrim(@SearchString)))) + '%') 
+			--						AND
+			--						(@use_Job_Title = 1)								
+			--					)
+			--				OR  (
+			--						(upper(rtrim(ltrim([DEPARTMENT]))) like '%' +  (upper(rtrim(ltrim(@SearchString)))) + '%') 	
+			--						AND
+			--						(@use_DEPARTMENT = 1)									
+			--					)
+			--				OR  (
+			--						(upper(rtrim(ltrim([UDF_RES_USER01_Supervisor]))) like '%' +  (upper(rtrim(ltrim(@SearchString)))) + '%') 	
+			--						AND
+			--						(@use_Supervisor = 1)									
+			--					)													
+
+			--			)	
+						--AND
+						( -- 0_All, 1_Terminated, 2_Active
+							(
+								(@Terminated = '0_All')
+							)
+							OR
+							(
+								(@Terminated = '1_Terminated')
+								AND
+								(TERMINATED is NOT NULL)
+							)	
+							OR
+							(
+								(@Terminated = '2_Active')
+								AND
+								(TERMINATED is NULL)
+							)																			
+						)		
+									
+					
+			--  ) 
+			ORDER BY FIRST_NAME, LAST_NAME
+		--========================================================================
+		END		
+GO</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>Stored_Procedure</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>IF_String_is_Blank_Then_SELECT_parms_for_Search_Fields</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>Stored_Procedure</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>IF_String_is_Blank_Then_SELECT_parms_for_Search_Fields</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>This has the NEW and the OLD version
+
+--prj_0031_REP_1001_Search_Join_of_HT_OWNOPERMASTR_and_HT_UNITMASTER.sql
+--temp development script
+/*
+	************************************************************************************
+	NOTE: 
+	Uses: 
+	Created: 10/21/2016
+	By: glenn garson
+	************************************************************************************
+*/
+
+use barriere
+go
+--------------------------------DEBUG PARMS START--================================================
+	
+--DECLARE @SearchString nvarchar(100)		-- for first name, last name or resource
+--DECLARE @use_OWNER_OPERATOR as BIT
+--DECLARE @use_NAME_OWNER_OPERATOR as BIT
+--DECLARE @use_UNIT_NUMBER as BIT
+--DECLARE @use_UNIT_TYPE as BIT
+--DECLARE @use_H_PLATE_NUMBER as BIT
+--DECLARE @use_OPERATOR as BIT
+--DECLARE @use_LAST_JOB as BIT
+--DECLARE @use_DESCRIPTION as BIT
+
+--SET @SearchString = ''			--'dai'
+--SET @use_OWNER_OPERATOR = 1
+--SET @use_NAME_OWNER_OPERATOR = 1
+--SET @use_UNIT_NUMBER = 1
+--SET @use_H_PLATE_NUMBER = 1
+--SET @use_OPERATOR = 1
+--SET @use_LAST_JOB = 1
+--SET @use_DESCRIPTION = 1
+
+ --------------------------------DEBUG PARMS END--================================================
+ 
+    
+alter Procedure prj_0031_REP_1001_Search_Join_of_HT_OWNOPERMASTR_and_HT_UNITMASTER(
+		 @SearchString as NVARCHAR(100),	
+         @use_OWNER_OPERATOR as BIT,	
+         @use_NAME_OWNER_OPERATOR as BIT,
+         @use_UNIT_NUMBER as BIT,
+         @use_UNIT_TYPE as BIT,         
+         @use_H_PLATE_NUMBER as BIT,
+         @use_OPERATOR as BIT,
+         @use_LAST_JOB as BIT,        
+         @use_DESCRIPTION as BIT		                       	
+	)
+
+	as
+
+--=============================================================================================================================
+
+SELECT  top(1000)   
+		HT_OWNOPERMASTR.OWNER_OPERATOR
+		, HT_OWNOPERMASTR.NAME AS [NAME_OWNER_OPERATOR]
+		, HT_UNITMASTER.UNIT_NUMBER
+		, HT_UNITMASTER.UNIT_TYPE
+		, HT_UNITMASTER.H_PLATE_NUMBER
+		, HT_UNITMASTER.OPERATOR
+		, HT_UNITMASTER.LAST_JOB
+		, HT_UNITMASTER.LAST_DAY, 
+		HT_UNITMASTER.DESCRIPTION
+FROM         
+		HT_OWNOPERMASTR 
+		INNER JOIN
+		HT_UNITMASTER 
+		ON 
+			HT_OWNOPERMASTR.COMPANY = HT_UNITMASTER.COMPANY 
+			AND 
+			HT_OWNOPERMASTR.OWNER_OPERATOR = HT_UNITMASTER.OWNER_OPERATOR
+		  
+
+WHERE
+		(
+			UPPER(ltrim(rtrim(HT_UNITMASTER.UNIT_TYPE))) &lt;&gt; 'PO'		-- Exclude police
+		)
+		AND
+		(
+				(
+					(
+						(LEN(rtrim(ltrim(@SearchString))) = 0) 
+						OR 
+						(@SearchString IS NULL)							
+					)
+					--OR
+					--(
+					--		(RTRIM(LTRIM(UPPER(v.[RESOURCE_CODE_EMPLOYEE_PM_SM]))) like '%' +  RTRIM(LTRIM(UPPER(@SearchString))) + '%')		
+					--		OR (RTRIM(LTRIM(UPPER(v.LAST_NAME))) like '%' +  RTRIM(LTRIM(UPPER(@SearchString))) + '%')			
+					--		OR (RTRIM(LTRIM(UPPER(v.FIRST_NAME))) like '%' +  RTRIM(LTRIM(UPPER(@SearchString))) + '%' )	
+					--)
+				)
+				OR
+				(
+					(
+						(upper(rtrim(ltrim(HT_OWNOPERMASTR.OWNER_OPERATOR))) like '%' +  UPPER(RTRIM(LTRIM(@SearchString))) + '%')
+						AND
+						(@use_OWNER_OPERATOR = 1)
+					)		
+					OR 
+					(
+						(
+							(upper(rtrim(ltrim(HT_OWNOPERMASTR.NAME))) like '%' +  (upper(rtrim(ltrim(@SearchString)))) + '%')				
+						)
+						AND
+						(@use_NAME_OWNER_OPERATOR = 1)
+					)				  
+					OR 
+						(
+							(upper(rtrim(ltrim(HT_UNITMASTER.UNIT_NUMBER))) like '%' +  (upper(rtrim(ltrim(@SearchString)))) + '%') 
+							AND
+							(@use_UNIT_NUMBER = 1)								
+						)
+					OR  (
+							(upper(rtrim(ltrim(HT_UNITMASTER.UNIT_TYPE))) like '%' +  (upper(rtrim(ltrim(@SearchString)))) + '%') 	
+							AND
+							(@use_UNIT_TYPE = 1)									
+						)
+					OR  (
+							(upper(rtrim(ltrim(HT_UNITMASTER.H_PLATE_NUMBER))) like '%' +  (upper(rtrim(ltrim(@SearchString)))) + '%') 	
+							AND
+							(@use_H_PLATE_NUMBER = 1)								
+						)							
+					OR  (
+							(upper(rtrim(ltrim(HT_UNITMASTER.OPERATOR))) like '%' +  (upper(rtrim(ltrim(@SearchString)))) + '%') 
+							AND
+							(@use_OPERATOR = 1)									
+						)	
+					OR  (
+							(upper(rtrim(ltrim(HT_UNITMASTER.LAST_JOB))) like '%' +  (upper(rtrim(ltrim(@SearchString)))) + '%') 
+							AND
+							(@use_LAST_JOB = 1)									
+						)				
+					OR  (
+							(upper(rtrim(ltrim(HT_UNITMASTER.DESCRIPTION))) like '%' +  (upper(rtrim(ltrim(@SearchString)))) + '%')
+							AND
+							(@use_DESCRIPTION = 1)									
+						) 	
+				)
+		)							 
+				
+GO					
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+--prj_01_REP_207_JobDescription_Searchable.sql
+
+/*
+	************************************************************************************
+	NOTE: 
+	Uses: 
+	Created: 01/12/2016
+	By: glenn garson
+	************************************************************************************
+*/
+
+
+
+USE [COI]
+GO
+
+
+alter Procedure prj_01_REP_207_JobDescription_Searchable(
+		 @SearchString as NVARCHAR(100),
+         @use_JOB as BIT,	
+         @use_Description as BIT,
+         @use_Contract as BIT,
+         @use_Owner as BIT,
+         @use_CustomerName as BIT,
+         @use_Parish as BIT,
+         @use_Municipality as BIT		
+	)
+
+	as
+	
+-- START DEBUGGING SECTION -------------------		
+	-- Get rid of any spaces the user may have left in there:
+	select @SearchString = LTRIM(RTRIM(@SearchString))
+	PRINT '2] Input @SearchString: [' + @SearchString + ']'
+-- END DEBUGGING SECTION -------------------		
+
+IF (LEN(@SearchString) &gt; 0) OR (@SearchString IS NOT NULL)			--Must also set the PARM to allow Nulls in SSRS
+
+		BEGIN
+				--=============WITH THE WHERE STATEMENT===================================
+
+
+			SELECT  [JOB]
+				  ,[Description_Header]
+				  ,[JOB_COMPLETE]
+				  ,[START_DATE]
+				  ,[ENDING_DATE]
+				  ,[CONTRACT]
+				  ,[OWNER]
+				  ,[Customer_Name]
+				  ,[Parish]
+				  ,[Municipality]
+				  ,[Description_Project]
+			FROM [COI].[dbo].[vw_01_512_JobDescription]
+			WHERE 
+			  (		
+					(
+							(
+								(upper(rtrim(ltrim([JOB]))) like '%' +  UPPER(RTRIM(LTRIM(@SearchString))) + '%')
+								AND
+								(@use_JOB = 1)
+							)		
+							OR 
+							(
+								(
+									(upper(rtrim(ltrim([Description_Header]))) like '%' +  (upper(rtrim(ltrim(@SearchString)))) + '%')				
+									OR 
+									(upper(rtrim(ltrim([Description_Header]))) like '%' +  (upper(rtrim(ltrim(@SearchString)))) + '%')
+								)
+								AND
+								(@use_Description = 1)
+							)				  
+							OR 
+								(
+									(upper(rtrim(ltrim([CONTRACT]))) like '%' +  (upper(rtrim(ltrim(@SearchString)))) + '%') 
+									AND
+									(@use_Contract = 1)								
+								)
+							OR  (
+									(upper(rtrim(ltrim([OWNER]))) like '%' +  (upper(rtrim(ltrim(@SearchString)))) + '%') 	
+									AND
+									(@use_Owner = 1)									
+								)
+							OR  (
+									(upper(rtrim(ltrim([Customer_Name]))) like '%' +  (upper(rtrim(ltrim(@SearchString)))) + '%') 	
+									AND
+									(@use_CustomerName = 1)								
+								)							
+							OR  (
+									(upper(rtrim(ltrim([Parish]))) like '%' +  (upper(rtrim(ltrim(@SearchString)))) + '%') 
+									AND
+									(@use_Parish = 1)									
+								)	
+							OR  (
+									(upper(rtrim(ltrim([Municipality]))) like '%' +  (upper(rtrim(ltrim(@SearchString)))) + '%')
+									AND
+									(@use_Municipality = 1)									
+								) 								
+
+						)	
+									
+					
+			  ) 
+			ORDER BY [JOB] DESC 
+		--========================================================================
+		END
+ELSE
+		BEGIN
+
+		--===========WITHOUT THE WHERE============================================
+			SELECT 250  [JOB]
+				  ,[Description_Header]
+				  ,[JOB_COMPLETE]
+				  ,[START_DATE]
+				  ,[ENDING_DATE]
+				  ,[CONTRACT]
+				  ,[OWNER]
+				  ,[Customer_Name]
+				  ,[Parish]
+				  ,[Municipality]
+				  ,[Description_Project]
+			FROM [COI].[dbo].[vw_01_512_JobDescription]
+
+			ORDER BY [JOB]DESC 
+
+		--========================================================================
+		END		
+GO
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>Stored_Procedure</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>STANDARD_Update_with_RowVersion_check_for_Change</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>Stored_Procedure</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>STANDARD_Update_with_RowVersion_check_for_Change</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>1] SP
+2] TEST
+
+//////////////////////////////////////SP
+
+-- prj_8011_SP_057_UPDATE_EmployeePosition_given_T29PK.sql
+-----------------------------------------
+
+/* This SP will:
+
+  		1] Check for existence of T29_PK in Table T29		
+  		IF the record is found the SP will
+  		2] Update the record in T29
+  			
+  			
+	************************************************************************************
+	NOTE: 
+		Return 0 =&gt; The record did not exist or it was changed.
+		Return 1 =&gt; The record was updated
+		Return 2 =&gt; There was an error while trying to update the  Record.
+	Uses: 
+	Created: 4/4/2014
+	By: glenn garson
+	************************************************************************************
+
+*/
+
+SET NOCOUNT ON
+Use DB2_CRM
+go
+
+
+
+alter PROCEDURE prj_8011_SP_057_UPDATE_EmployeePosition_given_T29PK(
+	@iT29_PK AS  INT,
+	@ORIGINAL_T29_RowVersion as rowversion,
+------	
+
+	@NEW_Position_Prefix AS nvarchar(25),
+	@NEW_Position_Role_e37 AS smallint,
+	@NEW_Position_Character_Separator AS nvarchar(25),
+	@NEW_Position_Descriptor AS nvarchar(25),
+	@NEW_Position_Region_e38 AS smallint,
+	@NEW_Position_Override AS nvarchar(255),
+	@NEW_Position_Suffix AS nvarchar(25),
+	@NEW_Position_Credentials AS nvarchar(25),
+	@NEW_Position_Alternate_1 AS nvarchar(255),
+	@NEW_Position_Alternate_2 AS nvarchar(max),
+	@NEW_CMIS_Access_e39 AS nvarchar(100),
+	@NEW_CMIS_Role_e40 AS nvarchar(100),
+	@NEW_bUse_Credentials AS bit,
+	@NEW_bReverseOrder AS bit,
+	@NEW_T29_Note AS nvarchar(max)
+
+
+----
+
+-- Dropped the old stuff
+
+------
+	)
+	
+	AS
+	
+-- START DEBUGGING SECTION -------------------	
+			PRINT '0) Input @iT29_PK: [' + 	 CAST(@iT29_PK AS varchar(5)) + ']'	
+			--PRINT @ORIGINAL_T29_RowVersion
+			--PRINT '1) Input @@ORIGINAL_T29_RowVersion: [' + 	 @ORIGINAL_T29_RowVersion + ']'
+			--PRINT '2) Input @@ORIGINAL_T29_RowVersion: [' + 	 CAST(@ORIGINAL_T29_RowVersion AS varchar(25)) + ']'	
+			--PRINT '======================================================================================'
+			--PRINT '1) Input @NEW_iLNK03_FK: [' + CAST(@NEW_iLNK03_FK as varchar(5)) + ']' 
+			--PRINT '2) Input @NEW_iT15_FK: [' + CAST(@NEW_iT15_FK as varchar(5)) + ']' 
+			--PRINT '3) Input @NEW_EMR_Notes: [' + @NEW_EMR_Notes	 + ']' 
+			--PRINT '4) Input @NEW_b_EMR_UserID_Password_Active: [' +  SUBSTRING('FalseTrue', @NEW_b_EMR_UserID_Password_Active * 5 + 1, 5) + ']' 			
+			--PRINT '5) Input @NEW_b_Installed_On_CCWNC_Equipment: [' +  SUBSTRING('FalseTrue', @NEW_b_Installed_On_CCWNC_Equipment * 5 + 1, 5) + ']' 			
+			--PRINT '6) Input @NEW_b_Remote: [' +  SUBSTRING('FalseTrue', @NEW_b_Remote * 5 + 1, 5) + ']' 
+			--PRINT '7) Input @NEW_b_Onsite_Only: [' +  SUBSTRING('FalseTrue', @NEW_b_Onsite_Only * 5 + 1, 5) + ']' 	
+			--PRINT '======================================================================================'
+			--PRINT '1) Input @OLD_iLNK03_FK: [' + CAST(@OLD_iLNK03_FK as varchar(5)) + ']' 
+			--PRINT '2) Input @OLD_iT15_FK: [' + CAST(@OLD_iT15_FK as varchar(5)) + ']' 
+			--PRINT '3) Input @OLD_EMR_Notes: [' + @OLD_EMR_Notes	 + ']' 
+			--PRINT '4) Input @OLD_b_EMR_UserID_Password_Active: [' +  SUBSTRING('FalseTrue', @OLD_b_EMR_UserID_Password_Active * 5 + 1, 5) + ']' 			
+			--PRINT '5) Input @OLD_b_Installed_On_CCWNC_Equipment: [' +  SUBSTRING('FalseTrue', @OLD_b_Installed_On_CCWNC_Equipment * 5 + 1, 5) + ']' 			
+			--PRINT '6) Input @OLD_b_Remote: [' +  SUBSTRING('FalseTrue', @OLD_b_Remote * 5 + 1, 5) + ']' 
+			--PRINT '7) Input @OLD_b_Onsite_Only: [' +  SUBSTRING('FalseTrue', @OLD_b_Onsite_Only * 5 + 1, 5) + ']' 		
+			
+-- END DEBUGGING SECTION -------------------	
+
+
+-- |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+-- 0] Declare variables used internally in the Stored Procedure, and set intial values:
+-- |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
+	--DECLARE @CONTINUE BIT	
+
+   
+	--SELECT @CONTINUE = 0	-- 1 means continue  0 means finished i.e. failed
+
+
+
+---- START TRANSACTION ----------------------------------------------------------			
+--BEGIN TRANSACTION Transaction_ONE
+
+
+-- |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+  		--1] Check for existence of T29_PK in Table T29
+-- |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
+SELECT * 
+FROM [T29_Employee_Positions]
+WHERE	(
+			([T29_PK]=@iT29_PK)
+			AND
+			([T29_RowVersion]=@ORIGINAL_T29_RowVersion)
+		)
+		
+	IF @@ROWCOUNT &lt;&gt; 1
+		BEGIN
+			PRINT 'Darn It! The  record does not appear to exist in T29, or it has been modified'
+			RETURN 0	-- Return the zero, b/c the record did not exist or it was changed.
+		END
+	ELSE
+		BEGIN
+			PRINT 'OK! The record exists in T29, and has not been changed, so go ahead and update'
+			
+			UPDATE [T29_Employee_Positions]
+			SET 
+
+			  [Position_Prefix] = @NEW_Position_Prefix
+			  ,[Position_Role_e37] = @NEW_Position_Role_e37
+			  ,[Position_Character_Separator] = @NEW_Position_Character_Separator
+			  ,[Position_Descriptor] = @NEW_Position_Descriptor
+			  ,[Position_Region_e38] = @NEW_Position_Region_e38
+			  ,[Position_Override] = @NEW_Position_Override
+			  ,[Position_Suffix] = @NEW_Position_Suffix
+			  ,[Position_Credentials] = @NEW_Position_Credentials
+			  ,[Position_Alternate_1] = @NEW_Position_Alternate_1
+			  ,[Position_Alternate_2] = @NEW_Position_Alternate_2
+			  ,[CMIS_Access_e39] = @NEW_CMIS_Access_e39
+			  ,[CMIS_Role_e40] = @NEW_CMIS_Role_e40
+			  ,[bUse_Credentials] = @NEW_bUse_Credentials
+			  ,[bReverseOrder] = @NEW_bReverseOrder
+			  ,[T29_Note] = @NEW_T29_Note
+				
+			WHERE	(
+						([T29_PK]=@iT29_PK)
+						AND
+						([T29_RowVersion]=@ORIGINAL_T29_RowVersion)
+					)	
+		END
+			
+		IF @@ROWCOUNT = 1 AND (@@ERROR = 0)
+			BEGIN
+
+				PRINT 'The record was updated where PK for the updated record is: ' + CAST(@iT29_PK as varchar(5))
+				RETURN 1	-- Return one, b/c the record did was updated
+			END		
+		ELSE	
+			BEGIN
+				PRINT 'Woops! There was an error while trying to update the  Record. '	
+				RETURN 2
+
+			END	
+
+//////////////////////////////////////TEST
+
+-- prj_8011_SP_057_UPDATE_EmployeePosition_given_T29PK_TEST.sql
+
+USE DB2_CRM
+go
+
+DECLARE @return_status int
+
+--DECLARE @bigint_RowVersion  BIGINT
+--SET @bigint_RowVersion =CONVERT(bigint,'0x0000000000060377')
+
+DECLARE @TheRowVersion  rowversion
+SET @TheRowVersion = 0x0000000000060373
+
+
+EXEC  @return_status =  prj_8011_SP_057_UPDATE_EmployeePosition_given_T29PK
+						@iT29_PK=1 ,
+						@ORIGINAL_T29_RowVersion = @TheRowVersion,
+					------	
+						@NEW_Position_Prefix = 'test',
+						@NEW_Position_Role_e37 = 99,
+						@NEW_Position_Character_Separator = 'test',
+						@NEW_Position_Descriptor = 'test',
+						@NEW_Position_Region_e38 = 99,
+						@NEW_Position_Override = 'test',
+						@NEW_Position_Suffix = 'test',
+						@NEW_Position_Credentials = 'test',
+						@NEW_Position_Alternate_1 = 'test',
+						@NEW_Position_Alternate_2 = 'test',
+						@NEW_CMIS_Access_e39 = 99,
+						@NEW_CMIS_Role_e40 = 99,
+						@NEW_bUse_Credentials = 1,
+						@NEW_bReverseOrder = 1,
+						@NEW_T29_Note = 'test'
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>Stored_Procedure</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>TEST</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>Stored_Procedure</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>TEST</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>--prj_8011_SP_027_Add_new_ContactDetail_for_NotEmployee_TEST.sql
+
+
+
+use DB2_CRM
+go
+
+DECLARE @return_status int
+
+
+exec @return_status = SP_023_Add_new_NotEmployee_Branch_To_Practice 
+																	@sLAST_NAME='Test_16',
+																	@sFIRST_NAME='Test_16',
+																	@sMI=NULL,
+																	@sTitle=NULL,
+																	@sNickname=NULL,
+																	@iPosition=NULL,
+																	@sNotes=NULL,
+																	@iT5_PK=32
+
+
+SELECT 'Return Status' = @return_status
+GO
+
+
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+
+EXEC prj_0010_SP_203_EMPLOYEE_Latest_Next_ReviewDate_Foreman
+	@RESOURCE_CODE = '1000'                	
+	,@BeginDate = '01-01-2005'
+	,@EndDate = '01-01-2016'	
+	,@Division ='2A'
+	,@Company ='1'
+	
+	
+//////////////	DEV with dates /////////////////////////////////////////////////////////
+
+--prj_0010_SP_204_Summary_of_Class_Hours__For_Employee__Given_Division_and_Dates_DEV.sql
+-- Company = 1
+-- Employees are Active
+
+
+use TRAIN
+go
+
+
+   DECLARE @BeginDate as date
+   DECLARE @EndDate as date
+   DECLARE @Division as char(9)
+   --DECLARE @Company as char(3)  
+
+                	
+	SELECT @BeginDate = '01-01-2015'
+	SELECT @EndDate = '01-01-2016'	
+	SELECT @Division ='2A'
+	--SELECT @Company ='1'	
+--==============================================
+
+
+SELECT 
+	  [FIRST_NAME]
+      ,[LAST_NAME]
+      ,[DEPARTMENT] as [Group]
+      ,[TRAINING_TYPE] as [Class_Description]
+      ,[COMPLETION_DATE]
+      ,[EXPIRATION_DATE]
+      ,[Supervisor]
+      ,[Job_Position] AS [Job_Description]
+	  ,[COURSE_DURATION_In_Hours] 
+      ,[Hourly_Salary]
+	  ,[BCC_Class_Coordinator]
+	  ,(SELECT 'TheCalculation' =  LEFT(Cost_Code,2)) AS [Cost_Code_Category]   
+	  ,YEAR([COMPLETION_DATE]) as YYYY   	       
+	  ----------------- ABOVE this line is for the user to see in the report
+	  ,[Employment_Status_Active]
+	  ,[RESOURCE_CODE]
+      ,[EMPLOYEE_CODE]
+      ,[COMPANY]     
+      ,[COST]
+	  ,[Employment_Status_Numeric]
+      ,[PAYROLL_MODULE]
+	  ,[Facilitator]
+	  ,Cost_Code
+	 
+	  
+  FROM [TRAIN].[dbo].[vw_0010_508_EMPLOYEE_Training_DATES_and_HOURS]
+  WHERE 
+		(
+			(RTRIM(LTRIM([DEPARTMENT])) = @Division)
+			AND 
+			(COMPLETION_DATE BETWEEN @BeginDate AND @EndDate)
+		)
+		AND
+		([COMPANY] = 1)
+		AND	
+		(RTRIM(LTRIM([Employment_Status_Numeric])) = '1')		--Active Employees
+	
+		
+  ORDER BY Supervisor, FIRST_NAME, LAST_NAME, COMPLETION_DATE
+	
+	
+///////////DEV///////////////////////////////////////////////////////////////////////////////
+
+	USE TRAIN
+go
+
+DECLARE @SearchString NVARCHAR(25)
+DECLARE @use_FIRST_NAME BIT	
+DECLARE @use_LAST_NAME BIT
+DECLARE @use_TRAINING_TYPE BIT
+DECLARE @use_Supervisor BIT
+DECLARE @Active_Employees as BIT		--'ACTIVE'  or 'inACTIVE'
+DECLARE @Hourly_Employees as BIT		--'Hourly' or 'Salary'
+
+
+SELECT @SearchString = ''
+SELECT @use_FIRST_NAME = 1	
+SELECT @use_LAST_NAME = 1	
+SELECT @use_TRAINING_TYPE = 1	
+SELECT @use_Supervisor = 0	
+SELECT @Active_Employees = 1
+SELECT @Hourly_Employees = 1
+
+
+
+	
+				--=============WITH THE WHERE STATEMENT===================================
+				
+				SELECT 
+						[FIRST_NAME]
+					  ,[LAST_NAME]
+					  ,[COMPANY]
+					  ,[RESOURCE_CODE]
+					  ,[EMPLOYEE_CODE]
+					  ,[DEPARTMENT]
+					  ,[EMPLOYMENT_TYPE]
+					  ,[SEQUENCE]
+					  ,[TRAINING_TYPE]
+					  ,[COMPLETION_DATE]
+					  ,[EXPIRATION_DATE]
+					  ,[COST]
+					  ,[COURSE_DURATION_raw_text]
+					  ,[COURSE_DURATION_In_Hours]
+					  ,[ENTRY_DATE]
+					  ,[BCC_Class_Coordinator]
+					  ,[Facilitator]
+					  ,[Supervisor]
+					  ,Hourly_Salary
+					  ,Employment_Status_Active
+				  FROM [TRAIN].[dbo].[vw_0010_508_EMPLOYEE_Training_DATES_and_HOURS]
+				where 
+						(
+							
+							(
+									
+									(
+										(upper(rtrim(ltrim([FIRST_NAME]))) like '%' +  UPPER(RTRIM(LTRIM(@SearchString))) + '%')
+										AND
+										(@use_FIRST_NAME = 1)
+									)		
+									OR 
+									(
+										(
+											(upper(rtrim(ltrim([LAST_NAME]))) like '%' +  (upper(rtrim(ltrim(@SearchString)))) + '%')				
+										)
+										AND
+										(@use_LAST_NAME = 1)
+									)				  
+									OR 
+										(
+											(upper(rtrim(ltrim([TRAINING_TYPE]))) like '%' +  (upper(rtrim(ltrim(@SearchString)))) + '%') 
+											AND
+											(@use_TRAINING_TYPE = 1)								
+										)
+									OR  (
+											(upper(rtrim(ltrim([Supervisor]))) like '%' +  (upper(rtrim(ltrim(@SearchString)))) + '%') 	
+											AND
+											(@use_Supervisor = 1)									
+										)
+							  )	
+						)
+						AND
+						(
+							(
+								(	upper(rtrim(ltrim(Employment_Status_Active))) = 'ACTIVE'	)
+								AND
+								(	@Active_Employees = 1)
+							)
+							OR
+							(
+								(	upper(rtrim(ltrim(Employment_Status_Active))) = 'INACTIVE'	)
+								AND
+								(	@Active_Employees = 0)
+							)							
+						)	
+						AND
+						(
+							(
+								(	upper(rtrim(ltrim(Hourly_Salary))) = 'HOURLY'	)
+								AND
+								(	@Hourly_Employees = 1)
+							)
+							OR
+							(
+								(	upper(rtrim(ltrim(Hourly_Salary))) = 'SALARY'	)
+								AND
+								(	@Hourly_Employees = 0)
+							)							
+						)	</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>Table</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>Simulate_CascadeUpdate_CascadeDelete</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>Table</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>Simulate_CascadeUpdate_CascadeDelete</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>--This one adds the new record to the other table, but not the delete
+
+
+--prj_8011_SP_011_Add_Employee_To_T9_v5.sql
+-----------------------------------------
+-- This SP will:
+--		INSERT INTO T011 one record, and return the IDENT_CURRENT for the new record
+--		INSERT INTO T15 the new T9_FK
+
+/*
+	************************************************************************************
+	NOTE: 
+	Uses: 
+	Created: 5/25/2012
+	Modified: 1/31/2013: Now it will run prj_1021_SP_925_Add_T21PK_for_all_Trainings_and_T15FK_ForNewEmployee_Given_T9PK_To_T21
+	Modified: 9/24/2012:  Now it will INSERT INTO T15 the T9_FK
+	Modified: 8/29/2012: added 7 fields	
+	Modified: 10/17/2012: removed three unused enum fields
+	By: glenn garson
+	************************************************************************************
+
+*/
+
+SET NOCOUNT ON
+Use DB2_CRM
+go
+
+
+
+alter PROCEDURE SP_011_Add_Employee_To_T9(
+	@Name AS  nvarchar(255),
+	@Titles AS  nvarchar(255),
+	@Position AS  int,
+	@bCareManager AS  bit,
+	@Notes AS  nvarchar(max),
+	@bActiveEmployee as bit
+	  , @EMPLOYEE_Language_e12 AS  smallint
+      , @EMPLOYEE_OfficeLocation_e13 AS  smallint
+      , @CCWNC_Department_e14 AS  smallint
+      --, @CrossDepartment_Team_e15 AS  smallint
+      --, @SameDepartment_Team_e16 AS  smallint
+      --, @EmployeeSupport_Role_e17 AS  smallint
+      , @Supervisor AS  int
+	)
+	
+	
+	AS
+	
+-- START DEBUGGING SECTION -------------------	
+	
+			PRINT '1) Input @Name: ' + 	 @Name
+			PRINT '2)Input @Titles: ' +  @Titles
+			PRINT '3)Input @Position: ' + 	 	CAST(@Position AS varchar(5))
+			PRINT '4)Input @bCareManager: ' + CAST(@bCareManager AS varchar(2)) + ', ' + SUBSTRING('FalseTrue', @bCareManager * 5 + 1, 5)  --TRUE is converted to 1 and FALSE is converted to 0.
+			PRINT '5)Input @Notes: ' + 	 @Notes	
+			PRINT '6)Input @bCareManager: ' + CAST(@bActiveEmployee AS varchar(2)) + ', ' + SUBSTRING('FalseTrue', @bActiveEmployee * 5 + 1, 5)  --TRUE is converted to 1 and FALSE is converted to 0.
+
+			PRINT '7)Input @EMPLOYEE_Language_e12: ' + CAST(@EMPLOYEE_Language_e12 AS varchar(10))
+			PRINT '8)Input @EMPLOYEE_OfficeLocation_e13: ' + CAST(@EMPLOYEE_OfficeLocation_e13 AS varchar(10))
+			PRINT '9)Input @CCWNC_Department_e14: ' + CAST(@CCWNC_Department_e14 AS varchar(10))
+			--PRINT '10)Input @SameDepartment_Team_e16: ' + CAST(@SameDepartment_Team_e16 AS varchar(10))			
+			--PRINT '11)Input @EmployeeSupport_Role_e17: ' + CAST(@EmployeeSupport_Role_e17 AS varchar(10))			
+			PRINT '12)Input @Supervisor: ' + CAST(@Supervisor AS varchar(10))
+												
+-- END DEBUGGING SECTION -------------------	
+	
+
+-- |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+-- 0] Declare variables used internally in the Stored Procedure, and set intial values:
+-- |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
+   DECLARE @T9_FK INT
+   SELECT @T9_FK = NULL
+
+-- |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+-- 1] INSERT INTO
+-- |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
+
+INSERT INTO T9_CCWNC_Employees
+						(
+							[Name]
+							,[Titles]
+							,[Position]
+							,[bCareManager]
+							,[Notes]
+							,[bActiveEmployee]
+							--
+							,[EMPLOYEE_Language_e12]
+							,[EMPLOYEE_OfficeLocation_e13]
+							,[CCWNC_Department_e14]
+							--,[CrossDepartment_Team_e15]
+							--,[SameDepartment_Team_e16]
+							--,[EmployeeSupport_Role_e17]
+							,[Supervisor]
+							--
+						)
+VALUES
+		(
+			@Name,
+			@Titles,
+			@Position,
+			@bCareManager,
+			@Notes,
+			@bActiveEmployee
+			--			
+			, @EMPLOYEE_Language_e12
+			, @EMPLOYEE_OfficeLocation_e13
+			, @CCWNC_Department_e14
+			--, @CrossDepartment_Team_e15
+			--, @SameDepartment_Team_e16
+			--, @EmployeeSupport_Role_e17
+			, @Supervisor
+			--				
+		);
+	
+   SELECT @T9_FK = @@IDENTITY
+	
+		
+		
+	IF @@ERROR = 0
+		BEGIN
+		-- \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+			INSERT INTO T15_CCWNC_Employee_SecurityPortal (T9_FK) VALUES (@T9_FK)
+			EXEC prj_1021_SP_925_Add_T21PK_for_all_Trainings_and_T15FK_ForNewEmployee_Given_T9PK_To_T21 @T9_FK
+			IF @@ERROR = 0
+				BEGIN
+					RETURN @T9_FK
+					PRINT 'Returned the PK for the new T9 record, and T9_FK was successfully inserted into T15'
+				END
+			ELSE
+				BEGIN
+					PRINT 'Woops! There was an error when the FK was inserted into T15 if it returns a zero (0)'
+					RETURN 0					
+				END	
+		-- \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\					
+		END
+	ELSE
+		BEGIN
+
+			PRINT 'Woops! There was an error if it returns a zero (0)'
+			RETURN 0			
+		END
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>TEST_DATA_simulation</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>CourseLinkStudent_createTablesAndData_RandomLink_Autonumber.sql</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>TEST_DATA_simulation</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>CourseLinkStudent_createTablesAndData_RandomLink_Autonumber.sql</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>--CourseLinkStudent_createTablesAndData_RandomLink_Autonumber.sql
+--Create_Course_LNK_Student_Tables_With_ForeignKeys_in_The_LNK_table_and_Cascade_Delete_AUTO-NUMBER.sql
+
+
+use Course_Link_Student
+go
+
+
+
+--Drop the Link Table first b/c it has the Foreign key constraints
+IF OBJECT_ID('dbo.LNK02_T0_T1') IS NOT NULL
+    DROP TABLE dbo.LNK02_T0_T1 
+
+--Drop the Student after the LNK table
+IF OBJECT_ID('dbo.T3_Student') IS NOT NULL
+    DROP TABLE dbo.T3_Student 
+    
+--Then drop the Course
+IF OBJECT_ID('dbo.T0_Course') IS NOT NULL
+    DROP TABLE dbo.T0_Course
+   
+    
+--Course table
+CREATE TABLE [dbo].[T0_Course](
+ [T0_Course_PK] [INT] IDENTITY(1,1) NOT NULL,
+ [CourseData] [varchar](10) NOT NULL,
+ CONSTRAINT [T0_Course$T0_Course_PK] PRIMARY KEY CLUSTERED 
+    ([T0_Course_PK] ASC)
+)
+GO
+-- Student table
+CREATE TABLE [dbo].[T3_Student](
+ [T3_Student_PK] [INT] IDENTITY(1,1) NOT NULL,
+ --[T0_Course_FK] [INT] NULL,
+ [StudentData] [varchar](10) NULL,
+ CONSTRAINT [T3_Student$T3_Student_PK] PRIMARY KEY CLUSTERED 
+    ([T3_Student_PK] ASC)
+)
+GO
+
+-- Link table
+CREATE TABLE [dbo].[LNK02_T0_T1](
+ [LNK02_PK] [int] IDENTITY(1,1) NOT NULL,
+ [T0_Course_FK] [INT] NULL,
+ [T3_Student_FK] [INT] NULL, 
+ --[StudentData] [varchar](10) NULL,
+ CONSTRAINT [LNK02_T0_T1$LNK02_PK] PRIMARY KEY CLUSTERED 
+    ([LNK02_PK] ASC)
+)
+GO
+-- foreign key constraints
+ALTER TABLE [dbo].[LNK02_T0_T1]  WITH CHECK 
+	ADD CONSTRAINT [LNK02_T0_T1$T0_Course_FK] FOREIGN KEY([T0_Course_FK])
+		REFERENCES [dbo].[T0_Course] ([T0_Course_PK])
+		ON DELETE CASCADE						--&lt;=====  here is the Delete Cascade on the LNK table
+GO
+ALTER TABLE [dbo].[LNK02_T0_T1]  WITH CHECK 
+	ADD CONSTRAINT [LNK02_T0_T1$T3_Student_FK] FOREIGN KEY([T3_Student_FK])
+		REFERENCES [dbo].[T3_Student] ([T3_Student_PK])
+		ON DELETE CASCADE						--&lt;=====  here is the Delete Cascade on the LNK table
+GO
+
+
+-- data load
+DECLARE @val_CourseCounter INT
+DECLARE @val_StudentCounter INT
+SELECT @val_CourseCounter=1
+
+-- Populate the Student : 2 columns:[T3_Student_PK], [StudentData] ------------------------------------------------------------------------
+SELECT @val_StudentCounter=1
+	   
+WHILE @val_StudentCounter &lt; 6	--Number of Student records per Course
+BEGIN  
+	INSERT INTO dbo.[T3_Student](StudentData) VALUES ('STUDENT_' + CAST(@val_StudentCounter AS VARCHAR)   )
+	SELECT @val_StudentCounter=@val_StudentCounter+1
+END
+
+WHILE @val_CourseCounter &lt; 10		-- Number of Course records
+	BEGIN 
+	
+	 
+		-- Populate the Course: 2 columns: [T0_Course_PK], [CourseData] ------------------------------------------------------------------------
+	   INSERT INTO dbo.[T0_Course](CourseData) VALUES('COURSE_' + CAST(@val_CourseCounter AS VARCHAR))
+	   
+	   
+	   -- Populate the Link Table: 2 columns: [T0_Course_FK], [T3_Student_FK] ------------------------------------------------------------------------
+	   SELECT @val_StudentCounter=1
+	   
+	   WHILE @val_StudentCounter &lt; 6	--Number of Student records per Course
+
+	   BEGIN  
+		  IF  (CAST(ROUND(RAND(),0) AS BIT) = 1)
+		  BEGIN
+			INSERT INTO dbo.[LNK02_T0_T1] ([T0_Course_FK], [T3_Student_FK]) VALUES (@val_CourseCounter,  @val_StudentCounter)
+		  END
+		  SELECT @val_StudentCounter=@val_StudentCounter+1
+	   END	   
+	   
+	   
+	   
+	   SELECT @val_CourseCounter=@val_CourseCounter+1
+	     
+	END
+GO </Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>TRIGGER</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>AFTER_UPDATE</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>TRIGGER</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>AFTER_UPDATE</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>-- EXAMPLE: So After an Update to table Categories, 
+--	Check the 'Active' field in the table Categories
+-- If it is Zero then update the Products Table and
+--	set the active field in that table to Zero for the 
+--	records where the CategoryID Match the ones in the 'temporary' table named: 'Inserted'
+--	which is only accessible from within the trigger, and that is automatically created
+--	by the server. The 'Inserted' table holds all the new information that is being
+--	updated/inserted into the table: Categories
+
+
+CREATE TRIGGER [dbo].[CategoryDeactivation]		--&lt;== Name of Trigger
+ON [dbo].[Categories]		--&lt;== Table to respond to
+AFTER UPDATE				--&lt;== Will only run AFTER an UPDATE statement
+AS
+BEGIN 
+	DECLARE @isActive AS bit 
+
+	SELECT @isActive = Active	-- Active is actually an INT, but if it is either Zero or One, so a it fits into the bit
+	FROM Inserted
+
+	IF (@isActive = 0)
+		UPDATE Products
+		SET Active = 0
+		WHERE CategoryID IN (SELECT CategoryID FROM Inserted)
+
+END
+
+
+--||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+--|||||BELOW HERE IS the Setup Script for the Trigger Example ||||||||||
+--||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
+CREATE TABLE [dbo].[Categories](
+	[CategoryID] [int] NOT NULL,
+	[CategoryName] [varchar](50) NULL,
+	[Active] [int] NULL,
+ CONSTRAINT [PK_Categories] PRIMARY KEY CLUSTERED 
+(
+	[CategoryID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+
+---------------
+
+INSERT INTO Categories VALUES (1, 'Shirts', 1);
+INSERT INTO Categories VALUES (2, 'Pants', 1);
+INSERT INTO Categories VALUES (3, 'Jackets', 1);
+INSERT INTO Categories VALUES (4, 'Shoes', 1);
+
+---------------------------------------------
+
+CREATE TABLE [dbo].[Products](
+	[ProductID] [int] NOT NULL,
+	[ProductName] [varchar](50) NULL,
+	[CategoryID] [int] NULL,
+	[Active] [bit] NULL,
+	[Qty] [int] NULL,
+ CONSTRAINT [PK_Product] PRIMARY KEY CLUSTERED 
+(
+	[ProductID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+--------------------------------------
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+</dictionary>
