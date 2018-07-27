@@ -1,2 +1,3079 @@
 <?xml version="1.0" encoding="utf-8"?>
-<dictionary />
+<dictionary>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>BOOTSTRAP</Category>
+        <Language>ASP</Language>
+        <Public>false</Public>
+        <Name>example_button_opens_ModalWindow</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>BOOTSTRAP</Category>
+          <Language>ASP</Language>
+          <Public>false</Public>
+          <Name>example_button_opens_ModalWindow</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>&lt;!-- example_button_opens_ModalWindow
+
+http://getbootstrap.com/javascript/#modals
+
+1] Required Libraries:
+    &lt;script src="../../Scripts/jquery-1.9.1.min.js"&gt;&lt;/script&gt;
+    &lt;script src="../../Scripts/bootstrap.min.js"&gt;&lt;/script&gt;
+2] 
+	
+3] 
+     
+4] 
+
+ --&gt;
+==================================================================
+
+&lt;!-- styling.css  --&gt;
+
+body {
+    padding: 30px;
+}
+
+
+==================================================================
+
+&lt;!DOCTYPE html&gt;
+&lt;html xmlns="http://www.w3.org/1999/xhtml"&gt;
+&lt;head&gt;
+    &lt;title&gt;&lt;/title&gt;
+    &lt;link href="../../Content/bootstrap.min.css" rel="stylesheet" /&gt;
+    &lt;link href="styling.css" rel="stylesheet" /&gt;
+    &lt;script src="../../Scripts/jquery-1.9.1.min.js"&gt;&lt;/script&gt;
+    &lt;script src="../../Scripts/bootstrap.min.js"&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+    &lt;!-- Button trigger modal --&gt;
+    &lt;a data-toggle="modal" href="#myModal" class="btn btn-primary btn-lg"&gt;Show Modal Form&lt;/a&gt;
+
+    &lt;!-- Modal --&gt;
+    &lt;div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"&gt;
+        &lt;div class="modal-dialog"&gt;
+            &lt;div class="modal-content"&gt;
+                &lt;div class="modal-header"&gt;
+                    &lt;button type="button" class="close" data-dismiss="modal" aria-hidden="true"&gt;&amp;times;&lt;/button&gt;	&lt;!-- Button that opens the Modal form --&gt;	
+                    &lt;h4 class="modal-title"&gt;A Modal Form&lt;/h4&gt;
+                &lt;/div&gt;
+                &lt;div class="modal-body"&gt;
+                
+                &lt;!-- START Form ----------------------------------------------------------------------------------&gt;
+                
+                    &lt;form class="form-horizontal"&gt;
+
+                        &lt;div class="form-group"&gt;
+                            &lt;label for="fullname" class="col-sm-2 control-label"&gt;Name&lt;/label&gt;
+                            &lt;div class="col-sm-10"&gt;
+                                &lt;input type="text" id="fullname" name="fullname" class="form-control" /&gt;
+                            &lt;/div&gt;
+                        &lt;/div&gt;
+
+
+                        &lt;div class="form-group"&gt;
+                            &lt;label for="comments" class="col-sm-2 control-label"&gt;Comments&lt;/label&gt;
+                            &lt;div class="col-sm-10"&gt;
+                                &lt;textarea name="comments" id="comments" class="form-control" rows="5" cols="40"&gt;&lt;/textarea&gt;
+                            &lt;/div&gt;
+                        &lt;/div&gt;
+
+                        &lt;div class="form-group"&gt;
+                            &lt;label for="luckynumber" class="col-sm-2 control-label"&gt;Lucky Number&lt;/label&gt;
+                            &lt;div class="col-sm-10"&gt;
+                                &lt;select name="luckynumber" id="luckynumber" class="col-sm-10 form-control"&gt;
+                                    &lt;option&gt;double zero&lt;/option&gt;
+                                    &lt;option&gt;seven&lt;/option&gt;
+                                    &lt;option&gt;thirteen&lt;/option&gt;
+                                &lt;/select&gt;
+                            &lt;/div&gt;
+                        &lt;/div&gt;
+
+                        &lt;div class="form-group"&gt;
+                            &lt;div class="col-sm-offset-2 col-sm-10"&gt;
+                                &lt;div class="checkbox"&gt;
+                                    &lt;label&gt;
+                                        &lt;input type="checkbox" value="dog" /&gt;Own a dog&lt;/label&gt;&lt;!--&lt;br /&gt;--&gt;
+                                &lt;/div&gt;
+                                &lt;div class="checkbox"&gt;
+                                    &lt;label&gt;
+                                        &lt;input type="checkbox" value="cat" /&gt;Own a cat&lt;/label&gt;&lt;!--&lt;br /&gt;--&gt;
+                                &lt;/div&gt;
+                                &lt;div class="checkbox"&gt;
+                                    &lt;label&gt;
+                                        &lt;input type="checkbox" value="owned" /&gt;Owned by a cat&lt;/label&gt;
+                                &lt;/div&gt;
+                            &lt;/div&gt;
+                        &lt;/div&gt;
+
+                        &lt;div class="form-group"&gt;
+                            &lt;div class="col-sm-offset-2 col-sm-10"&gt;
+                                &lt;span&gt;&lt;b&gt;Your favorite weather?&lt;/b&gt;&lt;/span&gt;&lt;br /&gt;
+
+                                &lt;div class="radio"&gt;
+                                    &lt;label&gt;
+                                        &lt;input type="radio" name="count" value="hot" /&gt;
+                                        hot&lt;/label&gt;&lt;br /&gt;
+                                &lt;/div&gt;
+                                &lt;div class="radio"&gt;
+                                    &lt;label&gt;
+                                        &lt;input type="radio" name="count" value="cold" /&gt;
+                                        cold&lt;/label&gt;&lt;br /&gt;
+                                &lt;/div&gt;
+                                &lt;div class="radio"&gt;
+                                    &lt;label&gt;
+                                        &lt;input type="radio" name="count" value="rainy" /&gt;
+                                        rainy&lt;/label&gt;&lt;br /&gt;
+                                &lt;/div&gt;
+                            &lt;/div&gt;
+                        &lt;/div&gt;
+
+                    &lt;/form&gt;
+                    
+                &lt;!-- END Form ----------------------------------------------------------------------------------&gt;                    
+                    
+                    
+                &lt;/div&gt;
+                &lt;div class="modal-footer"&gt;
+                    &lt;button type="button" class="btn btn-default" data-dismiss="modal"&gt;Close&lt;/button&gt;
+                    &lt;button type="button" class="btn btn-primary"&gt;Save&lt;/button&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;!-- /.modal-content --&gt;
+        &lt;/div&gt;
+        &lt;!-- /.modal-dialog --&gt;
+    &lt;/div&gt;
+    &lt;!-- /.modal --&gt;
+
+
+&lt;/body&gt;
+&lt;/html&gt;
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>EF_ReversePOCO_and_SinglePageMVC</Category>
+        <Language>C#</Language>
+        <Public>false</Public>
+        <Name>01_OneToMany_HeaderDetail__//MVC_EF_Parent_Child/Views/Home/Index.cshtml</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>EF_ReversePOCO_and_SinglePageMVC</Category>
+          <Language>C#</Language>
+          <Public>false</Public>
+          <Name>01_OneToMany_HeaderDetail__//MVC_EF_Parent_Child/Views/Home/Index.cshtml</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords>S</Keywords>
+        <Imports />
+        <Code>@model MVC_EF_Parent_Child.ViewModel.ParentChildViewModel
+
+@{
+    ViewBag.Title = "Edit Children for Parent";
+}
+
+@using (Html.BeginForm()){
+  &lt;!-- ** BEGIN HIDDEN FIELDS AREA ** --&gt;
+    @Html.HiddenFor(m =&gt; m.EventCommand)
+    @Html.HiddenFor(m =&gt; m.EventArgument)
+    @Html.HiddenFor(m =&gt; m.PageMode)
+    @Html.HiddenFor(m =&gt; m.ChildRecord.T3ChildDetailPk)
+  &lt;!-- ** END HIDDEN FIELDS AREA ** --&gt;
+
+    if (!Model.IsValid)
+    {
+    &lt;!-- ** BEGIN MESSAGE AREA ** --&gt;
+        &lt;div class="row"&gt;
+            &lt;div class="col-xs-12"&gt;
+                &lt;div class="alert alert-danger
+                    alert-dismissable"
+                     role="alert"&gt;
+                    &lt;button type="button" class="close"
+                            data-dismiss="alert"&gt;
+                        &lt;span aria-hidden="true"&gt;
+                            &amp;times;
+                        &lt;/span&gt;
+                        &lt;span class="sr-only"&gt;Close&lt;/span&gt;
+                    &lt;/button&gt;
+                    @Html.ValidationSummary(false)
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;!-- ** END MESSAGE AREA ** --&gt;
+    }
+
+    if (Model.IsSearchAreaVisible)
+    {
+    &lt;!-- ** BEGIN SEARCH AREA ** --&gt;
+        &lt;div class="panel panel-primary"&gt;
+            &lt;div class="panel-heading"&gt;
+                &lt;h1 class="panel-title"&gt;Search for Products&lt;/h1&gt;
+            &lt;/div&gt;
+            &lt;div class="panel-body"&gt;
+                &lt;div class="form-group"&gt;
+                    @Html.LabelFor(m =&gt; m.ChildSearchEntity.T0ParentFk,
+                         "Select a Parent")
+                    @Html.DropDownListFor(m =&gt; m.ChildSearchEntity.T0ParentFk,
+                                new SelectList(Model.ListOfParentSearchEntities,
+                                                "T0ParentPk",
+                                                "ParentData"),
+                               new { @class = "form-control" })
+                &lt;/div&gt;
+                &lt;div class="form-group"&gt;
+                    @Html.LabelFor(m =&gt; m.ChildSearchEntity.ChildData, "Child Data")
+                    @Html.TextBoxFor(m =&gt; m.ChildSearchEntity.ChildData, new { @class = "form-control" })
+                &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div class="panel-footer"&gt;
+                &lt;button formnovalidate="formnovalidate"
+                        class="btn btn-sm btn-primary"
+                        data-pdsa-action="search"&gt;
+                    &lt;i class="glyphicon glyphicon-search"&gt;&lt;/i&gt;
+                    &amp;nbsp;Search
+                &lt;/button&gt;
+                &lt;button formnovalidate="formnovalidate"
+                        class="btn btn-sm btn-primary"
+                        data-pdsa-action="resetsearch"&gt;
+                    &lt;i class="glyphicon glyphicon-share-alt"&gt;&lt;/i&gt;
+                    &amp;nbsp;Reset
+                &lt;/button&gt;
+                &lt;button formnovalidate="formnovalidate"
+                        class="btn btn-sm btn-success"
+                        data-pdsa-action="add"&gt;
+                    &lt;i class="glyphicon glyphicon-plus"&gt;&lt;/i&gt;
+                    &amp;nbsp;Add
+                &lt;/button&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+   &lt;!-- ** END SEARCH AREA ** --&gt;
+    }
+
+    if (Model.IsDetailAreaVisible)
+    {
+    &lt;!-- ** BEGIN DETAIL AREA ** --&gt;
+        &lt;div class="panel panel-primary"&gt;
+            &lt;div class="panel-heading"&gt;
+                &lt;h1 class="panel-title"&gt;
+                    Product Information
+                &lt;/h1&gt;
+            &lt;/div&gt;
+            &lt;div class="panel-body"&gt;
+                &lt;!-- ** BEGIN INPUT AREA --&gt;
+                &lt;div class="form-group"&gt;
+                    @Html.LabelFor(m =&gt; m.ChildRecord.T0Parent.T0ParentPk, "Parent Data")
+                    @Html.DropDownListFor(m =&gt; m.ChildRecord.T0Parent.T0ParentPk, new SelectList(Model.ListOfParentRecords, "T0ParentPk", "ParentData"), new { @class = "form-control" })
+                &lt;/div&gt;
+                &lt;div class="form-group"&gt;
+                    @*@Html.LabelFor(m =&gt; m.ChildRecord.ChildData, "Child PK")
+                    @Html.TextBoxFor(m =&gt; m.ChildRecord.T3ChildDetailPk, new { @class = "form-control" })*@                    
+                    @Html.LabelFor(m =&gt; m.ChildRecord.ChildData, "Child Data")
+                    @Html.TextBoxFor(m =&gt; m.ChildRecord.ChildData, new {@class = "form-control"})
+                &lt;/div&gt;
+                &lt;!-- ** END INPUT AREA --&gt;
+            &lt;/div&gt;
+            &lt;div class="panel-footer"&gt;
+                &lt;div class="row"&gt;
+                    &lt;div class="col-sm-12"&gt;
+                        &lt;button class="btn btn-sm btn-primary"
+                                data-pdsa-action="save"&gt;
+                            &lt;i class="glyphicon glyphicon-floppy-disk"&gt;&lt;/i&gt;
+                            &amp;nbsp;Save
+                        &lt;/button&gt;
+                        &lt;button class="btn btn-sm btn-primary"
+                                formnovalidate="formnovalidate"
+                                data-pdsa-action="cancel"&gt;
+                            &lt;i class="glyphicon glyphicon-remove-circle"&gt;&lt;/i&gt;
+                            &amp;nbsp;Cancel
+                        &lt;/button&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;!-- ** END DETAIL AREA ** --&gt;
+    }
+
+    if (Model.IsListAreaVisible)
+    {
+    &lt;!-- ** BEGIN LIST AREA ** --&gt;
+        &lt;div class="table-responsive"&gt;
+            &lt;table id="productTable"
+                   class="table table-condensed table-bordered table-striped table-hover"&gt;
+                &lt;thead&gt;
+                    &lt;tr&gt;
+                        &lt;th class="pdsa-action-button-column"&gt;
+                            Edit
+                        &lt;/th&gt;
+                        &lt;th&gt;Child Pk&lt;/th&gt;
+                        &lt;th&gt;Child Data&lt;/th&gt;
+                        &lt;th class="pdsa-action-button-column"&gt;
+                            Delete
+                        &lt;/th&gt;
+                    &lt;/tr&gt;
+                &lt;/thead&gt;
+
+                &lt;tbody&gt;
+                    @foreach (var item in Model.ListOfChildRecords)
+                    {
+                        &lt;tr&gt;
+                            &lt;td class="pdsa-action-button-column"&gt;
+                                &lt;a href="#" data-pdsa-action="edit"
+                                   data-pdsa-val="@item.T3ChildDetailPk"
+                                   class="btn btn-default btn-sm"&gt;
+                                    &lt;i class="glyphicon glyphicon-edit"&gt;&lt;/i&gt;
+                                &lt;/a&gt;
+                            &lt;/td&gt;
+                            &lt;td&gt;@item.T3ChildDetailPk&lt;/td&gt;
+                            &lt;td&gt;@item.ChildData&lt;/td&gt;
+                            &lt;td class="pdsa-action-button-column"&gt;
+                                &lt;a href="#" data-pdsa-action="delete"
+                                   data-pdsa-val="@item.T3ChildDetailPk"
+                                   onclick="return confirm('Delete this Child?');"
+                                   class="btn btn-default btn-sm"&gt;
+                                    &lt;i class="glyphicon glyphicon-trash"&gt;&lt;/i&gt;
+                                &lt;/a&gt;
+                            &lt;/td&gt;
+
+                        &lt;/tr&gt;
+                    }
+                &lt;/tbody&gt;
+            &lt;/table&gt;
+        &lt;/div&gt;
+    &lt;!-- ** END LIST AREA ** --&gt;
+    }
+}
+
+@section scripts {
+    &lt;script&gt;
+    $(document).ready(function () {
+      // Hook events on buttons and anchors
+      buildClickEvents();
+    });
+
+    // Hook events on buttons and anchors
+    function buildClickEvents() {
+      $("[data-pdsa-action]").on("click", function (e) {
+        e.preventDefault();
+
+        $("#EventCommand").val(
+          $(this).data("pdsa-action"));
+
+        $("#EventArgument").val(
+          $(this).attr("data-pdsa-val"));
+
+        $("form").submit();
+      });
+    }
+    &lt;/script&gt;
+}
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>EF_ReversePOCO_and_SinglePageMVC</Category>
+        <Language>C#</Language>
+        <Public>false</Public>
+        <Name>02_SingleTable__/Views/Home/Index.cshtml</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>EF_ReversePOCO_and_SinglePageMVC</Category>
+          <Language>C#</Language>
+          <Public>false</Public>
+          <Name>02_SingleTable__/Views/Home/Index.cshtml</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>@model T1_Servers.ViewModel.vmServer
+
+@{
+    ViewBag.Title = "Edit Servers";
+}
+
+@using (Html.BeginForm())
+{
+  &lt;!-- ** BEGIN HIDDEN FIELDS AREA ** --&gt;
+    @Html.HiddenFor(m =&gt; m.EventCommand)
+    @Html.HiddenFor(m =&gt; m.EventArgument)
+    @Html.HiddenFor(m =&gt; m.PageMode)
+    @Html.HiddenFor(m =&gt; m.ServerRecord.T001Pk)
+  &lt;!-- ** END HIDDEN FIELDS AREA ** --&gt;
+
+    if (!Model.IsValid)
+    {
+    &lt;!-- ** BEGIN MESSAGE AREA ** --&gt;
+        &lt;div class="row"&gt;
+            &lt;div class="col-xs-12"&gt;
+                &lt;div class="alert alert-danger
+                    alert-dismissable"
+                     role="alert"&gt;
+                    &lt;button type="button" class="close"
+                            data-dismiss="alert"&gt;
+                        &lt;span aria-hidden="true"&gt;
+                            &amp;times;
+                        &lt;/span&gt;
+                        &lt;span class="sr-only"&gt;Close&lt;/span&gt;
+                    &lt;/button&gt;
+                    @Html.ValidationSummary(false)
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;!-- ** END MESSAGE AREA ** --&gt;
+    }
+
+    if (Model.IsSearchAreaVisible)
+    {
+    &lt;!-- ** BEGIN SEARCH AREA ** --&gt;
+        &lt;div class="panel panel-primary"&gt;
+            &lt;div class="panel-heading"&gt;
+                &lt;h1 class="panel-title"&gt;SEARCH AREA&lt;/h1&gt;
+            &lt;/div&gt;
+            &lt;div class="panel-body"&gt;
+                &lt;div class="form-group col-sm-3"&gt;
+                    @Html.LabelFor(m =&gt; m.ServerSearchRecord.Name, "Server Name")
+                    @Html.TextBoxFor(m =&gt; m.ServerSearchRecord.Name, new { @class = "form-control" })
+                &lt;/div&gt;
+                &lt;div class="form-group col-sm-3"&gt;
+                    @Html.LabelFor(m =&gt; m.ServerSearchRecord.RolesAndFunctions, "Role")
+                    @Html.TextBoxFor(m =&gt; m.ServerSearchRecord.RolesAndFunctions, new { @class = "form-control" })
+                &lt;/div&gt;
+                &lt;div class="form-group col-sm-3"&gt;
+                    @Html.LabelFor(m =&gt; m.ServerSearchRecord.Ip1, "IP 1")
+                    @Html.TextBoxFor(m =&gt; m.ServerSearchRecord.Ip1, new { @class = "form-control" })
+                &lt;/div&gt;
+                &lt;div class="form-group col-sm-3"&gt;
+                    @Html.LabelFor(m =&gt; m.ServerSearchRecord.Ip2, "IP 2")
+                    @Html.TextBoxFor(m =&gt; m.ServerSearchRecord.Ip2, new { @class = "form-control" })
+                &lt;/div&gt;
+                &lt;div class="form-group col-sm-3"&gt;
+                    @Html.LabelFor(m =&gt; m.ServerSearchRecord.Notes, "Notes")
+                    @Html.TextBoxFor(m =&gt; m.ServerSearchRecord.Notes, new { @class = "form-control" })
+                &lt;/div&gt;
+                &lt;div class="form-group col-sm-3"&gt;
+                    @Html.LabelFor(m =&gt; m.ServerSearchRecord.Description, "Description")
+                    @Html.TextBoxFor(m =&gt; m.ServerSearchRecord.Description, new { @class = "form-control" })
+                &lt;/div&gt;
+                &lt;div class="form-group col-sm-3"&gt;
+                    @Html.LabelFor(m =&gt; m.ServerSearchRecord.ServiceTag, "Manufacturer Tag")
+                    @Html.TextBoxFor(m =&gt; m.ServerSearchRecord.ServiceTag, new { @class = "form-control" })
+                &lt;/div&gt;
+                &lt;div class="form-group col-sm-3"&gt;
+                    @Html.LabelFor(m =&gt; m.ServerSearchRecord.JphsaTag, "JPHSA Tag")
+                    @Html.TextBoxFor(m =&gt; m.ServerSearchRecord.JphsaTag, new { @class = "form-control" })
+                &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div class="panel-footer"&gt;
+                &lt;button formnovalidate="formnovalidate"
+                        class="btn btn-sm btn-primary"
+                        data-pdsa-action="search"&gt;
+                    &lt;i class="glyphicon glyphicon-search"&gt;&lt;/i&gt;
+                    &amp;nbsp;Search
+                &lt;/button&gt;
+                &lt;button formnovalidate="formnovalidate"
+                        class="btn btn-sm btn-primary"
+                        data-pdsa-action="resetsearch"&gt;
+                    &lt;i class="glyphicon glyphicon-share-alt"&gt;&lt;/i&gt;
+                    &amp;nbsp;Reset
+                &lt;/button&gt;
+                &lt;button formnovalidate="formnovalidate"
+                        class="btn btn-sm btn-success"
+                        data-pdsa-action="add"&gt;
+                    &lt;i class="glyphicon glyphicon-plus"&gt;&lt;/i&gt;
+                    &amp;nbsp;Add
+                &lt;/button&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+   &lt;!-- ** END SEARCH AREA ** --&gt;
+    }
+
+    if (Model.IsDetailAreaVisible)
+    {
+    &lt;!-- ** BEGIN DETAIL AREA ** --&gt;
+        &lt;div class="panel panel-primary"&gt;
+            &lt;div class="panel-heading"&gt;
+                &lt;h1 class="panel-title"&gt;
+                    Data Enter/Modify
+                &lt;/h1&gt;
+            &lt;/div&gt;
+            &lt;div class="panel-body"&gt;
+                &lt;!-- ** BEGIN INPUT AREA --&gt;
+                &lt;div class="form-group"&gt;
+                    @Html.LabelFor(m =&gt; m.ServerRecord.Name, "Server Name")
+                    @Html.TextBoxFor(m =&gt; m.ServerRecord.Name, new { @class = "form-control" })
+                &lt;/div&gt;
+                &lt;div class="form-group"&gt;
+                    @Html.LabelFor(m =&gt; m.ServerRecord.Ip1, "IP1")
+                    @Html.TextBoxFor(m =&gt; m.ServerRecord.Ip1, new { @class = "form-control" })
+                &lt;/div&gt;
+                &lt;div class="form-group"&gt;
+                    @Html.LabelFor(m =&gt; m.ServerRecord.Ip2, "IP1")
+                    @Html.TextBoxFor(m =&gt; m.ServerRecord.Ip2, new { @class = "form-control" })
+                &lt;/div&gt;
+                &lt;div class="form-group"&gt;
+                    @Html.LabelFor(m =&gt; m.ServerRecord.Notes, "Notes")
+                    @Html.TextBoxFor(m =&gt; m.ServerRecord.Notes, new { @class = "form-control" })
+                &lt;/div&gt;
+                &lt;div class="form-group"&gt;
+                    @Html.LabelFor(m =&gt; m.ServerRecord.Description, "Description")
+                    @Html.TextBoxFor(m =&gt; m.ServerRecord.Description, new { @class = "form-control" })
+                &lt;/div&gt;
+                &lt;div class="form-group"&gt;
+                    @Html.LabelFor(m =&gt; m.ServerRecord.RolesAndFunctions, "Role")
+                    @Html.TextBoxFor(m =&gt; m.ServerRecord.RolesAndFunctions, new { @class = "form-control" })
+                &lt;/div&gt;
+                &lt;div class="form-group"&gt;
+                    @Html.LabelFor(m =&gt; m.ServerRecord.ServiceTag, "Manufacturer Tag")
+                    @Html.TextBoxFor(m =&gt; m.ServerRecord.ServiceTag, new { @class = "form-control" })
+                &lt;/div&gt;
+                &lt;div class="form-group"&gt;
+                    @Html.LabelFor(m =&gt; m.ServerRecord.InstallDate, "Install Date")                     &lt;!-- DATE --&gt;
+                    @*@Html.EditorFor(m =&gt; m.ServerRecord.InstallDate, new { @class = "form-control" })*@
+                    @Html.EditorFor(m =&gt; m.ServerRecord.InstallDate, new { htmlAttributes = new { @class = "form-control datecontrol", @PlaceHolder = "Install Date" } })
+                &lt;/div&gt;
+                &lt;div class="form-group"&gt;
+                    @Html.LabelFor(m =&gt; m.ServerRecord.JphsaTag, "JPHSA Tag")
+                    @Html.TextBoxFor(m =&gt; m.ServerRecord.JphsaTag, new { @class = "form-control" })
+                &lt;/div&gt;
+                &lt;div class="form-group"&gt;
+                    @Html.LabelFor(m =&gt; m.ServerRecord.Os, "OS")
+                    @Html.TextBoxFor(m =&gt; m.ServerRecord.Os, new { @class = "form-control" })
+                &lt;/div&gt;
+                &lt;div class="form-group"&gt;
+                    @Html.LabelFor(m =&gt; m.ServerRecord.BiosSerialNumber, "BIOS S/N")
+                    @Html.TextBoxFor(m =&gt; m.ServerRecord.BiosSerialNumber, new { @class = "form-control" })
+                &lt;/div&gt;
+                &lt;div class="form-group"&gt;
+                    @Html.LabelFor(m =&gt; m.ServerRecord.OldPurchaseNotes, "Old Notes")
+                    @Html.TextBoxFor(m =&gt; m.ServerRecord.OldPurchaseNotes, new { @class = "form-control" })
+                &lt;/div&gt;
+                &lt;!-- ** END INPUT AREA --&gt;
+            &lt;/div&gt;
+            &lt;div class="panel-footer"&gt;
+                &lt;div class="row"&gt;
+                    &lt;div class="col-sm-12"&gt;
+                        &lt;button class="btn btn-sm btn-primary"
+                                data-pdsa-action="save"&gt;
+                            &lt;i class="glyphicon glyphicon-floppy-disk"&gt;&lt;/i&gt;
+                            &amp;nbsp;Save
+                        &lt;/button&gt;
+                        &lt;button class="btn btn-sm btn-primary"
+                                formnovalidate="formnovalidate"
+                                data-pdsa-action="cancel"&gt;
+                            &lt;i class="glyphicon glyphicon-remove-circle"&gt;&lt;/i&gt;
+                            &amp;nbsp;Cancel
+                        &lt;/button&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;!-- ** END DETAIL AREA ** --&gt;
+    }
+
+    if (Model.IsListAreaVisible)
+    {
+        &lt;!-- ** BEGIN LIST AREA ** --&gt;
+        &lt;h3&gt;List Area&lt;/h3&gt;
+        &lt;div class="table-responsive"&gt;
+            &lt;table id="productTable"
+                   class="table table-condensed table-bordered table-striped table-hover"&gt;
+                &lt;thead&gt;
+                    &lt;tr&gt;
+                        &lt;th class="pdsa-action-button-column"&gt;
+                            Edit
+                        &lt;/th&gt;
+                       
+                        &lt;th&gt;Server Name&lt;/th&gt;
+                        &lt;th&gt;IP 1&lt;/th&gt;
+                        &lt;th&gt;IP 2&lt;/th&gt;
+                        &lt;th&gt;Notes&lt;/th&gt;
+                        &lt;th&gt;Description&lt;/th&gt;
+                        &lt;th&gt;Role&lt;/th&gt;
+                        &lt;th&gt;Manufac.Tag&lt;/th&gt;
+                        &lt;th&gt;Install Date&lt;/th&gt;
+                        &lt;th&gt;JPHSA Tag&lt;/th&gt;
+                        &lt;th&gt;OS&lt;/th&gt;
+                        &lt;th&gt;BIOS S/N&lt;/th&gt;
+                        &lt;th class="pdsa-action-button-column"&gt;
+                            Delete
+                        &lt;/th&gt;
+                        &lt;th&gt;Pk&lt;/th&gt;
+                    &lt;/tr&gt;
+                &lt;/thead&gt;
+
+                &lt;tbody&gt;
+                    @foreach (var item in Model.ListOfServerRecords)
+                    {
+                        &lt;tr&gt;
+                            &lt;td class="pdsa-action-button-column btn-info"&gt;
+                                &lt;a href="#" data-pdsa-action="edit"
+                                   data-pdsa-val="@item.T001Pk"
+                                   class="btn btn-default btn-sm"&gt;
+                                    &lt;i class="glyphicon glyphicon-edit"&gt;&lt;/i&gt;
+                                &lt;/a&gt;
+                            &lt;/td&gt;
+                            
+                            &lt;td&gt;@item.Name&lt;/td&gt;
+                            &lt;td&gt;@item.Ip1&lt;/td&gt;
+                            &lt;td&gt;@item.Ip2&lt;/td&gt;
+                            &lt;td&gt;@item.Notes&lt;/td&gt;
+                            &lt;td&gt;@item.Description&lt;/td&gt;
+                            &lt;td&gt;@item.RolesAndFunctions&lt;/td&gt;
+                            &lt;td&gt;@item.ServiceTag&lt;/td&gt;
+                            &lt;td&gt;@String.Format("{0:d}", item.InstallDate)&lt;/td&gt;                    &lt;!-- format as DATE, rather than datetime --&gt;
+                            &lt;td&gt;@item.JphsaTag&lt;/td&gt;
+                            &lt;td&gt;@item.Os&lt;/td&gt;
+                            &lt;td&gt;@item.BiosSerialNumber&lt;/td&gt;
+                            &lt;td class="pdsa-action-button-column btn-danger"&gt;
+                                &lt;a href="#" data-pdsa-action="delete"
+                                   data-pdsa-val="@item.T001Pk"
+                                   onclick="javascript: return confirm('Are you sure?');"
+                                   class="btn btn-default btn-sm"&gt;
+                                    &lt;i class="glyphicon glyphicon-trash"&gt;&lt;/i&gt;
+                                &lt;/a&gt;
+                            &lt;/td&gt;
+                            &lt;td&gt;@item.T001Pk&lt;/td&gt;
+
+                        &lt;/tr&gt;
+                    }
+                &lt;/tbody&gt;
+            &lt;/table&gt;
+        &lt;/div&gt;
+    &lt;!-- ** END LIST AREA ** --&gt;
+    }
+}
+
+@section scripts {
+    &lt;script&gt;
+
+
+        $(document).ready(function() {
+            // Hook events on buttons and anchors
+            buildClickEvents();
+            $('.datepicker').datepicker(); //Initialise any date pickers
+        });
+
+        // Hook events on buttons and anchors
+        function buildClickEvents() {
+
+
+            $("[data-pdsa-action]").on("click",
+                function(e) {
+                    e.preventDefault();
+
+                    $("#EventCommand").val(
+                        $(this).data("pdsa-action"));
+
+
+                    $("#EventArgument").val(
+                      $(this).attr("data-pdsa-val"));
+
+
+                    $("form").submit();
+       
+        });
+        }
+
+        $(function() {
+
+            $(".datePicker").datepicker({
+                showOn: "button",
+
+                buttonImage: "/images/calendar-icon.png",
+
+                buttonImageOnly: true,
+
+                buttonText: "Select date"
+
+            });
+
+        });
+
+
+    &lt;/script&gt;
+}
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>MVC_Modal_Forms</Category>
+        <Language>C#</Language>
+        <Public>false</Public>
+        <Name>01_Bootstrap Modal Dialog - Loading Content from MVC Partial View__/Views/Home/_Lyubomir.cshtml</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>MVC_Modal_Forms</Category>
+          <Language>C#</Language>
+          <Public>false</Public>
+          <Name>01_Bootstrap Modal Dialog - Loading Content from MVC Partial View__/Views/Home/_Lyubomir.cshtml</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>//01_Bootstrap Modal Dialog - Loading Content from MVC Partial View__/Views/Home/_Lyubomir.cshtml
+
+
+&lt;div class="modal-body"&gt;
+    &lt;div class="alert alert-warning"&gt;
+        &lt;span class="glyphicon glyphicon-warning-sign"&gt;&lt;/span&gt;
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec consequat nisl a nibh tincidunt condimentum. Nullam in augue vitae augue dictum eleifend. Nunc porta fermentum metus, quis efficitur lectus scelerisque ac. Quisque egestas sit amet nunc in interdum. Etiam malesuada maximus nisi, id tempus metus. Vivamus at sapien ut metus aliquet sodales sed id magna. Integer in auctor ex. Phasellus tempor, est vel placerat dapibus, nulla dui tempor ligula, at pulvinar libero nunc gravida metus. Proin non feugiat felis. Proin ut ultrices ex. Morbi aliquet lacinia elit at bibendum. Nunc facilisis, neque a finibus dignissim, turpis felis vulputate diam, a tristique tellus nibh nec nulla. Suspendisse eget augue non turpis dignissim euismod eget eget odio. Donec sit amet nibh cursus, efficitur nibh in, sodales arcu. Pellentesque pulvinar consequat lacus ac porttitor.
+    &lt;/div&gt;
+
+    @using (Html.BeginForm("Lyubomir", "Home", FormMethod.Post))
+    {
+        &lt;div class="row"&gt;
+            &amp;nbsp;
+        &lt;/div&gt;
+        &lt;div class="row"&gt;
+            &lt;div class="col-md-4 col-md-offset-4"&gt;
+                &lt;button type="button" class="btn btn-default" data-dismiss="modal"&gt;Cancel&lt;/button&gt;
+                &lt;button type="submit" id="approve-btn" class="btn btn-danger"&gt;Save&lt;/button&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    }
+&lt;/div&gt;
+
+
+&lt;script type="text/javascript"&gt;
+    $(function () {
+        $('#approve-btn').click(function () {
+            $('#modal-container').modal('hide');
+        });
+    });
+&lt;/script&gt;</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>MVC_Modal_Forms</Category>
+        <Language>C#</Language>
+        <Public>false</Public>
+        <Name>01_Bootstrap Modal Dialog - Loading Content from MVC Partial View__about</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>MVC_Modal_Forms</Category>
+          <Language>C#</Language>
+          <Public>false</Public>
+          <Name>01_Bootstrap Modal Dialog - Loading Content from MVC Partial View__about</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>01_Bootstrap Modal Dialog - Loading Content from MVC Partial View__about
+
+/* From: http://www.codeproject.com/Tips/826002/Bootstrap-Modal-Dialog-Loading-Content-from-MVC-Pa
+
+I will also show how to fix the dialog doesn't appear issue after 3.1.0 version. 
+There is no need to write additional Ajax calls - this is handled internally by Bootstrap. 
+
+ 1]   On the main layout, you need to have a modal container - the place where the dialogs will be loaded.	
+ 
+ /Views/Home/_Lyubomir.cshtml
+ =============================
+ */
+
+    &lt;div id="modal-container" class="modal fade" 
+    tabindex="-1" role="dialog"&gt;
+       &lt;div class="modal-content"&gt;
+       &lt;/div&gt;
+     &lt;/div&gt;
+
+//    If you are using bootstrap v 3.0.0, then remove:
+
+    &lt;div class="modal-content"&gt;&lt;/div&gt;
+
+/*    After version 3.1.0, this should be included - this is how the changing of the versions affected my implementation.
+
+    
+ 2]   Set some styles - I have put that in the main layout just for the example, but you can put it in the correct place in your project.
+ 	
+ 	/Views/Shared/_Layout.cshtml
+	============================== 
+*/
+       &lt;style&gt;
+            .modal-content {
+                width: 600px !important;
+                margin: 30px auto !important;
+            }
+        &lt;/style&gt;
+
+/*
+3]    Add JavaScript - this will make an Ajax call internally and will inject the partialview content into the modal container.
+	/Views/Shared/_Layout.cshtml
+	==============================
+	*/
+
+    &lt;script type="text/javascript"&gt;
+            $(function () {
+                // Initialize numeric spinner input boxes
+                //$(".numeric-spinner").spinedit();
+                // Initialize modal dialog
+                // attach modal-container bootstrap attributes to links with .modal-link class.
+                // when a link is clicked with these attributes, bootstrap will display the href content in a modal dialog.
+                $('body').on('click', '.modal-link', function (e) {
+                    e.preventDefault();
+                    $(this).attr('data-target', '#modal-container');
+                    $(this).attr('data-toggle', 'modal');
+                });
+                // Attach listener to .modal-close-btn's so that when the button is pressed the modal dialog disappears
+                $('body').on('click', '.modal-close-btn', function () {
+                    $('#modal-container').modal('hide');
+                });
+                //clear modal cache, so that new content can be loaded
+                $('#modal-container').on('hidden.bs.modal', function () {
+                    $(this).removeData('bs.modal');
+                });
+                $('#CancelModal').on('click', function () {
+                    return false;
+                });
+            });
+        &lt;/script&gt;
+
+//4]     Create a Controller Action, that will return partial view.   /Controllers/HomeController.cs
+
+     public ActionResult ViewLyubomir()
+    {
+         return PartialView("_Lyubomir");
+     }
+
+//5]     Create an action that will process the result of the post occurring in the partial view.
+
+     [HttpPost]
+     public ActionResult Lyubomir()
+     {
+         return RedirectToAction("Index");
+     }
+
+//6]     Create a partial view:   /Views/Home/_Lyubomir.cshtml
+
+    &lt;div class="modal-body"&gt;
+        &lt;div class="alert alert-warning"&gt;
+            &lt;span class="glyphicon glyphicon-warning-sign"&gt;&lt;/span&gt;
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+            Donec consequat nisl a nibh tincidunt condimentum. 
+            Nullam in augue vitae augue dictum eleifend. 
+            Nunc porta fermentum metus, quis efficitur lectus scelerisque ac. 
+            Quisque egestas sit amet nunc in interdum. 
+            Etiam malesuada maximus nisi, id tempus metus. 
+            Vivamus at sapien ut metus aliquet sodales sed id magna. 
+            Integer in auctor ex. Phasellus tempor, est vel placerat dapibus, 
+            nulla dui tempor ligula, at pulvinar libero nunc gravida metus. 
+            Proin non feugiat felis. Proin ut ultrices ex. Morbi aliquet lacinia elit at bibendum. 
+            Nunc facilisis, neque a finibus dignissim, turpis felis vulputate diam, 
+            a tristique tellus nibh nec nulla. Suspendisse eget augue non turpis 
+            dignissim euismod eget eget odio. Donec sit amet nibh cursus, efficitur 
+            nibh in, sodales arcu. Pellentesque pulvinar consequat lacus ac porttitor.
+        &lt;/div&gt;
+        @using (Html.BeginForm("Lyubomir", "Home", FormMethod.Post))
+        {
+            &lt;div class="row"&gt;
+                &amp;nbsp;
+            &lt;/div&gt;
+            &lt;div class="row"&gt;
+                &lt;div class="col-md-4 col-md-offset-4"&gt;
+                    &lt;button type="button" class="btn btn-default" 
+                    data-dismiss="modal"&gt;Cancel&lt;/button&gt;
+                    &lt;button type="submit" id="approve-btn" 
+                    class="btn btn-danger"&gt;Save&lt;/button&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        }
+    &lt;/div&gt;
+    &lt;script type="text/javascript"&gt;
+        $(function () {
+            $('#approve-btn').click(function () {
+                $('#modal-container').modal('hide');
+            });
+        });
+    &lt;/script&gt;
+
+//    The last step is to create an action link with specific attributes.		/Views/Home/Index.cshtml
+
+    @Html.ActionLink("Lyubomir ", "ViewLyubomir", "Home", 
+    null, new { @class = "modal-link btn btn-success" })
+
+/*
+How Does It Work?
+
+On point 7 when the user clicks on the link, based on the attribute - 
+	modal-link we have an attached click event for all the links with that attribute - 
+point 3. On point 3, the default action of a link will be prevented and the content to where this link points 
+	to will be injected into the model-container div 
+point 1. When the user posts in the modal dialog - 
+point 6, the data will be processed in the corresponding controller - point 5.
+
+When you open the project - Home view has a link button - Lyubomir. Click on that and you will see the magic happening.</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>MVC_Modal_Forms</Category>
+        <Language>C#</Language>
+        <Public>false</Public>
+        <Name>02_TwitterBootstrap_Validation_ModalPartial__/Views/People/_Create.cshtml</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>MVC_Modal_Forms</Category>
+          <Language>C#</Language>
+          <Public>false</Public>
+          <Name>02_TwitterBootstrap_Validation_ModalPartial__/Views/People/_Create.cshtml</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>//02_TwitterBootstrap_Validation_ModalPartial__/Views/People/_Create.cshtml
+
+@model BootstrapModalTest.Models.Person
+
+&lt;div class="modal-header"&gt;
+    &lt;button type="button" class="close" data-dismiss="modal" aria-hidden="true"&gt;&amp;times;&lt;/button&gt;
+    &lt;h4 class="modal-title" id="myModalLabel"&gt;Add new Person&lt;/h4&gt;
+&lt;/div&gt;
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    &lt;div class="modal-body"&gt;
+
+        &lt;div class="form-horizontal"&gt;
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            &lt;div class="form-group"&gt;
+                @Html.LabelFor(model =&gt; model.FirstName, htmlAttributes: new { @class = "control-label col-md-3" })
+                &lt;div class="col-md-9"&gt;
+                    @Html.EditorFor(model =&gt; model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model =&gt; model.FirstName, "", new { @class = "text-danger" })
+                &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;div class="form-group"&gt;
+                @Html.LabelFor(model =&gt; model.LastName, htmlAttributes: new { @class = "control-label col-md-3" })
+                &lt;div class="col-md-9"&gt;
+                    @Html.EditorFor(model =&gt; model.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model =&gt; model.LastName, "", new { @class = "text-danger" })
+                &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;div class="form-group"&gt;
+                @Html.LabelFor(model =&gt; model.Email, htmlAttributes: new { @class = "control-label col-md-3" })
+                &lt;div class="col-md-9"&gt;
+                    @Html.EditorFor(model =&gt; model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model =&gt; model.Email, "", new { @class = "text-danger" })
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+
+    &lt;/div&gt;
+
+    &lt;div class="modal-footer"&gt;
+        &lt;button class="btn" data-dismiss="modal"&gt;Cancel&lt;/button&gt;
+        &lt;input class="btn btn-primary" type="submit" value="Save" /&gt;
+    &lt;/div&gt;
+}
+
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>MVC_Modal_Forms</Category>
+        <Language>C#</Language>
+        <Public>false</Public>
+        <Name>02_TwitterBootstrap_Validation_ModalPartial__/Views/People/_Delete.cshtml</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>MVC_Modal_Forms</Category>
+          <Language>C#</Language>
+          <Public>false</Public>
+          <Name>02_TwitterBootstrap_Validation_ModalPartial__/Views/People/_Delete.cshtml</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>//02_TwitterBootstrap_Validation_ModalPartial__/Views/People/_Delete.cshtml
+
+@model BootstrapModalTest.Models.Person
+
+&lt;div class="modal-header"&gt;
+    &lt;button type="button" class="close" data-dismiss="modal" aria-hidden="true"&gt;&amp;times;&lt;/button&gt;
+    &lt;h4 class="modal-title" id="myModalLabel"&gt;Are you sure you want to delete this Person?&lt;/h4&gt;
+&lt;/div&gt;
+
+&lt;div class="modal-body"&gt;
+
+    &lt;dl class="dl-horizontal"&gt;
+        &lt;dt&gt;
+            @Html.DisplayNameFor(model =&gt; model.FirstName)
+        &lt;/dt&gt;
+
+        &lt;dd&gt;
+            @Html.DisplayFor(model =&gt; model.FirstName)
+        &lt;/dd&gt;
+
+        &lt;dt&gt;
+            @Html.DisplayNameFor(model =&gt; model.LastName)
+        &lt;/dt&gt;
+
+        &lt;dd&gt;
+            @Html.DisplayFor(model =&gt; model.LastName)
+        &lt;/dd&gt;
+
+        &lt;dt&gt;
+            @Html.DisplayNameFor(model =&gt; model.Email)
+        &lt;/dt&gt;
+
+        &lt;dd&gt;
+            @Html.DisplayFor(model =&gt; model.Email)
+        &lt;/dd&gt;
+    &lt;/dl&gt;
+
+
+&lt;/div&gt;
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    &lt;div class="modal-footer"&gt;
+        &lt;button class="btn" data-dismiss="modal"&gt;No&lt;/button&gt;
+        &lt;input class="btn btn-danger" type="submit" value="Yes" /&gt;
+    &lt;/div&gt;
+}
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>MVC_Modal_Forms</Category>
+        <Language>C#</Language>
+        <Public>false</Public>
+        <Name>02_TwitterBootstrap_Validation_ModalPartial__/Views/People/_Detals.cchtml</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>MVC_Modal_Forms</Category>
+          <Language>C#</Language>
+          <Public>false</Public>
+          <Name>02_TwitterBootstrap_Validation_ModalPartial__/Views/People/_Detals.cchtml</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>//02_TwitterBootstrap_Validation_ModalPartial__/Views/People/_Detals.cshtml
+
+@model BootstrapModalTest.Models.Person
+
+&lt;div class="modal-header"&gt;
+    &lt;button type="button" class="close" data-dismiss="modal" aria-hidden="true"&gt;&amp;times;&lt;/button&gt;
+    &lt;h4 class="modal-title" id="myModalLabel"&gt;Person Details&lt;/h4&gt;
+&lt;/div&gt;
+
+&lt;div class="modal-body"&gt;
+    
+    &lt;dl class="dl-horizontal"&gt;
+        &lt;dt&gt;
+            @Html.DisplayNameFor(model =&gt; model.FirstName)
+        &lt;/dt&gt;
+
+        &lt;dd&gt;
+            @Html.DisplayFor(model =&gt; model.FirstName)
+        &lt;/dd&gt;
+
+        &lt;dt&gt;
+            @Html.DisplayNameFor(model =&gt; model.LastName)
+        &lt;/dt&gt;
+
+        &lt;dd&gt;
+            @Html.DisplayFor(model =&gt; model.LastName)
+        &lt;/dd&gt;
+
+        &lt;dt&gt;
+            @Html.DisplayNameFor(model =&gt; model.Email)
+        &lt;/dt&gt;
+
+        &lt;dd&gt;
+            @Html.DisplayFor(model =&gt; model.Email)
+        &lt;/dd&gt;
+
+    &lt;/dl&gt;
+&lt;/div&gt;
+&lt;div class="modal-footer"&gt;
+    &lt;button class="btn" data-dismiss="modal"&gt;Ok&lt;/button&gt;
+&lt;/div&gt;
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>MVC_Modal_Forms</Category>
+        <Language>C#</Language>
+        <Public>false</Public>
+        <Name>02_TwitterBootstrap_Validation_ModalPartial__/Views/People/_Edit.cshtml</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>MVC_Modal_Forms</Category>
+          <Language>C#</Language>
+          <Public>false</Public>
+          <Name>02_TwitterBootstrap_Validation_ModalPartial__/Views/People/_Edit.cshtml</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>//02_TwitterBootstrap_Validation_ModalPartial__/Views/People/_Edit.cshtml
+
+@model BootstrapModalTest.Models.Person
+
+&lt;div class="modal-header"&gt;
+    &lt;button type="button" class="close" data-dismiss="modal" aria-hidden="true"&gt;&amp;times;&lt;/button&gt;
+    &lt;h4 class="modal-title" id="myModalLabel"&gt;Edit Person&lt;/h4&gt;
+&lt;/div&gt;
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    &lt;div class="modal-body"&gt;
+        &lt;div class="form-horizontal"&gt;
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model =&gt; model.Id)
+
+            &lt;div class="form-group"&gt;
+                @Html.LabelFor(model =&gt; model.FirstName, htmlAttributes: new { @class = "control-label col-md-3" })
+                &lt;div class="col-md-9"&gt;
+                    @Html.EditorFor(model =&gt; model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model =&gt; model.FirstName, "", new { @class = "text-danger" })
+                &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;div class="form-group"&gt;
+                @Html.LabelFor(model =&gt; model.LastName, htmlAttributes: new { @class = "control-label col-md-3" })
+                &lt;div class="col-md-9"&gt;
+                    @Html.EditorFor(model =&gt; model.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model =&gt; model.LastName, "", new { @class = "text-danger" })
+                &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;div class="form-group"&gt;
+                @Html.LabelFor(model =&gt; model.Email, htmlAttributes: new { @class = "control-label col-md-3" })
+                &lt;div class="col-md-9"&gt;
+                    @Html.EditorFor(model =&gt; model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model =&gt; model.Email, "", new { @class = "text-danger" })
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="modal-footer"&gt;
+        &lt;button class="btn" data-dismiss="modal"&gt;Cancel&lt;/button&gt;
+        &lt;input class="btn btn-primary" type="submit" value="Save" /&gt;
+    &lt;/div&gt;
+}
+
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>MVC_Modal_Forms</Category>
+        <Language>C#</Language>
+        <Public>false</Public>
+        <Name>02_TwitterBootstrap_Validation_ModalPartial__about</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>MVC_Modal_Forms</Category>
+          <Language>C#</Language>
+          <Public>false</Public>
+          <Name>02_TwitterBootstrap_Validation_ModalPartial__about</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>02_TwitterBootstrap_Validation_ModalPartial__about
+
+http://stackoverflow.com/questions/8093633/whats-the-best-way-to-call-a-modal-dialog-in-asp-net-mvc-using-twitter-bootstra/12843281#12843281
+
+NOTE: The code from the sample works but only loosly follows the Article
+
+================NOTES from comments============================
+/*if you have more than 1 form (I had 2 simply for testing the concept), 
+	then there is a change the submit would never trigger, 
+	the answer is to put it at the Document root level like so: */
+	
+	$(document).on('submit', '#yourFormId', function (e){ e.preventDefault(); } 
+	
+	/*and voila, it finally triggered!!! 
+	Gosh, so much time spent for 1 little trick.. 
+	oh I prefer to use the e.preventDefault(); as it is more explicit...
+*/
+						===============
+/* Thanks @zjerry the solution is great but jQuery validation does not work, 
+	in order to fix you need to change the function bindForm as follow:	*/
+
+function bindForm(dialog) {
+        $.validator.unobtrusive.parse('form');
+        $('form', dialog).submit(function () {
+            $.ajax({
+                url: this.action,
+                type: this.method,
+                data: $(this).serialize(),
+                success: function (result) {
+                    if (result.success) {
+                        $('#dialogDiv').modal('hide');
+                        // Refresh:
+                        // location.reload();
+                    } else {
+                        $('#dialogContent').html(result);
+                        bindForm();
+                    }
+                }
+            });
+            return false;
+        });
+    }
+
+//Notice the first line of the function, because the form is loaded after jQuery validation was initialized.
+
+==ARTICLE ===============================================================
+	
+/*
+Here goes my little tutorial which demonstrates Twitter's Bootstrap (2.x) modal dialog 
+	that works with forms and partials in ASP.Net MVC 4.
+
+To download similar project but targeting MVC 5.1 and Bootstrap 3.1.1 please visit this site: http://www.fabro.pl/Download.aspx?S=Bootstrap+modal+MVC+5
+
+Start with an empty MVC 4 Internet template.
+
+Add reference to Bootstrap using NuGet
+
+In the App_Start/BundleConfig.cs add the following lines:	*/
+
+bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include("~/Scripts/bootstrap.js"));
+bundles.Add(new StyleBundle("~/Content/bootstrap").Include(
+                    "~/Content/bootstrap.css",
+                    "~/Content/bootstrap-responsive.css"));
+
+//In the Views/Shared/_Layout.cshtml modify the @styles.Render line so it will look like:
+
+@Styles.Render("~/Content/css", "~/Content/themes/base/css",  "~/Content/bootstrap")
+
+//and the @Scripts.Render line:
+
+@Scripts.Render("~/bundles/jquery", "~/bundles/jqueryui",  "~/bundles/bootstrap")
+
+//NOTE he did not actually do that, see the attached snippet
+
+/*So far we have Bootstrap prepared to work with MVC 4 
+	so let's add a simple model class MyViewModel.cs to the 
+	/Models folder:
+*/
+using System.ComponentModel.DataAnnotations;
+
+namespace MvcApplication1.Models
+{
+    public class MyViewModel
+    {
+        public string Foo { get; set; }
+
+        [Required(ErrorMessage = "The bar is absolutely required")]
+        public string Bar { get; set; }
+    }
+}
+
+//In the HomeController Add the following lines:
+
+using MvcApplication1.Models;
+//...
+
+    public ActionResult Create()
+    {
+        return PartialView("_Create");
+    }
+
+    [HttpPost]
+    public ActionResult Create(MyViewModel model)
+    {
+        if (ModelState.IsValid)
+        {
+            try
+            {
+                SaveChanges(model);
+                return Json(new { success = true });
+            }
+            catch (Exception e)
+            {
+                ModelState.AddModelError("", e.Message);
+            }
+
+        }
+        //Something bad happened
+        return PartialView("_Create", model);
+    }
+
+
+    static void SaveChanges(MyViewModel model)
+    {
+        // Uncommment next line to demonstrate errors in modal
+        //throw new Exception("Error test");
+    }
+
+//Create new Partial View in the Views/Home folder and name it _Create.cshtml:
+
+@using MvcApplication1.Models
+@model MyViewModel
+
+&lt;div class="modal-header"&gt;
+    &lt;button type="button" class="close" data-dismiss="modal" aria-hidden="true"&gt;×&lt;/button&gt;
+    &lt;h3 id="myModalLabel"&gt;Create Foo Bar&lt;/h3&gt;
+&lt;/div&gt;
+
+@using (Html.BeginForm("Create", "Home", FormMethod.Post, new { @class = "modal-form" }))
+{
+@Html.ValidationSummary()
+
+&lt;div  class="modal-body"&gt;
+    &lt;div&gt;
+        @Html.LabelFor(x =&gt; x.Foo)
+        @Html.EditorFor(x =&gt; x.Foo)
+        @Html.ValidationMessageFor(x =&gt; x.Foo)
+    &lt;/div&gt;
+    &lt;div&gt;
+        @Html.LabelFor(x =&gt; x.Bar)
+        @Html.EditorFor(x =&gt; x.Bar)
+        @Html.ValidationMessageFor(x =&gt; x.Bar)
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class="modal-footer"&gt;
+    &lt;button class="btn" data-dismiss="modal" aria-hidden="true"&gt;Undo&lt;/button&gt;
+    &lt;button class="btn btn-primary" type="submit"&gt;Save&lt;/button&gt;
+&lt;/div&gt;
+
+}
+
+//In the Home/Index.cshtml remove the default content from the template and replace it with following:
+
+@{
+    ViewBag.Title = "Home Page";
+}
+
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+
+@Html.ActionLink("Create", "Create", null, null, new { id = "btnCreate", @class = "btn btn-small btn-info" })
+
+&lt;div id='dialogDiv' class='modal hide fade in'&gt;
+    &lt;div id='dialogContent'&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+@section Scripts {
+@Scripts.Render("~/bundles/jqueryval")
+
+&lt;script type="text/javascript"&gt;
+    $(function () {
+
+        //Optional: turn the chache off
+        $.ajaxSetup({ cache: false });
+
+        $('#btnCreate').click(function () {
+            $('#dialogContent').load(this.href, function () {
+                $('#dialogDiv').modal({
+                    backdrop: 'static',
+                    keyboard: true
+                }, 'show');
+                bindForm(this);
+            });
+            return false;
+        });
+    });
+
+    function bindForm(dialog) {
+        $('form', dialog).submit(function () {
+            $.ajax({
+                url: this.action,
+                type: this.method,
+                data: $(this).serialize(),
+                success: function (result) {
+                    if (result.success) {
+                        $('#dialogDiv').modal('hide');
+                        // Refresh:
+                        // location.reload();
+                    } else {
+                        $('#dialogContent').html(result);
+                        bindForm();
+                    }
+                }
+            });
+            return false;
+        });
+    }
+
+&lt;/script&gt;
+}
+/*
+If you run your application, 
+	a nice Bootstrap modal will appear after clicking the Create button on the Home page.
+
+Try to uncomment the SaveChanges() //throw line in HomeController.cs 
+	to prove that your controller handled errors will appear correctly in the dialog.
+
+I hope that my sample clarifies a bit whole process of incorporating Bootstrap 
+	and creating modals in the MVC application.
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>MVC_Single_Page_CRUD</Category>
+        <Language>C#</Language>
+        <Public>false</Public>
+        <Name>00_EF_workingVersion___/Views/Home/Index.cshtml</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>MVC_Single_Page_CRUD</Category>
+          <Language>C#</Language>
+          <Public>false</Public>
+          <Name>00_EF_workingVersion___/Views/Home/Index.cshtml</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>@model PTCViewModel
+
+@{
+  ViewBag.Title = "Paul's Training Company";
+}
+
+@using (Html.BeginForm()) {
+  &lt;!-- ** BEGIN HIDDEN FIELDS AREA ** --&gt;
+  @Html.HiddenFor(m =&gt; m.EventCommand)
+  @Html.HiddenFor(m =&gt; m.EventArgument)
+  @Html.HiddenFor(m =&gt; m.PageMode)
+  @Html.HiddenFor(m =&gt; m.Entity.ProductId)
+  &lt;!-- ** END HIDDEN FIELDS AREA ** --&gt;
+
+  if (!Model.IsValid)
+	{
+    &lt;!-- ** BEGIN MESSAGE AREA ** --&gt;
+    &lt;div class="row"&gt;
+      &lt;div class="col-xs-12"&gt;
+        &lt;div class="alert alert-danger
+                    alert-dismissable"
+             role="alert"&gt;
+          &lt;button type="button" class="close"
+                  data-dismiss="alert"&gt;
+            &lt;span aria-hidden="true"&gt;
+              &amp;times;
+            &lt;/span&gt;
+            &lt;span class="sr-only"&gt;Close&lt;/span&gt;
+          &lt;/button&gt;
+          @Html.ValidationSummary(false)
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;!-- ** END MESSAGE AREA ** --&gt;
+  }
+
+  if (Model.IsSearchAreaVisible) {
+    &lt;!-- ** BEGIN SEARCH AREA ** --&gt;
+    &lt;div class="panel panel-primary"&gt;
+      &lt;div class="panel-heading"&gt;
+        &lt;h1 class="panel-title"&gt;Search for Products&lt;/h1&gt;
+      &lt;/div&gt;
+      &lt;div class="panel-body"&gt;
+        &lt;div class="form-group"&gt;
+          @Html.LabelFor(m =&gt; m.SearchEntity.CategoryId, 
+                         "Select a Product Category")
+          @Html.DropDownListFor(m =&gt; m.SearchEntity.CategoryId,
+                                new SelectList(Model.SearchCategories,
+                                                "CategoryId", 
+                                                "CategoryName"),
+                               new { @class = "form-control" })
+        &lt;/div&gt;        
+        &lt;div class="form-group"&gt;
+          @Html.LabelFor(m =&gt; m.SearchEntity.ProductName, "Product Name")
+          @Html.TextBoxFor(m =&gt; m.SearchEntity.ProductName, new { @class = "form-control" })
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class="panel-footer"&gt;
+        &lt;button formnovalidate="formnovalidate"
+                class="btn btn-sm btn-primary"
+                data-pdsa-action="search"&gt;
+          &lt;i class="glyphicon glyphicon-search"&gt;&lt;/i&gt;
+          &amp;nbsp;Search
+        &lt;/button&gt;
+        &lt;button formnovalidate="formnovalidate"
+                class="btn btn-sm btn-primary"
+                data-pdsa-action="resetsearch"&gt;
+          &lt;i class="glyphicon glyphicon-share-alt"&gt;&lt;/i&gt;
+          &amp;nbsp;Reset
+        &lt;/button&gt;
+        &lt;button formnovalidate="formnovalidate"
+                class="btn btn-sm btn-success"
+                data-pdsa-action="add"&gt;
+          &lt;i class="glyphicon glyphicon-plus"&gt;&lt;/i&gt;
+          &amp;nbsp;Add
+        &lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+   &lt;!-- ** END SEARCH AREA ** --&gt;
+  }
+
+  if (Model.IsDetailAreaVisible) {
+    &lt;!-- ** BEGIN DETAIL AREA ** --&gt;
+    &lt;div class="panel panel-primary"&gt;
+      &lt;div class="panel-heading"&gt;
+        &lt;h1 class="panel-title"&gt;
+          Product Information
+        &lt;/h1&gt;
+      &lt;/div&gt;
+      &lt;div class="panel-body"&gt;
+        &lt;!-- ** BEGIN INPUT AREA --&gt;
+        &lt;div class="form-group"&gt;
+          @Html.LabelFor(m =&gt; m.Entity.Category.CategoryId, "Product Category")
+          @Html.DropDownListFor(m =&gt; m.Entity.Category.CategoryId, new SelectList(Model.Categories, "CategoryId", "CategoryName"), new { @class = "form-control" })
+        &lt;/div&gt;
+        &lt;div class="form-group"&gt;
+          @Html.LabelFor(m =&gt; m.Entity.ProductName, "Product Name")
+          @Html.TextBoxFor(m =&gt; m.Entity.ProductName, new { @class = "form-control" })          
+        &lt;/div&gt;
+        &lt;div class="form-group"&gt;
+          @Html.LabelFor(m =&gt; m.Entity.IntroductionDate, "Introduction Date")
+          @Html.TextBoxFor(m =&gt; m.Entity.IntroductionDate, new { @class = "form-control" })
+        &lt;/div&gt;
+        &lt;div class="form-group"&gt;
+          @Html.LabelFor(m =&gt; m.Entity.Url, "Url")
+          @Html.TextBoxFor(m =&gt; m.Entity.Url, new { @class = "form-control" })
+        &lt;/div&gt;
+        &lt;div class="form-group"&gt;
+          @Html.LabelFor(m =&gt; m.Entity.Price, "Price")
+          @Html.TextBoxFor(m =&gt; m.Entity.Price, new { @class = "form-control" })
+        &lt;/div&gt;
+        &lt;!-- ** END INPUT AREA --&gt;
+      &lt;/div&gt;
+      &lt;div class="panel-footer"&gt;
+        &lt;div class="row"&gt;
+          &lt;div class="col-sm-12"&gt;
+            &lt;button class="btn btn-sm btn-primary"
+                    data-pdsa-action="save"&gt;
+              &lt;i class="glyphicon glyphicon-floppy-disk"&gt;&lt;/i&gt;
+              &amp;nbsp;Save
+            &lt;/button&gt;
+            &lt;button class="btn btn-sm btn-primary"
+                    formnovalidate="formnovalidate"
+                    data-pdsa-action="cancel"&gt;
+              &lt;i class="glyphicon glyphicon-remove-circle"&gt;&lt;/i&gt;
+              &amp;nbsp;Cancel
+            &lt;/button&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;!-- ** END DETAIL AREA ** --&gt;
+  }
+
+  if (Model.IsListAreaVisible) {
+    &lt;!-- ** BEGIN LIST AREA ** --&gt;
+    &lt;div class="table-responsive"&gt;
+      &lt;table id="productTable"
+             class="table table-condensed table-bordered table-striped table-hover"&gt;
+        &lt;thead&gt;
+          &lt;tr&gt;
+            &lt;th class="pdsa-action-button-column"&gt;
+              Edit
+            &lt;/th&gt;
+            &lt;th&gt;Product Name&lt;/th&gt;
+            &lt;th&gt;Introduction Date&lt;/th&gt;
+            &lt;th&gt;Url&lt;/th&gt;
+            &lt;th&gt;Price&lt;/th&gt;
+            &lt;th class="pdsa-action-button-column"&gt;
+              Delete
+            &lt;/th&gt;
+          &lt;/tr&gt;
+        &lt;/thead&gt;
+
+        &lt;tbody&gt;
+          @foreach (var item in Model.Products) {
+            &lt;tr&gt;
+              &lt;td class="pdsa-action-button-column"&gt;
+                &lt;a href="#" data-pdsa-action="edit"
+                   data-pdsa-val="@item.ProductId"
+                   class="btn btn-default btn-sm"&gt;
+                  &lt;i class="glyphicon glyphicon-edit"&gt;&lt;/i&gt;
+                &lt;/a&gt;
+              &lt;/td&gt;
+              &lt;td&gt;@item.ProductName&lt;/td&gt;
+              &lt;td&gt;@item.IntroductionDate&lt;/td&gt;
+              &lt;td&gt;@item.Url&lt;/td&gt;
+              &lt;td&gt;@item.Price.Value.ToString("c")&lt;/td&gt;
+              &lt;td class="pdsa-action-button-column"&gt;
+                &lt;a href="#" data-pdsa-action="delete"
+                   data-pdsa-val="@item.ProductId"
+                   onclick="return confirm('Delete this Product?');"
+                   class="btn btn-default btn-sm"&gt;
+                  &lt;i class="glyphicon glyphicon-trash"&gt;&lt;/i&gt;
+                &lt;/a&gt;
+              &lt;/td&gt;
+
+            &lt;/tr&gt;
+          }
+        &lt;/tbody&gt;
+      &lt;/table&gt;
+    &lt;/div&gt;
+    &lt;!-- ** END LIST AREA ** --&gt;
+  }
+}
+
+@section scripts {
+  &lt;script&gt;
+    $(document).ready(function () {
+      // Hook events on buttons and anchors
+      buildClickEvents();
+    });
+
+    // Hook events on buttons and anchors
+    function buildClickEvents() {
+      $("[data-pdsa-action]").on("click", function (e) {
+        e.preventDefault();
+
+        $("#EventCommand").val(
+          $(this).data("pdsa-action"));
+
+        $("#EventArgument").val(
+          $(this).attr("data-pdsa-val"));
+
+        $("form").submit();
+      });
+    }
+  &lt;/script&gt;
+}</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>MVC_Single_Page_CRUD</Category>
+        <Language>C#</Language>
+        <Public>false</Public>
+        <Name>02_Add_and_Validate___PTC/Views/Home/Index.cshtml</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>MVC_Single_Page_CRUD</Category>
+          <Language>C#</Language>
+          <Public>false</Public>
+          <Name>02_Add_and_Validate___PTC/Views/Home/Index.cshtml</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>@model PTCData.TrainingProductViewModel
+
+@{
+  ViewBag.Title = "Paul's Training Company";
+}
+
+@using (Html.BeginForm())
+{
+  &lt;!-- BEGIN HIDDEN FIELDS AREA --&gt;
+  
+  @Html.HiddenFor(m =&gt; m.EventCommand)
+  @Html.HiddenFor(m =&gt; m.Mode)
+  
+  &lt;!-- END HIDDEN FIELDS AREA --&gt;
+
+
+&lt;!-- ** BEGIN IsSearchAreaVisible ** --&gt;
+  if (Model.IsSearchAreaVisible)
+  {
+  &lt;!-- ** BEGIN SEARCH AREA ** --&gt;
+    &lt;div class="panel panel-primary"&gt;
+      &lt;div class="panel-heading"&gt;
+        &lt;h1 class="panel-title"&gt;Search for Products&lt;/h1&gt;
+      &lt;/div&gt;
+      &lt;div class="panel-body"&gt;
+        &lt;div class="form-group"&gt;
+          @Html.LabelFor(m =&gt; m.SearchEntity.ProductName, "Product Name")
+          @Html.TextBoxFor(m =&gt; m.SearchEntity.ProductName, new { @class = "form-control" })
+        &lt;/div&gt;
+      &lt;/div&gt;
+      
+      &lt;div class="panel-footer"&gt;
+      
+        &lt;button id="btnSearch"
+                class="btn btn-sm btn-primary"
+                data-pdsa-action="search"&gt;
+          &lt;i class="glyphicon glyphicon-search"&gt;&lt;/i&gt;
+          &amp;nbsp;Search
+        &lt;/button&gt;
+        
+        &lt;button id="btnReset"
+                class="btn btn-sm btn-primary"
+                data-pdsa-action="resetsearch"&gt;
+          &lt;i class="glyphicon glyphicon-share-alt"&gt;&lt;/i&gt;
+          &amp;nbsp;Reset
+        &lt;/button&gt;
+        
+        &lt;button id="btnAdd"
+                class="btn btn-sm btn-success"
+                data-pdsa-action="add"&gt;
+          &lt;i class="glyphicon glyphicon-plus"&gt;&lt;/i&gt;
+          &amp;nbsp;Add
+        &lt;/button&gt;
+        
+      &lt;/div&gt;
+      
+    &lt;/div&gt;
+   &lt;!-- ** END SEARCH AREA ** --&gt;
+  }
+&lt;!-- ** END IsSearchAreaVisible ** --&gt;
+
+
+&lt;!-- ** BEGIN IsDetailAreaVisible --&gt;
+  if (Model.IsDetailAreaVisible)
+  {
+  
+    &lt;div class="panel panel-primary"&gt;
+      &lt;div class="panel-heading"&gt;
+        &lt;h1 class="panel-title"&gt;
+          Product Information
+        &lt;/h1&gt;
+      &lt;/div&gt;
+      &lt;div class="panel-body"&gt;
+      
+&lt;!-- ** BEGIN Validation/Error MESSAGE AREA --&gt;
+        &lt;div class="row"&gt;
+          &lt;div class="col-xs-12"&gt;
+            @if (!Model.IsValid)
+            {
+              &lt;div class="alert alert-danger
+                    alert-dismissable"
+                   role="alert"&gt;
+                   
+                &lt;button type="button" class="close"
+                        data-dismiss="alert"&gt;
+                  &lt;span aria-hidden="true"&gt;
+                    &amp;times;						//&lt;=== gives an 'x' symbol
+                  &lt;/span&gt;
+                  &lt;span class="sr-only"&gt;Close&lt;/span&gt;   //screen reader
+                &lt;/button&gt;
+                
+                @Html.ValidationSummary(false)
+              &lt;/div&gt;
+            }
+          &lt;/div&gt;
+        &lt;/div&gt;
+&lt;!-- ** END Validation/Error MESSAGE AREA --&gt;
+
+&lt;!-- ** BEGIN DETAIL DATA INPUT AREA --&gt;
+
+        &lt;div class="form-group"&gt;
+          @Html.LabelFor(m =&gt; m.Entity.ProductName,
+                 "Product Name")
+          @Html.TextBoxFor(m =&gt; m.Entity.ProductName,
+           new { @class = "form-control" })
+        &lt;/div&gt;
+        
+        &lt;div class="form-group"&gt;
+          @Html.LabelFor(m =&gt;
+		       m.Entity.IntroductionDate,
+		       "Introduction Date")
+		  @Html.TextBoxFor(m =&gt;
+		       m.Entity.IntroductionDate,
+		       new { @class = "form-control" })
+        &lt;/div&gt;
+        
+        &lt;div class="form-group"&gt;
+          @Html.LabelFor(m =&gt; m.Entity.Url, "Url")
+          @Html.TextBoxFor(m =&gt; m.Entity.Url,
+       new { @class = "form-control" })
+        &lt;/div&gt;
+        
+        &lt;div class="form-group"&gt;
+          @Html.LabelFor(m =&gt; m.Entity.Price, "Price")
+          @Html.TextBoxFor(m =&gt; m.Entity.Price,
+       new { @class = "form-control" })
+        &lt;/div&gt;
+        
+&lt;!-- ** END DETAIL DATA INPUT AREA --&gt;
+
+      &lt;/div&gt;
+      
+&lt;!-- ** START FOOTER AREA --&gt;      
+      &lt;div class="panel-footer"&gt;
+        &lt;div class="row"&gt;
+          &lt;div class="col-sm-12"&gt;
+          
+            &lt;button id="btnSave"
+                    class="btn btn-sm btn-primary"
+                    data-pdsa-action="save"&gt;
+              &lt;i class="glyphicon
+           glyphicon-floppy-disk"&gt;&lt;/i&gt;
+              &amp;nbsp;Save
+            &lt;/button&gt;
+            
+            &lt;button id="btnCancel"
+                    class="btn btn-sm btn-primary"
+                    formnovalidate="formnovalidate"   //&lt;=== Don't need to validate when canceling
+                    data-pdsa-action="cancel"&gt;
+              &lt;i class="glyphicon
+           glyphicon-remove-circle"&gt;&lt;/i&gt;
+              &amp;nbsp;Cancel
+            &lt;/button&gt;
+            
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+&lt;!-- ** END FOOTER AREA --&gt;   
+    
+    &lt;/div&gt;
+  }
+&lt;!-- ** END IsDetailAreaVisible --&gt;  
+  
+&lt;!-- ** BEGIN IsListAreaVisible --&gt;
+  if (Model.IsListAreaVisible)
+  {
+      &lt;!-- BEGIN GRID AREA --&gt;
+    &lt;div class="table-responsive"&gt;
+      &lt;table class="table table-condensed table-bordered table-striped table-hover"&gt;
+        &lt;thead&gt;
+          &lt;tr&gt;
+            &lt;th&gt;Product Name&lt;/th&gt;
+            &lt;th&gt;Introduction Date&lt;/th&gt;
+            &lt;th&gt;Url&lt;/th&gt;
+            &lt;th&gt;Price&lt;/th&gt;
+          &lt;/tr&gt;
+        &lt;/thead&gt;
+        &lt;tbody&gt;
+          @foreach (var item in Model.Products)
+          {
+            &lt;tr&gt;
+              &lt;td&gt;@item.ProductName&lt;/td&gt;
+              &lt;td&gt;@item.IntroductionDate&lt;/td&gt;
+              &lt;td&gt;@item.Url&lt;/td&gt;
+              &lt;td&gt;@item.Price.ToString("c")&lt;/td&gt;
+            &lt;/tr&gt;
+          }
+        &lt;/tbody&gt;
+      &lt;/table&gt;
+    &lt;/div&gt;
+      &lt;!-- END GRID AREA --&gt;
+  }
+}
+&lt;!-- ** END IsListAreaVisible --&gt;
+
+
+@section scripts {
+
+  &lt;script&gt;
+    $(document).ready(function () {
+      $("[data-pdsa-action]").on("click", function (e) {
+        e.preventDefault();
+
+        $("#EventCommand").val(
+          $(this).data("pdsa-action"));
+
+        $("form").submit();
+      });
+    });
+  &lt;/script&gt;
+}
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>MVC_Single_Page_CRUD</Category>
+        <Language>C#</Language>
+        <Public>false</Public>
+        <Name>02_Add_and_Validate__about</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>MVC_Single_Page_CRUD</Category>
+          <Language>C#</Language>
+          <Public>false</Public>
+          <Name>02_Add_and_Validate__about</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>02_Add_and_Validate__about
+
+//Path of data from Source to View
+----------------------------------------------------------
+View &lt;= Controller &lt;= ViewModel &lt;= Manager(in 2nd project)
+
+//Data for this example comes from method: "CreateMockData" in TrainingProductManager class
+
+// The table in the view model uses the List&lt;record&gt; (i.e. 'Products', which is a property of the ViewModel)
+//		- UI has attributes (e.g. List, Search, Add, Edit ) which bind to the ViewModel's public EventCommand property
+// 		The View gets the VM from the Controller (which is passed in as a ViewModel object)
+//			The Controller gets the VM from the ViewModel's HandleRequest method 
+//			- The Controller either gets a 'New' VM (unfiltered), or on Postback it gets a filtered VM list of records		
+//				The View Model gets it's data from the Manager (the Get() of the Manager  returns a List&lt;record&gt;) 
+//				- The VM's public EventCommand property is used in a SWITCH statement (in HandleRequest) 		
+
+
+//Data for this example comes from method: "CreateMockData" in TrainingProductManager class
+
+//Module:
+//============
+//Turn areas of the page visible and invisible, using properties in the ViewModel
+//Add input fields on page
+//Validate data using data Annotations
+//Add additional business rules in the Manager class
+//Display Error messages in a Bootstrap alert areas
+
+//- Add new panel with "save" and "Cancel" buttons
+//- Add product detail input area
+
+//NOTE: the 'TrainingProductViewModel' is in the other project(i.e. in PTCData project)
+
+//Step 1
+//==============
+//Create an "Add" button
+//Add properties to view model to control visibility
+
+//- Search Panel (in View)
+//-----------------
+  if (Model.IsSearchAreaVisible)
+  {
+  &lt;!-- ** BEGIN SEARCH AREA ** --&gt;
+    &lt;div class="panel panel-primary"&gt;
+	....
+    &lt;/div&gt;
+   &lt;!-- ** END SEARCH AREA ** --&gt;
+  }
+
+//- HTML table
+//--------------
+
+  if (Model.IsListAreaVisible)
+  {
+      &lt;!-- BEGIN GRID AREA --&gt;
+    &lt;div class="table-responsive"&gt;
+	....
+    &lt;/div&gt;
+      &lt;!-- END GRID AREA --&gt;
+  }
+
+//- Detail input area
+//--------------------
+
+  if (Model.IsDetailAreaVisible)
+  {
+    &lt;div class="panel panel-primary"&gt;
+	...
+    &lt;/div&gt;
+  }
+
+ //   ---------------------------------------------------------------------
+ // - Modify HandleRequest() Method in 'TrainingProductViewModel'
+	//- add case (in the SWITCH statement) for when "Add" button is clicked
+ // - Set visibilility properties
+	//- Detail area is visible
+	//- List area is invisible
+	//- Search area is invisible
+ // ---------------------------------------------------------------------
+    private void AddMode()
+{
+    IsDetailAreaVisible = true;
+    IsListAreaVisible = false;
+    IsSearchAreaVisible = false;
+
+    Mode = "Add";
+}
+
+private void Add()
+{
+    IsValid = true;
+
+    // Initialize Entity Object
+    Entity = new TrainingProduct();
+    Entity.IntroductionDate = DateTime.Now;
+    Entity.Url = string.Empty;
+    Entity.Price = 0;
+
+    // Put ViewModel into Add Mode
+    AddMode();
+}
+//  ---------------------------------------------------------------------
+//  add html for the 'Add' button
+
+//---------------------------------------------------------------------
+        &lt;button id = "btnAdd"
+                class="btn btn-sm btn-success"
+                data-pdsa-action="add"&gt;
+          &lt;i class="glyphicon glyphicon-plus"&gt;&lt;/i&gt;
+          &amp;nbsp;Add
+        &lt;/button&gt;
+
+
+//Step 2
+//==============
+
+//Add two more buttons in the footer of the Detail area {&lt;div class="panel-footer"&gt;}
+// - Save
+// - Cancel {resets visibility properties, and reloads table with data }
+//		  { use attribute on Index.cshtml:   formnovalidate= "formnovalidate"  }
+// Modify HandleRequest() method
+
+//Step 3
+//==============
+
+//Put the toggle statements into private methods
+//	- ListMode
+//	- AddMode
+//	- Init
+//        Initialize all variables
+
+//        call from constructor
+
+//Step 4
+//==============
+
+//Add properties to the view model
+//	- Product input
+
+
+     public TrainingProduct SearchEntity { get; set; }
+
+	 //-Is the data Valid
+
+
+      public bool IsValid { get; set; }
+
+	  //-Track which mode we are in
+
+	  public string Mode { get; set; }
+
+//Create Add() method
+//	- initialize default values
+
+    private void Add()
+{
+    IsValid = true;
+
+    // Initialize Entity Object
+    Entity = new TrainingProduct();
+    Entity.IntroductionDate = DateTime.Now;
+    Entity.Url = string.Empty;
+    Entity.Price = 0;
+
+    // Put ViewModel into Add Mode
+    AddMode();
+}
+
+//Property to hold the Product data, and initialize it in the view model constructor
+
+
+    public TrainingProduct Entity { get; set; }
+
+//Add Product input areas
+//	- Place in panel body
+//	- Use Bootstrap form group
+
+//Bind to the Mode property
+//	- Use a hidden field
+//	- What "mode" our form is in: List, Add, Edit, etc.
+//        One reason you need this is when you click 'save' you need to know if you need to 'insert' or 'add' in the data class
+
+//Step 5
+//==============
+
+//Add validation for product data, in the "TrainingProduct" public class using Data Annotations
+
+
+  public class TrainingProduct
+{
+    public int ProductId { get; set; }
+
+    [Required(ErrorMessage = "Product Name must be filled in.")]
+    [Display(Description = "Product Name")]
+    [StringLength(150, MinimumLength = 4,
+       ErrorMessage = "Product Name must be greater than {2} characters and less than {1} characters.")]
+    public string ProductName { get; set; }
+
+    [Range(typeof(DateTime), "1/1/2000", "12/31/2020",
+      ErrorMessage = "Introduction Date must be between {1} and {2}")]
+    public DateTime IntroductionDate { get; set; }
+
+    [Required(ErrorMessage = "URL must be filled in.")]
+    [Display(Description = "Product URL")]
+    [Url()]
+    [StringLength(2000, MinimumLength = 5,
+        ErrorMessage = "URL must be greater than {2} characters and less than {1} characters.")]
+    public string Url { get; set; }
+
+    [Range(1, 9999, ErrorMessage = "{0} must be between {1} and {2}")]
+    public decimal Price { get; set; }
+}
+
+//and display them in Bootstrap alert, in the Panel Body
+
+        &lt;!-- ** BEGIN MESSAGE AREA --&gt;
+        &lt;div class="row"&gt;
+          &lt;div class="col-xs-12"&gt;
+            @if(!Model.IsValid)
+{
+              &lt; div class="alert alert-danger
+                    alert-dismissable"
+                   role="alert"&gt;
+
+                &lt;button type = "button" class="close"
+                        data-dismiss="alert"&gt;
+
+                  &lt;span aria-hidden="true"&gt;
+                    &amp;times;
+                  &lt;/span&gt;
+                  &lt;span class="sr-only"&gt;Close&lt;/span&gt;
+
+                &lt;/button&gt;
+                @Html.ValidationSummary(false)				 &lt;!-- HERE is the validation message --&gt;
+
+              &lt;/div&gt;
+            }
+          &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;!-- ** END MESSAGE AREA --&gt;
+
+
+//Step 6
+//==============
+
+//- Add additional validations to data manager class
+//- Create a Validate() method
+//- Add Insert() method to data manager class
+//- Add Validation errors to ModelState
+//- Add KeyValuePair to manager class, in the constructor:
+//	- Key = property name in error
+//	- Value = Error message to display
+
+
+  public class TrainingProductManager
+{
+    public TrainingProductManager()
+    {
+        ValidationErrors = new List&lt;KeyValuePair&lt;string, string&gt;&gt;();    //Set ONE of Validation Errors
+    }
+
+    public List&lt;KeyValuePair&lt;string, string&gt;&gt; ValidationErrors { get; set; }
+
+	...
+   )
+
+//- Add Validate() method(in the TrainingProductManager)
+//	- To check additional business rules
+//	- And if there are issues, then add it to the KeyValuePair property
+
+    public bool Validate(TrainingProduct entity)
+    {
+        ValidationErrors.Clear();
+
+        if (!string.IsNullOrEmpty(entity.ProductName))
+        {
+            if (entity.ProductName.ToLower() ==
+                entity.ProductName)
+            {
+                ValidationErrors.Add(new
+                  KeyValuePair&lt;string, string&gt;("ProductName",
+                  "Product must not be all lower case."));
+            }
+        }
+
+        return (ValidationErrors.Count == 0);
+    }
+
+//- Call Validate() method from Insert() method(in the TrainingProductManager)
+
+
+    public bool Insert(TrainingProduct entity)
+    {
+        bool ret = false;
+
+        ret = Validate(entity);
+
+        if (ret)
+        {
+            /// TODO: Create INSERT code here, after validation
+        }
+
+        return ret;
+    }
+
+//- Modify Save() method in view model
+//	- Call Insert() method
+//		- When the process comes back from the Insert(Entity) statement, get an Validation Error messages that may have been generated.
+//- So actually create TWO validation error collections, ONE in the manager, the OTHER in the view model
+//	- Set IsValid property if errors came back from manager class, which communicates all the way back up and is used in the Controller
+
+    private void Save()
+    {
+        TrainingProductManager mgr =
+          new TrainingProductManager();
+
+        if (Mode == "Add")
+        {
+            mgr.Insert(Entity);
+        }
+        // Set any validation errors (it will throw an error if you try to save it with null values
+        ValidationErrors = mgr.ValidationErrors;           //&lt;====set TWO of Validation Errors
+        if (ValidationErrors.Count &gt; 0) // when it throws an error, it sets IsValid to false
+        {
+            IsValid = false;			//&lt;=== This value goes back to the Controller (in the Postback method) where they go back to the View for display
+        }
+
+//-Modify the POST method in the controller.
+//-Check IsValid
+//- Add validation errors to model state, in the 'else' statement
+
+
+       [HttpPost]
+        public ActionResult Index(TrainingProductViewModel vm)
+    {
+        vm.IsValid = ModelState.IsValid;  //NOTE: If you didn’t set the model value in model state you’ll see a null reference exception.
+        vm.HandleRequest();
+
+        if (vm.IsValid)
+        {
+            // NOTE: Must clear the model state in order to bind
+            //       the @Html helpers to the new model values
+            ModelState.Clear();
+        }
+        else
+        {
+            foreach (KeyValuePair&lt;string, string&gt; item in vm.ValidationErrors)
+            {
+                ModelState.AddModelError(item.Key, item.Value);
+            }
+        }
+
+        return View(vm);
+    }
+
+
+    //******************************************************************
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>MVC_Single_Page_CRUD</Category>
+        <Language>C#</Language>
+        <Public>false</Public>
+        <Name>03_Modify_Delete__PTC/Views/Home/Index.cshtml</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>MVC_Single_Page_CRUD</Category>
+          <Language>C#</Language>
+          <Public>false</Public>
+          <Name>03_Modify_Delete__PTC/Views/Home/Index.cshtml</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>@model PTCData.TrainingProductViewModel
+
+@{
+  ViewBag.Title = "Paul's Training Company";
+}
+
+@using (Html.BeginForm())
+{
+  &lt;!-- BEGIN HIDDEN FIELDS AREA --&gt;
+  @Html.HiddenFor(m =&gt; m.EventCommand)
+  @Html.HiddenFor(m =&gt; m.Mode)
+  @Html.HiddenFor(m =&gt; m.EventArgument)
+  &lt;!-- END HIDDEN FIELDS AREA --&gt;
+
+  if (Model.IsSearchAreaVisible)
+  {
+  &lt;!-- ** BEGIN SEARCH AREA ** --&gt;
+    &lt;div class="panel panel-primary"&gt;
+      &lt;div class="panel-heading"&gt;
+        &lt;h1 class="panel-title"&gt;Search for Products&lt;/h1&gt;
+      &lt;/div&gt;
+      &lt;div class="panel-body"&gt;
+        &lt;div class="form-group"&gt;
+          @Html.LabelFor(m =&gt; m.SearchEntity.ProductName, "Product Name")
+          @Html.TextBoxFor(m =&gt; m.SearchEntity.ProductName, new { @class = "form-control" })
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class="panel-footer"&gt;
+        &lt;button id="btnSearch"
+                class="btn btn-sm btn-primary"
+                data-pdsa-action="search"&gt;
+          &lt;i class="glyphicon glyphicon-search"&gt;&lt;/i&gt;
+          &amp;nbsp;Search
+        &lt;/button&gt;
+        &lt;button id="btnReset"
+                class="btn btn-sm btn-primary"
+                data-pdsa-action="resetsearch"&gt;
+          &lt;i class="glyphicon glyphicon-share-alt"&gt;&lt;/i&gt;
+          &amp;nbsp;Reset
+        &lt;/button&gt;
+        &lt;button id="btnAdd"
+                class="btn btn-sm btn-success"
+                data-pdsa-action="add"&gt;
+          &lt;i class="glyphicon glyphicon-plus"&gt;&lt;/i&gt;
+          &amp;nbsp;Add
+        &lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+   &lt;!-- ** END SEARCH AREA ** --&gt;
+  }
+
+  if (Model.IsDetailAreaVisible)
+  {
+    &lt;div class="panel panel-primary"&gt;
+      &lt;div class="panel-heading"&gt;
+        &lt;h1 class="panel-title"&gt;
+          Product Information
+        &lt;/h1&gt;
+      &lt;/div&gt;
+      &lt;div class="panel-body"&gt;
+        &lt;!-- ** BEGIN MESSAGE AREA --&gt;
+        &lt;div class="row"&gt;
+          &lt;div class="col-xs-12"&gt;
+            @if (!Model.IsValid)
+            {
+              &lt;div class="alert alert-danger
+                    alert-dismissable"
+                   role="alert"&gt;
+                &lt;button type="button" class="close"
+                        data-dismiss="alert"&gt;
+                  &lt;span aria-hidden="true"&gt;
+                    &amp;times;
+                  &lt;/span&gt;
+                  &lt;span class="sr-only"&gt;Close&lt;/span&gt;
+                &lt;/button&gt;
+                @Html.ValidationSummary(false)
+              &lt;/div&gt;
+            }
+          &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;!-- ** END MESSAGE AREA --&gt;
+        &lt;!-- ** BEGIN INPUT AREA --&gt;
+        &lt;div class="form-group"&gt;
+          @Html.LabelFor(m =&gt; m.Entity.ProductName,
+                 "Product Name")
+          @Html.TextBoxFor(m =&gt; m.Entity.ProductName,
+           new { @class = "form-control" })
+        &lt;/div&gt;
+        &lt;div class="form-group"&gt;
+          @Html.LabelFor(m =&gt;
+       m.Entity.IntroductionDate,
+       "Introduction Date")
+          @Html.TextBoxFor(m =&gt;
+       m.Entity.IntroductionDate,
+       new { @class = "form-control" })
+        &lt;/div&gt;
+        &lt;div class="form-group"&gt;
+          @Html.LabelFor(m =&gt; m.Entity.Url, "Url")
+          @Html.TextBoxFor(m =&gt; m.Entity.Url,
+       new { @class = "form-control" })
+        &lt;/div&gt;
+        &lt;div class="form-group"&gt;
+          @Html.LabelFor(m =&gt; m.Entity.Price, "Price")
+          @Html.TextBoxFor(m =&gt; m.Entity.Price,
+       new { @class = "form-control" })
+        &lt;/div&gt;
+        &lt;!-- ** END INPUT AREA --&gt;
+      &lt;/div&gt;
+      &lt;div class="panel-footer"&gt;
+        &lt;div class="row"&gt;
+          &lt;div class="col-sm-12"&gt;
+            &lt;button id="btnSave"
+                    class="btn btn-sm btn-primary"
+                    data-pdsa-action="save"&gt;
+              &lt;i class="glyphicon
+           glyphicon-floppy-disk"&gt;&lt;/i&gt;
+              &amp;nbsp;Save
+            &lt;/button&gt;
+            &lt;button id="btnCancel"
+                    class="btn btn-sm btn-primary"
+                    formnovalidate="formnovalidate"
+                    data-pdsa-action="cancel"&gt;
+              &lt;i class="glyphicon
+           glyphicon-remove-circle"&gt;&lt;/i&gt;
+              &amp;nbsp;Cancel
+            &lt;/button&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  }
+
+  if (Model.IsListAreaVisible)
+  {
+      &lt;!-- BEGIN GRID AREA --&gt;
+    &lt;div class="table-responsive"&gt;
+      &lt;table class="table table-condensed table-bordered table-striped table-hover"&gt;
+        &lt;thead&gt;
+          &lt;tr&gt;
+            &lt;th class="pdsa-action-button-column"&gt;
+              Edit
+            &lt;/th&gt;
+            &lt;th&gt;Product Name&lt;/th&gt;
+            &lt;th&gt;Introduction Date&lt;/th&gt;
+            &lt;th&gt;Url&lt;/th&gt;
+            &lt;th&gt;Price&lt;/th&gt;
+            &lt;th class="pdsa-action-button-column"&gt;
+              Delete
+            &lt;/th&gt;
+          &lt;/tr&gt;
+        &lt;/thead&gt;
+
+        &lt;tbody&gt;
+          @foreach (var item in Model.Products)
+          {
+            &lt;tr&gt;
+              &lt;td class="pdsa-action-button-column"&gt;
+                &lt;a href="#" data-pdsa-action="edit"
+                   data-pdsa-val="@item.ProductId"
+                   class="btn btn-default btn-sm"&gt;
+                  &lt;i class="glyphicon glyphicon-edit"&gt;&lt;/i&gt;
+                &lt;/a&gt;
+              &lt;/td&gt;
+              &lt;td&gt;@item.ProductName&lt;/td&gt;
+              &lt;td&gt;@item.IntroductionDate&lt;/td&gt;
+              &lt;td&gt;@item.Url&lt;/td&gt;
+              &lt;td&gt;@item.Price.ToString("c")&lt;/td&gt;
+              &lt;td class="pdsa-action-button-column"&gt;
+                &lt;a href="#" data-pdsa-action="delete"
+                   data-pdsa-val="@item.ProductId"
+                   onclick="return confirm('Delete this Product?');"
+                   class="btn btn-default btn-sm"&gt;
+                  &lt;i class="glyphicon glyphicon-trash"&gt;&lt;/i&gt;
+                &lt;/a&gt;
+              &lt;/td&gt;
+
+            &lt;/tr&gt;
+          }
+        &lt;/tbody&gt;
+      &lt;/table&gt;
+    &lt;/div&gt;
+      &lt;!-- END GRID AREA --&gt;
+  }
+}
+
+@section scripts {
+
+  &lt;script&gt;
+    $(document).ready(function () {
+      $("[data-pdsa-action]").on("click", function (e) {
+        e.preventDefault();
+
+        $("#EventCommand").val(
+          $(this).data("pdsa-action"));
+
+        $("#EventArgument").val(
+          $(this).attr("data-pdsa-val"));
+
+        $("form").submit();
+      });
+    });
+  &lt;/script&gt;
+}
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>MVC_ViewModel</Category>
+        <Language>C#</Language>
+        <Public>false</Public>
+        <Name>09_SinglePage_CRUD_Drop-Down_Filter_/Views/Home/Index.cshtml</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>MVC_ViewModel</Category>
+          <Language>C#</Language>
+          <Public>false</Public>
+          <Name>09_SinglePage_CRUD_Drop-Down_Filter_/Views/Home/Index.cshtml</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>@model PTCViewModel
+
+@{
+  ViewBag.Title = "Paul's Training Company";
+}
+
+@using (Html.BeginForm()) {
+  &lt;!-- ** BEGIN HIDDEN FIELDS AREA ** --&gt;
+  @Html.HiddenFor(m =&gt; m.EventCommand)
+  @Html.HiddenFor(m =&gt; m.EventArgument)
+  @Html.HiddenFor(m =&gt; m.PageMode)
+  @Html.HiddenFor(m =&gt; m.Entity.ProductId)
+  &lt;!-- ** END HIDDEN FIELDS AREA ** --&gt;
+
+  if (!Model.IsValid)
+	{
+    &lt;!-- ** BEGIN MESSAGE AREA ** --&gt;
+    &lt;div class="row"&gt;
+      &lt;div class="col-xs-12"&gt;
+        &lt;div class="alert alert-danger
+                    alert-dismissable"
+             role="alert"&gt;
+          &lt;button type="button" class="close"
+                  data-dismiss="alert"&gt;
+            &lt;span aria-hidden="true"&gt;
+              &amp;times;
+            &lt;/span&gt;
+            &lt;span class="sr-only"&gt;Close&lt;/span&gt;
+          &lt;/button&gt;
+          @Html.ValidationSummary(false)
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;!-- ** END MESSAGE AREA ** --&gt;
+  }
+
+  if (Model.IsSearchAreaVisible) {
+    &lt;!-- ** BEGIN SEARCH AREA ** --&gt;
+    &lt;div class="panel panel-primary"&gt;
+      &lt;div class="panel-heading"&gt;
+        &lt;h1 class="panel-title"&gt;Search for Products&lt;/h1&gt;
+      &lt;/div&gt;
+      &lt;div class="panel-body"&gt;
+        &lt;div class="form-group"&gt;
+          @Html.LabelFor(m =&gt; m.SearchEntity.CategoryId, 
+                         "Select a Product Category")
+          @Html.DropDownListFor(m =&gt; m.SearchEntity.CategoryId,
+                                new SelectList(Model.SearchCategories,
+                                                "CategoryId", 
+                                                "CategoryName"),
+                               new { @class = "form-control" })
+        &lt;/div&gt;        
+        &lt;div class="form-group"&gt;
+          @Html.LabelFor(m =&gt; m.SearchEntity.ProductName, "Product Name")
+          @Html.TextBoxFor(m =&gt; m.SearchEntity.ProductName, new { @class = "form-control" })
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class="panel-footer"&gt;
+        &lt;button formnovalidate="formnovalidate"
+                class="btn btn-sm btn-primary"
+                data-pdsa-action="search"&gt;
+          &lt;i class="glyphicon glyphicon-search"&gt;&lt;/i&gt;
+          &amp;nbsp;Search
+        &lt;/button&gt;
+        &lt;button formnovalidate="formnovalidate"
+                class="btn btn-sm btn-primary"
+                data-pdsa-action="resetsearch"&gt;
+          &lt;i class="glyphicon glyphicon-share-alt"&gt;&lt;/i&gt;
+          &amp;nbsp;Reset
+        &lt;/button&gt;
+          &lt;!-- When you click on 'add' the 'IsDetailAreaVisible' becomes true--&gt;
+          &lt;!--      then the search and list areas are hidden --&gt;
+          &lt;!-- This works b/c of the 'buildClickEvents()' Javascript/JQuery at the bottom of the page--&gt;
+        &lt;button formnovalidate="formnovalidate"
+                class="btn btn-sm btn-success"
+                data-pdsa-action="add"&gt;
+          &lt;i class="glyphicon glyphicon-plus"&gt;&lt;/i&gt;
+          &amp;nbsp;Add
+        &lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+   &lt;!-- ** END SEARCH AREA ** --&gt;
+  }
+
+  if (Model.IsDetailAreaVisible) {
+    &lt;!-- ** BEGIN DETAIL EDIT/CRUD AREA ** --&gt;
+    &lt;div class="panel panel-primary"&gt;
+      &lt;div class="panel-heading"&gt;
+        &lt;h1 class="panel-title"&gt;
+          Product Information
+        &lt;/h1&gt;
+      &lt;/div&gt;
+      &lt;div class="panel-body"&gt;
+        &lt;!-- ** BEGIN INPUT AREA --&gt;
+        &lt;div class="form-group"&gt;
+          @Html.LabelFor(m =&gt; m.Entity.Category.CategoryId, "Product Category")
+          @Html.DropDownListFor(m =&gt; m.Entity.Category.CategoryId, new SelectList(Model.Categories, "CategoryId", "CategoryName"), new { @class = "form-control" })
+        &lt;/div&gt;
+        &lt;div class="form-group"&gt;
+          @Html.LabelFor(m =&gt; m.Entity.ProductName, "Product Name")
+          @Html.TextBoxFor(m =&gt; m.Entity.ProductName, new { @class = "form-control" })          
+        &lt;/div&gt;
+        &lt;div class="form-group"&gt;
+          @Html.LabelFor(m =&gt; m.Entity.IntroductionDate, "Introduction Date")
+          @Html.TextBoxFor(m =&gt; m.Entity.IntroductionDate, new { @class = "form-control" })
+        &lt;/div&gt;
+        &lt;div class="form-group"&gt;
+          @Html.LabelFor(m =&gt; m.Entity.Url, "Url")
+          @Html.TextBoxFor(m =&gt; m.Entity.Url, new { @class = "form-control" })
+        &lt;/div&gt;
+        &lt;div class="form-group"&gt;
+          @Html.LabelFor(m =&gt; m.Entity.Price, "Price")
+          @Html.TextBoxFor(m =&gt; m.Entity.Price, new { @class = "form-control" })
+        &lt;/div&gt;
+        &lt;!-- ** END INPUT AREA --&gt;
+      &lt;/div&gt;
+      &lt;div class="panel-footer"&gt;
+        &lt;div class="row"&gt;
+          &lt;div class="col-sm-12"&gt;
+            &lt;button class="btn btn-sm btn-primary"
+                    data-pdsa-action="save"&gt;
+              &lt;i class="glyphicon glyphicon-floppy-disk"&gt;&lt;/i&gt;
+              &amp;nbsp;Save
+            &lt;/button&gt;
+            &lt;button class="btn btn-sm btn-primary"
+                    formnovalidate="formnovalidate"
+                    data-pdsa-action="cancel"&gt;
+              &lt;i class="glyphicon glyphicon-remove-circle"&gt;&lt;/i&gt;
+              &amp;nbsp;Cancel
+            &lt;/button&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;!-- ** END DETAIL AREA ** --&gt;
+  }
+
+  if (Model.IsListAreaVisible) {
+    &lt;!-- ** BEGIN LIST AREA ** --&gt;
+    &lt;div class="table-responsive"&gt;
+      &lt;table id="productTable"
+             class="table table-condensed table-bordered table-striped table-hover"&gt;
+        &lt;thead&gt;
+          &lt;tr&gt;
+            &lt;th class="pdsa-action-button-column"&gt;
+              Edit
+            &lt;/th&gt;
+            &lt;th&gt;Product Name&lt;/th&gt;
+            &lt;th&gt;Introduction Date&lt;/th&gt;
+            &lt;th&gt;Url&lt;/th&gt;
+            &lt;th&gt;Price&lt;/th&gt;
+            &lt;th class="pdsa-action-button-column"&gt;
+              Delete
+            &lt;/th&gt;
+          &lt;/tr&gt;
+        &lt;/thead&gt;
+
+        &lt;tbody&gt;
+          @foreach (var item in Model.Products) {
+            &lt;tr&gt;
+              &lt;td class="pdsa-action-button-column"&gt;
+                &lt;a href="#" data-pdsa-action="edit"
+                   data-pdsa-val="@item.ProductId"
+                   class="btn btn-default btn-sm"&gt;
+                  &lt;i class="glyphicon glyphicon-edit"&gt;&lt;/i&gt;
+                &lt;/a&gt;
+              &lt;/td&gt;
+              &lt;td&gt;@item.ProductName&lt;/td&gt;
+              &lt;td&gt;@item.IntroductionDate&lt;/td&gt;
+              &lt;td&gt;@item.Url&lt;/td&gt;
+              &lt;td&gt;@item.Price.Value.ToString("c")&lt;/td&gt;
+              &lt;td class="pdsa-action-button-column"&gt;
+                &lt;a href="#" data-pdsa-action="delete"
+                   data-pdsa-val="@item.ProductId"
+                   onclick="return confirm('Delete this Product?');"
+                   class="btn btn-default btn-sm"&gt;
+                  &lt;i class="glyphicon glyphicon-trash"&gt;&lt;/i&gt;
+                &lt;/a&gt;
+              &lt;/td&gt;
+
+            &lt;/tr&gt;
+          }
+        &lt;/tbody&gt;
+      &lt;/table&gt;
+    &lt;/div&gt;
+    &lt;!-- ** END LIST AREA ** --&gt;
+  }
+}
+
+@section scripts {
+  &lt;script&gt;
+    $(document).ready(function () {
+      // Hook events on buttons and anchors
+      buildClickEvents();
+    });
+
+      // Hook events on buttons and anchors
+      //    The 'click' event grabs the 'pdsa-action' property and 'data-pdsa-val' value from the button
+      //    and puts them into the "#EventCommand" and "#EventArgument" respectively, and then submits the form
+    function buildClickEvents() {
+      $("[data-pdsa-action]").on("click", function (e) {
+        e.preventDefault();
+
+        $("#EventCommand").val(
+          $(this).data("pdsa-action"));
+
+        $("#EventArgument").val(
+          $(this).attr("data-pdsa-val"));
+
+        $("form").submit();
+      });
+    }
+  &lt;/script&gt;
+}</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Files_Folders_Directories</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>Windows_10_Mount_Dismount_ISO_VHD</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Files_Folders_Directories</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>Windows_10_Mount_Dismount_ISO_VHD</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>&gt; Mount-DiskImage -ImagePath "E:\ISO-Files\My US Visit Fall 2010 Pictures.iso"
+
+&gt; Dismount-DiskImage -ImagePath "E:\ISO-Files\My US Visit Fall 2010 Pictures.iso"</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>Windows_10</Category>
+        <Language>TEXT</Language>
+        <Public>false</Public>
+        <Name>DotNet3_for_SnippetManager</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>Windows_10</Category>
+          <Language>TEXT</Language>
+          <Public>false</Public>
+          <Name>DotNet3_for_SnippetManager</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>This Worked. You need the installer media for Windows 10.
+That is where the path to the file it needs is located.
+http://serverfault.com/questions/750562/net-framework-3-5-error-code-0x800f081f
+From an Admin launch of command prompt ( or powershell as administrator) run:
+
+&gt;Dism /online /enable-feature /featurename:NetFx3 /All /Source:D:\sources\sxs
+
+rebooted
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>Windows_10</Category>
+        <Language>TEXT</Language>
+        <Public>false</Public>
+        <Name>Stop_Resetting_Default_Apps</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>Windows_10</Category>
+          <Language>TEXT</Language>
+          <Public>false</Public>
+          <Name>Stop_Resetting_Default_Apps</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>Stop_Resetting_Default_Apps
+----------------------------
+
+
+https://4sysops.com/archives/default-file-associations-in-windows-10/
+
+
+To deploy the default file associations, 
+	you first have to configure the settings on a reference machine 
+	and then export the configuration in an XML file that you can deploy in your network.
+
+1] You can configure the settings in the Control Panel under Programs &gt; Default Programs &gt; Set Default Program.
+
+2] Once you do that, you have to open a command prompt 
+	with the user account from above 
+	and use the DISM tool to export the current settings to an .XML file, as shown below.
+	
+
+&gt;Dism.exe /online /Export-DefaultAppAssociations:C:\DATA\DefaultApplications\DefaultApps.xml
+
+{See below for example of the file for Windows 10 Build 1709}
+
+
+Now you have a .XML file with all the file associations from that user. 
+	People often ask me if it is possible to deploy just one file association 
+	or if they must use the entire file, which also contains all the default settings. 
+	The answer is, yes, you can import just the association you need.
+
+3] Deploying default file associations using Group Policy
+
+You can also deploy the default file associations using Group Policy: 
+	Computer Configuration &gt; Administrative Templates &gt; Windows Components &gt; File Explorer
+		
+	
+Set the Group Policy	
+https://docs.microsoft.com/en-us/internet-explorer/ie11-deploy-guide/set-the-default-browser-using-group-policy
+=============================================================================================================
+
+1] Open your Group Policy editor and go to the following policy 
+
+	Administrative Templates\Windows Components\File Explorer\Set a default associations configuration file setting
+	
+	a] 	Enabled
+	
+	b]	Default Associations Configuration File
+	
+		C:\DATA\DefaultApplications\DefaultApps.xml
+		
+
+
+Export or Import Default Application Associations
+https://technet.microsoft.com/en-us/library/hh825038.aspx
+=============================================================	
+
+EXPORT
+(e.g. Dism /Online /Export-DefaultAppAssociations:\\Server\Share\AppAssoc.xml)
+
+IMPORT
+(mount image)
+Dism /Mount-Image /ImageFile:C:\test\images\install.wim /Name:"Windows" /MountDir:C:\test\offline
+(Import the .xml file that has the default application association settings to the Windows image. For example, at the command prompt type the following command:)
+
+
+=================================================================
+
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;DefaultAssociations&gt;
+  &lt;Association Identifier=".3g2" ProgId="WMP11.AssocFile.3G2" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".3gp" ProgId="WMP11.AssocFile.3GP" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".3gp2" ProgId="WMP11.AssocFile.3G2" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".3gpp" ProgId="WMP11.AssocFile.3GP" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".aac" ProgId="WMP11.AssocFile.ADTS" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".ac3" ProgId="AppXqj98qxeaynz6dv4459ayz6bnqxbyaqcs" ApplicationName="Groove Music" /&gt;
+  &lt;Association Identifier=".adt" ProgId="AppXqj98qxeaynz6dv4459ayz6bnqxbyaqcs" ApplicationName="Groove Music" /&gt;
+  &lt;Association Identifier=".adts" ProgId="WMP11.AssocFile.ADTS" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".aif" ProgId="WMP11.AssocFile.AIFF" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".aifc" ProgId="WMP11.AssocFile.AIFF" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".aiff" ProgId="WMP11.AssocFile.AIFF" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".amr" ProgId="AppXqj98qxeaynz6dv4459ayz6bnqxbyaqcs" ApplicationName="Groove Music" /&gt;
+  &lt;Association Identifier=".ani" ProgId="IrfanView.ani" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".arw" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" /&gt;
+  &lt;Association Identifier=".asf" ProgId="WMP11.AssocFile.ASF" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".asx" ProgId="WMP11.AssocFile.ASX" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".au" ProgId="WMP11.AssocFile.AU" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".avi" ProgId="WMP11.AssocFile.AVI" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".bmp" ProgId="IrfanView.bmp" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".cda" ProgId="WMP11.AssocFile.CDA" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".cr2" ProgId="IrfanView.cr2" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".crw" ProgId="IrfanView.crw" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".dcx" ProgId="IrfanView.dcx" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".dib" ProgId="IrfanView.bmp" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".ec3" ProgId="AppXqj98qxeaynz6dv4459ayz6bnqxbyaqcs" ApplicationName="Groove Music" /&gt;
+  &lt;Association Identifier=".emf" ProgId="IrfanView.emf" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".eps" ProgId="IrfanView.eps" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".epub" ProgId="AppXvepbp3z66accmsd0x877zbbxjctkpr6t" ApplicationName="Microsoft Edge" /&gt;
+  &lt;Association Identifier=".erf" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" /&gt;
+  &lt;Association Identifier=".flac" ProgId="WMP11.AssocFile.FLAC" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".gif" ProgId="IrfanView.gif" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".htm" ProgId="ChromeHTML.BFATTW3WY5HWWRDPZHSSXN7MKY" ApplicationName="Google Chrome" /&gt;
+  &lt;Association Identifier=".html" ProgId="ChromeHTML.BFATTW3WY5HWWRDPZHSSXN7MKY" ApplicationName="Google Chrome" /&gt;
+  &lt;Association Identifier=".ico" ProgId="IrfanView.ico" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".jfif" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" /&gt;
+  &lt;Association Identifier=".jpc" ProgId="IrfanView.jp2" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".jpe" ProgId="IrfanView.jpg" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".jpeg" ProgId="IrfanView.jpg" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".jpg" ProgId="IrfanView.jpg" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".jxr" ProgId="IrfanView.hdp" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".kdc" ProgId="IrfanView.kdc" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".lbm" ProgId="IrfanView.iff" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".m1v" ProgId="WMP11.AssocFile.MPEG" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".m2t" ProgId="WMP11.AssocFile.M2TS" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".m2ts" ProgId="WMP11.AssocFile.M2TS" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".m3u" ProgId="WMP11.AssocFile.m3u" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".m4a" ProgId="WMP11.AssocFile.M4A" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".m4r" ProgId="AppXqj98qxeaynz6dv4459ayz6bnqxbyaqcs" ApplicationName="Groove Music" /&gt;
+  &lt;Association Identifier=".m4v" ProgId="WMP11.AssocFile.MP4" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".mid" ProgId="WMP11.AssocFile.MIDI" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".midi" ProgId="WMP11.AssocFile.MIDI" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".MK3D" ProgId="WMP11.AssocFile.MK3D" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".mka" ProgId="WMP11.AssocFile.MKA" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".mkv" ProgId="WMP11.AssocFile.MKV" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".mod" ProgId="AppX6eg8h5sxqq90pv53845wmnbewywdqq5h" ApplicationName="Movies &amp;amp; TV" /&gt;
+  &lt;Association Identifier=".mov" ProgId="WMP11.AssocFile.MOV" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".MP2" ProgId="WMP11.AssocFile.MP3" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".mp2v" ProgId="WMP11.AssocFile.MPEG" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".mp3" ProgId="WMP11.AssocFile.MP3" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".mp4" ProgId="WMP11.AssocFile.MP4" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".mp4v" ProgId="WMP11.AssocFile.MP4" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".mpa" ProgId="WMP11.AssocFile.MPEG" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".MPE" ProgId="WMP11.AssocFile.MPEG" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".mpeg" ProgId="WMP11.AssocFile.MPEG" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".mpg" ProgId="WMP11.AssocFile.MPEG" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".mpv2" ProgId="WMP11.AssocFile.MPEG" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".mrw" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" /&gt;
+  &lt;Association Identifier=".mts" ProgId="WMP11.AssocFile.M2TS" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".nef" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" /&gt;
+  &lt;Association Identifier=".nrw" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" /&gt;
+  &lt;Association Identifier=".orf" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" /&gt;
+  &lt;Association Identifier=".oxps" ProgId="Windows.XPSReachViewer" ApplicationName="XPS Viewer" /&gt;
+  &lt;Association Identifier=".pcx" ProgId="IrfanView.pcx" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".pdf" ProgId="AcroExch.Document" ApplicationName="Adobe Acrobat 9.0" /&gt;
+  &lt;Association Identifier=".pef" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" /&gt;
+  &lt;Association Identifier=".pgm" ProgId="IrfanView.pgm" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".png" ProgId="IrfanView.png" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".ppm" ProgId="IrfanView.ppm" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".psd" ProgId="IrfanView.psd" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".raf" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" /&gt;
+  &lt;Association Identifier=".raw" ProgId="IrfanView.raw" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".rgb" ProgId="IrfanView.sgi" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".rle" ProgId="IrfanView.rle" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".rmi" ProgId="WMP11.AssocFile.MIDI" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".rw2" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" /&gt;
+  &lt;Association Identifier=".rwl" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" /&gt;
+  &lt;Association Identifier=".snd" ProgId="WMP11.AssocFile.AU" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".sr2" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" /&gt;
+  &lt;Association Identifier=".srw" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" /&gt;
+  &lt;Association Identifier=".tif" ProgId="IrfanView.tif" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".tod" ProgId="AppX6eg8h5sxqq90pv53845wmnbewywdqq5h" ApplicationName="Movies &amp;amp; TV" /&gt;
+  &lt;Association Identifier=".TS" ProgId="WMP11.AssocFile.TTS" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".TTS" ProgId="WMP11.AssocFile.TTS" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".txt" ProgId="txtfile" ApplicationName="Notepad" /&gt;
+  &lt;Association Identifier=".url" ProgId="IE.AssocFile.URL" ApplicationName="Internet Browser" /&gt;
+  &lt;Association Identifier=".wav" ProgId="WMP11.AssocFile.WAV" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".wax" ProgId="WMP11.AssocFile.WAX" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".wdp" ProgId="IrfanView.hdp" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".website" ProgId="IE.AssocFile.WEBSITE" ApplicationName="Internet Explorer" /&gt;
+  &lt;Association Identifier=".wfw" ProgId="Applications\notepad.exe" ApplicationName="Notepad" /&gt;
+  &lt;Association Identifier=".wm" ProgId="WMP11.AssocFile.ASF" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".wma" ProgId="WMP11.AssocFile.WMA" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".wmf" ProgId="IrfanView.wmf" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".wmv" ProgId="WMP11.AssocFile.WMV" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".wmx" ProgId="WMP11.AssocFile.ASX" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".WPL" ProgId="WMP11.AssocFile.WPL" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".wvx" ProgId="WMP11.AssocFile.WVX" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".xbm" ProgId="IrfanView.xbm" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".xpm" ProgId="IrfanView.xpm" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".xps" ProgId="Windows.XPSReachViewer" ApplicationName="XPS Viewer" /&gt;
+  &lt;Association Identifier=".xvid" ProgId="AppX6eg8h5sxqq90pv53845wmnbewywdqq5h" ApplicationName="Movies &amp;amp; TV" /&gt;
+  &lt;Association Identifier=".zpl" ProgId="AppXqj98qxeaynz6dv4459ayz6bnqxbyaqcs" ApplicationName="Groove Music" /&gt;
+  &lt;Association Identifier="bingmaps" ProgId="AppXp9gkwccvk6fa6yyfq3tmsk8ws2nprk1p" ApplicationName="Maps" /&gt;
+  &lt;Association Identifier="http" ProgId="ChromeHTML.BFATTW3WY5HWWRDPZHSSXN7MKY" ApplicationName="Google Chrome" /&gt;
+  &lt;Association Identifier="https" ProgId="ChromeHTML.BFATTW3WY5HWWRDPZHSSXN7MKY" ApplicationName="Google Chrome" /&gt;
+  &lt;Association Identifier="mailto" ProgId="Outlook.URL.mailto.15" ApplicationName="Outlook 2016" /&gt;
+  &lt;Association Identifier="mswindowsmusic" ProgId="AppXtggqqtcfspt6ks3fjzyfppwc05yxwtwy" ApplicationName="Groove Music" /&gt;
+  &lt;Association Identifier="mswindowsvideo" ProgId="AppX6w6n4f8xch1s3vzwf3af6bfe88qhxbza" ApplicationName="Movies &amp;amp; TV" /&gt;
+&lt;/DefaultAssociations&gt;</Code>
+      </SnippetValue>
+    </value>
+  </item>
+</dictionary>
