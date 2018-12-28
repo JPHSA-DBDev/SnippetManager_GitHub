@@ -1,2 +1,167 @@
 <?xml version="1.0" encoding="utf-8"?>
-<dictionary />
+<dictionary>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DATES</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>Previous_Month_or_Day_or_year</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DATES</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>Previous_Month_or_Day_or_year</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+
+--To get applications since yesterday:
+ WHERE APPLICATION_DATE &gt;= CAST(CONVERT(varchar, dateadd(dd,-1,getdate()), 101) AS Date)
+
+
+
+select 
+DATEADD(YYYY, DATEDIFF(YYYY, 0, GETDATE()) - 1, 0) as FirstDayOfLastYear,
+DATEADD(MM, DATEDIFF(MM, 0, GETDATE()) - 1, 0) as FirstDayOfLastMonth,
+DATEADD(DD, DATEDIFF(DD, 0, GETDATE()) - 1, 0) as Yesterday
+
+--where the date in question is greater than the first day of last month:
+ WHERE  "CREDIT_REQUEST"."INITIATION_DT"&gt;= DATEADD(MM, DATEDIFF(MM, 0, GETDATE()) - 1, 0)
+ 
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+WHERE datediff( d,ARCHIVE_EOD_EXRETAIL.BUS_DATE,getdate()) = 1
+
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+Select top(1000) EXRETAIL.F0272_FUNDED_DATE
+, DATEADD(MM, DATEDIFF(MM, 0, GETDATE()) - 1, 0) as FirstDayOfLastMonth
+,  DATEADD(MM, DATEDIFF(MM, 0, GETDATE()), 0) as FirstDayOfThisMonth
+, (CASE
+	-- if today is the first
+	WHEN day(getdate())=1
+	-- Then first day of last month
+	THEN DATEADD(MM, DATEDIFF(MM, 0, GETDATE()) - 1, 0)
+	-- else FirstDayOfThisMonth
+	ELSE DATEADD(MM, DATEDIFF(MM, 0, GETDATE()), 0)
+	END) as whatever2
+
+From
+R_WAREHOUSE.CBT.RWH_ARCHIVE_EOD_EXRETAIL EXRETAIL
+where EXRETAIL.F0272_FUNDED_DATE &gt; '2018-05-26 00:00:00.000'
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\--make previous day look like particular format - this may not be neccessary
+ARCHIVE_EOD_EXRETAIL.BUS_DATE=dateadd(dd,-1,cast(getdate() as date)) </Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>Extended_Events_and_Trace_Profiler</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>monitoring log activity with Extended Events</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>Extended_Events_and_Trace_Profiler</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>monitoring log activity with Extended Events</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>--https://www.sqlskills.com/blogs/paul/t-sql-tuesday-67-monitoring-log-activity-with-extended-events/
+
+--Yesterday in class I was discussing monitoring transaction log activity with a student,
+--to show that when a transaction commits, there is a write to the transaction log file. 
+--This is easy to do with Extended Events.
+
+--I’m going to use the file_write_completed event to track writes occurring 
+--and the transaction_log event to watch log records being generated so we can see transactions committing.
+
+--First of all I’ll setup my simple scenario:
+
+USE [master];
+GO
+ 
+IF DATABASEPROPERTYEX (N'Test', N'Version') &gt; 0
+BEGIN
+    ALTER DATABASE [Test] SET SINGLE_USER
+        WITH ROLLBACK IMMEDIATE;
+    DROP DATABASE [Test];
+END
+GO
+ 
+CREATE DATABASE [Test] ON PRIMARY (
+    NAME = N'Test_data',
+    FILENAME = N'D:\SQLskills\Test_data.mdf')
+LOG ON (
+    NAME = N'Test_log',
+    FILENAME = N'C:\SQLskills\Test_log.ldf',
+    SIZE = 1MB,
+    FILEGROWTH = 0MB);
+GO
+ 
+USE [test];
+GO
+ 
+CREATE TABLE TestTable (
+    c1 INT IDENTITY,
+    c2 CHAR (1000) DEFAULT 'a');
+GO
+ 
+INSERT INTO [TestTable] DEFAULT VALUES;
+GO
+And here’s the simple Extended Event session:
+
+-- Drop the session if it exists. 
+IF EXISTS (
+    SELECT * FROM sys.server_event_sessions
+        WHERE [name] = N'MonitorLog')
+    DROP EVENT SESSION [MonitorLog] ON SERVER
+GO
+ 
+-- Create the event session
+CREATE EVENT SESSION [MonitorLog] ON SERVER
+    ADD EVENT [sqlserver].[file_write_completed],
+    ADD EVENT [sqlserver].[transaction_log]
+    ADD TARGET [package0].[ring_buffer]
+        WITH (MAX_MEMORY = 50MB, max_dispatch_latency = 1 seconds)
+GO
+ 
+-- Start the session
+ALTER EVENT SESSION [MonitorLog] ON SERVER
+STATE = START;
+GO
+
+--I ran both of those scripts, then executed the INSERT a few times.
+
+--Now if I go to Object Explorer, 
+--I can use the Live Data Viewer (in SQL Server 2012 onwards). 
+--Find the session, right-click on it and select Watch Live Data.
+
+--Choose the following columns to view (right click on any column name and select Choose Columns…): 
+--	name, timestamp, database_id, file_id, size, operation.
+
+--And then run another INSERT (you might have to run two to make the first set of data show in the Viewer)
+--and you’ll see data like below.
+
+--Is this a bug that i cannot locate transaction_log under the GUI for XEvents even in SQL Server 2014? I wonder how many more events are there…..
+--No – it’s by design. Use New Session and then click Channel and tick the Debug box. Then all events will show up.</Code>
+      </SnippetValue>
+    </value>
+  </item>
+</dictionary>
