@@ -1,2 +1,3720 @@
 <?xml version="1.0" encoding="utf-8"?>
-<dictionary />
+<dictionary>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>ARRAY</Category>
+        <Language>VB.NET</Language>
+        <Public>false</Public>
+        <Name>Pass_and_Return_An_Array_From_Procedure_Or_Property</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>ARRAY</Category>
+          <Language>VB.NET</Language>
+          <Public>false</Public>
+          <Name>Pass_and_Return_An_Array_From_Procedure_Or_Property</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>'Pass_and_Return_An_Array_From_Procedure_Or_Property
+' See ParamArray example at the bottom
+
+Module Pass_and_Return_An_Array_From_Procedure_Or_Property
+
+    '[Pass an Array to a Procedure or Property]
+    '-----------------------------------------
+
+
+    '=====================================================================================================================================
+
+    'To pass an array to a procedure
+
+    '    Ensure that one of the procedure parameters specifies an array with the same rank (number of dimensions) and element data type.
+    '    Supply the array variable at the corresponding place in the argument list. Do not follow the array name with parentheses.
+
+    Public Function findLargest(ByVal numbers() As Double) As Double
+        ' Insert code to calculate and return largest number.
+    End Function
+
+
+
+    Dim testNumbers() As Double = New Double() {5.0, 3.7, 1.2, 7.6}
+    Dim largestNumber As Double = findLargest(testNumbers)
+
+
+
+    '=====================================================================================================================================
+
+    'To pass an array to a property
+
+    '    Ensure that one of the property parameters specifies an array with the same rank (number of dimensions) and element data type.
+    '    Supply the array variable at the corresponding place in the argument list. Do not follow the array name with parentheses.
+
+
+    Public Property bestMatch(ByVal formattedStrings() As String) As Double
+        ' Insert Get and Set procedures for number best matching strings.
+    End Property
+
+
+    Dim testStrings() As String = New String() {}
+    Dim formattedNumber As Double = bestMatch(testStrings)
+
+
+    '=====================================================================================================================================
+
+
+    '[Return an Array from a Procedure or Property]
+    '---------------------------------------------
+
+    'To return an array from a Function procedure
+
+    'Specify the array type (rank and element data type) as the return type in the Function Statement (Visual Basic).
+    'Within the procedure, declare a local array variable with the same rank and element data type.
+    'Include this local array variable in the Return Statement (Visual Basic). Do not follow the array name with parentheses.
+
+    Public Function splitNumber(ByVal number As Double) As Char()
+        Dim characters() As Char
+        ' Insert code to split number into characters.
+        Return characters
+    End Function
+
+
+    Dim piCharacters() As Char = splitNumber(3.14159265)
+
+    'To return an array from a property
+    '----------------------------------
+    'Specify the array type (rank and element data type) as the property type in the Property Statement.
+    'Within the property's Get procedure, or in a place available to the Get procedure, declare a local array variable with the same rank and element data type.
+    'Include this local array variable in the Return statement. Do not follow the array name with parentheses.
+
+    Private nameList() As String
+
+    Public Property stationNames As String()
+        Get
+            Return nameList
+        End Get
+        Set(ByVal Value As String())
+            ' Insert code to store nameList values.
+        End Set
+    End Property
+
+    Dim listOfNames() As String = stationNames
+
+
+
+
+End Module
+
+
+
+/////////////// ParamArray//////////////////////////
+
+
+Public Shared Sub UseVariableParameters(ParamArray list() As  Integer) 
+     For  i As Integer = 0  To list.Length -1 
+        Console.WriteLine(list(i))
+     Next i 
+     Console.WriteLine()
+End Sub
+
+Public Shared Sub DemonstrateVariableParameters()
+
+    Manager.UseVariableParameters(1,2,3,4,5)
+End Sub
+
+
+
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DataGridView</Category>
+        <Language>VB.NET</Language>
+        <Public>false</Public>
+        <Name>CalculatedColumn_AfterFormatting</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DataGridView</Category>
+          <Language>VB.NET</Language>
+          <Public>false</Public>
+          <Name>CalculatedColumn_AfterFormatting</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>'1] Set the datasource for the DGV
+'2] Format the DGV, adding in a column for subsequent calculation
+'3] Calculate the column
+
+
+
+'1] Set the datasource for the DGV
+    Sub SetTheDataSource_for_DVG_and_ShowTheMinimumSetOfColumns_TeamMember(ByRef dgv As DataGridView, sSearchString As String, oCurrentTeam As Team_Record)
+        Try
+
+            '_bToggle_ShowAllColumns_Contacts = False
+
+            dgv.Columns.Clear()
+
+            Get_DataSource_List_ForDataGridView_TeamMember_Given_T17PK_and_SearchString(dgv, sSearchString, oCurrentTeam)
+
+            FormatTheDGV(dgv)
+
+            CalculateTheNameColumnInTheTeamMemberDGV()
+
+        Catch ex As Exception
+            UnhandledExceptionHandler(ex, "SetTheDataSource_for_DVG_and_ShowTheMinimumSetOfColumns_TeamMember", k_NameOfClass)
+        End Try
+    End Sub
+    
+    
+    '2] Format the DGV, adding in a column for subsequent calculation
+    
+    
+    
+    Sub FormatTheDGV(dgv As DataGridView)
+        dgv.EditMode = DataGridViewEditMode.EditProgrammatically
+        dgv.AutoGenerateColumns = g_DebugOn_
+        dgv.AutoSize = True
+
+
+
+
+
+
+        Dim iNumberOfCalculatedColumns As Integer = 1
+
+
+        Dim column As DataGridViewColumn
+
+        '=Start=============
+        column = New DataGridViewTextBoxColumn()
+        With column
+            .DataPropertyName = "Team_Role"
+            .Name = "Team Role"
+            .DisplayIndex = 0
+            .Visible = True
+            .AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+
+        End With
+        dgv.Columns.Add(column)
+
+        '\\\\\\ Calculated Column \\\\\\\\\\\\\\
+
+        column = New DataGridViewTextBoxColumn()
+        With column
+            '.DataPropertyName = "Name"
+            .Name = "Member-Name"
+            .DisplayIndex = 1
+            .Visible = True
+            .AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+        End With
+        dgv.Columns.Add(column)
+
+
+        '\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+        '=Start=============
+        column = New DataGridViewTextBoxColumn()
+        With column
+            .DataPropertyName = "TEAM_MemberType"
+            .Name = "TEAM Member Type"
+            .DisplayIndex = 1 + iNumberOfCalculatedColumns
+            .Visible = True
+            .AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+        End With
+        dgv.Columns.Add(column)
+
+        '=Start=============
+        column = New DataGridViewTextBoxColumn()
+        With column
+            .DataPropertyName = "Name"
+            .Name = "Employee Name"
+            .DisplayIndex = 2 + iNumberOfCalculatedColumns
+            .Visible = True
+            .AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+        End With
+        dgv.Columns.Add(column)
+
+        '=Start=============
+        column = New DataGridViewTextBoxColumn()
+        With column
+            .DataPropertyName = "FIRST_NAME"
+            .Name = "FN NonEmployee"
+            .DisplayIndex = 4 + iNumberOfCalculatedColumns
+            .Visible = True
+            .AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+        End With
+        dgv.Columns.Add(column)
+
+        '=Start=============
+        column = New DataGridViewTextBoxColumn()
+        With column
+            .DataPropertyName = "LAST_NAME"
+            .Name = "LN NonEmployee"
+            .DisplayIndex = 5 + iNumberOfCalculatedColumns
+            .Visible = True
+            .AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+        End With
+        dgv.Columns.Add(column)
+
+        '=Start=============
+        column = New DataGridViewTextBoxColumn()
+        With column
+            .DataPropertyName = "CA_Number"
+            .Name = "CA #"
+            .DisplayIndex = 6 + iNumberOfCalculatedColumns
+            .Visible = True
+            .AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+        End With
+        dgv.Columns.Add(column)
+
+        '=Start=============
+        column = New DataGridViewTextBoxColumn()
+        With column
+            .DataPropertyName = "Practice_Name"
+            .Name = "Practice Name"
+            .DisplayIndex = 7 + iNumberOfCalculatedColumns
+            .Visible = True
+            .AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+        End With
+        dgv.Columns.Add(column)
+
+        '=Start=============
+        column = New DataGridViewTextBoxColumn()
+        With column
+            .DataPropertyName = "Alternate_Name"
+            .Name = "Alternate Name"
+            .DisplayIndex = 8 + iNumberOfCalculatedColumns
+            .Visible = True
+            .AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+        End With
+        dgv.Columns.Add(column)
+
+        '=Start=============
+        column = New DataGridViewTextBoxColumn()
+        With column
+            .DataPropertyName = "T18_PK"
+            .Name = "T18_PK"
+            .DisplayIndex = 9 + iNumberOfCalculatedColumns
+            .Visible = g_DebugOn_
+        End With
+        dgv.Columns.Add(column)
+
+        '=Start=============
+        column = New DataGridViewTextBoxColumn()
+        With column
+            .DataPropertyName = "T17_FK"
+            .Name = "T17_FK"
+            .DisplayIndex = 10 + iNumberOfCalculatedColumns
+            .Visible = g_DebugOn_
+        End With
+        dgv.Columns.Add(column)
+
+        '=Start=============
+        column = New DataGridViewTextBoxColumn()
+        With column
+            .DataPropertyName = "Team_Role_e16"
+            .Name = "Team_Role_e16"
+            .DisplayIndex = 11 + iNumberOfCalculatedColumns
+            .Visible = g_DebugOn_
+        End With
+        dgv.Columns.Add(column)
+
+        '=Start=============
+        column = New DataGridViewTextBoxColumn()
+        With column
+            .DataPropertyName = "TEAM_MemberType_e25"
+            .Name = "TEAM_MemberType_e25"
+            .DisplayIndex = 12 + iNumberOfCalculatedColumns
+            .Visible = g_DebugOn_
+        End With
+        dgv.Columns.Add(column)
+
+
+    End Sub
+
+'3] Calculate the column
+
+
+    Sub CalculateTheNameColumnInTheTeamMemberDGV()
+
+        Dim sName As String
+
+        For Each rRow As DataGridViewRow In dgv_TeamMember_Record.Rows
+
+            sName = ""
+
+            'row.Cells("Member-Name").Value = "Whatever"
+
+            Select Case rRow.Cells("TEAM_MemberType_e25").Value.ToString
+
+                Case "1" 'Employee
+                    sName = CStr(rRow.Cells("Employee Name").Value)
+                Case "2" 'NonEmployee
+                    sName = rRow.Cells("LN NonEmployee").Value.ToString &amp; ", " &amp; rRow.Cells("FN NonEmployee").Value.ToString
+                Case "3" 'Practice
+                    sName = "{# " &amp; rRow.Cells("CA #").Value.ToString &amp; "} " &amp; rRow.Cells("Practice Name").Value.ToString
+                Case Else
+                    sName = "missing"
+
+            End Select
+
+            rRow.Cells("Member-Name").Value = sName
+        Next
+
+    End Sub</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Calculated_Columns</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>about_DAX_Calculated_Columns</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Calculated_Columns</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>about_DAX_Calculated_Columns</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>about_DAX_Calculated_Columns
+
+the ICON of a calculated column is a little SIGMA inside a square
+
+'Calculated Columns: "Expands" a table by adding columns defined ba a defined ???
+'					They can only look in the row that they are in.
+'vs.
+'Measures : "Summarizes" all the data into a single value
+'			works with whold columns of data and condense them into a single value
+'			Computed at run time, stored temporarily
+'			Limited by a Filter Context, which are ALL the filters applied by the user
+
+			
+----------------------------------------------------------------------------------
+'SO if you created two columns in a Visual (e.g. Table) and one was based on a Calculated Column using data from a Related table, 
+'	and the other was based on a Measure using data from a Related table, then the Calculated-based Rank would remain unchanged as you
+'	apply filters to the related Table, but the Measure-based Rank would change as you applied filters to the related Table.
+
+'e.g. for a Calculated Column
+Ranking =        RANKX(ALL(Products), SUMX(RELATEDTABLE(SalesOrderDetail), SalesOrderDetail[GrossSales]))
+
+'e.g. for a MEASURE Column
+RankingMeasure = RANKX(ALL(Products), SUMX(RELATEDTABLE(SalesOrderDetail), SalesOrderDetail[GrossSales]))		
+---------------------------------------------------------------------------------
+			
+'Column calculations are computed at time of refresh, and then stored with the table
+
+'They are limited to the row context: They can only look in the row that they are in.
+
+---SIMPLE
+'.e.g. 
+Gross Sales = [Price] * [Quantity] * (1-[Discount])
+
+---RELATED TABLE
+'e.g. calculated value based on column in another table related by [ProductID]
+'			uses color from a related table
+Color = RELATED(Products[Color]) 'used to pull to a many table from a one table in a 'Many-to-one' relationship
+
+---INTERATOR 'Takes 2 parameters: related table name, and an expression
+'e.g. want Total Sales by product between 2 related tables, related by [ProductID] 
+'		want the calculation done in the ONE end of the 1-to-Many relationship
+SUMX : sums values from a related table  - This is the interator function
+RELATEDTABLE: the related table for SUMX
+TotalSales = SUMX(RELATEDTABLE(SalesOrderDetail),SalesOrderDetail[LineTotal])</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Evaluation_Contexts</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>about_DAX_Evaluation_Contexts</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Evaluation_Contexts</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>about_DAX_Evaluation_Contexts</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>about_DAX_Evaluation_Contexts
+
+The evaluation context determines what your expression can see
+you have to imagine what the expression is able to access WHEN it evaluates
+
+Evaluation Context define what values an expression can see when it is evaluating
+
+- no context: all rows and columns are available
+
+- Filter Context: All the implicit filters that are applied
+		=&gt;	Is a combination of Visual and User Filters
+		=&gt;	Can be changed w/ CALCULATE
+		=&gt;	Propogates filters to other tables via the relationships
+		
+- Row Context: CALCULATED columns implicitly create a row context
+				it is limited to the current row
+		=&gt; Limits to the current row, when iterating 
+		=&gt; used in calculated columns
+		=&gt; used in Iterators, when it goes row-by-row
+		=&gt; Does NOT propogate filters (e.g. working on Table_1, would not affect anything on Table_2)
+		=&gt; 	in fact, Row Context requires RELATED/RELATEDTABLE to use other tables
+		
+
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Evaluation_Contexts</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>Nested_Evaluation_Context</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Evaluation_Contexts</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>Nested_Evaluation_Context</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>Nested_Evaluation_Context
+
+
+e.g. for each product (in TABLE_1), go through each row in another table (TABLE_2)
+'NOTE for e.g.: Iterators are Limited by a Filter Context, which are ALL the filters applied by the user
+
+= RANKX (												'&lt;== Interator Creates a Row Context
+			ALL( Products ),							'&lt;== Parm1: Table, ALL Returns all the rows in a table regardless of the filters
+			SUMX (										'&lt;== Iterator: use an iterator b/c data is in another table
+					RELATEDTABLE ( InternetSales ) ,	'&lt;== Pulls sales b based on the 'inner row' context? Outputs Temporary Table
+					'InternetSales'[SalesAmount]
+				 )
+		)
+		
+
+----------------------------------------------------------------------------------
+'SO if you created two columns in a Visual (e.g. Table) and one was based on a Calculated Column using data from a Related table, 
+'	and the other was based on a Measure using data from a Related table, then the Calculated-based Rank would remain unchanged as you
+'	apply filters to the related Table, but the Measure-based Rank would change as you applied filters to the related Table.
+
+'e.g. for a Calculated Column
+Ranking =        RANKX(ALL(Products), SUMX(RELATEDTABLE(SalesOrderDetail), SalesOrderDetail[GrossSales]))
+
+'e.g. for a MEASURE Column
+RankingMeasure = RANKX(ALL(Products), SUMX(RELATEDTABLE(SalesOrderDetail), SalesOrderDetail[GrossSales]))		
+---------------------------------------------------------------------------------	</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Filtering</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>about_DAX_Filtering</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Filtering</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>about_DAX_Filtering</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>about_DAX_Filtering
+
+Implicit Filter: 	'Filtering applied by the GUI (user or layout) of the report
+
+Explicit Filter:  	'Filtering applied by the the Measures
+
+Explicit filters overide Implicit Filters
+
+CALCULATE: 'to override filters, designed to be fast, can use multiple filter statements: Single column to fixed value
+
+FILTER: 'for advanced filters, designed to be flexible, and when evaluating multiple Columns
+		' for comparing to an aggregate function or measure
+		' Returns a Table, for example to a function that requires a table input
+
+ALL: 'to undo filters</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Filtering</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>ALLEXCEPT</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Filtering</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>ALLEXCEPT</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+'The following example presents a formula that you can use in a measure.
+'The formula sums SalesAmount_USD 
+'	and uses the ALLEXCEPT function to remove any context filters on the DateTime table 
+'	except if the filter has been applied to the CalendarYear column.
+
+CALCULATE(SUM(ResellerSales_USD[SalesAmount_USD]), ALLEXCEPT(DateTime, DateTime[CalendarYear]))  </Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Filtering</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>ALL</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Filtering</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>ALL</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>ALL:	'Removes Filters
+'Use with CALCULATE
+'Returns all the rows in a table, or all the values in a column, ignoring any filters that might have been applied. 
+'This function is useful for clearing filters and creating calculations on all the rows in a table.
+
+'Syntax:
+ALL( {&lt;table&gt; | &lt;column&gt;[, &lt;column&gt;[, &lt;column&gt;[,…]]]} )  
+
+
+e.g. 'This removes filters from all columns in the Products table
+% of Total Sales = SUM(SalesOrderDetail[OrderQty]) / CALCULATE(SUM(SalesOrderDetail[OrderQty]), ALL(Products))
+
+e.g. 'This removes filters from the Color Column in the Products table, but any other filter would still override it
+% of Total Sales = SUM(SalesOrderDetail[OrderQty]) / CALCULATE(SUM(SalesOrderDetail[OrderQty]), ALL(Products[Color]))
+
+'ALLEXCEPT
+
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Filtering</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>CALCULATE</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Filtering</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>CALCULATE</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>CALCULATE: 'to override filters, designed to be fast, can use multiple filter statements: Single column to fixed value
+
+e.g.
+
+'CALCULATE ( Expression, Filter )
+Sum of Green Products := CALCULATE ( SUM ( Sales[Total] ), [Color] = "Green" )
+
+
+---------------------------------------------------------------------------
+'use CALCULATE to Create a Measure, that compares a 'column' (or Field) to a single value:
+
+'Syntax:
+		CALCULATE(&lt;expression&gt;,&lt;filter1&gt;,&lt;filter2&gt;…)  
+
+'The expression used as the first parameter is essentially the same as a measure.
+'The following restrictions apply to Boolean expressions that are used as arguments:
+		'The expression cannot reference a measure.	
+		'The expression cannot use a nested CALCULATE function.
+		'The expression cannot use any function that scans a table or returns a table, including aggregation functions.	
+		
+
+BlackAveragePrice = CALCULATE(AVERAGE(SalesOrderDetail[UnitPrice]), Products[Color] = "Black")
+'If this measure were added to a table, where each row is a different color, it would override the GUI
+'	filters and still show the average black price, regardless of which color was sliced.</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Filtering</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>FILTER</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Filtering</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>FILTER</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>FILTER: 'for advanced filters, designed to be flexible, and when evaluating multiple Columns
+		' for comparing to an aggregate function or measure
+		' Returns a Table, for example to a function that requires a table input
+		
+FILTER 'is an Iterator
+
+'Syntax: 
+			FILTER(&lt;table&gt;,&lt;filter&gt;)
+			 
+			table:	'The table to be filtered. The table can also be an expression that results in a table.	
+			
+			filter:	 ' A Boolean expression that is to be evaluated for each row of the table. 
+					 ' For example, [Amount] &gt; 0 or [Region] = "France"
+'e.g. 		
+Measure Name := CALCULATE ( SUM ( [Total] ), FILTER (Sales, QTY * Price &lt; 100 ) )
+
+'e.g.
+AverageDiscountGreaterthanTen = 
+		CALCULATE(AVERAGE(
+							SalesOrderDetail[UnitPriceDiscount]
+						  ),FILTER(
+						  			SalesOrderDetail, 
+						  			SalesOrderDetail[OrderQty] * SalesOrderDetail[UnitPrice] * SalesOrderDetail[UnitPriceDiscount] &gt; 10
+						  		   )
+				  )</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Functions</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>DateAndTime_Functions</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Functions</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>DateAndTime_Functions</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>https://docs.microsoft.com/en-us/dax/date-and-time-functions-dax
+
+CALENDAR			CALENDAR(&lt;start_date&gt;, &lt;end_date&gt;)  
+
+=CALENDAR (DATE (2005, 1, 1), DATE (2015, 12, 31))
+==================================================================================================================
+
+CALENDARAUTO		CALENDARAUTO([fiscal_year_end_month])
+'WHERE
+fiscal_year_end_month '= Any DAX expression that returns an integer from 1 to 12. 
+					'	If omitted, defaults to the value specified in the calendar table 
+					'	template for the current user, if present; otherwise, defaults to 12.
+  
+'Returns a table with a single column named “Date” that contains a contiguous set of dates. 
+'The range of dates is calculated automatically based on data in the model.
+==================================================================================================================
+
+DATE
+DATEDIFF
+DATEVALUE
+DAY
+EDATE
+EOMONTH
+HOUR
+MINUTE
+==================================================================================================================
+MONTH			MONTH(&lt;datetime&gt;) 
+'Returns the month as a number from 1 (January) to 12 (December).
+==================================================================================================================
+NOW
+SECOND
+TIME
+TIMEVALUE
+TODAY
+WEEKDAY
+WEEKNUM
+==================================================================================================================
+YEAR 			YEAR(&lt;date&gt;)
+'Returns the year of a date as a four digit integer in the range 1900-9999.
+==================================================================================================================
+YEARFRAC
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Functions</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>Filter_Functions</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Functions</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>Filter_Functions</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>https://docs.microsoft.com/en-us/dax/filter-functions-dax
+
+' FILTER functions output a temporary table
+' Filters do not propogate in a Row Context, i.e. in Calculated Columns
+
+ADDMISSINGITEMS
+ALL
+	'Returns all the rows in a table, or all the values in a column, 
+	'	ignoring any filters that might have been applied. 
+	'	This function is useful for clearing filters 
+	'	and creating calculations on all the rows in a table.
+	
+
+ALLEXCEPT
+ALLNOBLANKROW
+ALLSELECTED
+CALCULATE	'to override filters, designed to be fast, can use multiple filter statements: Single column to fixed value
+			'Evaluates an expression in a context that is modified by the specified filters.
+
+			'Syntax: 'CALCULATE ( Expression, Filter )
+					CALCULATE(&lt;expression&gt;,&lt;filter1&gt;,&lt;filter2&gt;…)  
+			'e.g.
+			BlackAveragePrice = CALCULATE(AVERAGE(SalesOrderDetail[UnitPrice]), Products[Color] = "Black")
+			'If this measure were added to a table, where each row is a different color, it would override the GUI
+			'	filters and still show the average black price, regardless of which color was sliced.			
+CALCULATETABLE
+CROSSFILTER function
+DISTINCT 'returns a one column table that contains the unique values in a column,
+		 '  OR Multiple columnswith distinct combination of values, for a table expression argument
+		 
+		'e.g.  Notice: DISTINCT gets rid of the duplicates
+		Colors = CONCATENATEX(DISTINCT(Products[Color]),Products[Color], ", ")
+
+EARLIER
+EARLIEST
+FILTER
+FILTERS
+HASONEFILTER
+HASONEVALUE
+ISCROSSFILTERED
+ISFILTERED
+KEEPFILTERS
+
+RELATED 
+	'=&gt; used in Row-Context: so used in CALCULATED Columns, but not in MEASURES
+	' outputs a temporary table
+
+RELATEDTABLE
+	'=&gt; used in Row-Context: so used in CALCULATED Columns, but not in MEASURES
+	' outputs a temporary table of just the rows related by the JOIN
+	
+SELECTEDVALUE
+SUBSTITUTEWITHINDEX
+USERELATIONSHIP
+VALUES
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Functions</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>Statistical_Functions</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Functions</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>Statistical_Functions</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>https://docs.microsoft.com/en-us/dax/statistical-functions-dax
+
+' Filters do not propogate in a Row Context, i.e. in Calculated Columns
+----------------------------------------------------------------------------------
+'SO if you created two columns in a Visual (e.g. Table) and one was based on a Calculated Column using data from a Related table, 
+'	and the other was based on a Measure using data from a Related table, then the Calculated-based Rank would remain unchanged as you
+'	apply filters to the related Table, but the Measure-based Rank would change as you applied filters to the related Table.
+
+'e.g. for a Calculated Column
+Ranking =        RANKX(ALL(Products), SUMX(RELATEDTABLE(SalesOrderDetail), SalesOrderDetail[GrossSales]))
+
+'e.g. for a MEASURE Column
+RankingMeasure = RANKX(ALL(Products), SUMX(RELATEDTABLE(SalesOrderDetail), SalesOrderDetail[GrossSales]))		
+---------------------------------------------------------------------------------
+
+ADDCOLUMNS
+APPROXIMATEDISTINCTCOUNT
+AVERAGE
+AVERAGEA
+
+AVERAGEX
+ 		'e.g.
+ 		AverageGrossSales = AVERAGEX(SalesOrderDetail, SalesOrderDetail[OrderQty] * SalesOrderDetail[UnitPrice] * (1 - SalesOrderDetail[UnitPriceDiscount]))
+ 		
+BETA.DIST
+BETA.INV
+CHISQ.INV
+CHISQ.INV.RT
+CONFIDENCE.NORM
+CONFIDENCE.T
+COUNT
+COUNTA
+COUNTAX
+COUNTBLANK
+COUNTROWS
+COUNTX
+CROSSJOIN
+DATATABLE function
+DISTINCTCOUNT
+EXPON.DIST
+GENERATE
+GENERATEALL
+GEOMEAN
+GEOMEANX
+MAX
+MAXA
+MAXX
+MEDIAN
+MEDIANX
+MIN
+MINA
+MINX
+NORM.DIST
+NORM.INV
+NORM.S.DIST
+NORM.S.INV (DAX)
+PERCENTILE.EXC
+PERCENTILE.INC
+PERCENTILEX.EXC
+PERCENTILEX.INC
+POISSON.DIST
+RANK.EQ
+RANKX
+	'e.g. create a MEASURE: for each product (in TABLE_1: Products), go through each row in another table (TABLE_2: SalesOrderDetail)
+	
+	Ranking = RANKX(ALL(Products), SUMX(RELATEDTABLE(SalesOrderDetail), SalesOrderDetail[GrossSales]))
+	'NOTE: if you used  SUMX(SalesOrderDetail, SalesOrderDetail[GrossSales]) 
+	'	then it would sum up all the rows, rather than just the related rows
+	'NOTE: if we did not use ALL (for [Products] table) then it would only rank for the filtered rows of [Products], and not give us an overall Rank
+
+
+ROW
+SAMPLE
+SELECTCOLUMNS
+SIN
+SINH
+SQRTPI
+STDEV.P
+STDEV.S
+STDEVX.P
+STDEVX.S
+SUMMARIZE
+T.DIST
+T.DIST.2T
+T.DIST.RT
+T.INV
+T.INV.2t
+TAN
+TANH
+TOPN
+VAR.P
+VAR.S
+VARX.P
+VARX.S
+XIRR
+XNPV
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Functions</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>Table_Functions</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Functions</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>Table_Functions</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>'Table_Functions
+
+'One key limitation of a table function is that its output can’t be used in a visual in your report. 
+'	If you think about it, 
+'	each cell on a pivot table can only fit one number, not an entire table of numbers.
+
+ 'returns a table of data
+------------------------------------------------ 
+ 'In DAX, a table function is used in a few ways:
+
+'1]	As input to another DAX function where the function argument requires a table. 
+'		For example, the FILTER function iterates over a table of data 
+'		and tests each value for a condition 
+'		(actually any X function like SUMX or AVERAGEX is an iterator and would require a table as the first argument.)
+'2] As a calculated table definition in Power BI Desktop
+'3] As a query written against your data model using DAX Studio or SQL Server Management Studio.
+------------------------------------------------
+
+'Tables can become scalars: 
+'	A neat feature of DAX is that any table function that resolves to a single row and column (i.e., one value) is automatically converted to a scalar value if possible. That means that you can use a table function as an input to another function, 
+'	but do so cautiously to avoid the dreaded “Table of Multiple Values…” error.
+
+----------------------------------------------------------------------------------
+'SO if you created two columns in a Visual (e.g. Table) and one was based on a Calculated Column using data from a Related table, 
+'	and the other was based on a Measure using data from a Related table, then the Calculated-based Rank would remain unchanged as you
+'	apply filters to the related Table, but the Measure-based Rank would change as you applied filters to the related Table.
+
+'e.g. for a Calculated Column
+Ranking =        RANKX(ALL(Products), SUMX(RELATEDTABLE(SalesOrderDetail), SalesOrderDetail[GrossSales]))
+
+'e.g. for a MEASURE Column
+RankingMeasure = RANKX(ALL(Products), SUMX(RELATEDTABLE(SalesOrderDetail), SalesOrderDetail[GrossSales]))		
+---------------------------------------------------------------------------------</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Iterators</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>about_DAX_Iterators</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Iterators</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>about_DAX_Iterators</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>about_DAX_Iterators
+
+'Iterators have the advantage over calculated columns b/c they don't use up RAM
+
+'Iterators are Limited by a Filter Context, which are ALL the filters applied by the user
+
+'Iterators can be implemented as MEASURES, so remember:
+'When you create a 'MEASURE' in the 'Fields' panel of a Table, 
+'	and you look at the table in Data View, 
+'	you do NOT see a column for the measure
+'HOWEVER, you can drag n drop the MEASURE from the 'Fields' panel, into the 'Values' field of a Matrix visualization (for example)
+'	and it will show up as a column in the Matrix Visualization, so it can 
+'	be used in a Table or Matrix Visualization
+
+
+
+'can use for row-by-row 
+SUM vs SUMX 'SUMX is an iterator
+			'Many Iterators end in 'X'
+
+'Row-by-row iterators do have worse performance than their non-interator functions
+
+'Iterators allow for multi-column expressions (in an aggregator)
+
+'Iterator Parameters: 2
+'First Parameter:  is a Table
+'Second Parameter: is an expression
+
+'Iterator says for each row, of the Table Parameter, evaluate the Expression Parameter
+
+FILTER ' is an Interator
+
+'Using AVERAGEX vs AVERAGE
+Average Gross Sales := AVERAGEX ( Category, [Quantity] * [Price] )
+'You could put the Iterator in a Measure
+
+'AVERAGE function, unlike AVERAGEX only excepts 1 column as an argument
+
+
+'e.g. this can be used to show which colors are being filtered on, by dropping this measure into a detail card 
+Colors = CONCATENATEX(DISTINCT(Products[Color]),Products[Color], ", ")
+'e.g.
+AverageGrossSales = AVERAGEX(SalesOrderDetail, SalesOrderDetail[OrderQty] * SalesOrderDetail[UnitPrice] * (1 - SalesOrderDetail[UnitPriceDiscount]))
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Measures</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>about_DAX_Measures</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Measures</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>about_DAX_Measures</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>about_DAX_Measures
+
+the ICON of a MEASURE column is a little CALCULATOR inside a square 
+
+'Calculated Columns: "Expands" a table by adding columns defined ba a defined ???
+'					They can only look in the row that they are in.
+'vs.
+'Measures : "Summarizes" all the data into a single value
+'			works with whole columns of data and condense them into a single value
+'			Computed at run time, stored temporarily
+'			Limited by a Filter Context, which are ALL the filters applied by the user
+
+----------------------------------------------------------------------------------
+'SO if you created two columns in a Visual (e.g. Table) and one was based on a Calculated Column using data from a Related table, 
+'	and the other was based on a Measure using data from a Related table, then the Calculated-based Rank would remain unchanged as you
+'	apply filters to the related Table, but the Measure-based Rank would change as you applied filters to the related Table.
+
+'e.g. for a Calculated Column
+Ranking =        RANKX(ALL(Products), SUMX(RELATEDTABLE(SalesOrderDetail), SalesOrderDetail[GrossSales]))
+
+'e.g. for a MEASURE Column
+RankingMeasure = RANKX(ALL(Products), SUMX(RELATEDTABLE(SalesOrderDetail), SalesOrderDetail[GrossSales]))		
+---------------------------------------------------------------------------------
+'e.g.
+Total Gross Sales := SUM( Sales[Gross Sales] )  'where Sales[Gross Sales] is Table[field])
+
+'To make sure you are applying the measure to the right table, right click on the table {in Data View}
+
+'You can create Measures in tables with no data
+
+'When you create a 'MEASURE' in the 'Fields' panel of a Table, 
+'	and you look at the table in Data View, 
+'	you do NOT see a column for the measure
+'HOWEVER, you can drag n drop the MEASURE from the 'Fields' panel, into the 'Values' field of a Matrix visualization (for example)
+'	and it will show up as a column in the Matrix Visualization
+
+'You can NOT use a MEASURE in a SLICER</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Misc</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>debugging_formatting</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Misc</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>debugging_formatting</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>web formatter: http://www.daxformatter.com/
+
+New Line in DAX editor: [Shift]-[Enter]
+
+'To debug this:
+
+[ABC Class] =
+				VAR MySales = Products[ProductSales]
+				VAR ProductsWithSalesBiggerThanMine =									'&lt;==== Table Variable
+				    FILTER ( ALL ( Products ), Products[ProductSales] &gt;= MySales )
+				VAR CumulatedSales =
+				    CALCULATE ( SUM ( Sales[SalesAmount] ), ProductsWithSalesBiggerThanMine )
+				VAR CumulatedPercentage =
+				    CumulatedSales / SUM ( Sales[SalesAmount] )
+				RETURN
+				    SWITCH (
+						        TRUE (),
+						        CumulatedPercentage &lt;= 0.7, "A",
+						        CumulatedPercentage &lt;= 0.9, "B",
+						        "C"
+						    )
+'Change the return to return each variable one at a time.
+'and display the output in a Card visualizer
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Misc</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>VAR_Variables</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Misc</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>VAR_Variables</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+'PseudoCode:
+myFormula = VAR = VariableName1 = &lt;some valid DAX formula&gt;
+            VAR = VariableName2 = &lt;some other valid DAX formula&gt;
+            RETURN &lt;another valid DAX formula that can use VariableName1 
+                       and VariableName2 as part of the expression&gt;
+                       
+'Example:
+
+[ABC Class] =
+				VAR MySales = Products[ProductSales]
+				VAR ProductsWithSalesBiggerThanMine =									'&lt;==== Table Variable
+				    FILTER ( ALL ( Products ), Products[ProductSales] &gt;= MySales )
+				VAR CumulatedSales =
+				    CALCULATE ( SUM ( Sales[SalesAmount] ), ProductsWithSalesBiggerThanMine )
+				VAR CumulatedPercentage =
+				    CumulatedSales / SUM ( Sales[SalesAmount] )
+				RETURN
+				    SWITCH (
+						        TRUE (),
+						        CumulatedPercentage &lt;= 0.7, "A",
+						        CumulatedPercentage &lt;= 0.9, "B",
+						        "C"
+						    )                       
+                       
+'It is possible to set scalar values as variables but it is also possible to assign tables as variables.
+
+'Scalar Value Example
+---------------------
+VAR myScalarValue = SUM(Sales[Extended Amount]) 
+
+'Table Example
+------------------
+VAR myTable = FILTER(Customer,Customer[Post Code] = 50210) 
+'The above variable myTable returns a virtual table 
+'that can be used anywhere that a table is used in a DAX formula, such as a filter inside a CALCULATE function.              
+
+'Once the variable has been assigned a value, that value cannot change during the execution of the RETURN portion of the formula. 
+'From that perspective, the variables act more like constants than regular variables in a traditional programming language context.
+
+
+-----------------------------------------------------------------DEFINE clause
+'You can declare DAX variables in the DEFINE clause of a query like so:
+DEFINE
+    VAR MyMonth = "January"
+    VAR FilteredMonths =
+        FILTER ( VALUES ( Sales[Month] ), Sales[Month] = MyMonth )
+EVALUATE
+CALCULATETABLE ( Sales, FilteredMonths )</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Time_Intelligence</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>Date_Table</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Time_Intelligence</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>Date_Table</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>a 'date table' is all the dates between a specific range
+'often have additional columns such as: MonthName, YearName, Quarter, Holiday
+
+'Time Intelligence requires continous series of dates w/ no gaps
+
+'To Create Date Table in DAX
+-----------------------------
+' "Modeling" {Main Menu} =&gt; 'New Table' {icon in ribbon}
+' In the formula bar: "Table =" =&gt; rename 'Table' to 'DatesDAX' and change it to:
+DatesDAX = CALENDAR("01/01/2011","01/01/2021") 
+'This would give you one column, so add the "ADDCOLUMNS" iterator
+DatesDAX = ADDCOLUMNS( CALENDAR("01/01/2011","01/01/2021"), "Year", YEAR([Date]))
+'Where [Date] is the existing column to use  
+
+'Create Relationship with Date Table to use for subsequent filtering
+--------------------------------------------------------------------
+'To automatically calculate the calendar, w/o specifying start and end date
+'	where fiscal year end and start is December (i.e. 12)
+DatesDAX = ADDCOLUMNS(CALENDARAUTO(12),"Year",YEAR([Date]))
+
+'Then build relationship between [Date] column of the newly created Date Table, 
+'	AND the [OrderDate] field of the [SalesOrderHeader] table  {FOR EXAMPLE}
+
+'Go to the relationships pane {on left} and drag the  [Date] column of the newly created Date Table
+'	and drop it on the [OrderDate] field of the [SalesOrderHeader] table 
+
+
+'could also calculate a PreviousYear column:
+Date = ADDCOLUMNS(CALENDARAUTO(12),"Year", YEAR([Date]),"Month", Month([Date]), "PreviousYear",(YEAR([Date]-1) )) 
+
+====Date Table=======================================================================================================
+https://powerbi.tips/2017/12/start-of-month-dax-calendar/
+'Open Power BI Desktop, on the Modeling ribbon click New Table.
+'Enter the following code:
+
+Dates = 
+  GENERATE ( 
+    CALENDAR ( DATE ( 2017, 1, 1 ), DATE ( 2017, 12, 31 ) ), 
+    VAR currentDay = [Date]
+    VAR day = DAY( currentDay )
+    VAR month = MONTH ( currentDay ) 
+    VAR year = YEAR ( currentDay )
+  RETURN ROW ( 
+    "day", day, 
+    "month", month, 
+    "year", year )
+  )
+  
+  'Note: When you drag over the field labeled Date the field will be naturally added as a Date Hierarchy.  
+  'To remove the Date Hierarchy, you have to click the little drop down arrow next to the word DATE 
+  '	and select the word Date in the drop down menu.  
+  '	This will remove the Year, Quarter, Month and Day date context from the visual.
+====Data Table - Just 1st of month ===============================================================
+https://powerbi.tips/2017/12/start-of-month-dax-calendar/
+'Open Power BI Desktop, on the Modeling ribbon click New Table.
+'Enter the following code:
+
+Start of Month Dates = 
+  GENERATE (
+    GENERATESERIES(1,(12*118)),
+    VAR inc = [Value]
+  RETURN ROW (
+    "date", DATE(1900,inc,1)
+    )
+  )  
+====Data Table - Beginning and End of month ===============================================================
+https://powerbi.tips/2017/12/start-of-month-dax-calendar/
+'Open Power BI Desktop, on the Modeling ribbon click New Table.
+'Enter the following code:
+  
+End of Month Dates = 
+  GENERATE (
+    GENERATESERIES(1,12*119),
+    VAR yearToStart = 1900
+    VAR inc = [Value]
+  RETURN ROW (
+    "Date", DATE(yearToStart,inc,1) ,
+    "Month End", EOMONTH( DATE(yearToStart,inc,1), 0)
+    )
+  )</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Time_Intelligence</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>YearOverYear_Growth</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Time_Intelligence</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>YearOverYear_Growth</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>YearOverYear_Growth
+
+'Relationship:
+[OrderDate] of table [SalesHeader]  &lt;=&gt; [Date] of table [Date]
+'Cardinality: Many-to-one
+
+'TABLE: [Date] w/ 3 column &amp; 1 Measure
+--------------
+'C1: Date
+'C2: "Year"
+'C3: "Month"
+
+Date =
+ADDCOLUMNS (
+    CALENDARAUTO ( 12 ),
+    "Year", YEAR ( [Date] ),
+    "Month", MONTH ( [Date] )
+)
+'Measure: YTD which pulls from the [SalesHeader] Table
+YTD = TOTALYTD(SUM(SalesHeader[TotalDue]),'Date'[Date])
+
+
+'TABLE: [SalesHeader]
+---------------------
+'C1: OrderDate
+'C2: OrderDateNum  {YYYYMMDD : INTEGER}
+'Measure1: 
+	Prev Year = CALCULATE(SUM(SalesHeader[TotalDue]),PREVIOUSYEAR('Date'[Date]))
+'C3: SalesOrderID
+'C4: TotalDue
+'Measure2: 
+YoY Growth =
+	 ( SUM ( SalesHeader[TotalDue] ) - [Prev Year] )
+	    / SUM ( SalesHeader[TotalDue] )
+	
+'Design Surface
+---------------------
+Table Visual
+'Values:
+	[DATE].[Year]				'{Don't summarize}
+	[SalesHeader].[TotalDue]	'{Sum}
+	[SalesHeader].[Prev Year]	'
+	[SalesHeader].[YoY Growth]	'
+	
+	
+
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Time_Intelligence</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>YearToDate_total</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Time_Intelligence</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>YearToDate_total</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>'Start w/ 2 tables:
+
+'Relationship:
+[OrderDate] of table [SalesHeader]  &lt;=&gt; [Date] of table [Date]
+'Cardinality: Many-to-one
+
+'TABLE: [Date] w/ 3 column &amp; 1 Measure
+--------------
+'C1: Date
+'C2: "Year"
+'C3: "Month"
+Date = ADDCOLUMNS(CALENDARAUTO(12),"Year", YEAR([Date]),"Month", Month([Date]))
+'Measure: YTD which pulls from the [SalesHeader] Table
+YTD = TOTALYTD(SUM(SalesHeader[TotalDue]),'Date'[Date])
+
+
+'TABLE: [SalesHeader]
+---------------------
+'C1: OrderDate
+'C2: OrderDateNum  {YYYYMMDD : INTEGER}
+'Measure1: 
+	Prev Year = CALCULATE(SUM(SalesHeader[TotalDue]),PREVIOUSYEAR('Date'[Date]))
+'C3: SalesOrderID
+'C4: TotalDue
+'Measure2: 
+	YoY Growth = (SUM(SalesHeader[TotalDue]) - [Prev Year]) / Sum(SalesHeader[TotalDue])
+
+'Design Surface
+---------------------
+Table Visual
+'Values:
+	[DATE].[Year]				'{Don't summarize}
+	[DATE].[Month]				'{Don't summarize}	
+	[SalesHeader].[TotalDue]	'{Sum}
+	[DATE].[YTD]				'
+	
+	
+
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>EXCEL_AUTOMATION</Category>
+        <Language>VB.NET</Language>
+        <Public>false</Public>
+        <Name>CreateAndPopulateExcel_ButNotSave</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>EXCEL_AUTOMATION</Category>
+          <Language>VB.NET</Language>
+          <Public>false</Public>
+          <Name>CreateAndPopulateExcel_ButNotSave</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+
+
+
+CreateAndPopulateExcel_ButNotSave
+
+Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As 
+System.EventArgs) Handles Button1.Click
+
+Dim excel As Microsoft.Office.Interop.Excel.Application
+
+Dim wb As Microsoft.Office.Interop.Excel.Workbook
+
+Dim ws As Microsoft.Office.Interop.Excel.Worksheet
+
+Dim rng As Microsoft.Office.Interop.Excel.Range
+
+Try
+
+excel = New Microsoft.Office.Interop.Excel.Application
+wb = excel.Workbooks.Add()
+ws = wb.ActiveSheet()
+rng = ws.Range("A1")
+rng.Value = "Techrepublic.com"
+rng = ws.Range("A3")
+rng.Value = "Quarter"
+rng = ws.Range("B3")
+rng.Value = "Sales"
+rng = ws.Range("A5")
+rng.Value = "First"
+rng = ws.Range("B5")
+rng.Value = 1000.0
+rng = ws.Range("A6")
+rng.Value = "Second"
+rng = ws.Range("B6")
+rng.Value = 2000.0
+rng = ws.Range("A7")
+rng.Value = "Third"
+rng = ws.Range("B7")
+rng.Value = 4500.0
+rng = ws.Range("A8")
+rng.Value = "Fourth"
+rng = ws.Range("B8")
+rng.Value = 4000.0
+rng = ws.Range("A10")
+rng.Value = "Total"
+rng = ws.Range("B10")
+rng.Formula = "=@Sum(B5..B8)" 
+rng.Calculate()
+excel.Visible = True
+wb.Activate()
+
+Catch ex As COMException
+MessageBox.Show("Error accessing Excel: " + ex.ToString())
+
+Catch ex As Exception
+MessageBox.Show("Error: " + ex.ToString())
+
+End Try
+
+End Sub</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>LAMBDA</Category>
+        <Language>VB.NET</Language>
+        <Public>false</Public>
+        <Name>SUB_ImplicitlyConvertedTo_aCompatibleDelegateType</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>LAMBDA</Category>
+          <Language>VB.NET</Language>
+          <Public>false</Public>
+          <Name>SUB_ImplicitlyConvertedTo_aCompatibleDelegateType</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>'a lambda expression that implicitly converts to 
+'	Sub(Of Double, String, Double) Or a matching Delegate signature.
+
+'When you assign lambda expressions to delegates or pass them as arguments to procedures, 
+'	you can specify the parameter names but omit their data types, 
+'	letting the types be taken from the delegate. 
+
+Module Module1
+    Delegate Sub StoreCalculation(ByVal value As Double,
+                                  ByVal calcType As String,
+                                  ByVal result As Double)
+
+    Sub Main()
+        ' Create a DataTable to store the data.
+        Dim valuesTable = New DataTable("Calculations")
+        valuesTable.Columns.Add("Value", GetType(Double))
+        valuesTable.Columns.Add("Calculation", GetType(String))
+        valuesTable.Columns.Add("Result", GetType(Double))
+
+        ' Define a lambda subroutine to write to the DataTable.
+        Dim writeToValuesTable = Sub(value As Double, calcType As String, result As Double)
+                                     Dim row = valuesTable.NewRow()
+                                     row(0) = value
+                                     row(1) = calcType
+                                     row(2) = result
+                                     valuesTable.Rows.Add(row)
+                                 End Sub
+
+        ' Define the source values.
+        Dim s = {1, 2, 3, 4, 5, 6, 7, 8, 9}
+
+        ' Perform the calculations.
+        Array.ForEach(s, Sub(c) CalculateSquare(c, writeToValuesTable))
+        Array.ForEach(s, Sub(c) CalculateSquareRoot(c, writeToValuesTable))
+
+        ' Display the data.
+        Console.WriteLine("Value" &amp; vbTab &amp; "Calculation" &amp; vbTab &amp; "Result")
+        For Each row As DataRow In valuesTable.Rows
+            Console.WriteLine(row(0).ToString() &amp; vbTab &amp;
+                              row(1).ToString() &amp; vbTab &amp;
+                              row(2).ToString())
+        Next
+
+    End Sub
+
+
+    Sub CalculateSquare(ByVal number As Double, ByVal writeTo As StoreCalculation)
+        writeTo(number, "Square     ", number ^ 2)
+    End Sub
+
+    Sub CalculateSquareRoot(ByVal number As Double, ByVal writeTo As StoreCalculation)
+        writeTo(number, "Square Root", Math.Sqrt(number))
+    End Sub
+End Module</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Format_Commands_to_change_output_vie</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>about_POWERSHELL_Format_Commands_to_change_output_vie</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Format_Commands_to_change_output_vie</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>about_POWERSHELL_Format_Commands_to_change_output_vie</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>about_POWERSHELL_Format_Commands_to_change_output_view
+
+'creates a pop-up window adjustable
+whatever | Out-GridView
+
+'At the end of the pipeline is a special comand: Out-Default
+'	That cmdlet passes objects to 'Out-Host', which calls PowerShell's formatting system
+'1] PowerShell checks configuration file for instructions
+'	That file is: $pshome\DotNetTypes.format.ps1xml (in System32 folder)
+'	Those files have the default layouts. You can customize those.
+'	It also checs the types.ps1xml file for the default properties of any given type
+'2]	If there are no defaults, then it follows some simple rules:
+'	If no default then all properties are used.
+'	If there are less than 5 properties it displays a table
+'	If 5 or more, display a list
+'	You can override the defaults with the Format cmdlets
+
+
+'The Format cmdlets are 
+'	Format-Wide
+'	Format-List
+'	Format-Table
+'	Format-Custom
+
+'Each cmdlet also uses the same parameter name, Property, to specify which properties you want to display. 
+'	Because Format-Wide only shows a single property, its Property parameter only takes a single value, 
+'	but the property parameters of Format-List and Format-Table will accept a list of property names.
+
+'Example:
+&gt; Get-Process -Name chrome
+
+Handles  NPM(K)    PM(K)      WS(K) VM(M)   CPU(s)     Id ProcessName                                                                                                     
+-------  ------    -----      ----- -----   ------     -- -----------                                                                                                     
+    220      24    64112      52000   263    38.66   5404 chrome                                                                                                          
+    165      20    34864      33988   207     0.45   6456 chrome                                                                                                          
+    160      20    28312      30240   209     0.87   6668 chrome                                                                                                          
+   1281      69    93976     115380   378    57.63   7036 chrome                                                                                                          
+    205      23    42608      55556   243    16.11  24500 chrome                                                                                                          
+    195      23    42492      49880   256     1.36  26212 chrome  
+    
+'The Format-Wide cmdlet, by default, displays only the default property of an object.    
+&gt; Get-Process -Name chrome | Format-Wide
+
+chrome                                                                                chrome                                                                              
+chrome                                                                                chrome                                                                              
+chrome                                                                                chrome       
+
+'You can also specify a non-default property:
+&gt; Get-Process -Name chrome | Format-Wide  -Property Id
+5404                                                                                  6456                                                                                
+6668                                                                                  7036                                                                                
+24500                                                                                 26212
+
+'With the Format-Wide cmdlet, you can only display a single property at a time. This makes it 
+'useful for displaying simple lists that show only one element per line. To get a simple listing, set the value of the Column parameter to 1 
+
+&gt; Get-Process -Name chrome | Format-Wide   -Column 1
+chrome                                                                                                                                                                    
+chrome                                                                                                                                                                    
+chrome                                                                                                                                                                    
+chrome                                                                                                                                                                    
+chrome                                                                                                                                                                    
+chrome  
+
+'The Format-List cmdlet displays an object in the form of a listing, with each property labeled and displayed on a separate line:
+&gt; Get-Process -Name chrome | Format-list
+Id      : 5404
+Handles : 220
+CPU     : 39.1874512
+Name    : chrome
+
+Id      : 6456
+Handles : 160
+CPU     : 0.4524029
+Name    : chrome
+
+Id      : 6668
+Handles : 160
+CPU     : 0.8736056
+Name    : chrome
+
+Id      : 7036
+Handles : 1274
+CPU     : 59.1867794
+Name    : chrome
+
+Id      : 24500
+Handles : 210
+CPU     : 17.9713152
+Name    : chrome
+
+Id      : 26212
+Handles : 195
+CPU     : 1.3572087
+Name    : chrome
+
+
+'You can specify as many properties as you want:
+&gt; Get-Process -Name chrome | Format-list -Property processname, id
+
+
+ProcessName : chrome
+Id          : 5404
+
+ProcessName : chrome
+Id          : 6456
+
+ProcessName : chrome
+Id          : 6668
+
+ProcessName : chrome
+Id          : 7036
+
+ProcessName : chrome
+Id          : 24500
+
+ProcessName : chrome
+Id          : 26212
+
+'Getting Detailed Information by Using Format-List with Wildcards, This gives a huge list of properties
+&gt; Get-Process -Name chrome | Format-list -Property *
+
+'If you use the Format-Table cmdlet with no property names specified to format the output of the Get-Process command, 
+'you get exactly the same output as you do without performing any formatting. 
+'The reason is that processes are usually displayed in a tabular format, as are most Windows PowerShell objects.
+
+&gt; Get-Process -Name chrome | Format-table
+
+Handles  NPM(K)    PM(K)      WS(K) VM(M)   CPU(s)     Id ProcessName                                                                                                                          
+-------  ------    -----      ----- -----   ------     -- -----------                                                                                                                          
+    219      24    70044      60708   268    83.46   5404 chrome                                                                                                                               
+    160      20    34756      34012   206     0.47   6456 chrome                                                                                                                               
+    160      20    29432      31500   210     1.20   6668 chrome                                                                                                                               
+   1313      69   105772     128120   394    84.60   7036 chrome                                                                                                                               
+    204      23    42096      54180   242    20.51  24500 chrome                                                                                                                               
+    195      23    42204      49748   256     1.40  26212 chrome  
+
+'If you specify the AutoSize parameter when you run the Format-Table command,
+' Windows PowerShell will calculate column widths based on the actual data you are going to display.
+'The Format-Table cmdlet might still truncate data, but it will only do so at the end of the screen
+
+&gt; Get-Process -Name chrome | Format-table  -Property Path,Name,Id,Company -AutoSize
+
+Path                                                        Name      Id Company    
+----                                                        ----      -- -------    
+C:\Program Files (x86)\Google\Chrome\Application\chrome.exe chrome  5404 Google Inc.
+C:\Program Files (x86)\Google\Chrome\Application\chrome.exe chrome  6456 Google Inc.
+C:\Program Files (x86)\Google\Chrome\Application\chrome.exe chrome  6668 Google Inc.
+C:\Program Files (x86)\Google\Chrome\Application\chrome.exe chrome  7036 Google Inc.
+C:\Program Files (x86)\Google\Chrome\Application\chrome.exe chrome 24500 Google Inc.
+C:\Program Files (x86)\Google\Chrome\Application\chrome.exe chrome 26212 Google Inc.
+
+'you can force lengthy Format-Table data to wrap within its display column by using the Wrap parameter
+'An advantage of using the Wrap parameter by itself is that it does not slow down processing very much. 
+'	If you perform a recursive file listing of a large directory system, 
+'	it might take a very long time and use a lot of memory before displaying the first output items if you use AutoSize.
+
+&gt; Get-Process -Name chrome | Format-table -wrap -Property Path,Name,Id,Company
+
+'Another useful parameter for tabular output control is GroupBy. 
+'	Longer tabular listings in particular may be hard to compare. The GroupBy parameter groups output based on a property value. 
+'	For example, we can group processes by company for easier inspection, omitting the company value from the property listing:
+
+&gt; Get-Process -Name chrome | Format-table -wrap -Property Path,Name,Id  -GroupBy Company
+
+
+
+
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Functions_String</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>SEARCH_and_REPLACE</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Functions_String</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>SEARCH_and_REPLACE</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>'Replace is the simplest of these methods and doesn’t support regular expressions.
+	
+("Hello World").Replace("Hello","New")
+
+'A counterpart to the -match operator doesn’t exist. However, 
+'PowerShell supports several methods that specialize on a particular search type. 
+'For instance, StartsWith and EndsWith determine whether a string begins or ends with a certain character or string, 
+'respectively. Likewise, Contains tells you if a string contains a certain substring:
+
+("Hello world").Contains("ll")
+'The above command results in True. To calculate the position of a character or substring in the string, IndexOf is at your disposal:
+
+
+("Hello world").IndexOf("ll")
+
+'Don’t forget that counting starts at 0!</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_LogParser</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>LogParser_Functions</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_LogParser</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>LogParser_Functions</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>http://logparserplus.com/Functions#function_TRIM
+
+Function listing
+
+
+ADD
+ADD( addend1 &lt;any type&gt;, addend2 &lt;any type&gt; )
+Calculates the sum of two values. Returns a value of the same type as its arguments.
+Type: arithmetical
+
+See also: SUB DIV MUL
+AVG
+AVG( [ DISTINCT | ALL ] &lt;field_expr&gt; )
+Returns the average among all the values, or only the DISTINCT values, of the specified field-expression.
+Type: aggregate
+
+BIT_AND
+BIT_AND( arg1 &lt;INTEGER&gt;, arg2 &lt;INTEGER&gt; )
+Calculates the bitwise AND of two values.
+Type: arithmetical
+
+See also: BIT_NOT BIT_OR BIT_SHL BIT_SHR BIT_XOR
+BIT_NOT
+BIT_NOT( arg &lt;INTEGER&gt; )
+Calculates the bitwise NOT of a value.
+Type: arithmetical
+
+See also: BIT_AND BIT_OR BIT_SHL BIT_SHR BIT_XOR
+BIT_OR
+BIT_OR( arg1 &lt;INTEGER&gt;, arg2 &lt;INTEGER&gt; )
+Calculates the bitwise OR of two values.
+Type: arithmetical
+
+See also: BIT_AND BIT_NOT BIT_SHL BIT_SHR BIT_XOR
+BIT_SHL
+BIT_SHL( arg1 &lt;INTEGER&gt;, arg2 &lt;INTEGER&gt; )
+Shifts a value left by a specified number of bits.
+Type: arithmetical
+
+See also: BIT_AND BIT_NOT BIT_OR BIT_SHR BIT_XOR
+BIT_SHR
+BIT_SHR( arg1 &lt;INTEGER&gt;, arg2 &lt;INTEGER&gt; )
+Shifts a value right by a specified number of bits.
+Type: arithmetical
+
+See also: BIT_AND BIT_NOT BIT_OR BIT_SHL BIT_XOR
+BIT_XOR
+BIT_XOR( arg1 &lt;INTEGER&gt;, arg2 &lt;INTEGER&gt; )
+Calculates the bitwise XOR of two values.
+Type: arithmetical
+
+See also: BIT_AND BIT_NOT BIT_OR BIT_SHL BIT_SHR
+CASE
+CASE &lt;field_expression&gt; WHEN &lt;field_expression&gt; THEN &lt;field_expression&gt; [ ... ] [ ELSE &lt;field_expression&gt; ] END
+Compares the argument of the CASE statement with the arguments of the WHEN statements, returning the argument of a THEN statement when a match is found. If no match is found, returns the argument of the ELSE statement, or NULL if no ELSE statement is provided.
+Type: miscellaneous
+
+COALESCE
+COALESCE( arg1 &lt;any type&gt;, arg2 &lt;any type&gt; [, ....] )
+Returns the first non-NULL value among its arguments.
+Type: miscellaneous
+
+COMPUTER_NAME
+COMPUTER_NAME()
+Returns the NetBIOS name of the local computer.
+Type: system information
+
+COUNT
+COUNT( [ DISTINCT | ALL ] * ) | ( [ DISTINCT | ALL ] &lt;field_expr_list&gt; )
+Returns the number of items in a group.
+Type: aggregate
+COUNT(DISTINCT cs-uri-stem) AS [Distinct Requests]
+Returns a count of how many distinct files were requested.
+DIV
+DIV( dividend &lt;INTEGER | REAL&gt;, divisor &lt;INTEGER | REAL&gt; )
+Calculates the quotient of two values.
+Type: arithmetical
+DIV(sc-bytes, 1024) AS [KB Sent]
+Converts bytes sent from the server to the client to Kilobytes (KB).
+DIV(DIV(sc-bytes, 1024), 1024) AS [MB Sent]
+Converts bytes sent from the server to the client to Megabytes (MB).
+See also: MUL ADD SUB
+EXP
+EXP( argument &lt;INTEGER | REAL&gt; )
+Calculates e (the Natural logarithm base) raised to the power of the specified argument.
+Type: arithmetical
+
+See also: EXP10
+EXP10
+EXP10( argument &lt;INTEGER | REAL&gt; )
+Calculates 10 raised to the power of the specified argument.
+Type: arithmetical
+
+See also: EXP
+EXTRACT_EXTENSION
+EXTRACT_EXTENSION( filepath &lt;STRING&gt; )
+Returns the file extension portion of a file path.
+Type: string manipulation
+EXTRACT_EXTENSION(cs-uri-stem) AS [File Extension]
+Extracts the file extension for requests. Returns nothing for those without an extension.
+EXTRACT_EXTENSION(cs-uri-stem) NOT IN ('jpg';'png';'gif';'ico')
+When used in a WHERE clause, excludes requests for common image formats.
+See also: EXTRACT_FILENAME EXTRACT_PATH EXTRACT_PREFIX EXTRACT_SUFFIX EXTRACT_TOKEN EXTRACT_VALUE
+EXTRACT_FILENAME
+EXTRACT_FILENAME( filepath &lt;STRING&gt; )
+Returns the filename portion of a file path.
+Type: string manipulation
+EXTRACT_FILENAME(cs-uri-stem) AS [File Requested]
+Extracts the file name for requests.
+See also: EXTRACT_EXTENSION EXTRACT_PATH EXTRACT_PREFIX EXTRACT_SUFFIX EXTRACT_TOKEN EXTRACT_VALUE
+EXTRACT_PATH
+EXTRACT_PATH( filepath &lt;STRING&gt; )
+Returns the directory path portion of a file path.
+Type: string manipulation
+EXTRACT_PATH(cs-uri-stem) AS [Path Requested]
+Extracts the path of a request. The trailing slash (/) is removed.
+See also: EXTRACT_EXTENSION EXTRACT_FILENAME EXTRACT_PREFIX EXTRACT_SUFFIX EXTRACT_TOKEN EXTRACT_VALUE
+EXTRACT_PREFIX
+EXTRACT_PREFIX( argument &lt;STRING&gt;, index &lt;INTEGER&gt;, separator &lt;STRING&gt; )
+Returns a substring beginning at the first character and up to, but not including, the specified instance of the separator.
+Type: string manipulation
+
+See also: EXTRACT_SUFFIX EXTRACT_EXTENSION EXTRACT_FILENAME EXTRACT_PATH EXTRACT_TOKEN EXTRACT_VALUE
+EXTRACT_SUFFIX
+EXTRACT_SUFFIX( argument &lt;STRING&gt;, index &lt;INTEGER&gt;, separator &lt;STRING&gt; )
+Returns a substring beginning after the specified instance of the separator and up to the end of the string.
+Type: string manipulation
+
+See also: EXTRACT_PREFIX EXTRACT_EXTENSION EXTRACT_FILENAME EXTRACT_PATH EXTRACT_TOKEN EXTRACT_VALUE
+EXTRACT_TOKEN
+EXTRACT_TOKEN( argument &lt;STRING&gt;, index &lt;INTEGER&gt; [ , separator &lt;STRING&gt; ] )
+Splits the string into substrings at each point where the separator occurs, and returns the substring with the specified index.
+Type: string manipulation
+EXTRACT_TOKEN(cs(Referer), 2, '/') AS [Referring Domain]
+Returns full domain of the site referring traffic to this resource.
+See also: EXTRACT_EXTENSION EXTRACT_FILENAME EXTRACT_PATH EXTRACT_PREFIX EXTRACT_SUFFIX EXTRACT_VALUE
+EXTRACT_VALUE
+EXTRACT_VALUE( argument &lt;STRING&gt;, key &lt;STRING&gt; [ , separator &lt;STRING&gt; ] )
+Parses "key=value" pairs in the string, returning the value corresponding to the specified key.
+Type: string manipulation
+
+See also: EXTRACT_EXTENSION EXTRACT_FILENAME EXTRACT_PATH EXTRACT_PREFIX EXTRACT_SUFFIX EXTRACT_TOKEN
+FLOOR
+FLOOR( argument &lt;REAL&gt; )
+Returns the integral part of the specified argument.
+Type: arithmetical
+
+See also: ROUND QNTFLOOR_TO_DIGIT QNTROUND_TO_DIGIT
+GROUPING
+GROUPING( &lt;field_expr&gt; )
+Returns a value of 1 when the row is added by the ROLLUP operator of the GROUP BY clause, or 0 when the row is not the result of ROLLUP. GROUPING is used to distinguish the NULL values returned by ROLLUP from standard NULL values. The NULL returned as the result of a ROLLUP operation is a special use of NULL. It acts as a value placeholder in the result set and means "all".
+Type: aggregate
+
+HASHMD5_FILE
+HASHMD5_FILE( filePath &lt;STRING&gt; )
+Calculates the MD5 hash of the content of a file and returns its hexadecimal representation.
+Type: miscellaneous
+
+HASHSEQ
+HASHSEQ( value &lt;STRING&gt; )
+Returns a unique, sequential integer for each distinct value of the argument.
+Type: miscellaneous
+
+HEX_TO_ASC
+HEX_TO_ASC( hexString &lt;STRING&gt; )
+Converts the hexadecimal representation of a series of bytes into a string where the bytes belonging to the 0x20-0x7F range have been converted to ASCII characters.
+Type: string manipulation
+
+See also: HEX_TO_HEX16 HEX_TO_HEX32 HEX_TO_HEX8 HEX_TO_INT HEX_TO_PRINT
+HEX_TO_HEX16
+HEX_TO_HEX16( hexString &lt;STRING&gt; [ , bigEndian &lt;INTEGER&gt; ] )
+Converts the hexadecimal representation of a series of bytes into another hexadecimal representation in which bytes are grouped into 16-bit WORDs.
+Type: string manipulation
+
+See also: HEX_TO_ASC HEX_TO_HEX32 HEX_TO_HEX8 HEX_TO_INT HEX_TO_PRINT
+HEX_TO_HEX32
+HEX_TO_HEX32( hexString &lt;STRING&gt; [ , bigEndian &lt;INTEGER&gt; ] )
+Converts the hexadecimal representation of a series of bytes into another hexadecimal representation in which bytes are grouped into 32-bit DWORDs.
+Type: string manipulation
+
+See also: HEX_TO_ASC HEX_TO_HEX16 HEX_TO_HEX8 HEX_TO_INT HEX_TO_PRINT
+HEX_TO_HEX8
+HEX_TO_HEX8( hexString &lt;STRING&gt; )
+Converts the hexadecimal representation of a series of bytes into another hexadecimal representation in which bytes are grouped into 8-bit octets.
+Type: string manipulation
+
+See also: HEX_TO_ASC HEX_TO_HEX16 HEX_TO_HEX32 HEX_TO_INT HEX_TO_PRINT
+HEX_TO_INT
+HEX_TO_INT( hexString &lt;STRING&gt; )
+Converts the hexadecimal representation of an integer into the integer itself.
+Type: conversion
+
+See also: HEX_TO_ASC HEX_TO_HEX16 HEX_TO_HEX32 HEX_TO_HEX8 HEX_TO_PRINT
+HEX_TO_PRINT
+HEX_TO_PRINT( hexString &lt;STRING&gt; )
+Converts the hexadecimal representation of a series of bytes into a string where the bytes corresponding to printable ASCII characters have been converted to the characters themselves.
+Type: string manipulation
+
+See also: HEX_TO_ASC HEX_TO_HEX16 HEX_TO_HEX32 HEX_TO_HEX8 HEX_TO_INT
+IN_ROW_NUMBER
+IN_ROW_NUMBER()
+Returns the current input record number.
+Type: miscellaneous
+
+See also: OUT_ROW_NUMBER
+INDEX_OF
+INDEX_OF( string &lt;STRING&gt;, searchStr &lt;STRING&gt; )
+Returns the character position where the first occurrence of a search substring occurs in a string.
+Type: string manipulation
+
+See also: LAST_INDEX_OF
+INT_TO_IPV4
+INT_TO_IPV4( ipV4Address &lt;INTEGER&gt; )
+Converts a 32-bit integer into the string representation of an IPV4 address.
+Type: conversion
+
+See also: IPV4_TO_INT
+IPV4_TO_INT
+IPV4_TO_INT( ipV4Address &lt;STRING&gt; )
+Converts the string representation of an IPV4 address into a 32-bit integer.
+Type: conversion
+
+See also: INT_TO_IPV4
+LAST_INDEX_OF
+LAST_INDEX_OF( string &lt;STRING&gt;, searchStr &lt;STRING&gt; )
+Returns the character position where the last occurrence of a search substring occurs in a string.
+Type: string manipulation
+
+See also: INDEX_OF
+LOG
+LOG( argument &lt;INTEGER | REAL&gt; )
+Calculates the Natural logarithm of the specified argument.
+Type: arithmetical
+
+See also: LOG10
+LOG10
+LOG10( argument &lt;INTEGER | REAL&gt; )
+Calculates the base-10 logarithm of the specified argument.
+Type: arithmetical
+
+See also: LOG
+LTRIM
+LTRIM( string &lt;STRING&gt; )
+Removes whitespace characters from the beginning of a string.
+Type: string manipulation
+
+See also: RTRIM TRIM
+MAX
+MAX( [ DISTINCT | ALL ] &lt;field_expr&gt; )
+Returns the maximum value among all the values of the specified field-expression.
+Type: aggregate
+MAX(sc-bytes) AS [Maximum Bytes Sent]
+Returns the maximum number of bytes sent from the server to the client, across all requests.
+See also: MIN
+MIN
+MIN( [ DISTINCT | ALL ] &lt;field_expr&gt; )
+Returns the minimum value among all the values of the specified field-expression.
+Type: aggregate
+MIN(sc-bytes) AS [Minimum Bytes Sent]
+Returns the minimum number of bytes sent from the server to the client, across all requests.
+See also: MAX
+MOD
+MOD( dividend &lt;INTEGER | REAL&gt;, divisor &lt;INTEGER | REAL&gt; )
+Calculates the remainder of the division of two numbers.
+Type: arithmetical
+
+MUL
+MUL( multiplicand &lt;INTEGER | REAL&gt;, multiplier &lt;INTEGER | REAL&gt; )
+Calculates the product of two values.
+Type: arithmetical
+MUL(PROPCOUNT(*), 100)
+When used with another field and a simple GROUP BY, returns the percentage of requests by that field. See example query HTTP status codes and percentage of total.
+See also: DIV ADD SUB
+OUT_ROW_NUMBER
+OUT_ROW_NUMBER()
+Returns the current output record number.
+Type: miscellaneous
+
+See also: IN_ROW_NUMBER
+PROPCOUNT
+PROPCOUNT( * ) [ ON ( &lt;on_field_expr_list&gt; ) ] | ( &lt;field_expr_list&gt; ) [ ON ( &lt;on_field_expr_list&gt; ) ]
+Returns the ratio of the COUNT aggregate function calculated on a group to the COUNT aggregate function calculated on a hierarchically higher group.
+Type: aggregate
+
+PROPSUM
+PROPSUM( &lt;field_expr&gt; ) [ ON ( &lt;on_field_expr_list&gt; ) ]
+Returns the ratio of the SUM aggregate function calculated on a group to the SUM aggregate function calculated on a hierarchically higher group.
+Type: aggregate
+
+QNTFLOOR_TO_DIGIT
+QNTFLOOR_TO_DIGIT( value &lt;INTEGER&gt;, digits &lt;INTEGER&gt; )
+Truncates a number to a specified number of significant digits, masking the remaining digits to zero.
+Type: arithmetical
+
+See also: QNTROUND_TO_DIGIT FLOOR ROUND
+QNTROUND_TO_DIGIT
+QNTROUND_TO_DIGIT( value &lt;INTEGER&gt;, digits &lt;INTEGER&gt; )
+Rounds a number to a specified number of significant digits, masking the remaining digits to zero.
+Type: arithmetical
+
+See also: QNTFLOOR_TO_DIGIT FLOOR ROUND
+QUANTIZE
+QUANTIZE( argument &lt;INTEGER | REAL | TIMESTAMP&gt;, quantization &lt;INTEGER | REAL&gt; )
+Truncates a value to the nearest multiple of another value.
+Type: arithmetical
+QUANTIZE(TO_TIMESTAMP(date, time), 3600)
+Returns date/times to the hour. (In other words, drops the minutes.)
+REPLACE_CHR
+REPLACE_CHR( string &lt;STRING&gt;, searchCharacters &lt;STRING&gt;, replaceString &lt;STRING&gt; )
+Replaces each occurrence of a character in a given set of characters with a string.
+Type: string manipulation
+
+REPLACE_IF_NOT_NULL
+REPLACE_IF_NOT_NULL( argument &lt;any type&gt;, replaceValue &lt;any type&gt; )
+Returns the second argument when the first argument is not NULL, and NULL otherwise.
+Type: miscellaneous
+
+REPLACE_STR
+REPLACE_STR( string &lt;STRING&gt;, searchString &lt;STRING&gt;, replaceString &lt;STRING&gt; )
+Replaces each occurrence of a substring with a string.
+Type: string manipulation
+
+RESOLVE_SID
+RESOLVE_SID( sid &lt;STRING&gt; [ , computerName &lt;STRING&gt; ] )
+Resolves a SID and returns its full account name.
+Type: system information
+
+REVERSEDNS
+REVERSEDNS( ipAddress &lt;STRING&gt; )
+Resolves an IP address and returns the corresponding host name.
+Type: system information
+REVERSEDNS(c-ip)
+Returns the host name for the client's IP address.
+ROT13
+ROT13( string &lt;STRING&gt; )
+Encodes or decodes a string using the ROT13 algorithm.
+Type: string manipulation
+
+ROUND
+ROUND( argument &lt;REAL&gt; )
+Returns the integer closest to the specified argument.
+Type: arithmetical
+
+See also: FLOOR QNTFLOOR_TO_DIGIT QNTROUND_TO_DIGIT
+RTRIM
+RTRIM( string &lt;STRING&gt; )
+Removes whitespace characters from the end of a string.
+Type: string manipulation
+
+See also: LTRIM TRIM
+SEQUENCE
+SEQUENCE( [ startValue &lt;INTEGER&gt; ] )
+Returns a unique sequential integer associated with the current input record number.
+Type: miscellaneous
+
+SQR
+SQR( argument &lt;INTEGER | REAL&gt; )
+Calculates the square of the specified argument.
+Type: arithmetical
+
+SQRROOT
+SQRROOT( argument &lt;INTEGER | REAL&gt; )
+Calculates the square root of the specified argument.
+Type: arithmetical
+
+STRCAT
+STRCAT( string1 &lt;STRING&gt;, string2 &lt;STRING&gt; )
+Appends one string to another.
+Type: string manipulation
+
+STRCNT
+STRCNT( string &lt;STRING&gt;, token &lt;STRING&gt; )
+Returns the number of occurrences of a substring in a string.
+Type: string manipulation
+STRCNT(cs-uri-stem, '/') AS [Request Depth]
+Returns the depth of a requested file.
+STRLEN
+STRLEN( string &lt;STRING&gt; )
+Returns the length of a string.
+Type: string manipulation
+
+STRREPEAT
+STRREPEAT( string &lt;STRING&gt;, count &lt;INTEGER&gt; )
+Creates a string by repeating a substring a given number of times.
+Type: string manipulation
+
+STRREV
+STRREV( string &lt;STRING&gt; )
+Reverses the characters in a string.
+Type: string manipulation
+
+SUB
+SUB( minuend &lt;any type&gt;, subtrahend &lt;any type&gt; )
+Calculates the difference of two values.
+Type: arithmetical
+TO_DATE(SUB(TO_LOCALTIME(SYSTEM_TIMESTAMP()), TIMESTAMP('0000-01-08', 'yyyy-MM-dd')))
+Gets the date seven days ago, based on the current local date/time.
+See also: ADD DIV MUL
+SUBSTR
+SUBSTR( string &lt;STRING&gt;, start &lt;INTEGER&gt; [ , length &lt;INTEGER&gt; ])
+Returns a substring beginning at a specified location and having a specified length. The &lt;start&gt; of &lt;string&gt; begins at 0.
+Type: string manipulation
+
+SUM
+SUM( [ DISTINCT | ALL ] &lt;field_expr&gt; )
+Returns the sum of all the values, or only the DISTINCT values, of the specified field-expression.
+Type: aggregate
+SUM(sc-bytes) AS [Total Bytes Sent]
+Returns the total number of bytes sent from the server to the client.
+SYSTEM_DATE
+SYSTEM_DATE()
+Returns the current system date in Universal Time Coordinates (UTC) time.
+Type: system information
+
+See also: SYSTEM_TIME SYSTEM_TIMESTAMP
+SYSTEM_TIME
+SYSTEM_TIME()
+Returns the current system time of the day in Universal Time Coordinates (UTC) time.
+Type: system information
+
+See also: SYSTEM_DATE SYSTEM_TIMESTAMP
+SYSTEM_TIMESTAMP
+SYSTEM_TIMESTAMP()
+Returns the current system date and time in Universal Time Coordinates (UTC) time.
+Type: system information
+TO_LOCALTIME(SYSTEM_TIMESTAMP) AS [CurrentLocalTime]
+Get the current date and time, converted to local time.
+SUB(TO_LOCALTIME(SYSTEM_TIMESTAMP()), TIMESTAMP('0000-01-01 00:03', 'yyyy-MM-dd HH:mm'))
+Get the local time 3 minutes ago.
+See also: SYSTEM_DATE SYSTEM_TIME
+SYSTEM_UTCOFFSET
+SYSTEM_UTCOFFSET()
+Returns the current system timezone and daylight saving offset relative to Universal Time Coordinates (UTC) time.
+Type: system information
+
+TO_DATE
+TO_DATE( timestamp &lt;TIMESTAMP&gt; )
+Converts a full timestamp into a date-only timestamp.
+Type: conversion
+
+See also: TO_TIME
+TO_HEX
+TO_HEX( argument &lt;INTEGER | STRING&gt; )
+Returns the hexadecimal representation of an integer or of the characters in a string.
+Type: conversion
+
+TO_INT
+TO_INT( argument &lt;any type&gt; )
+Converts a value of the REAL, STRING, or TIMESTAMP data type into a value of the INTEGER data type.
+Type: conversion
+
+TO_LOCALTIME
+TO_LOCALTIME( timestamp &lt;TIMESTAMP&gt; )
+Converts a timestamp from Universal Time Coordinates (UTC) time into local time.
+Type: conversion
+TO_LOCALTIME(TO_TIMESTAMP(date, time)) AS [LocalTime]
+Create a timestamp from the date and time of a request and convert it to local time.
+See also: TO_UTCTIME
+TO_LOWERCASE
+TO_LOWERCASE( string &lt;STRING&gt; )
+Returns a string where all alphabetic characters have been converted to lowercase.
+Type: string manipulation
+
+See also: TO_UPPERCASE
+TO_REAL
+TO_REAL( argument &lt;any type&gt; )
+Converts a value of the INTEGER, STRING, or TIMESTAMP data type into a value of the REAL data type.
+Type: conversion
+
+TO_STRING
+TO_STRING( argument &lt;INTEGER | REAL&gt; ) | ( timestamp &lt;TIMESTAMP&gt;, format &lt;STRING&gt; )
+Converts a value of the REAL or INTEGER data type into a value of the STRING data type.
+Type: conversion
+TO_STRING(TO_LOCALTIME(TO_TIMESTAMP(date, time)), 'yyyy-MM-dd') AS [Day]
+Converts the date and time of a request to local time, and then outputs the day as a string (2010-03-22).
+TO_TIME
+TO_TIME( timestamp &lt;TIMESTAMP&gt; )
+Converts a full timestamp into a time-only timestamp.
+Type: conversion
+TO_TIME(TO_LOCALTIME(QUANTIZE(TO_TIMESTAMP(date, time), 3600))) AS [Hour]
+Create a timestamp from the date and time of a request, drops the minutes from the time, converts it to local time, and pulls just the time.
+See also: TO_LOCALTIME TO_DATE
+TO_TIMESTAMP
+TO_TIMESTAMP( dateTime1 &lt;TIMESTAMP&gt;, dateTime2 &lt;TIMESTAMP&gt; ) | ( string &lt;STRING&gt;, format &lt;STRING&gt; ) ( seconds &lt;INTEGER | REAL&gt; )
+Parses a string representing a timestamp and returns a value of the TIMESTAMP data type. See also Microsoft Log Parser timestamp formats by James Skemp. There seems to be no difference between using TO_TIMESTAMP() and just TIMESTAMP().
+Type: conversion
+TO_TIMESTAMP(date, time)
+Converts the date and time of a request into a timestamp, for use with other functions.
+TO_TIMESTAMP('2009-02-06', 'yyyy-MM-dd')
+Creates a timestamp of the date February 6, 2009.
+TO_TIMESTAMP('2010-02-15 10:15', 'yyyy-MM-dd HH:mm')
+Creates a timestamp of February 25, 2010, at 10:15 in the morning.
+TO_TIMESTAMP('24 Jun 2011 13:22:21', 'dd MMM yyyy HH:mm:ss')
+Creates a timestamp of a date/time in 'short' format.
+TO_UPPERCASE
+TO_UPPERCASE( string &lt;STRING&gt; )
+Returns a string where all alphabetic characters have been converted to uppercase.
+Type: string manipulation
+
+See also: TO_LOWERCASE
+TO_UTCTIME
+TO_UTCTIME( timestamp &lt;TIMESTAMP&gt; )
+Converts a timestamp from local time into Universal Time Coordinates (UTC) time.
+Type: conversion
+
+See also: TO_LOCALTIME
+TRIM
+TRIM( string &lt;STRING&gt; )
+Removes whitespace characters from the beginning and end of a string.
+Type: string manipulation
+
+See also: LTRIM RTRIM
+URLESCAPE
+URLESCAPE( url &lt;STRING&gt; [ , codepage &lt;INTEGER&gt; ] )
+Converts a string to the URL-encoded form suitable for transmission as an HTTP query string.
+Type: string manipulation
+
+See also: URLUNESCAPE
+URLUNESCAPE
+URLUNESCAPE( url &lt;STRING&gt; [ , codepage &lt;INTEGER&gt; ] )
+Converts a URL-encoded string into its plain, unencoded form.
+Type: string manipulation
+
+See also: URLESCAPE
+WIN32_ERROR_DESCRIPTION
+WIN32_ERROR_DESCRIPTION( win32ErrorCode &lt;INTEGER&gt; )
+Returns the text message associated with a numeric Windows error code.
+Type: miscellaneous</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Menus_and_Controllers</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>basic_menu_FANCY</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Menus_and_Controllers</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>basic_menu_FANCY</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>#a fancier function using Write-Host
+
+Function Invoke-MyMenu {
+
+[cmdletbinding()]
+Param()
+
+#start with a clear screen
+Clear-Host
+
+$title = "Help Desk Menu"
+$menuwidth = 30
+#calculate how much to pad left to center the title
+[int]$pad = ($menuwidth/2)+($title.length/2)	     #' use this for formatting base on the width of the menu
+
+#define a here string for the menu options
+$menu = @"
+
+1. Get services
+2. Get processes
+3. Get System event logs
+4. Check free disk space (MB)
+5. Quit
+
+"@
+
+Write-Host ($title.PadLeft($pad)) -ForegroundColor Cyan   #'color the title
+Write-Host $menu -ForegroundColor Yellow				  #' color the menu itself
+
+#Read-Host writes strings but we can specifically treat the result as
+#an integer
+[int]$r = Read-Host "Select a menu choice"
+
+#validate the value
+if ((1..5) -notcontains $r ) {
+        write-warning "$r is not a valid choice"
+        pause
+        Invoke-Mymenu
+}
+elseif ((1..4) -contains $r) {
+    #get computername for first four menu choices
+    $Computername = Read-Host "Enter a computername or press Enter to use the localhost"
+    if ($Computername -notmatch "\w+") {
+        $computername = $env:COMPUTERNAME
+    }
+}
+
+#code to execute
+Switch ($r) {
+    1 {
+        Get-Service -computername $Computername
+    }
+    2 {
+        Get-Process -computername $Computername
+    }
+    3 {
+        Get-Eventlog -LogName System -Newest 25 -ComputerName $Computername
+    }
+    4 {
+        $c = Get-CimInstance -ClassName win32_logicaldisk -ComputerName $computername -filter "deviceid='c:'"
+        $c.FreeSpace/1mb
+    }
+    5 {
+        Write-Host "Have a nice day" -ForegroundColor Green
+        #bail out of the command 
+        Return
+    }
+} #switch
+
+#insert a blank line
+write-host ""
+pause
+
+#run this function again
+&amp;$MyInvocation.MyCommand
+
+} #end function </Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Profile</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>prompt_in_Profile</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Profile</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>prompt_in_Profile</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>'    The Windows PowerShell prompt is determined by the built-in Prompt
+'    function. You can customize the prompt by creating your own Prompt
+'    function and saving it in your Windows PowerShell profile.
+
+=============================================================================
+
+'http://kevinmarquette.blogspot.com/2015/11/here-is-my-custom-powershell-prompt.html
+
+'I change my prompt to just show the current folder and place the full path in the tittle bar.
+' I just save my last command to a text file whenever I run it.
+'The last thing I so is calculate where in the history the next command will be and add that to my prompt.
+'REQUIRES that you create a folder named 'log' in the directory:  C:\Users\glenn\Documents\WindowsPowerShell\
+
+$PSLogPath = ("{0}{1}\Documents\WindowsPowerShell\log\{2:yyyyMMdd}-{3}.log" -f $env:HOMEDRIVE, $env:HOMEPATH,  (Get-Date), $PID)
+Add-Content -Value "# $(Get-Date) $env:username $env:computername" -Path $PSLogPath
+Add-Content -Value "# $(Get-Location)" -Path $PSLogPath
+
+function prompt
+{
+    $LastCmd = Get-History -Count 1
+    if($LastCmd)
+    {
+        $lastId = $LastCmd.Id
+       
+        Add-Content -Value "# $($LastCmd.StartExecutionTime)" -Path $PSLogPath
+        Add-Content -Value "$($LastCmd.CommandLine)" -Path $PSLogPath
+        Add-Content -Value "" -Path $PSLogPath
+    }
+
+    $nextCommand = $lastId + 1
+    $currentDirectory = Split-Path (Get-Location) -Leaf
+    $host.UI.RawUI.WindowTitle = Get-Location
+    "$nextCommand PS:$currentDirectory&gt;"
+} 
+
+=============================================================================
+
+'To be able to get time and path with colors in my prompt :
+
+function Get-Time { return $(get-date | foreach { $_.ToLongTimeString() } ) }
+function prompt
+{
+    # Write the time 
+    write-host "[" -noNewLine
+    write-host $(Get-Time) -foreground yellow -noNewLine
+    write-host "] " -noNewLine
+    # Write the path
+    write-host $($(Get-Location).Path.replace($home,"~").replace("\","/")) -foreground green -noNewLine
+    write-host $(if ($nestedpromptlevel -ge 1) { '&gt;&gt;' }) -noNewLine
+    return "&gt; "
+}
+
+===================================================================
+
+'My prompt contains:
+
+$width = ($Host.UI.RawUI.WindowSize.Width - 2 - $(Get-Location).ToString().Length)
+$hr = New-Object System.String @('-',$width)
+Write-Host -ForegroundColor Red $(Get-Location) $hr
+
+'Which gives me a divider between commands that's easy to see when scrolling back. It also shows me the current directory without using horizontal space on the line that I'm typing on.
+
+'For example:
+
+C:\Users\Jay ----------------------------------------------------------------------------------------------------------
+[1] PS&gt;
+
+===================================================================
+
+# Setup the Console look and feel
+$host.UI.RawUI.ForegroundColor = "Yellow"
+if ( Test-Admin ) {
+    $title = "Administrator Shell - {0}" -f $host.UI.RawUI.WindowTitle
+    $host.UI.RawUI.WindowTitle = $title;
+}
+
+===================================================================
+
+function Get-Time { return $(get-date | foreach { $_.ToLongTimeString() } ) }
+function prompt
+{
+    # Write the time 
+    write-host "[" -noNewLine
+    write-host $(Get-Time) -foreground yellow -noNewLine
+    write-host "] " -noNewLine
+    # Write the path
+    write-host $($(Get-Location).Path.replace($home,"~").replace("\","/")) -foreground green -noNewLine
+    write-host $(if ($nestedpromptlevel -ge 1) { '&gt;&gt;' }) -noNewLine
+    return "&gt; "
+}</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Profile</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>SAMPLE_Profile_2___nice</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Profile</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>SAMPLE_Profile_2___nice</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>'http://kevinmarquette.blogspot.com/2015/11/here-is-my-custom-powershell-prompt.html
+
+'I change my prompt to just show the current folder and place the full path in the tittle bar.
+' I just save my last command to a text file whenever I run it.
+'The last thing I so is calculate where in the history the next command will be and add that to my prompt.
+
+$PSLogPath = ("{0}{1}\Documents\WindowsPowerShell\log\{2:yyyyMMdd}-{3}.log" -f $env:HOMEDRIVE, $env:HOMEPATH,  (Get-Date), $PID)
+Add-Content -Value "# $(Get-Date) $env:username $env:computername" -Path $PSLogPath
+Add-Content -Value "# $(Get-Location)" -Path $PSLogPath
+
+function prompt
+{
+    $LastCmd = Get-History -Count 1
+    if($LastCmd)
+    {
+        $lastId = $LastCmd.Id
+       
+        Add-Content -Value "# $($LastCmd.StartExecutionTime)" -Path $PSLogPath
+        Add-Content -Value "$($LastCmd.CommandLine)" -Path $PSLogPath
+        Add-Content -Value "" -Path $PSLogPath
+    }
+
+    $nextCommand = $lastId + 1
+    $currentDirectory = Split-Path (Get-Location) -Leaf
+    $host.UI.RawUI.WindowTitle = Get-Location
+    "$nextCommand PS:$currentDirectory&gt;"
+} </Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Updates_WSUS</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>Approve_With_Criteria</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Updates_WSUS</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>Approve_With_Criteria</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>http://blog.jasondahmen.com/2015/01/23/wsus-approve-patchesupdate-with-specific-criteria-via-powershell/
+
+#' This scripts goes through and approves and decline updates/patches that meet a specific criteria, 
+#'    if it does not meet the criteria it will leave the updates/patches in an unapproved state. 
+#' We do not have any Itanium based servers, we only have 32 bit of windows server 2003, and 64 bit of windows server 2008. 
+#' This script will let you first run a report of the list of patches that will be approved and declined. 
+#' After your verify that your list is applicable to your criteria you can then run the approve option. 
+#' This will approve and decline patches for computers in the “All Computers” group. 
+#' If you need to get more granular than that I suggest you take a look at the $group variable 
+#'    and be sure that you get the specific computer group that you need.
+#'
+
+------------------------------------------------------------------------
+$caption = "Choose Option";
+$message = "What would you like to do with new updates?";
+$report = new-Object System.Management.Automation.Host.ChoiceDescription "&amp;Report Patches","Report";
+$approve = new-Object System.Management.Automation.Host.ChoiceDescription "&amp;Approve/Decline Patches","Approve";
+$choices = [System.Management.Automation.Host.ChoiceDescription[]]($approve,$report);
+$answer = $host.ui.PromptForChoice($caption,$message,$choices,0)
+#'$answer 0=approve 1=report
+#'#FINAL SCRIPT
+$wsusserver = "YOUR IP ADDRESS OR SERVERNAME"
+#'#Load required assemblies
+[void][reflection.assembly]::LoadWithPartialName("Microsoft.UpdateServices.Administration")
+$wsus = [Microsoft.UpdateServices.Administration.AdminProxy]::getUpdateServer($wsusserver,$False,8530)
+#'#Retriving "All Computers" Group information
+$group = $wsus.GetComputerTargetGroups() | where {$_.Name -eq 'All Computers'}
+#'#Retriving list of unapproved updates
+$updates = $wsus.GetUpdates()  | where {$_.IsApproved -eq $False -and $_.IsDeclined -eq $False}
+#'#######################################
+#'Itanium Updates
+#'#######################################
+#'#Retrive a subset of updates where IA64 is in the legacyname
+$IAUpdates = $updates | where {($_.LegacyName -like '*IA64*')}
+Foreach ($IAUpdate in $IAUpdates) {
+    switch ($answer){
+        0 {$IAUpdate.Decline(); $msgDeclined = $msgDeclined + $IAUpdate.SecurityBulletins + "`t" + $IAUpdate.MsrcSeverity + "`t" + $IAUpdate.Title + "`n";break}
+        1 {$msgDeclined = $msgDeclined + $IAUpdate.SecurityBulletins + "`t" + $IAUpdate.MsrcSeverity + "`t" + $IAUpdate.Title + "`n";break}
+    }
+    #'#Uncomment the next line to check updates that are in an incorrect state
+    #'If ($IAUpdate.IsDeclined -ne "True") {$msgCheckTheseUpdates = $msgCheckTheseUpdates + $IAUpdate.Title + "`n"}
+}
+#'#######################################
+#'Windows Security Updates Critical
+#'#######################################
+#'#Revise list of unapproved updates
+$updates = $wsus.GetUpdates()  | where {$_.IsApproved -eq $False -and $_.IsDeclined -eq $False}
+#'#Retrive a subset of updates that are security updates and are of the windows family and have a MSRC serverity of Critical
+$WSecCriticalUpdates = $updates | where {$_.UpdateClassificationTitle -eq 'Security Updates' -and $_.ProductFamilyTitles -like 'Windows' -and $_.MsrcSeverity -eq 'Critical'}
+Foreach ($WSecCriticalUpdate in $WSecCriticalUpdates) {
+    If ($WSecCriticalUpdate.LegacyName -like "*x64*" -and ($WSecCriticalUpdate.ProductTitles -like "*2008*") -or ($WSecCriticalUpdate.ProductTitles -like "*2012 R2*")) {
+            switch ($answer) {
+                0 {$WSecCriticalUpdate.Approve('Install',$group); $msgApproved = $msgApproved + $WSecCriticalUpdate.SecurityBulletins + "`t" + $WSecCriticalUpdate.MsrcSeverity + "`t" + $WSecCriticalUpdate.Title + "`n";break}
+                1 {$msgApproved = $msgApproved + $WSecCriticalUpdate.SecurityBulletins + "`t" + $WSecCriticalUpdate.MsrcSeverity + "`t" + $WSecCriticalUpdate.Title + "`n";break}
+            }
+            ##Uncomment the next line to check updates that are in an incorrect state
+            #If ($WSecCriticalUpdate.IsApproved -ne "True"){$msgCheckTheseUpdates = $msgCheckTheseUpdates + $WSecCriticalUpdate.Title + "`n"}
+    }elseif ($WSecCriticalUpdate.LegacyName -like "*x86*" -and $WSecCriticalUpdate.ProductTitles -like "*2003*") {
+            switch ($answer) {
+                0 {$WSecCriticalUpdate.Approve('Install',$group); $msgApproved = $msgApproved + $WSecCriticalUpdate.SecurityBulletins + "`t" + $WSecCriticalUpdate.MsrcSeverity + "`t" + $WSecCriticalUpdate.Title + "`n";break}
+                1 {$msgApproved = $msgApproved + $WSecCriticalUpdate.SecurityBulletins + "`t" + $WSecCriticalUpdate.MsrcSeverity + "`t" + $WSecCriticalUpdate.Title + "`n";break}
+            }
+            ##Uncomment the next line to check updates that are in an incorrect state
+            #If ($WSecCriticalUpdate.IsApproved -ne "True"){$msgCheckTheseUpdates = $msgCheckTheseUpdates + $WSecCriticalUpdate.Title + "`n"}
+    }else {
+        switch ($answer) {
+            0 {$WSecCriticalUpdate.Decline(); $msgDeclined + $WSecCriticalUpdate.SecurityBulletins + "`t" + $WSecCriticalUpdate.MsrcSeverity + "`t" + $WSecCriticalUpdate.Title + "`n";break}
+            1 {$msgDeclined = $msgDeclined + $WSecCriticalUpdate.SecurityBulletins + "`t" + $WSecCriticalUpdate.MsrcSeverity + "`t" + $WSecCriticalUpdate.Title + "`n";break}
+        }
+        ##Uncomment the next line to check updates that are in an incorrect state
+        #If ($WSecCriticalUpdate.IsDeclined -ne "True"){$msgCheckTheseUpdates = $msgCheckTheseUpdates + $WSecCriticalUpdate.Title + "`n"}
+    }
+}
+#'#######################################
+#'Windows Security Updates 1 month old
+#'#######################################
+'##Revise list of unapproved updates
+$updates = $wsus.GetUpdates()  | where {$_.IsApproved -eq $False -and $_.IsDeclined -eq $False}
+#'#Retrive a subset of updates that are security updates and are of the windows family and DO NOT have a MSRC serverity of Critical
+$WSecNoneCriticalUpdates = $updates | where {$_.UpdateClassificationTitle -eq 'Security Updates' -and $_.ProductFamilyTitles -like 'Windows' -and $_.MsrcSeverity -ne 'Critical'}
+Foreach ($WSecNoneCriticalUpdate in $WSecNoneCriticalUpdates) {
+    If ($WSecNoneCriticalUpdate.LegacyName -like "*x64*" -and ($WSecNoneCriticalUpdate.ProductTitles -like "*2008*") -or ($WSecNoneCriticalUpdate.ProductTitles -like "*2012 R2*")) {
+            #'#Getting the createdate of each update and storing it in a variable that can be calculated later
+            [datetime]$CreationDate = ($WSecNoneCriticalUpdate).CreationDate
+            #'#If the update is more than 27 day old it will approve
+            If ($CreationDate -le (Get-Date).AddDays(-27)) {
+                switch ($answer){
+                    0 {$WSecNoneCriticalUpdate.Approve('Install',$group);$msgApproved = $msgApproved + $WSecNoneCriticalUpdate.SecurityBulletins + "`t" + $WSecNoneCriticalUpdate.MsrcSeverity + "`t" + $WSecNoneCriticalUpdate.Title + "`n";break}
+                    1 {$msgApproved = $msgApproved + $WSecNoneCriticalUpdate.SecurityBulletins + "`t" + $WSecNoneCriticalUpdate.MsrcSeverity + "`t" + $WSecNoneCriticalUpdate.Title + "`n";break}
+                }
+            }
+    }elseif ($WSecNoneCriticalUpdate.LegacyName -like "*x86*" -and $WSecNoneCriticalUpdate.ProductTitles -like "*2003*") {
+        #'#Getting the createdate of each update and storing it in a variable that can be calculated later
+        [datetime]$CreationDate = ($WSecNoneCriticalUpdate).CreationDate
+        #'#If the update is more than 27 day old it will approve
+        If ($CreationDate -le (Get-Date).AddDays(-27)) {
+            switch ($answer){
+                    0 {$WSecNoneCriticalUpdate.Approve('Install',$group);$msgApproved = $msgApproved + $WSecNoneCriticalUpdate.SecurityBulletins + "`t" + $WSecNoneCriticalUpdate.MsrcSeverity + "`t" + $WSecNoneCriticalUpdate.Title + "`n";break}
+                    1 {$msgApproved = $msgApproved + $WSecNoneCriticalUpdate.SecurityBulletins + "`t" + $WSecNoneCriticalUpdate.MsrcSeverity + "`t" + $WSecNoneCriticalUpdate.Title + "`n";break}
+            }
+        }
+    }else {
+        switch ($answer){
+            0 {$WSecNoneCriticalUpdate.Decline(); $msgDeclined = $msgDeclined + $WSecNoneCriticalUpdate.SecurityBulletins + "`t" + $WSecNoneCriticalUpdate.MsrcSeverity + "`t" + $WSecNoneCriticalUpdate.Title + "`n";break}
+            1 {$msgDeclined = $msgDeclined + $WSecNoneCriticalUpdate.SecurityBulletins + "`t" + $WSecNoneCriticalUpdate.MsrcSeverity + "`t" + $WSecNoneCriticalUpdate.Title + "`n";break}
+        }
+    }
+}
+#'#######################################
+#'Windows Recommended Updates 1 month old
+#'#######################################
+#'#Revise list of unapproved updates
+$updates = $wsus.GetUpdates()  | where {$_.IsApproved -eq $False -and $_.IsDeclined -eq $False}
+#'#Retrive a subset of updates that are updates and are of the windows family
+$WRecommendedUpdates = $updates | where {$_.UpdateClassificationTitle -eq 'Updates' -and $_.ProductFamilyTitles -like 'Windows'}
+Foreach ($WRecommendedUpdate in $WRecommendedUpdates) {
+    If ($WRecommendedUpdate.LegacyName -like "*x64*" -and ($WRecommendedUpdate.ProductTitles -like "*2008*") -or ($WRecommendedUpdate.ProductTitles -like "*2012 R2*")) {
+        #'#Getting the createdate of each update and storing it in a variable that can be calculated later
+        [datetime]$CreationDate = ($WRecommendedUpdate).CreationDate
+        ##If the update is more than 27 day old it will approve
+        If ($CreationDate -le (Get-Date).AddDays(-27)) {
+            switch ($answer) {
+                0 {$WRecommendedUpdate.Approve('Install',$group); $msgApproved = $msgApproved + $WRecommendedUpdate.SecurityBulletins + "`t      " + $WRecommendedUpdate.MsrcSeverity + "`t" +  $WRecommendedUpdate.Title + "`n";break}
+                1 {$msgApproved = $msgApproved + $WRecommendedUpdate.SecurityBulletins + "`t      " + $WRecommendedUpdate.MsrcSeverity + "`t" +  $WRecommendedUpdate.Title + "`n";break}
+            }
+        }
+    }elseif ($WRecommendedUpdate.LegacyName -like "*x86*" -and $WRecommendedUpdate.ProductTitles -like "*2003*") {
+        #'#Getting the createdate of each update and storing it in a variable that can be calculated later
+        [datetime]$CreationDate = ($WRecommendedUpdate).CreationDate
+        #'#If the update is more than 27 day old it will approve
+        If ($CreationDate -le (Get-Date).AddDays(-27)) {
+            switch ($answer) {
+                0 {$WRecommendedUpdate.Approve('Install',$group); $msgApproved = $msgApproved + $WRecommendedUpdate.SecurityBulletins + "`t      " + $WRecommendedUpdate.MsrcSeverity + "`t" +  $WRecommendedUpdate.Title + "`n";break}
+                1 {$msgApproved = $msgApproved + $WRecommendedUpdate.SecurityBulletins + "`t      " + $WRecommendedUpdate.MsrcSeverity + "`t" +  $WRecommendedUpdate.Title + "`n";break}
+            }
+        }
+    }else {
+        switch ($answer) {
+            0 {$WRecommendedUpdate.Decline();  $msgDeclined = $msgDeclined + $WRecommendedUpdate.SecurityBulletins + "`t      " + $WRecommendedUpdate.MsrcSeverity + "`t" +  $WRecommendedUpdate.Title + "`n";break}
+            1 {$msgDeclined = $msgDeclined + $WRecommendedUpdate.SecurityBulletins + "`t      " + $WRecommendedUpdate.MsrcSeverity + "`t" +  $WRecommendedUpdate.Title + "`n";break}
+        }
+    }
+}
+#'#######################################
+#'Windows Office Updates 1 month old
+#'#######################################
+#'#Revise list of unapproved updates
+$updates = $wsus.GetUpdates()  | where {$_.IsApproved -eq $False -and $_.IsDeclined -eq $False}
+#'#Retrive a subset of updates that are updates and are of the windows family
+$WOfficeUpdates = $updates | where {($_.UpdateClassificationTitle -eq 'Updates' -or $_.UpdateClassificationTitle -eq 'Security Updates') -and $_.ProductTitles -like '*Office 2*' -and $_.Title -notlike '*Share*'}
+Foreach ($WOfficeUpdate in $WOfficeUpdates) {
+    [datetime]$CreationDate = ($WOfficeUpdate).CreationDate
+    #'#If the update is more than 27 day old it will approve
+    If ($CreationDate -le (Get-Date).AddDays(-27)) {
+        switch ($answer) {
+            0 {$WOfficeUpdate.Approve('Install',$group); $msgApproved = $msgApproved + $WOfficeUpdate.SecurityBulletins + "`t" + $WOfficeUpdate.MsrcSeverity + "`t" +  $WOfficeUpdate.Title + "`n"; break}
+            1 {$msgApproved = $msgApproved + $WOfficeUpdate.SecurityBulletins + "`t" + $WOfficeUpdate.MsrcSeverity + "`t" +  $WOfficeUpdate.Title + "`n"; break}
+        }
+    }
+}
+#'#Sending EMAIL
+$month = get-date -Format MMMM
+switch($answer){
+    0 {send-mailmessage -to patchingreports@example.com -subject "Updates Approve/Declined for $month" -body "Approved Updates`n $msgApproved`nDeclined Updates`n $msgDeclined"  -smtpserver "mailserver.example.com" -from WSUSServer@example.com;break}
+    1 {send-mailmessage -to patchingreports@example.com -subject "Updates Reports for $month" -body "Approved Updates`n $msgApproved`nDeclined Updates`n $msgDeclined"  -smtpserver "mailserver.example.com" -from WSUSServer@example.com;break}
+}
+exit
+------------------------------------------------------------------------</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>VBA_ACCESS</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>Access_SQL_ConversionAndFunctions</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>VBA_ACCESS</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>Access_SQL_ConversionAndFunctions</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>'Access and  T-SQL differences and conversion
+
+
+
+'Converting NULL values
+'
+'Access:        NZ(Value, ValueToReturnIfNull)
+'T-SQL:         COALESCE(Value, ValueToReturnIfNull) -- or --  ISNULL(Value, ValueToReturnIfNull)
+'
+'Checking for NULLs
+'
+'Access:      WHERE Value IS NULL   -- or --  WHERE ISNULL(Value)   (note the difference from T-SQL's ISNULL)
+'T -SQL:      WHERE Value Is Null
+'
+'String Segments
+'
+'Access:       MID(StringVal, StartPos, [length] )   (length is optional)
+'T-SQL:        SUBSTRING(StringVal, StartPos, length )    (length is required!)
+'
+'Finding a String within a String
+'
+'Access:     SELECT INSTR(start, StringToSearch, StringToFind)
+'T-SQL:       SELECT CHARINDEX(start, StringToSearch, StringToFind)
+'
+'Reverse a String
+'
+'Access:     SELECT STRREVERSE(StringVal)
+'T-SQL:       SELECT REVERSE(StringVal)
+'
+'Convert a String to Uppercase or Lowercase
+'
+'Access:      SELECT UCASE(StringVal),  LCASE(StringVal)
+'T-SQL:       SELECT UPPER(StringVal), LOWER(StringVal)
+'
+'Formatting Dates, Booleans, Numerics as Strings
+'
+'Access:     SELECT Format(Value, FormatSpecification)  (note: this always returns a string value)
+'T-SQL:      Do not do this in T-SQL; format data at your front-end application or report
+'
+'String Literals
+'
+'Access:      SELECT "This is a string"
+'T-SQL:       SELECT 'This is a string'
+'
+'LIKE pattern matching
+'
+'matching multiple characters:
+'
+'Access:      WHERE Column Like "*string*"
+'T-SQL:       WHERE Column LIKE '%string%'
+'
+'matching a single character:
+'
+'Access:     WHERE Column Like "?string?"
+'T-SQL:       WHERE Column LIKE '_string_'
+'
+'not matching a character or range:
+'
+'Access:   WHERE Column Like "[!a-z]"
+'T-SQL:     WHERE Column LIKE '[^a-z]'
+'
+'Triming White Space
+'
+'Access:       Trim (Val)
+'T -SQL:       RTrim (LTrim(Val))
+'
+'Converting DataTypes
+'
+'Access:       CINT(value),  CDBL(value), CDEC(value),  CSTR(value), CDATE(value), CBOOL(value)
+'T-SQL:        CONVERT(DATATYPE, value) -- or -- CAST(value AS datatype)
+'
+'Conditional Expressions
+'
+'Access:       IIF(Condition, ReturnIfTrue, ReturnIfValue)
+'T-SQL:        CASE WHEN Condition THEN ReturnIfTrue ELSE ReturnIfFalse END
+'
+'Working with Date Literals
+'
+'Access:      WHERE SomeDate = #1/1/2005#
+'T-SQL:       WHERE SomeDate = '1/1/2005'    (this is an implicit conversion from a string to a date)
+'
+'Creating New Dates
+'
+'Access:     DATESERIAL(year,month,date)
+'T-SQL:       Use the Date() function  here  -- there is no quick easy way to do this in T-SQL
+'
+'Creating New Times
+'
+'Access:     TIMESERIAL(Hour, minute, second)
+'T-SQL:       Use the Time() function here  -- there is no quick easy way to do this in T-SQL
+'
+'Getting Today 's Date and Time
+'
+'Access:     SELECT now()
+'T-SQL:      SELECT getdate()
+'
+'Getting Today 's Date only (i.e., at midnight)
+'
+'Access:     SELECT date()
+'T-SQL:      Use the DateOnly() function here  :  SELECT dbo.DateOnly(getdate())
+'
+'Getting Today 's Time Only (at the "base" date, or date with a numeric value of 0)
+'
+'Access:    SELECT Time()    (this returns the time at 12/30/1899)
+'T-SQL:      Use the TimeOnly() function here  :  SELECT dbo.TimeOnly(getdate())  (returns the time at 1/1/1900)
+'
+'Boolean (True/False) Values
+'
+'Access:      WHERE Active = True  -- and --  WHERE Active = False
+'                    (Active is a Boolean datatype)
+'
+'T-SQL:       WHERE Active=1   -- and --   WHERE Active=0
+'                    (Active is a Bit datatype)
+'
+'Returning or Setting Boolean Values
+'
+'Access:    SELECT BooleanExpression
+'T-SQL:      CAST(CASE WHEN BooleanExpression THEN 1 ELSE 0 END) AS BIT
+'
+'FULL OUTER JOINS
+'
+'(Note: try to avoid these as a general practice)
+'
+'Access:      SELECT ... FROM tableA LEFT OUTER JOIN tableB ON ...
+'                     Union all
+'                    SELECT ... FROM tableB LEFT OUTER JOIN tableA ON ... WHERE tableA .PK IS NULL
+'
+'T-SQL:       SELECT ... FROM tableA FULL OUTER JOIN tableB ON ....
+'
+'RIGHT OUTER JOINS
+'
+'Because we all know that using the query designer in Access sometimes results in these, but we should never use them in manually written and maintained SQL:
+'
+'Access:      SELECT ... FROM tableA RIGHT OUTER JOIN tableB ON ....
+'T-SQL:        SELECT ... FROM tableB LEFT OUTER JOIN tableA ON ....
+'
+'Parameters
+'
+'Access:      SELECT [Any column name not defined]
+'T-SQL:       SELECT @ParamName
+'
+'Modulo Operator
+'
+'Access:     SELECT value1 MOD value2
+'T-SQL:      SELECT value1 % value2
+'
+'Dividing Integers to calculate a Percentage or other result with decimal places
+'
+'Access:    SELECT Int1 / Int2    (this returns a Double value implicitly)
+'T-SQL:      SELECT Int1 * 1.0 / Int2   (the multiplication by 1.0 results in a numeric(8,6) being returned)
+'
+'String Concatenation Operator
+'
+'Access:      Val1 &amp; Val2  (both will be implicitly converted to strings if they are not already)
+'T-SQL:       Val1 + Val2 ( note that explicit conversion to a "string" datatypes is necessary in T-SQL)
+'
+'Referencing an Expression in a SELECT
+'
+'Here, we define A+B as a new column X, and we want to reference X in the SELECT:
+'
+'Access:      SELECT A+B as X, X+C as D FROM ...
+'T-SQL:        SELECT X, X+C as D FROM (SELECT A+B as X, C FROM ... ) tmp
+'
+'Getting a Character from an ASCII code
+'
+'Access:      SELECT CHR(AsciiCode)
+'T-SQL:        SELECT CHAR(AsciiCode)
+'
+'Getting an ASCII code from a Character
+'
+'Access:      SELECT ASC(Character)
+'T-SQL:        SELECT ASCII(Character)
+'
+'Date Part Indicators (DateAdd, DateDiff, DatePart)
+'
+'MS Access and SQL Server both use the same basic date functions (DateAdd, DateDiff, DatePart) but the way you indicate which "date part" you are after differs between the two.
+'
+'MS Access uses a string expression to indicate the "dart part" in DateAdd, DatePart and DateDiff expressions; SQL Server uses symbols.  Thus, you need to put quotes around the part name in MS Access since it is just a string expression, but you should NOT use quotes in SQL Server -- just enter the value directly.
+'
+'The Date Part indicators are listed below:
+'
+'Date Part   SQL Server  MS Access
+'Year    year, yy, yyyy  "yyyy"
+'Quarter     quarter, qq, q  "q"
+'Month   month, mm, m    "m"
+'Day of Year     dayofyear, dy, y    "y"
+'Day     day, dd, d  "d"
+'Week    week, wk, ww    "ww"
+'Day of Week     weekday, dw     "w"
+'Hour    hour, hh    "h"
+'Minute      minute, mi, n   "n"
+'Second      second, ss, s   "s"
+'Millisecond     millisecond, ms     -
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>VBA_EXCEL_Conditional_Formatting</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>select_Cell_Highlight_Row_and_Column</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>VBA_EXCEL_Conditional_Formatting</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>select_Cell_Highlight_Row_and_Column</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+http://www.tushar-mehta.com/publish_train/xl_vba_cases/0121%20highlight%20row%20and%20col%20of%20selected%20cell.shtml
+Highlight: Column an Row
+
+Select cell A1 then select all the cells (click on the square at the intersection of the row and column headers).
+
+Next, select Conditional Formatting and create a condition based on a formula.
+=OR(CELL("col")=CELL("col",A1),CELL("row")=CELL("row",A1))
+F-9 {to recalculate}
+
+Just the horizontal row:
+=(CELL("row")=CELL("row",A1))
+
+Just the vertical col:
+=(CELL("col")=CELL("col",A1))
+
+
+Then to automate it
+Private Sub Worksheet_SelectionChange(ByVal Target As Range)
+    Target.Calculate
+    End Sub
+    
+    
+    
+Highlight the row to the left of and the column above the selected cell
+=OR(AND(CELL("col")=CELL("col",A1),CELL("row")&gt;CELL("row",A1)),AND(CELL("row")=CELL("row",A1),CELL("col")&gt;CELL("col",A1)))
+
+Draw a border in the cells to the left of and above the selected cell
+  For the red row border, use the c.f. formula =AND(CELL("row")=CELL("row",A1),CELL("col")&gt;CELL("col",A1))
+  
+and specify a format of red top and bottom borders.
+For the green column border, use the c.f. formula =AND(CELL("col")=CELL("col",A1),CELL("row")&gt;CELL("row",A1)) and specify a format of a green left and right borders.
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>VBA_EXCEL_CustomObject_With_Dictionary_asAProperty</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>StoreDictionaryInCustomObject_ReadWorksheetData_HoldInMatrix</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>VBA_EXCEL_CustomObject_With_Dictionary_asAProperty</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>StoreDictionaryInCustomObject_ReadWorksheetData_HoldInMatrix</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>'1] Mod_Two					'Second Button: Process the Data (i.e. runs sub: "Two_Main")  &lt;== This holds the controlling sub: Two_Main
+'2] Mod_General				'General Subs
+'3] Mod_Functions	 		'Used by Main
+'4] Mod_One(NOT INCLUDED)	'First Button: Get Original Data (Choose File, then choose Sheet 
+'5] c_R1_Record				'Class that defines the Highest Level Record
+'6] c_R2_Record				'Class that defines the next-Highest Level Record
+'This example only focuses on the first two levels
+////////////////////////////////////////////////
+'The sub 'Build_Output_Array' is the one that:
+'a) Creates the local level dictionaries to populate into the Custom Objects (i.e. oR1_record and oR2_record)    
+	Dim oR1_record As New c_R1_record
+    Dim oR2_record As New c_R2_Record
+'b) Then those are stored in form module level object:  m_dict_OUTPUTs   
+	Private m_dict_OUTPUTs As Scripting.Dictionary		
+
+///////////DATA on sheet: R2_to_R1_Mapping//////////////////////////////
+
+	R1(i) ==&gt;					1		2
+R2(i)							Revenue	Expenses
+1	Per Member Per Month (PMPM)	1	
+2	Grant and Other Revenue		1	
+3	Salary and Benefits					1
+4	Operations							1
+5	Support to Others					1
+6	Reserve Spending					1
+
+//////////////////////////////////////////
+
+
+
+
+//////////////1] Mod_Two/////////////////
+Option Explicit
+Option Base 0
+
+Private m_l_R2_to_R1_Max_Column As Long 'Column where the last cell is located (right side) of:  R2_to_R1
+Private m_l_R2_to_R1_Max_Row As Long    'Row where the last cell is located (bottom) of:  R2_to_R1
+Private m_l_R3_to_R2_Max_Column As Long 'Column where the last cell is located (right side) of:  R3_to_R2
+Private m_l_R3_to_R2_Max_Row As Long    'Row where the last cell is located (bottom) of: R3_to_R2
+Private m_l_IN_to_R3_Max_Column As Long 'Column where the last cell is located (right side) of:  IN_to_R3
+Private m_l_IN_to_R3_Max_Row As Long    'Row where the last cell is located (bottom) of: IN_to_R3
+
+Private m_arrMAP_R2_to_R1() As Variant       'Matrix Mapping the data from:  R2_to_R1
+Private m_arMAP_R3_to_R2() As Variant       'Matrix Mapping the data from:  R3_to_R2
+Private m_arrMAP_IN_to_R3() As Variant       'Matrix Mapping the data from:  IN_to_R3
+
+'Requires REFERENCE: Microsoft Scripting Runtime
+
+Private m_dict_OUTPUTs As Scripting.Dictionary     'This is the Output Data, with the 'R1_PK' as the key
+'Dictionary Key:    IN_PK   As Integer             'This is the key that ties the levels together, from the Mapping table
+
+'==============================================================================
+
+
+
+Sub Two_Main()
+    On Error GoTo ErrorHandler
+    
+    '=========================
+    GetTheMatrixSizes
+    PopulateTheMappingMatrix "R2_to_R1_Mapping", m_l_R2_to_R1_Max_Row, m_l_R2_to_R1_Max_Column, m_arrMAP_R2_to_R1
+    mod_General.PutArrayOnWorkSheet m_arrMAP_R2_to_R1, "Junk", 1, 1
+    PopulateTheMappingMatrix "R3_to_R2_Mapping", m_l_R3_to_R2_Max_Row, m_l_R3_to_R2_Max_Column, m_arMAP_R3_to_R2
+    PopulateTheMappingMatrix "IN_to_R3_Mapping", m_l_IN_to_R3_Max_Row, m_l_IN_to_R3_Max_Column, m_arrMAP_IN_to_R3
+'    mod_General.PutArrayOnWorkSheet m_arrMAP_IN_to_R3, "Junk", 1, 1
+    
+    
+    '1] Build the Output Array
+    Set m_dict_OUTPUTs = New Dictionary
+    Build_Output_Array
+    
+    
+    '===================START TEST Print of data ==============================
+   Dim keyX As Variant
+   Dim keyY As Variant
+   
+   For Each keyX In m_dict_OUTPUTs
+        Debug.Print ("=================")
+        Debug.Print (CStr(m_dict_OUTPUTs(keyX).R1_i) &amp; " : " &amp; m_dict_OUTPUTs(keyX).R1_Caption)
+        
+
+        For Each keyY In m_dict_OUTPUTs(keyX).dict_R2s
+            Debug.Print ("=================")
+            Debug.Print ("      " &amp; CStr(m_dict_OUTPUTs(keyX).dict_R2s(keyY).R2_i) &amp; " : " &amp; m_dict_OUTPUTs(keyX).dict_R2s(keyY).R2_Caption)
+        Next keyY
+            
+    Next keyX
+    
+    '===================START TEST Print of data ==============================
+    
+    
+    
+    MsgBox ("Done!")
+    '=========================
+      Exit Sub
+            
+ErrorHandler:
+        Select Case Err.Number
+            Case 0  'raised by subroutine
+                MsgBox ("A Subroutine raised an error that must be fixed BEFORE proceeding")
+            Case Else
+                MsgBox "Two_Main - Error: " &amp; Err.Number &amp; " " &amp; Err.Description
+        End Select
+    End Sub
+
+
+
+Sub PopulateTheMappingMatrix(sSheetName As String, lNoOfRows As Long, lNoOfColumns As Long, ByRef arrMatrixToPopulate() As Variant)
+    On Error GoTo ErrorHandler
+    
+    '=========================
+    Dim rngX As Range
+
+    Set rngX = Range(Worksheets(sSheetName).Range("A1"), Worksheets(sSheetName).Cells(lNoOfRows, lNoOfColumns))
+    arrMatrixToPopulate() = rngX
+
+
+    '=========================
+      Exit Sub
+            
+ErrorHandler:
+        Select Case Err.Number
+            Case Else
+                MsgBox "PopulateTheMappingMatrix - Error: " &amp; Err.Number &amp; " " &amp; Err.Description
+        End Select
+    End Sub
+
+Sub GetTheMatrixSizes()
+    On Error GoTo ErrorHandler
+    
+    '=========================
+    '1] R2_to_R1
+    m_l_R2_to_R1_Max_Column = fn_lLastColumn("R2_to_R1_Mapping")
+    m_l_R2_to_R1_Max_Row = fn_lLastRow("R2_to_R1_Mapping")
+
+     '2] R3_to_R2
+    m_l_R3_to_R2_Max_Column = fn_lLastColumn("R3_to_R2_Mapping")
+    m_l_R3_to_R2_Max_Row = fn_lLastRow("R3_to_R2_Mapping")
+   
+     '3] IN_to_R3
+    m_l_IN_to_R3_Max_Column = fn_lLastColumn("IN_to_R3_Mapping")
+    m_l_IN_to_R3_Max_Row = fn_lLastRow("IN_to_R3_Mapping")
+   
+    '=========================
+      Exit Sub
+            
+ErrorHandler:
+        Select Case Err.Number
+            Case Else
+                MsgBox "GetTheMatrixSizes - Error: " &amp; Err.Number &amp; " " &amp; Err.Description
+        End Select
+    End Sub
+
+
+Sub Build_Output_Array()
+    On Error GoTo ErrorHandler
+    
+    '=========================
+
+    Dim iRowCounter As Integer
+    Dim iColumnCounter As Integer
+    Dim iCellInRangeCounter As Integer
+    Dim rngHeaderOfData As Range    'This is the value in Row: 1
+    Dim rngColumnOfData As Range    'this is the set of data values located underneath the header, starting a row: 3
+    Dim iDataStartsAtColumn_for_R2_to_R1  As Integer   'The Column R1(i) index begin at this column
+    Dim iNumberOfRowsOfData_for_R2_to_R1  As Integer
+    Dim c As Range
+    Dim oR1_record As New c_R1_record
+    Dim oR2_record As New c_R2_Record
+
+'   Get the data from: R2_to_R1
+    iDataStartsAtColumn_for_R2_to_R1 = 3
+    iNumberOfRowsOfData_for_R2_to_R1 = CInt(m_l_R2_to_R1_Max_Row)
+    
+    
+    For iColumnCounter = iDataStartsAtColumn_for_R2_to_R1 To m_l_R2_to_R1_Max_Column
+    '===============================================================================
+        Set oR1_record = New c_R1_record
+        
+'        Set rngHeaderOfData = Worksheets("R2_to_R1_Mapping").Range("A1").Offset(0, iDataStartsAtColumn_for_R2_to_R1 - 1)
+        Set rngHeaderOfData = Worksheets("R2_to_R1_Mapping").Range("A1").Offset(0, iColumnCounter - 1)
+
+        Set rngColumnOfData = rngHeaderOfData.Offset(2, 0).Resize(iNumberOfRowsOfData_for_R2_to_R1, 1).SpecialCells(xlCellTypeConstants)
+        
+'        oR1_record.R1_PK = rngHeaderOfData.Value
+'        oR1_record.R1_Caption = rngHeaderOfData.Offset(1, 0).Value
+'        oR1_record.R1_i = iColumnCounter - iDataStartsAtColumn_for_R2_to_R1 + 1
+'
+'        Set oR1_record.dict_R2s = New Dictionary
+
+        With oR1_record
+            .R1_PK = rngHeaderOfData.Value
+            .R1_Caption = rngHeaderOfData.Offset(1, 0).Value
+            .R1_i = iColumnCounter - iDataStartsAtColumn_for_R2_to_R1 + 1
+            Set .dict_R2s = New Dictionary
+        End With
+
+        iCellInRangeCounter = 0
+        Set c = Nothing
+        
+        For Each c In rngColumnOfData.Cells
+        
+            iCellInRangeCounter = iCellInRangeCounter + 1
+
+            Set oR2_record = New c_R2_Record
+            Dim iR2_PK As Integer
+            iR2_PK = Worksheets("R2_to_R1_Mapping").Range("A" &amp; CStr(c.Row)).Value
+            
+            oR2_record.R2_i = iCellInRangeCounter
+            oR2_record.R2_PK = iR2_PK
+            oR2_record.R2_Caption = Worksheets("R2_to_R1_Mapping").Range("B" &amp; CStr(c.Row)).Value
+            oR2_record.R2_Multiplier = c.Value          'This comes from the cell located directly below the 'rngHeaderOfData' cell
+            '======================================================================
+            
+            
+            
+            'Code for inner Loops if neccessary
+            
+            
+            
+
+             '======================================================================
+            'oR1_record.dict_R2s.Add iCellInRangeCounter, oR2_record
+            oR1_record.dict_R2s.Add iR2_PK, oR2_record
+        Next c
+        
+        m_dict_OUTPUTs.Add rngHeaderOfData.Value, oR1_record    'Key: is the R1_PK
+    '===============================================================================
+    Next iColumnCounter
+    
+    
+    '=========================
+      Exit Sub
+            
+            
+            
+            
+ErrorHandler:
+        Select Case Err.Number
+            Case Else
+                MsgBox "Build_Output_Array - Error: " &amp; Err.Number &amp; " " &amp; Err.Description
+                Err.Raise 0
+                
+        End Select
+    End Sub
+
+
+
+/////////////2] Mod_General/////////////////
+
+Sub PutArrayOnWorkSheet(arrData() As Variant, SheetName As String, intStartRow As Integer, intStartCol As Integer)
+    On Error GoTo ErrorHandler
+    
+    '=========================
+    Dim oWorksheet As Worksheet
+    Dim rngCopyTo As Range
+    Set oWorksheet = ActiveWorkbook.Worksheets(SheetName)
+
+    ' size of array
+    Dim intEndRow As Integer
+    Dim intEndCol As Integer
+    intEndRow = UBound(arrData, 1)
+    intEndCol = UBound(arrData, 2)
+
+    Set rngCopyTo = oWorksheet.Range(oWorksheet.Cells(intStartRow, intStartCol), oWorksheet.Cells(intEndRow, intEndCol))
+    rngCopyTo.Value = arrData
+
+    '=========================
+      Exit Sub
+            
+ErrorHandler:
+        Select Case Err.Number
+            Case Else
+                MsgBox "GetTheMatrixSizes - Error: " &amp; Err.Number &amp; " " &amp; Err.Description
+        End Select
+    End Sub
+
+////////// 3] Mod_Functions ///////////////
+
+Function fn_WorkSheetExists(wsName As String) As Boolean
+    On Error Resume Next
+    fn_WorkSheetExists = Worksheets(wsName).Name = wsName
+End Function
+
+
+Function fn_lLastRow(sWorkSheetName As String) As Long
+    Dim lX As Long
+    
+
+    Dim wsX As Worksheet
+    
+    Set wsX = Sheets(sWorkSheetName)
+    lX = wsX.Cells(Rows.Count, 1).End(xlUp).Row
+    
+    fn_lLastRow = lX
+    
+'    MsgBox (CStr(lX))
+    
+End Function
+
+Function fn_lLastColumn(sWorkSheetName As String) As Long
+    On Error GoTo ErrorHandler
+    
+    '=========================
+    Dim lX As Long
+
+'    Worksheets(sWorkSheetName).Cells(1, Columns.Count).End(xlToLeft).Select
+
+
+    lX = Worksheets(sWorkSheetName).Cells(1, Columns.Count).End(xlToLeft).Column
+    
+    fn_lLastColumn = lX
+    
+         '=========================
+      Exit Function
+            
+ErrorHandler:
+        Select Case Err.Number
+            Case Else
+                MsgBox "Error: " &amp; Err.Number &amp; " " &amp; Err.Description
+        End Select
+     
+End Function
+
+
+
+Function fn_MappingsAreValid() As String
+    'Validity is defined as:
+    '      a) There is 1 or less entries per row of data
+    
+    Dim sX As String
+    Dim sX_accumulated As String
+    
+    sX = ""
+    sX_accumulated = ""
+    
+    '1] R2_to_R1
+    sX = sX &amp; fn_CheckForOneAndOnlyOneValuePerRow("R2_to_R1_Mapping", m_l_R2_to_R1_Max_Row, m_l_R2_to_R1_Max_Column)
+
+    If Len(Trim(sX)) &gt; 0 Then
+        sX = "These rows in R2_to_R1_Mapping had more than one value: " &amp; sX
+        sX_accumulated = sX
+        sX = ""
+    Else
+    
+    End If
+    
+    '2] R3_to_R2
+    
+    sX = sX &amp; fn_CheckForOneAndOnlyOneValuePerRow("R3_to_R2_Mapping", m_l_R3_to_R2_Max_Row, m_l_R3_to_R2_Max_Column)
+
+    If Len(Trim(sX)) &gt; 0 Then
+        sX = "These rows in R3_to_R2_Mapping had more than one value: " &amp; sX
+        sX_accumulated = sX_accumulated &amp; " | " &amp; sX
+        sX = ""
+    Else
+    
+    End If
+    
+    
+        '3] IN_to_R3
+    
+    sX = sX &amp; fn_CheckForOneAndOnlyOneValuePerRow("IN_to_R3_Mapping", m_l_IN_to_R3_Max_Row, m_l_IN_to_R3_Max_Column)
+
+    If Len(Trim(sX)) &gt; 0 Then
+        sX = "These rows in IN_to_R3_Mapping had more than one value: " &amp; sX
+        sX_accumulated = sX_accumulated &amp; " | " &amp; sX
+        sX = ""
+    Else
+    
+    End If
+
+    fn_MappingsAreValid = sX_accumulated
+    
+End Function
+
+
+Function fn_CheckForOneAndOnlyOneValuePerRow(sNameOfWorkSheet As String, lRows As Long, lColumns As Long) As String
+    On Error GoTo ErrorHandler
+    
+    '=========================
+    
+    Dim sX As String
+    Dim lRowCounter As Long
+    Dim lnonEmptyColumnCount As Long
+    
+    sX = ""
+           
+    For lRowCounter = 3 To lRows
+        Dim rng As Range
+        Dim ws As Worksheet
+        Set ws = Sheets(sNameOfWorkSheet)
+        Set rng = ws.Cells(lRowCounter, 3).Resize(, lColumns - 2)
+        lnonEmptyColumnCount = WorksheetFunction.CountA(rng)
+ 
+        If lnonEmptyColumnCount &gt; 1 Then
+            sX = sX &amp; "[" &amp; Trim(Worksheets(sNameOfWorkSheet).Range("A1").Cells(lRowCounter, 2).Value) &amp; "] , "
+        Else
+'            sX = sX
+        End If
+        
+    Next lRowCounter
+
+    fn_CheckForOneAndOnlyOneValuePerRow = sX
+    '=========================
+      Exit Function
+            
+ErrorHandler:
+        Select Case Err.Number
+            Case Else
+                MsgBox "GetTheMatrixSizes - Error: " &amp; Err.Number &amp; " " &amp; Err.Description
+        End Select
+End Function
+
+    
+///////////// 5] c_R1_Record /////////////
+
+Option Explicit
+
+'CLASS: c_R1_Record
+'Dictionary Key:    R1_PK   As Integer             'This is the key that ties the levels together, from the Mapping table
+
+Public R1_i As Long                     'This is a simple counter starting at 1
+Public R1_PK As Long                    'This is the key that ties the levels together, from the Mapping table
+Public Total_1 As Double                'This is the total of the (Total_2  times R2_Multiplier) from the R2_Records
+Public R1_Caption As String             'This is the caption from the Mapping table
+Public dict_R2s As Scripting.Dictionary 'This is the dictionary of R2_Record objects
+
+
+///////////// 6] c_R2_Record /////////////
+
+Option Explicit
+
+'CLASS: c_R2_Record
+'Dictionary Key:    R2_PK   As Integer             'This is the key that ties the levels together, from the Mapping table
+
+
+Public R2_i As Long                     'This is a simple counter starting at 1
+Public R2_PK As Long                    'This is the key that ties the levels together, from the Mapping table
+Public Total_2 As Double                'This is the total of the (Total_3  times R3_Multiplier) from the R3_Records
+Public R2_Caption As String             'This is the caption from the Mapping table
+Public R2_Multiplier As Double          'Used in R1 Record to calculate the Total_1
+Public dict_R3s As Scripting.Dictionary 'This is the dictionary of R3_Record objects
+
+//////////////////////////////////////////
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+</dictionary>
