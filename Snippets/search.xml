@@ -3,322 +3,148 @@
   <item>
     <key>
       <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>Bulk_Insert</Category>
-        <Language>SQLSERVER2K SQL</Language>
+        <Category>CODE_01_Empty_ASP.NET_Core_Web_Application</Category>
+        <Language>C#</Language>
         <Public>false</Public>
-        <Name>Bulk_Insert_EscapeCharacters_NonPrintables</Name>
+        <Name>CODE_01__Startup.cs</Name>
         <Group>My Snippets</Group>
       </SnippetKey>
     </key>
     <value>
       <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
         <Key>
-          <Category>Bulk_Insert</Category>
-          <Language>SQLSERVER2K SQL</Language>
+          <Category>CODE_01_Empty_ASP.NET_Core_Web_Application</Category>
+          <Language>C#</Language>
           <Public>false</Public>
-          <Name>Bulk_Insert_EscapeCharacters_NonPrintables</Name>
+          <Name>CODE_01__Startup.cs</Name>
           <Group>My Snippets</Group>
         </Key>
         <Keywords />
         <Imports />
-        <Code>
-
-BULK INSERT [table]
-FROM 'c:\file'
-WITH
-(
-   FIELDTERMINATOR = CHAR(0x01),
-   ROWTERMINATOR = CHAR(0x02),
-   FIRSTROW = 2
-);</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>CCWNC</Category>
-        <Language>SQLSERVER2K SQL</Language>
-        <Public>false</Public>
-        <Name>CharIndex_get_text_between_special_Characters</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>CCWNC</Category>
-          <Language>SQLSERVER2K SQL</Language>
-          <Public>false</Public>
-          <Name>CharIndex_get_text_between_special_Characters</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>-- PARSE: [*
-  	  
-  	  
-  	  ,	(SELECT     'TheCalculation' = 
-        		CASE 
-            			WHEN (charINDEX('[*',[NOTES]) &gt;= 0) and (charINDEX('*]',[NOTES]) &gt; 0 ) THEN SUBSTRING([NOTES],(charINDEX('[*',[NOTES])+3), (  (charINDEX('*]',[NOTES])-1) - (charINDEX('[*',[NOTES])+2)  ))
-        		 
-				ELSE NULL
-
-        			END) as GoodString
-        			
-        			
-///////////////////// nicer formatted version//////////////////
-
-	  	  ,	(SELECT     'TheCalculation' = 
-CASE 
-		WHEN (charINDEX('[*',[Program_Title]) &gt;= 0) and (charINDEX('*]',[Program_Title]) &gt; 0 ) 
-		THEN SUBSTRING(
-						[Program_Title],
-						(charINDEX('[*',[Program_Title])+3),
-						(  (charINDEX('*]',[Program_Title])-1) - (charINDEX('[*',[Program_Title])+2)  )
-					  )
- 
-ELSE NULL
-
-	END) as GoodString	
-	
-////////////////////  definitions and more verbose///////////////
-
-	  	  ,	(SELECT     'TheCalculation' = 
-        		CASE 
-            			WHEN (charINDEX('[*',[Program_Title]) &gt;= 0) and (charINDEX('*]',[Program_Title]) &gt; 0 ) 
-            			THEN SUBSTRING(
-            							[Program_Title],						--SUBSTRING(value_expression , , )
-            							(										--SUBSTRING(,start_expression , )	{Is an integer or bigint expression that specifies where the returned characters start}
-            								charINDEX(							--charINDEX: Searches expression2 for expression1 and returns its starting position if found. The search starts at start_location.
-            											'[*',					--charINDEX: expression1: Is a character expression that contains the sequence to be found. expression1 is limited to 8000 characters. 
-            											[Program_Title]			--charINDEX: expression2: Is a character expression to be searched.
-            																	--charINDEX: start_location (optional):  Is an integer or bigint expression at which the search starts. If start_location is not specified, is a negative number, or is 0, the search starts at the beginning of expression2
-            										)
-            								+
-            								3
-            							),
-            							(										--SUBSTRING(, ,length_expression )  {Is a positive integer or bigint expression that specifies how many characters of the value_expression will be returned} 
-            								(
-            									charINDEX('*]',[Program_Title])
-            									-
-            									1
-            								) 
-            								- 
-            								(
-            									charINDEX('[*',[Program_Title])
-            									+
-            									2
-            								)  
-            							)
-            						  )</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>CrossApply</Category>
-        <Language>SQLSERVER2K SQL</Language>
-        <Public>false</Public>
-        <Name>CROSS_APPLY_a_function_with_a_CTE</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>CrossApply</Category>
-          <Language>SQLSERVER2K SQL</Language>
-          <Public>false</Public>
-          <Name>CROSS_APPLY_a_function_with_a_CTE</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>--https://www.simple-talk.com/sql/t-sql-programming/sql-server-apply-basics/
+        <Code>CODE_01__Startup.cs
+-------------------
+using DutchTreat.Data;      //required for AddDbContext&lt;DutchContext&gt;()
+using DutchTreat.Services;  //for the IMailService
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+// required for 'UseSqlServer'
+using Microsoft.EntityFrameworkCore;
+// required for IConfiguration
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 
---the following function, returns the product model associated with the specified product:
+namespace DutchTreat
+{
+    public class Startup
+    {
+        //Private field to hold the configuration interface
+        private readonly IConfiguration _config;
 
-USE AdventureWorks2008
-GO
-
-IF OBJECT_ID (N'fn_products', N'IF') IS NOT NULL
-  DROP FUNCTION dbo.fn_products
-GO
-
-CREATE FUNCTION fn_products (@ProductID int) RETURNS TABLE
-AS
-RETURN
-		(
-			  SELECT
-			    p.Name AS ProductName,
-			    pm.Name AS ProductModel
-			  FROM
-			    Production.Product AS p
-			    LEFT OUTER JOIN 
-			    Production.ProductModel AS pm
-			    ON p.ProductModelID = pm.ProductModelID
-			  WHERE
-			    p.ProductID = @ProductID
-		)
-GO
-
---I then used the following SELECT statement to verify that the function works as I expect:
-
-SELECT 
-	ProductName, 
-	ProductModel
-FROM fn_products(707)
-
---The statement returns the product name and model for product 707
-
-ProductName				ModelName
------------				---------
-Sport-100 Helmet, Red	Sport-100
-
---You can then use the CROSS APPLY operator to join a CTE to the function, 
---	as shown in the following example:
-
-WITH
-  ProductSales (ProductID, TotalSales)
-  AS
-  (
-    SELECT
-		      ProductID,
-		      SUM(LineTotal)
-    FROM Sales.SalesOrderDetail
-    GROUP BY ProductID
-  )
-
-SELECT
-		  ps.ProductID,
-		  ps.TotalSales,
-		  fn.ProductModel
-FROM
-		ProductSales AS ps
-		CROSS APPLY
-		fn_products(ps.ProductID) AS fn
-		
-ORDER BY ps.ProductID</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>CTE</Category>
-        <Language>SQLSERVER2K SQL</Language>
-        <Public>false</Public>
-        <Name>about_CTE</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>CTE</Category>
-          <Language>SQLSERVER2K SQL</Language>
-          <Public>false</Public>
-          <Name>about_CTE</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>CTE = Common Table Expression</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>CTE</Category>
-        <Language>SQLSERVER2K SQL</Language>
-        <Public>false</Public>
-        <Name>Create_a_TEST_dataset_with_a_CTE</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>CTE</Category>
-          <Language>SQLSERVER2K SQL</Language>
-          <Public>false</Public>
-          <Name>Create_a_TEST_dataset_with_a_CTE</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>with CTEOrders as
-(select cast(1 as int) as OrderID, cast('3/1/2012' as date) as OrderDate, cast(10.00 as money) as OrderAmt, 'Joe' as CustomerName
-union select 2, '3/1/2012', 11.00, 'Sam'
-union select 3, '3/2/2012', 10.00, 'Beth'
-union select 4, '3/2/2012', 15.00, 'Joe'
-union select 5, '3/2/2012', 17.00, 'Sam'
-union select 6, '3/3/2012', 12.00, 'Joe'
-union select 7, '3/4/2012', 10.00, 'Beth'
-union select 8, '3/4/2012', 18.00, 'Sam'
-union select 9, '3/4/2012', 12.00, 'Joe'
-union select 10, '3/4/2012', 11.00, 'Beth'
-union select 11, '3/5/2012', 14.00, 'Sam'
-union select 12, '3/6/2012', 17.00, 'Beth'
-union select 13, '3/6/2012', 19.00, 'Joe'
-union select 14, '3/7/2012', 13.00, 'Beth'
-union select 15, '3/7/2012', 16.00, 'Sam'
-)
-select OrderID
-,OrderDate
-,OrderAmt
-,CustomerName
-from CTEOrders;</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>CTE</Category>
-        <Language>SQLSERVER2K SQL</Language>
-        <Public>false</Public>
-        <Name>CTE_and_IF</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>CTE</Category>
-          <Language>SQLSERVER2K SQL</Language>
-          <Public>false</Public>
-          <Name>CTE_and_IF</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>
---FROM: http://www.sqlservercentral.com/Forums/Topic599836-338-1.aspx#bm599936
-
---The issue that I have is that I can create a temporary table in the beginning of a stored procedure
--- and then use that temporary table anywhere in the procedure whereas a CTE must be followed by a
---  Select, Insert, Update or Delete.
-
---For instance, if my stored procedure followed the following steps:
-
---Step #1 - Create Temporary Table
---Step #2 - If @SomeParameter is Null Then Do Something, Otherwise Do Something Else
-
---won't work if Step #1 Creates a CTE instead of a Temporary table.
-
---That is why I stated that the CTE seems to be limited. I guess that is a limitation that 
---I will have to accept in order to get the other benefits of the CTE.
+        //constructor to inject some interfaces into our startup
+        public Startup(IConfiguration config)
+        {
+            _config = config;
+        }
 
 
---You're right. CTEs are limited in that they are meant to be a one-time view that gets used 
---immediately and then destroyed. To do what you intend, you may have to do the 
---IF check first and then have two different CTEs for each outcome. In this case,
--- you're probably better off using a temp table or a table variable.
+        // This method gets called by the runtime. Use this method to add services to the container.
+        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+        public void ConfigureServices(IServiceCollection services)
+        {
+            //Add this and build the solution. Note need to add Using statement above to bring in the context
+            // By default it is added as a 'Scoped' service
+            services.AddDbContext&lt;DutchContext&gt;(cfg =&gt;
+            {
+                //could hard code a connection string in here, but instead we will use a configuration
+                // The IConfiguration object (i.e. _config) has a property for the connection string, 
+                //      that are stored in the configuration file (created by 'CreateDefaultBuilder' in Program.cs)
+                cfg.UseSqlServer(_config.GetConnectionString("DutchConnectionString"));
+            });
+
+
+            //AddTransient =&gt; have no data on themselves, just methods
+            //AddScoped =&gt; Kept around for the length of a connection, usually for length of request from client
+            //AddSingleton =&gt; created once and kept for the lifetime of the server being up.
+            //Later you would add support for a real mail service, so for now it just has an implementation that it can call
+            //and for now it would be calling the fake method: NullMailService
+            services.AddTransient&lt;IMailService, NullMailService&gt;();
+
+            //Without this code (i.e.  services.AddMvc();)  you would get this error:
+            //============================================================================================================================
+            //An error occurred while starting the application.
+            //    InvalidOperationException: Unable to find the required services. 
+            //    Please add all the required services by calling 'IServiceCollection.AddMvc' inside the call to 'ConfigureServices(...)' 
+            //    in the application startup code.
+            //============================================================================================================================
+
+            //add the 'DutchSeeder' class to the services collection as a Transient service
+            services.AddTransient&lt;DutchSeeder&gt;();  //Note DutchSeeder uses DutchContext (a scoped service) which is added above
+
+            //add 'IDutchRepository' as a service that can be used, but as an implementation use 'DutchRepository'
+            services.AddTransient&lt;IDutchRepository, DutchRepository&gt;();
+            
+            services.AddMvc();  
+
+        }
+
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        {
+            //to see ERRORS in 'development'
+            // Project(menu) =&gt; Dutchtreat Properties =&gt; Debug {tag} =&gt; Environment variables {right pane} 
+            //          Name: ASPNETCORE ENVIRONMENT  Value: Development
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else // where the value of 'ASPNETCORE ENVIRONMENT' is not Development
+            {
+                app.UseExceptionHandler("/Error");
+            }
+
+            // The order matters in this Method
+            //app.UseDefaultFiles(); // This lets it find default files (e.g. index.html), COMMENT IT OUT in order to process the MVC files first
+            app.UseStaticFiles();  //This line lets you use .html etc files. They must be placed in the wwwroot folder of the project
+
+            //Without this (i.e. app.UseMvc) the .html would work, but not the MVC components           
+            app.UseMvc(cfg =&gt;
+            {
+                cfg.MapRoute("Default",                             //Set up the routes
+                    "{controller}/{action}/{id?}",                  // where things in braces are place-holders, vs putting specific controller and action names in there. The "?" means that "id" is optional
+                    new { controller = "App", Action = "Index" });  // and if the controller/action is missing then use this line
+            });
+
+            //We want this to happen last, so it goes at the bottom
+            // put the seeding method call
+            if (env.IsDevelopment())    //Project =&gt; Properties =&gt; Debug {left pane} =&gt; Environment Variables(Name='ASPNETCORE_ENVIRONMENT', Value='Development')
+            {
+                //Seed the database, but don't have the context, nor hosting environment at this point
+                // b/c we need a context, we therefore need a scope first while we seed the database
+                using (var scope = app.ApplicationServices.CreateScope())
+                {
+                    var seeder = scope.ServiceProvider.GetService&lt;DutchSeeder&gt;();
+                    seeder.Seed();
+                }
+
+            }
+
+
+            //// This was here by default
+            //if (env.IsDevelopment())
+            //{
+            //    app.UseDeveloperExceptionPage();
+            //}
+
+            //// example of responding to any query w/ a fixed output
+            //app.Run(async (context) =&gt;
+            //{
+            //    await context.Response.WriteAsync("&lt;html&gt;&lt;body&gt;&lt;h1&gt;Hello Glenn&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt;");
+            //    //await context.Response.WriteAsync("Hello World!");
+            //});
+        }
+    }
+}
 </Code>
       </SnippetValue>
     </value>
@@ -326,1932 +152,362 @@ from CTEOrders;</Code>
   <item>
     <key>
       <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>CTE</Category>
-        <Language>SQLSERVER2K SQL</Language>
+        <Category>CODE_01_Empty_ASP.NET_Core_Web_Application</Category>
+        <Language>C#</Language>
         <Public>false</Public>
-        <Name>CTE_in_StoredProc</Name>
+        <Name>CODE_01_about_Connection_String</Name>
         <Group>My Snippets</Group>
       </SnippetKey>
     </key>
     <value>
       <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
         <Key>
-          <Category>CTE</Category>
-          <Language>SQLSERVER2K SQL</Language>
+          <Category>CODE_01_Empty_ASP.NET_Core_Web_Application</Category>
+          <Language>C#</Language>
           <Public>false</Public>
-          <Name>CTE_in_StoredProc</Name>
+          <Name>CODE_01_about_Connection_String</Name>
           <Group>My Snippets</Group>
         </Key>
         <Keywords />
         <Imports />
-        <Code>/*	prj_1012_SP_009_CountEnrollmentDocumentsPerDay.sql
-	************************************************************************************
-	NOTE: 
-	Uses: 
-	Created: 1/27/2014
-	By: glenn garson
-	************************************************************************************
-*/
+        <Code>CODE_01_about_Connection_String
+--------------------------------------------
+// 1] add code (AddDbContext) to 'ConfigureServices', in Startup.cs
+--------------------------------------------
+using DutchTreat.Data;      //required for AddDbContext&lt;DutchContext&gt;()
+// required for 'UseSqlServer'
+using Microsoft.EntityFrameworkCore;
 
-SET NOCOUNT ON
-Use DB4_DocumentManagement
-go
+...
 
-create PROCEDURE prj_1012_SP_009_CountEnrollmentDocumentsPerDay
-	AS
-	
-;with CTE_RoundToDate (TheDate)
-AS
-	(
-		SELECT DATEADD(dd, DATEDIFF(dd,0,[DateEnteredIntoDatabase]), 0)
-		FROM [DB4_DocumentManagement].[dbo].[T1_ReleaseOfInformation]
-	),
---Select * from CTE_RoundToDate
+        // This method gets called by the runtime. Use this method to add services to the container.
+        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+        public void ConfigureServices(IServiceCollection services)
+        {
+            //Add this and build the solution. Note need to add Using statement above to bring in the context
+            services.AddDbContext&lt;DutchContext&gt;(cfg =&gt;
+            {
+                //could hard code a connection string in here, but instead we will use a configuration
+                // The IConfiguration object (i.e. _config) has a property for the connection string, 
+                //      that are stored in the configuration file (created by 'CreateDefaultBuilder' in Program.cs)
+                cfg.UseSqlServer(_config.GetConnectionString("DutchConnectionString"));
+            });
+--------------------------------------------
+//2]  Modify 'BuildWebHost' in Program.cs: (1) ConfigureAppConfiguration, (2) SetupConfiguration
+--------------------------------------------
+        /*
+         'CreateDefaultBuilder' sets up a configuration file that we can use
+         'ConfigureAppConfiguration' takes a delegate that is going to pass in a configuration builder 
+                so that we can add our own configuration options (e.g. the connection string)
+                To do this we create a method called 'SetupConfiguration' to keep the code  here simple
+                
+        */
+        public static IWebHost BuildWebHost(string[] args) =&gt;
+            WebHost.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration(SetupConfiguration)			//&lt;===============
+                .UseStartup&lt;Startup&gt;()
+                .Build();
 
-CTE_FormatAsDate (TheDate)
-AS
+        private static void SetupConfiguration(WebHostBuilderContext ctx, IConfigurationBuilder builder)
+        {
+            //Remove the default configuration options
+            builder.Sources.Clear();
 
-	(
-		SELECT 	CAST(CONVERT(varchar, TheDate, 101) AS Date)
-		FROM CTE_RoundToDate
-	)
+            //builder allows for many types of configuration files. we will use a Json file, with path "config.json"
+            // AddJsonFile parms: path, optional, reload on change
+            // This example illustrates that you can have multple configuration sources combined into a single 'configuration'
+            //          conflicts are resolved (last in is the one that counts, i.e. the bottom most one is the one that rules)
+            //          So developer could use the first one, but when it is pushed out to production, the last one is the Production environments values, and they rule
+            builder.AddJsonFile("config.json", false, true)         //This requires we create a 'config.json' file om the root
+                //.AddXmlFile("config.xml", true)     //&lt;=== just to demonstrate that you can have multiple config files
+                .AddEnvironmentVariables();         //&lt;=== to demonstrate you can use environmental variables
+        }
 
-Select COUNT(*), TheDate
-FROM CTE_FormatAsDate
-Group By TheDate
-Order by TheDate desc  	
-	</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>CTE</Category>
-        <Language>SQLSERVER2K SQL</Language>
-        <Public>false</Public>
-        <Name>CTE_in_VIEW</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>CTE</Category>
-          <Language>SQLSERVER2K SQL</Language>
-          <Public>false</Public>
-          <Name>CTE_in_VIEW</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>--prj_0037_vw_501_EmployeePositions_v3.sql
-
-
-use DB2_CRM
-go
-;
-Create View [dbo].[prj_0037_vw_501_EmployeePositions]
-AS
-
-with CTE_ONE (
-				 Name, 
-				 Accounting_First_Name, 
-				 Accounting_Middle_Name, 
-				 Accounting_Last_Name, 
-				 T29_PK, 
-				 T22_PK, 
-				 T9_PK, 
-				 Position_Prefix, 
-				 Position_Role_e37, 
-				 Position_Role,	
-				 Position_Character_Separator, 
-				 Position_Descriptor, 
-				 Position_Region_e38, 
-				 Position_Region,		
-				 Position_Override, 
-				 bUse_Credentials,
-				 Position_Suffix, 
-				 Position_Credentials, 
-				 Position_Alternate_1, 
-				 Position_Alternate_2, 
-				 CMIS_Access_e39,
-				 CMIS_Access, 
-				 CMIS_Role_e40,
-				 CMIS_Role, 
-				 bReverseOrder, 
-				 T29_Note
-			 )
-AS
-	(
-		SELECT 
-			T9_CCWNC_Employees.Name, 
-			T22_CCWNC_Employee_AccountingPortal.Accounting_First_Name, 
-			T22_CCWNC_Employee_AccountingPortal.Accounting_Middle_Name, 
-			T22_CCWNC_Employee_AccountingPortal.Accounting_Last_Name, 
-			T29_Employee_Positions.T29_PK, 
-			T22_CCWNC_Employee_AccountingPortal.T22_PK, 
-			T9_CCWNC_Employees.T9_PK, 
-			T29_Employee_Positions.Position_Prefix, 
-			T29_Employee_Positions.Position_Role_e37, 
-			(
-					Select [Enum].EnumDescription 
-					From Enum
-					where (
-							([Enum].EnumNameSpace_FK=37) 
-							and 
-							([Enum].EnumValue=T29_Employee_Positions.Position_Role_e37)
-						   )
-			) as Position_Role,	
-			T29_Employee_Positions.Position_Character_Separator, 
-			T29_Employee_Positions.Position_Descriptor, 
-			T29_Employee_Positions.Position_Region_e38, 
-			(
-					Select [Enum].EnumDescription 
-					From Enum
-					where (
-							([Enum].EnumNameSpace_FK=38) 
-							and 
-							([Enum].EnumValue=T29_Employee_Positions.Position_Region_e38)
-						   )
-			) as Position_Region,		
-			T29_Employee_Positions.Position_Override, 
-			T29_Employee_Positions.bUse_Credentials,
-			T29_Employee_Positions.Position_Suffix, 
-			T29_Employee_Positions.Position_Credentials, 
-			T29_Employee_Positions.Position_Alternate_1, 
-			T29_Employee_Positions.Position_Alternate_2, 
-			T29_Employee_Positions.CMIS_Access_e39, 
-			(
-				Select [Enum].EnumDescription 
-				From Enum
-				where (
-						([Enum].EnumNameSpace_FK=39) 
-						and 
-						([Enum].EnumValue=T29_Employee_Positions.CMIS_Access_e39)
-					  )
-			   ) as CMIS_Access,
-			T29_Employee_Positions.CMIS_Role_e40,
-			(
-				Select [Enum].EnumDescription 
-				From Enum
-				where (
-						([Enum].EnumNameSpace_FK=40) 
-						and 
-						([Enum].EnumValue=T29_Employee_Positions.CMIS_Role_e40)
-					  )
-			) as CMIS_Role,			 
-			T29_Employee_Positions.bReverseOrder, 
-			T29_Employee_Positions.T29_Note
+--------------------------------------------
+//3]  Create config.json in root of project
+--------------------------------------------
+/* 		This will allow us to store Hierarchies and values
+		The name "DutchConnectionString", in this file will be used in the 'AddDbContext' of Startup.cs
+		From the VS 2017 menu "View" =&gt; SQL Server Object Explorer =&gt; opens Pane named "SQL Server Object Explorer"
+			This shows SQL servers on local machine */
 			
-		FROM  
-			(
-				T9_CCWNC_Employees 
-				INNER JOIN
-				T29_Employee_Positions 
-				ON T9_CCWNC_Employees.T9_PK = T29_Employee_Positions.T9_FK 
-			) 
-			INNER JOIN
-			T22_CCWNC_Employee_AccountingPortal 
-			ON T9_CCWNC_Employees.T9_PK = T22_CCWNC_Employee_AccountingPortal.T9_FK
-	)	
-
---select * from CTE_ONE
-
-
-select
-
-				dbo.fn_Parse_OrgChart(bReverseOrder,Position_Role,Position_Character_Separator,Position_Descriptor) AS OrgChart,
-
-				 dbo.fn_Parse_CMIS(CMIS_Access_e39, CMIS_Access, CMIS_Role_e40, CMIS_Role) as CMIS_Position,
-
-				 dbo.fn_Parse_BusinessCard( bReverseOrder,
-											Position_Prefix,
-											Position_Role,
-											Position_Character_Separator,
-											Position_Descriptor,
-											Position_Region_e38,
-											Position_Region,
-											bUse_Credentials,
-											Position_Suffix,
-											Position_Credentials,
-											Position_Override
-													)  as BusinessCardPosition,
-
-				 Name, 
-				 Accounting_First_Name, 
-				 Accounting_Middle_Name, 
-				 Accounting_Last_Name, 
-				 T29_PK, 
-				 T22_PK, 
-				 T9_PK, 
-				 Position_Prefix, 
-				 Position_Role_e37, 
-				 Position_Role,	
-				 Position_Character_Separator, 
-				 Position_Descriptor, 
-				 Position_Region_e38, 
-				 Position_Region,		
-				 Position_Override, 
-				 bUse_Credentials,
-				 Position_Suffix, 
-				 Position_Credentials, 
-				 Position_Alternate_1, 
-				 Position_Alternate_2, 
-				 CMIS_Access_e39,
-				 CMIS_Access, 
-				 CMIS_Role_e40,
-				 CMIS_Role, 
-				 bReverseOrder, 
-				 T29_Note
-
-from CTE_ONE
-
-
-								
-
-</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>CTE</Category>
-        <Language>SQLSERVER2K SQL</Language>
-        <Public>false</Public>
-        <Name>CTE_ReadMe</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>CTE</Category>
-          <Language>SQLSERVER2K SQL</Language>
-          <Public>false</Public>
-          <Name>CTE_ReadMe</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>
-Common Table Expressions 
-
---After CTE there should be a SELECT and DML statements only. You can use SELECT/INSERT/UPDATE/DELETE only.
-
---If you need to have condition then you have to use alternate way like Table variable.</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>CTE</Category>
-        <Language>SQLSERVER2K SQL</Language>
-        <Public>false</Public>
-        <Name>CTE_SELECT_In_ColumnList</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>CTE</Category>
-          <Language>SQLSERVER2K SQL</Language>
-          <Public>false</Public>
-          <Name>CTE_SELECT_In_ColumnList</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>
-
-with ctetbl1
-as(
-select affinityNumber from tbl
-group by ID having COUNT(*)&gt;1),
-cteTemp
-as(
-select *
-from tbl where AffinityNumber not in(select id from ctetbl1 where ID =’2′)
-select * from cte temp</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>CTE</Category>
-        <Language>SQLSERVER2K SQL</Language>
-        <Public>false</Public>
-        <Name>DateFieldsForCTE</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>CTE</Category>
-          <Language>SQLSERVER2K SQL</Language>
-          <Public>false</Public>
-          <Name>DateFieldsForCTE</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>CAST(zzz_prj_0011_prj_1028_TEMP_PatientList.Eligibility_Start_Date AS DATE) AS Eligibility_Start_Date , </Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>CTE</Category>
-        <Language>SQLSERVER2K SQL</Language>
-        <Public>false</Public>
-        <Name>JOIN_TwoCTE_And_RenameThem</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>CTE</Category>
-          <Language>SQLSERVER2K SQL</Language>
-          <Public>false</Public>
-          <Name>JOIN_TwoCTE_And_RenameThem</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>
-USE ReportServer$PRODUCTION;
-
-WITH CTE_LastExecution
-AS
-(
-   SELECT e.ReportID
-       ,  MAX(e.timestart) AS LastExecution
-       FROM ExecutionLog  e
-       GROUP BY e.ReportID
-)
-,
-CTE_ExecutionCount
-AS
-(
-   SELECT e.ReportID
-       ,  COUNT(*) AS ExecutionCount
-       FROM ExecutionLog  e
-       GROUP BY e.ReportID
-)
-SELECT c.Path
-	   , c.Name
-	   , CTE_le.LastExecution
-	   , CTE_ec.ExecutionCount
-	   , e.UserName AS LastExecutingUser
-   FROM
-		( 
-			(
-				ExecutionLog e
-				JOIN 
-				Catalog c
-				ON e.ReportID = c.ItemID
-			)
-		   JOIN 
-		   CTE_LastExecution CTE_le
-		   ON (
-				e.ReportID = CTE_le.ReportID 
-				AND 
-				e.TimeStart = CTE_le.LastExecution
-			  )
-		)
-	   JOIN 
-	   CTE_ExecutionCount CTE_ec
-	   ON e.ReportID = CTE_ec.ReportID
-; </Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>CTE</Category>
-        <Language>SQLSERVER2K SQL</Language>
-        <Public>false</Public>
-        <Name>Mulitple_CTE_SeperatedBy_Comma</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>CTE</Category>
-          <Language>SQLSERVER2K SQL</Language>
-          <Public>false</Public>
-          <Name>Mulitple_CTE_SeperatedBy_Comma</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>-- Mulitple_CTE_SeperatedBy_Comma
-
-
-
-
-
-WITH
-
-  cteTotalSales (SalesPersonID, NetSales)
-  AS
-  (
-
-    SELECT SalesPersonID, ROUND(SUM(SubTotal), 2)
-    FROM Sales.SalesOrderHeader
-    WHERE SalesPersonID IS NOT NULL
-      AND OrderDate BETWEEN '2003-01-01 00:00:00.000'
-      AND '2003-12-31 23:59:59.000'
-    GROUP BY SalesPersonID
-
-  ),                                             --    &lt;==========  HERE is the comma that seperates the two CTE
-
-  cteTargetDiff (SalesPersonID, SalesQuota, QuotaDiff)
-
-  AS
-
-  (
-
-    SELECT ts.SalesPersonID,
-      CASE
-        WHEN sp.SalesQuota IS NULL THEN 0
-        ELSE sp.SalesQuota
-      END,
-      CASE
-        WHEN sp.SalesQuota IS NULL THEN ts.NetSales
-        ELSE ts.NetSales - sp.SalesQuota
-      END
-    FROM cteTotalSales AS ts
-      INNER JOIN Sales.SalesPerson AS sp
-      ON ts.SalesPersonID = sp.BusinessEntityID
-
-  )
-
-SELECT
-
-  sp.FirstName + ' ' + sp.LastName AS FullName,
-
-  sp.City,
-
-  ts.NetSales,
-
-  td.SalesQuota,
-
-  td.QuotaDiff
-
-FROM Sales.vSalesPerson AS sp
-
-  INNER JOIN cteTotalSales AS ts
-
-    ON sp.BusinessEntityID = ts.SalesPersonID
-
-  INNER JOIN cteTargetDiff AS td
-
-    ON sp.BusinessEntityID = td.SalesPersonID
-
-ORDER BY ts.NetSales DESC</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>CTE</Category>
-        <Language>SQLSERVER2K SQL</Language>
-        <Public>false</Public>
-        <Name>MultipleCTE_inOne_SELECT</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>CTE</Category>
-          <Language>SQLSERVER2K SQL</Language>
-          <Public>false</Public>
-          <Name>MultipleCTE_inOne_SELECT</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>--Option 1 :
-
-/* Method 1 */
-;WITH CTE1 AS (SELECT 1 AS Col1),
-CTE2 AS (SELECT 2 AS Col2)                  --&lt;=== Notice there is no "With" in front of second CTE
-SELECT CTE1.Col1,CTE2.Col2
-FROM CTE1
-CROSS JOIN CTE2
-GO
-
-
--- Result: 1 row, 2 columns: [  1  ,  2  ]
-
---Option 2:
-
-/* Method 2 */
-;WITH CTE1 AS (SELECT 1 AS Col1),
-CTE2 AS (SELECT COL1+1 AS Col2 FROM CTE1)    --&lt;=== Notice there is no "With" in front of second CTE
-SELECT CTE1.Col1,CTE2.Col2
-FROM CTE1
-CROSS JOIN CTE2
-GO 
-
--- Result: 1 row, 2 columns: [  1  ,  2  ]
-
-
--- Now use CTE1 to create CTE2:
-
-;WITH CTE1 AS (SELECT 1 AS Col1),
-CTE2 AS (SELECT * FROM CTE1)                  --&lt;=== Notice there is no "With" in front of second CTE
-SELECT CTE1.Col1,CTE2.Col1
-FROM CTE1
-CROSS JOIN CTE2
-GO</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>CTE</Category>
-        <Language>SQLSERVER2K SQL</Language>
-        <Public>false</Public>
-        <Name>Optional_Parm_MultipleCTE</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>CTE</Category>
-          <Language>SQLSERVER2K SQL</Language>
-          <Public>false</Public>
-          <Name>Optional_Parm_MultipleCTE</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>
-
-
---To accomplish CTE with optional parameter, you can use is as this way:
-
-;WITH cte1 AS
-( SELECT Col1
-FROM Table
-WHERE (@Param IS NULL OR Col1 = @Param)
-),
-cte2 AS (
-SELECT Col2
-FROM Table
-WHERE (@Param IS NULL OR Col2 = @Param)
-)
-SELECT cte1.Col1,cte2.Col2
-FROM cte1
-CROSS JOIN cte2
-GO
-
-Here, if @param has value, then it will filter result in CTE.</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>CTE</Category>
-        <Language>SQLSERVER2K SQL</Language>
-        <Public>false</Public>
-        <Name>Set_PARAM,ETER_from_a_CTE</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>CTE</Category>
-          <Language>SQLSERVER2K SQL</Language>
-          <Public>false</Public>
-          <Name>Set_PARAM,ETER_from_a_CTE</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>;WITH Results AS
- (
-  SELECT ItemListID, Title,
-         CASE WHEN ROW_NUMBER() OVER(ORDER BY ItemListID DESC) 
-                   BETWEEN @intStartRow AND @intEndRow THEN 1
-                   END AS NumberOfResultsReturned,      
-         COUNT(ItemListID) OVER() AS ActualNumberOfResults          
-  FROM ItemData
-  WHERE FREETEXT(Title, @FTSSearchTerm)
-        AND WebsiteID = @WebsiteID
-        AND ContentTypeID = @ContentTypeID
-        AND GeoID2 = @GeoID                                 
- )
- SELECT @NumberOfResultsReturned = COUNT(NumberOfResultsReturned), 
-        @ActualNumberOfResults = MAX(ActualNumberOfResults)
- FROM cte  
- 
- 
- 
- \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
- 
-DECLARE @Number_of_All_CM INT
-
-
-
-WITH CTE_All_CM
-AS
-(
-	select [Name], 
-			[Position_Role],
-			[Position_Credentials],
-			'All' as Type	
-	FROM [DB2_CRM].[dbo].[prj_8011_vw_008_EmployeePositions_v0]
-	Where
-		(
-			(Position_Role='Team Lead')
-			or
-			(Position_Role='Care Manager')
-		)
-)
---select * from CTE_All_CM
---
-Select @Number_of_All_CM = (
-							Select COUNT(*)
-							From CTE_All_CM
-						
-						)</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>CTE</Category>
-        <Language>SQLSERVER2K SQL</Language>
-        <Public>false</Public>
-        <Name>SimpleSummaryCTE</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>CTE</Category>
-          <Language>SQLSERVER2K SQL</Language>
-          <Public>false</Public>
-          <Name>SimpleSummaryCTE</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>
-WITH ONE_CTE ([Practice_Group_Name], [DateDataWasCollected]) AS
-	(
-		SELECT	[Practice_Group_Name],[DateDataWasCollected]
-		FROM 	[DB3_EHR_Chart].[dbo].[T0001_AllScript_Diabetes] 
-	)
-	
-SELECT [Practice_Group_Name], [DateDataWasCollected], COUNT(*) AS RecordCount
-FROM ONE_CTE
-GROUP BY [Practice_Group_Name], [DateDataWasCollected]
-ORDER BY [Practice_Group_Name], [DateDataWasCollected]
-
-GO</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>CTE</Category>
-        <Language>SQLSERVER2K SQL</Language>
-        <Public>false</Public>
-        <Name>TableVariable_with_PrimaryKey_created_from_CTE_without_PrimaryKey</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>CTE</Category>
-          <Language>SQLSERVER2K SQL</Language>
-          <Public>false</Public>
-          <Name>TableVariable_with_PrimaryKey_created_from_CTE_without_PrimaryKey</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>--TableVariable_with_PrimaryKey_created_from_CTE_without_PrimaryKey
-
---example uses the list of Triggers
-
-
-DECLARE @tmp table (Id INT IDENTITY(1,1) PRIMARY KEY NOT NULL, Trigger_Name nvarchar(Max))
---DECLARE @CustomerId INT 
-DECLARE @Id INT = 0
-
-;WITH CTE_Triggers(Trigger_Name)
-AS
-(
-	SELECT 
-		 sysobjects.name AS Trigger_Name 
-	FROM sysobjects 
-	WHERE sysobjects.type = 'TR'
-)
-
-INSERT INTO @tmp SELECT Trigger_Name FROM CTE_Triggers
-
-Select * from @tmp
-
-
-///////--OUTPUT
-
-Id	Trigger_Name
-1	trg_Astec_Internal_Job_Insert
-2	trg_Astec_RetailJob_Insert
-3	trg_Astec_Hauler_Insert
-4	trg_HCSS_Insert_EmployeeTypes
-5	trg_Astec_RetailCustomer_Insert
-6	trg_HCSS_Update_EmployeeTypes
-7	trg_Astec_Vendor_Insert
-8	trg_B2W_Insert_Equipment
-9	trg_B2W_Insert_Vendor
-10	trg_HCSS_Insert_Equipment
-</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>CTE</Category>
-        <Language>SQLSERVER2K SQL</Language>
-        <Public>false</Public>
-        <Name>UNION_of_two_CTE_Select_from</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>CTE</Category>
-          <Language>SQLSERVER2K SQL</Language>
-          <Public>false</Public>
-          <Name>UNION_of_two_CTE_Select_from</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>
------------------------ Local Variables
-DECLARE @LineNumber int
-DECLARE @Source nvarchar(100)
-DECLARE @Title nvarchar(255)
-----------------------------------------
-
-
-SELECT @LineNumber = 23
-SELECT @Source = '[Q-002]'
-SELECT @Title = '[Adults]'
-;
-WITH cte_Line_23_Adult
-AS
-(
-
-
-	SELECT distinct
-		  [Patient_No]
-	  FROM [Success].[dbo].[zzz_p0021_6_for_Analysis_of_Part_Q]
-	  Where (
-				[Type] = 'PC'
-				AND
-				[loc] = 'EJ'
-				AND
-				[Adult] = 1
-			)
-)
-,cte_Line_23_NotAdult
-AS
-(
-
-
-	SELECT distinct
-		  [Patient_No]
-	  FROM [Success].[dbo].[zzz_p0021_6_for_Analysis_of_Part_Q]
-	  Where (
-				[Type] = 'PC'
-				AND
-				[loc] = 'EJ'
-				AND
-				[Adult] &lt;&gt; 1
-			)
-)
-
---Select * 
---From cte_Line_23_Adult
---Order by Patient_No
-
-SELECT *
-FROM
-	cte_Line_23_Adult a
-	INNER JOIN
-	cte_Line_23_NotAdult na
-	On a.Patient_No = na.Patient_No
-
-////////////////////////////////////////////////////////////////////////
-WITH CTE_All_CM
-AS
-(
-select [Name], 
-		[Position_Role],
-		[Position_Credentials],
-		'All' as Type	
-FROM [DB2_CRM].[dbo].[prj_8011_vw_008_EmployeePositions_v0]
-Where
-	(
-		(Position_Role='Team Lead')
-		or
-		(Position_Role='Care Manager')
-	)
-),
-CTE_RN_CM
-AS
-(
-	select [Name], 
-			[Position_Role],
-			[Position_Credentials],
-			'RN' as Type	
-	FROM [DB2_CRM].[dbo].[prj_8011_vw_008_EmployeePositions_v0]
-	Where Position_Credentials like '%RN%'
-)
-Select Type, COUNT(*) as TypeCount
-From
-	(
-		(Select * From 	CTE_RN_CM)
-		UNION 
-		(Select * From 	CTE_All_CM)	
-	) as TheUnion
-Group by Type
-Order by Type DESC
-
-	</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>DATES</Category>
-        <Language>SQLSERVER2K SQL</Language>
-        <Public>false</Public>
-        <Name>PureMath_NoCharecters</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>DATES</Category>
-          <Language>SQLSERVER2K SQL</Language>
-          <Public>false</Public>
-          <Name>PureMath_NoCharecters</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>    --has added benefit of not doing any string conversions, 
-    --so it's pure arithmetic processing (very fast) and it's not 
-    --dependant on any date format This capitalizes on the fact that 
-    --SQL Server's internal representation for datetime and smalldatetime 
-    --values is a two part value the first part of which is an integer 
-    --representing the number of days since 1 Jan 1900, and the second 
-    --part is a decimal fraction representing the fractional portion 
-    --of one day (for the time) --- So the integer value 0 (zero) always 
-    --translates directly into Midnight morning of 1 Jan 1900...
-    
-    --Just a little addition: You have to add "@DayOfMonth - 1" and "@Month - 1", because 0 already is 1 Jan, not day "0" ;) 
-    
-    --Works for leap years: select dateadd(mm,(@y-1900)* 12 + @m - 1,0) + (@d-1) 
-    
-    --Results in a valid yet spurious date value when passed invalid combination of values e.g. @Year = 2001,
-    --  @Month = 13 and @DayOfMonth = 32 results in 2002-02-01T00:00:00.000. The accepted answer (by Cade Roux) 
-    
-    
-    --generates an error, which is more useful.
-
-Declare @DayOfMonth TinyInt Set @DayOfMonth = 13
-Declare @Month TinyInt Set @Month = 6
-Declare @Year Integer Set @Year = 2006
--- ------------------------------------
-Select DateAdd(day, @DayOfMonth - 1, 
-          DateAdd(month, @Month - 1, 
-              DateAdd(Year, @Year-1900, 0)))
-              
-              </Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>Functions</Category>
-        <Language>SQLSERVER2K SQL</Language>
-        <Public>false</Public>
-        <Name>Are_characters_Numeric</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>Functions</Category>
-          <Language>SQLSERVER2K SQL</Language>
-          <Public>false</Public>
-          <Name>Are_characters_Numeric</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>ref: http://technet.microsoft.com/en-us/library/ms179859.aspx
-
-Better to use Like '%[0-9]%' than IsNumeric
-
---OR
-
-LIKE '%[0-9+ -]%'
-
-PATINDEX().</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>Functions</Category>
-        <Language>SQLSERVER2K SQL</Language>
-        <Public>false</Public>
-        <Name>disitinguish_Character_vs_SingleDigitNumber</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>Functions</Category>
-          <Language>SQLSERVER2K SQL</Language>
-          <Public>false</Public>
-          <Name>disitinguish_Character_vs_SingleDigitNumber</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>SELECT col, case when upper(col) = lower(col) then 'Number' else 'Character' end as [alfaNumeric] from table;</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>Functions</Category>
-        <Language>SQLSERVER2K SQL</Language>
-        <Public>false</Public>
-        <Name>TrimLeadingTrailingCharacters</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>Functions</Category>
-          <Language>SQLSERVER2K SQL</Language>
-          <Public>false</Public>
-          <Name>TrimLeadingTrailingCharacters</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>Trim leading/trailing characters.
-
-
-DECLARE @value VARCHAR(1000)
-DECLARE @pat varchar(10)
-SET @pat = '%[^ ' + char(09) + char(10) + ']%'
-
-SET @value = CHAR(10) + ' ' + CHAR(10) + 'message test ' + char(10) + ' values ' + CHAR(10) + ' ' + CHAR(10) + CHAR(10) + ' ' + CHAR(10)
-
-SELECT SUBSTRING(
-@value,
-PATINDEX(@pat, @value),
-LEN(@value) - PATINDEX(@pat, @value) - PATINDEX(@pat, REVERSE(@value)) + 2) </Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>INSERT</Category>
-        <Language>SQLSERVER2K SQL</Language>
-        <Public>false</Public>
-        <Name>INSERT_INTO_from_a_CTE</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>INSERT</Category>
-          <Language>SQLSERVER2K SQL</Language>
-          <Public>false</Public>
-          <Name>INSERT_INTO_from_a_CTE</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>--prj_0006_305_Create_Individual_INVREG_WorkFlows.sql
-
-use barriere
-go
-
---NEED TO LEAVE the PK in this b/c that is the counter for the last step
-DECLARE @tmp table (
-					 PK INT IDENTITY(1,1) PRIMARY KEY NOT NULL
-					 , [APM_TYPE] nvarchar(8)
-					 , [APM_SUBTYPE] nvarchar(8)
-					 , [RULE_DESC] nvarchar(30)
-					 , [SELECTED] nvarchar(1)
-					 , [FORM] nvarchar(4)
-					 , [WORKFLOW_IND] nvarchar(1)					 					 					 					 					 					 
-					)
-					
-DECLARE @PK INT = 0					
-					
-DECLARE @APM_TYPE nvarchar(8) 
-DECLARE @APM_SUBTYPE nvarchar(8)
-DECLARE @RULE_DESC nvarchar(30)
-DECLARE @SELECTED nvarchar(1)
-DECLARE @FORM nvarchar(4)
-DECLARE @WORKFLOW_IND nvarchar(1)
-
-
-;with CTE_WorkFlowParms as
-(select 
-		cast('INVREG' as [nvarchar](8)) as [APM_TYPE]
-		, cast('JUNK' as [nvarchar](8)) as [APM_SUBTYPE]
-		, cast('junk for testing' as [nvarchar](30)) as [RULE_DESC]
-		, cast(N' ' as [nvarchar](1)) as [SELECTED]
-		, cast(N' ' as [nvarchar](4)) as [FORM]
-		, cast(N' ' as [nvarchar](1)) as [WORKFLOW_IND]
-		
-union select 'INVREG',N'invALO',N'inv to: Aaron Lofton',N' ',N' ',N' '
-union select 'INVREG',N'invABG',N'inv to: Abbie Graffeo',N' ',N' ',N' '
-union select 'INVREG',N'invAGO',N'inv to: Adriane Gonzalez',N' ',N' ',N' '
-union select 'INVREG',N'invAR',N'inv to: Amber Reese',N' ',N' ',N' '
-union select 'INVREG',N'invAW',N'inv to: Andrew Wilson',N' ',N' ',N' '
-
-)
---select TOP(2)
---		[APM_TYPE]
---		,[APM_SUBTYPE]
---		,[RULE_DESC]
---		,[SELECTED]
---		,[FORM]
---		,[WORKFLOW_IND]
---from CTE_WorkFlowParms;
-
-
-INSERT INTO @tmp SELECT --TOP(2)
-						[APM_TYPE] 
-						,[APM_SUBTYPE]
-						,[RULE_DESC]
-						,[SELECTED]
-						,[FORM]
-						,[WORKFLOW_IND]
-FROM CTE_WorkFlowParms
-
-
---SELECT * FROM @tmp
-
-
-WHILE (1=1)
-BEGIN
-    SELECT 
-			@PK = PK    
-			,@APM_TYPE = APM_TYPE
-			,@APM_SUBTYPE = APM_SUBTYPE
-			,@RULE_DESC = RULE_DESC
-			,@SELECTED = SELECTED
-			,@FORM = FORM
-			,@WORKFLOW_IND = WORKFLOW_IND										
+  "ConnectionStrings": {
+    //"DutchConnectionString": "server=(localdb)\\ProjectsV13;Database=DutchTreatDb;Integrated Security=true;MultipleActiveResultSets=true;"
+    //MultipleActiveResultSets is required for EF, to retrieve multiple streams of data at the same time.
+    "DutchConnectionString": "server=HOMETOWERVM05\\PROD;Database=JUNK;Integrated Security=true;MultipleActiveResultSets=true;"
+  },			
 			
-			
-			
-    FROM @tmp
-    WHERE PK = @PK + 1
-	--PRINT '============================================================PK = @PK + 1,   PK is: '  + CAST(@PK AS varchar(5))
-	--PRINT '@APM_TYPE: ' + @APM_TYPE
-	--PRINT '@APM_SUBTYPE: ' + @APM_SUBTYPE
-	--PRINT '@RULE_DESC: ' + @RULE_DESC
-	
-	
-		
-    IF @@rowcount = 0 BREAK;
-	PRINT '============================================================PK = @PK + 1,   PK is: '  + CAST(@PK AS varchar(5))
-	PRINT '@APM_TYPE: ' + @APM_TYPE
-	PRINT '@APM_SUBTYPE: ' + @APM_SUBTYPE
-	PRINT '@RULE_DESC: ' + @RULE_DESC    
-	PRINT '@@rowcount was not 0'
-    -- call your sproc
-    exec prj_0006_SP_0001_CreateWorkFlow @APM_TYPE, @APM_SUBTYPE, @RULE_DESC, @SELECTED, @FORM, @WORKFLOW_IND   --&lt;==== calls the SP
-	PRINT 'SP ran'    
-END
+--------------------------------------------			
+//4  Add the Constructor for DutchContext.cs
+--------------------------------------------
+        //create constructor that takes the 'options' with my class as the 'type', and refer to it as 'options'
+        //  then call the base class with those options, this way it now knows which connection string to use from config.json
+        public DutchContext(DbContextOptions&lt;DutchContext&gt; options): base(options)
+        {
+            
+        }	
 
-
-\\\\\\\\\\\\\\\\\\\\\SP that does the work:\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-
---prj_0006_SP_0001_CreateWorkFlow.sql
-/*
-	************************************************************************************
-	NOTE: 
-	Uses: 
-	Created: 7/15/2016
-	By: glenn garson
-	************************************************************************************
-*/
-
-
-
-USE barriere
-GO
-
-
-create Procedure prj_0006_SP_0001_CreateWorkFlow(
-		 @APM_TYPE as NVARCHAR(8)
-		,@APM_SUBTYPE as NVARCHAR(8)
-		,@RULE_DESC as NVARCHAR(30)
-		,@SELECTED as NVARCHAR(1)
-		,@FORM as NVARCHAR(4)
-		,@WORKFLOW_IND as NVARCHAR(1)						
-	)
-
-as
-INSERT into SW_APM_FLM (
-							APM_TYPE,			--This is the name of the workflow type (e.g. INVREG, or PO
-							APM_SUBTYPE,		--This corresponds to the Sub Rule in the "WorkFlow Rules" panel (max Length: 8) can use persons UserID her	
-							RULE_DESC,			--This corresponds to the Comment in the "WorkFlow Rules" panel (max length: 30)
-							SELECTED,
-							FORM,				--(max length: 3)
-							WORKFLOW_IND
-						)
-values(
-		@APM_TYPE
-		,@APM_SUBTYPE
-		,@RULE_DESC
-		,@SELECTED
-		,@FORM
-		,@WORKFLOW_IND
-		)	
-	</Code>
+--------------------------------------------
+//5  re-build the object after this, and run the command (CMD or Powershell): 
+--------------------------------------------  
+&gt;dotnet ef database update
+// It should respond:
+Done.</Code>
       </SnippetValue>
     </value>
   </item>
   <item>
     <key>
       <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>JOIN</Category>
-        <Language>SQLSERVER2K SQL</Language>
+        <Category>CODE_01_Empty_ASP.NET_Core_Web_Application</Category>
+        <Language>C#</Language>
         <Public>false</Public>
-        <Name>Use_CTE_to_UNION_a_ZeroValueGroup_ToExistingGroups</Name>
+        <Name>CODE_01_about_SeedingTheDatabase</Name>
         <Group>My Snippets</Group>
       </SnippetKey>
     </key>
     <value>
       <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
         <Key>
-          <Category>JOIN</Category>
-          <Language>SQLSERVER2K SQL</Language>
+          <Category>CODE_01_Empty_ASP.NET_Core_Web_Application</Category>
+          <Language>C#</Language>
           <Public>false</Public>
-          <Name>Use_CTE_to_UNION_a_ZeroValueGroup_ToExistingGroups</Name>
+          <Name>CODE_01_about_SeedingTheDatabase</Name>
           <Group>My Snippets</Group>
         </Key>
         <Keywords />
         <Imports />
-        <Code>-- prj_8011_SP_339_RichardHudspeth_MAILLIST_ActiveTeam_List.sql
+        <Code>CODE_01_about_SeedingTheDatabase
 
 /*
-	************************************************************************************
-	NOTE: 
-	Uses: 
-	Created: 12/07/2012
-	By: glenn garson
-	************************************************************************************
-*/
+1] Create a class: DutchSeeder, in the Data folder
+	then create a constructor that takes a DbContext (ctx), and a local variable */
 
+    public class DutchSeeder
+    {
+        private readonly DutchContext _ctx;
 
-USE [DB2_CRM]
-GO
+        public DutchSeeder(DutchContext ctx)
+        {
+            _ctx = ctx;
+        }
 
+        public void Seed()
+        {
+            //Before we create any queries, make sure the database exists
+            //Create if it doesn't exist
+            _ctx.Database.EnsureCreated();
 
-alter Procedure SP_339_RichardHudspeth_MAILLIST_ActiveTeam_List
+            //".Any()" returns true if there are any records in the Products table
+            //Not any
+            if (!_ctx.Products.Any())
+            {
+                //Need to create sample data if there are not any products
+            }
 
-	as
-
---========================================================================
-WITH CTE_Zero(Team_Name, T17_PK)
-AS
-(	
-	Select 
-		(SELECT 'TheCalculation' =  'ALL' ) AS [Team_Name],
-		(SELECT 'TheCalculation' =  0 ) AS [T17_PK]		
-),			
-CTE_TheData(Team_Name, T17_PK)
-AS
-(	
-	SELECT 
-		Team_Name, 
-		T17_PK	
-	FROM  T17_Team
-		WHERE 
-			(b_Active=1)
-			and 
-			(T17_Team.T14_FK = 13)
-)
-
-SELECT * FROM CTE_Zero
-UNION
-SELECT * FROM CTE_TheData
-ORDER BY Team_Name	
---========================================================================
-</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>LNK_Junction_Cross-Reference_Bridge_Map_Intersection_Linking</Category>
-        <Language>SQLSERVER2K SQL</Language>
-        <Public>false</Public>
-        <Name>ActiveDirectory_LINKED_Server___JOIN_using_CTE</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>LNK_Junction_Cross-Reference_Bridge_Map_Intersection_Linking</Category>
-          <Language>SQLSERVER2K SQL</Language>
-          <Public>false</Public>
-          <Name>ActiveDirectory_LINKED_Server___JOIN_using_CTE</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>--ActiveDirectory_LINKED_Server___JOIN_using_CTE
-
---prj_0007_subprj_001_REP_101_DF_Report.sql 
+        }
+    }
 /*
-	************************************************************************************
-	NOTE: 
-	Uses: 
-	Created: 5/18/2016
-	By: glenn garson
-	************************************************************************************
-*/
-USE EQUIP
-go
-
-alter Procedure prj_0007_subprj_001_REP_101_DF_Report
-
-	as
+2] In this example the author has a json file: "art.json" which he reads in to seed the table
+	so a bunch of code is added to the "Seed()" method to check to see if the database exists
+	and if it does not to pull data in from a JSON file	*/
 	
--- START DEBUGGING SECTION -------------------	
-	
-
-
--- END DEBUGGING SECTION -------------------		
-
-
-;WITH CTE_EQUIPMENT (
-						Equipment_Number,
-						DIVISION,
-						LAST_FIRST_Name,
-						EMPLOYEE_NUMBER,
-						FIRST_NAME,
-						LAST_NAME
-					)
-AS
-(
-SELECT 
-
-	   [EQUIPMENT]
-      --,[DATE_SOLD]
-      ,[DIVISION]
-      ,[DESCRIPTION]
-      ,[USER8] AS EMP_NUM
-      --,CHARINDEX(',', [DESCRIPTION]) as ZeroIfThereIsNoComma
-      , (SELECT 'TheCalculation' =  SUBSTRING(  [DESCRIPTION], (CHARINDEX(',', [DESCRIPTION])   + 1 ), LEN([DESCRIPTION])  ) ) AS [First]
-      , (SELECT 'TheCalculation' =  SUBSTRING(  [DESCRIPTION], 0, (CHARINDEX(',', [DESCRIPTION])   - 0 )) ) AS [LAST]      
-  FROM [barriere].[dbo].[EQ_EQUIPMASTER]
-  WHERE 
-		[EQUIPMENT] like 'DF%'
-		and 
-		DATE_SOLD is NULL
-		AND
-		RTRIM(LTRIM([EQUIPMENT])) NOT IN ('DF9' ,'DF21' ,'DF46' )	--Exclude the Wilson Brothers
- ),
- CTE_ADquery(
-					MobileNumber,
-					TelephoneNumber,
-					eMail,
-					First_Last_Name,
-					UserID,
-					Last_Name,
-					First_Name
-				
-				)
-AS
-(
-select  *
-from  openquery(adsi, '
-						select  
-								givenName,
-								sn,
-								sAMAccountName,
-								displayName,
-								mail,
-								telephoneNumber,
-								mobile
-						from    ''LDAP://dc=barriere,dc=com''
-						where   objectCategory = ''Person''
-								and
-								objectClass = ''user''
-						')
-)
---SELECT * FROM CTE_ADquery
-SELECT 
-		AD.Last_Name,
-		AD.First_Name,
-		E.Equipment_Number,
-		E.DIVISION,
-		E.EMPLOYEE_NUMBER,
-		AD.eMail,
-		AD.MobileNumber
-FROM
-		CTE_EQUIPMENT E
-		INNER JOIN
-		CTE_ADquery AD
-		ON
-			upper(rtrim(ltrim(AD.First_Name))) LIKE upper(rtrim(ltrim(E.FIRST_NAME))) COLLATE DATABASE_DEFAULT
-			AND
-			upper(rtrim(ltrim(AD.Last_Name))) LIKE upper(rtrim(ltrim(E.LAST_NAME))) COLLATE DATABASE_DEFAULT
-Order by AD.Last_Name, AD.First_Name</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>SELECT_COMPLEX</Category>
-        <Language>SQLSERVER2K SQL</Language>
-        <Public>false</Public>
-        <Name>Calculate_GetString_Between_Pattern_OfCharacters</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>SELECT_COMPLEX</Category>
-          <Language>SQLSERVER2K SQL</Language>
-          <Public>false</Public>
-          <Name>Calculate_GetString_Between_Pattern_OfCharacters</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>-- PARSE: [*
- 
- ;WITH CTE_Records_GradesFilledIn_One  (Supervisor_Name, 
-										CM_Name
-										,ONE
-										,TWO
-										)										
-AS
-(
-	select Supervisor_Name, 
-			[CM_Name]
-			
-			,(
-				SELECT 'TheCalculation' = Case When ([ONE_0b_Demo_Page_e2]=0) then 0 ELSE 1 END 
-			  ) AS ONE 
-			,(
-				SELECT 'TheCalculation' = Case When ([TWO_0b_Goals_e2]=0) then 0 ELSE 1 END 
-			  ) AS TWO 			  
-	FROM vwFORM_0010_T0
-
-)
-Select * from CTE_Records_GradesFilledIn_One 	  
-  	  
- /////////////////////////////////////////////////////////////////////////////// 	  
-  	  
-  	  
-  	  ,	(SELECT     'TheCalculation' = 
-        		CASE 
-            			WHEN (charINDEX('[*',[NOTES]) &gt;= 0) and (charINDEX('*]',[NOTES]) &gt; 0 ) 
-            			THEN SUBSTRING([NOTES],(charINDEX('[*',[NOTES])+3), (  (charINDEX('*]',[NOTES])-1) - (charINDEX('[*',[NOTES])+2)  ))
-        		 
-				ELSE NULL
-
-        			END) as GoodString
-        			
-        			
-///////////////////// nicer formatted version//////////////////
-
-,	(SELECT     'TheCalculation' = 
-			CASE 
-					WHEN (charINDEX('[*',[Program_Title]) &gt;= 0) and (charINDEX('*]',[Program_Title]) &gt; 0 ) 
-					THEN SUBSTRING(
-									[Program_Title],
-									(charINDEX('[*',[Program_Title])+3),
-									(  (charINDEX('*]',[Program_Title])-1) - (charINDEX('[*',[Program_Title])+2)  )
-								  )
-			 
-			ELSE NULL
-			
-				END) as GoodString	
-	
-////////////////////  definitions and more verbose///////////////
-
-	  	  ,	(SELECT     'TheCalculation' = 
-        		CASE 
-            			WHEN (charINDEX('[*',[Program_Title]) &gt;= 0) and (charINDEX('*]',[Program_Title]) &gt; 0 ) 
-            			THEN SUBSTRING(
-            							[Program_Title],						--SUBSTRING(value_expression , , )
-            							(										--SUBSTRING(,start_expression , )	{Is an integer or bigint expression that specifies where the returned characters start}
-            								charINDEX(							--charINDEX: Searches expression2 for expression1 and returns its starting position if found. The search starts at start_location.
-            											'[*',					--charINDEX: expression1: Is a character expression that contains the sequence to be found. expression1 is limited to 8000 characters. 
-            											[Program_Title]			--charINDEX: expression2: Is a character expression to be searched.
-            																	--charINDEX: start_location (optional):  Is an integer or bigint expression at which the search starts. If start_location is not specified, is a negative number, or is 0, the search starts at the beginning of expression2
-            										)
-            								+
-            								3
-            							),
-            							(										--SUBSTRING(, ,length_expression )  {Is a positive integer or bigint expression that specifies how many characters of the value_expression will be returned} 
-            								(
-            									charINDEX('*]',[Program_Title])
-            									-
-            									1
-            								) 
-            								- 
-            								(
-            									charINDEX('[*',[Program_Title])
-            									+
-            									2
-            								)  
-            							)
-            						  )</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>SELECT_OVER</Category>
-        <Language>SQLSERVER2K SQL</Language>
-        <Public>false</Public>
-        <Name>ROW_NUMBER_to_get_just_FIRST_row_using_CTE</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>SELECT_OVER</Category>
-          <Language>SQLSERVER2K SQL</Language>
-          <Public>false</Public>
-          <Name>ROW_NUMBER_to_get_just_FIRST_row_using_CTE</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>-- Use ROW_NUMBER to get rid of duplicate rows
-
-WITH CTE_One (RowNumber, ISOLATOR, Training_Description, Reminder_Type, Folder, Cost_Code, ClassCatagories)
-AS
-	(
-		--==============================================NOTE: needed to ORDER BY something even if it is meaningless
-		SELECT ROW_NUMBER() OVER(PARTITION BY [FIELD3] ORDER BY [CODE]) as RowNumber, --&lt;==== ROW_NUMBER
-			   [ISOLATOR]								
-			  ,[CODE] as [Training_Description]		
-			  ,[FIELD1] as [Reminder_Type]			 
-			  ,[FIELD2] as [Folder]					
-			  ,[FIELD3] as [Cost_Code]				
-				-------
-				,(SELECT     'TheCalculation' = 
-						CASE 
-								WHEN (SUBSTRING([FIELD3],1,2)='CE')  THEN '(CE) Continuing Education'
-								WHEN (SUBSTRING([FIELD3],1,2)='CT')  THEN '(CT) Computer'
-								WHEN (SUBSTRING([FIELD3],1,2)='DS')  THEN '(DS) Division Specific'          		 
-						ELSE 'unCategorized: ' + [FIELD3]
-
-							END) as ClassCatagories								
-				----------	      
-		  FROM [barriere].[dbo].[SCD_SYSTEMCODES]
-		  Where ISOLATOR = 'ht' 
-		--===============================================
-	)
-	
--- NOTE: The field 'RowNumber' was not available inside the CTE, so got it in this next step:
-
-SELECT ISOLATOR, Training_Description, Reminder_Type, Folder, Cost_Code, ClassCatagories
-FROM CTE_One
-WHERE RowNumber=1	--&lt;== This just leaves the first row
-</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>Stored_Procedure</Category>
-        <Language>SQLSERVER2K SQL</Language>
-        <Public>false</Public>
-        <Name>If_String_is_Blank_Then_SELECT_ALL_Short_with_CTE</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>Stored_Procedure</Category>
-          <Language>SQLSERVER2K SQL</Language>
-          <Public>false</Public>
-          <Name>If_String_is_Blank_Then_SELECT_ALL_Short_with_CTE</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>--If_String_is_Blank_Then_SELECT_ALL_Short_with_CTE
-
-
---prj_8015_SP_916_GetSelected_Practice_EMR_From_LNK03_v0.sql
------------------------------------------
--- This SP will: Return the records that have the sSearchString in the following fields:
---
-				--Practice_Official_CA_Name,
-				--SoftwareTitle,
-				--Practice_CA_Number,
-				--Practice_Alternate_Name_1,				
-				
--- In addition these fields are also returned:
-				
-				--VersionInfo_Details,
-				--SoftwareType,
-				--SoftwareType_e20,
-				--LNK03_PK,
-				--T1_FK,
-				--L002_FK,
-				--Notes
-
+	{See the CODE_01__Data/DutchSeeder.cs snippet for details}
 /*
-	************************************************************************************
-	NOTE: 
-	Uses: 
-	Modified: 
-	Created: 10/16/2012
-	By: glenn garson
-	************************************************************************************
-*/
-SET NOCOUNT ON
-Use DB2_CRM
-go
+3] In the " ConfigureServices" method of Startup.cs you need to add something that calls the Seed method */
 
+        public void ConfigureServices(IServiceCollection services)
+        {
+            // By default it is added as a 'Scoped' service
+            services.AddDbContext&lt;DutchContext&gt;(cfg =&gt;
+                cfg.UseSqlServer(_config.GetConnectionString("DutchConnectionString"));
+            });
+			...
+            //AddTransient =&gt; have no data on themselves, just methods
+            //AddScoped =&gt; Kept around for the length of a connection, usually for length of request from client
+            //AddSingleton =&gt; created once and kept for the lifetime of the server being up.
 
-alter PROCEDURE prj_8015_SP_916_GetSelected_Practice_EMR_From_LNK03(
-	@sSearchString as NVARCHAR(25)
-	)
-	AS
-	
--- START DEBUGGING SECTION -------------------	
-	
-			PRINT 'Input @sSearchString: ' + @sSearchString
-
--- END DEBUGGING SECTION -------------------
-
-IF (LEN(@sSearchString) &gt; 0) OR (@sSearchString IS NOT NULL)			--Must also set the PARM to allow Nulls in SSRS
-
-		BEGIN
--- ************* START BEGIN *****************************		
-		
-		
---\\\\\\\\\\\\\\ start CTE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\		
-
-
-WITH CTE_ONE( 
-				Practice_Official_CA_Name,
-				SoftwareTitle,
-				VersionInfo_Details,
-				SoftwareType,
-				Practice_CA_Number,
-				Practice_Alternate_Name_1,
-				SoftwareType_e20,
-				LNK03_PK,
-				T1_FK,
-				L002_FK,
-				Notes
-			)
-AS
-(
-
-	SELECT 
-
-			T1_Practice.Practice_Official_CA_Name, 		
-			L002_Software_LIST.SoftwareTitle, 
-			L002_Software_LIST.VersionInfo_Details, 
-			(
-				Select [Enum].EnumDescription 
-				From Enum
-				where (
-						([Enum].EnumNameSpace_FK=20) 
-						and 
-						([Enum].EnumValue=[SoftwareType_e20])
-					   )
-			 ) as SoftwareType,	
- 			T1_Practice.Practice_CA_Number,
- 			T1_Practice.Practice_Alternate_Name_1,
-			L002_Software_LIST.SoftwareType_e20, 		
- 			LNK03_T1_Practice_L002_EMR.LNK03_PK, 
-			LNK03_T1_Practice_L002_EMR.T1_FK, 
-			LNK03_T1_Practice_L002_EMR.L002_FK, 
-			LNK03_T1_Practice_L002_EMR.Notes 		 
-			 		
-	FROM	(
-				LNK03_T1_Practice_L002_EMR 
-				INNER JOIN
-				L002_Software_LIST 
-				ON LNK03_T1_Practice_L002_EMR.L002_FK = L002_Software_LIST.L002_PK 
-			)
-			INNER JOIN
-			T1_Practice
-			ON LNK03_T1_Practice_L002_EMR.T1_FK = T1_Practice.T1_PK
-        
-)		
-		
---\\\\\\\\\\\\\\ end CTE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\	
-
-		
-				SELECT *
-
-				FROM CTE_ONE
-				WHERE (		
-							(Practice_Official_CA_Name like '%' +  @sSearchString + '%')
-							OR (SoftwareTitle like '%' +  @sSearchString + '%')
-							OR (Practice_CA_Number like '%' +  @sSearchString + '%')
-							OR (Practice_Alternate_Name_1 like '%' +  @sSearchString + '%')
-						)   
-				Order by Practice_Official_CA_Name
-							
-				RETURN(@@ROWCOUNT)	
-				
--- ************* END BEGIN *****************************				
-		END
-ELSE
-		BEGIN
--- ************* START BEGIN *****************************		
-		
-		
---\\\\\\\\\\\\\\ start CTE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\		
-
-
-WITH CTE_ONE( 
-				Practice_Official_CA_Name,
-				SoftwareTitle,
-				VersionInfo_Details,
-				SoftwareType,
-				Practice_CA_Number,
-				Practice_Alternate_Name_1,
-				SoftwareType_e20,
-				LNK03_PK,
-				T1_FK,
-				L002_FK,
-				Notes
-			)
-AS
-(
-
-	SELECT 
-
-			T1_Practice.Practice_Official_CA_Name, 		
-			L002_Software_LIST.SoftwareTitle, 
-			L002_Software_LIST.VersionInfo_Details, 
-			(
-				Select [Enum].EnumDescription 
-				From Enum
-				where (
-						([Enum].EnumNameSpace_FK=20) 
-						and 
-						([Enum].EnumValue=[SoftwareType_e20])
-					   )
-			 ) as SoftwareType,	
- 			T1_Practice.Practice_CA_Number,
- 			T1_Practice.Practice_Alternate_Name_1,
-			L002_Software_LIST.SoftwareType_e20, 		
- 			LNK03_T1_Practice_L002_EMR.LNK03_PK, 
-			LNK03_T1_Practice_L002_EMR.T1_FK, 
-			LNK03_T1_Practice_L002_EMR.L002_FK, 
-			LNK03_T1_Practice_L002_EMR.Notes 		 
-			 		
-	FROM	(
-				LNK03_T1_Practice_L002_EMR 
-				INNER JOIN
-				L002_Software_LIST 
-				ON LNK03_T1_Practice_L002_EMR.L002_FK = L002_Software_LIST.L002_PK 
-			)
-			INNER JOIN
-			T1_Practice
-			ON LNK03_T1_Practice_L002_EMR.T1_FK = T1_Practice.T1_PK
-        
-)		
-		
---\\\\\\\\\\\\\\ end CTE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\	
-
-		
-				SELECT *
-
-				FROM CTE_ONE
-  
-				Order by Practice_Official_CA_Name
-							
-				RETURN(@@ROWCOUNT)	
-				
--- ************* END BEGIN *****************************
-		END
-
-	</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>STRINGS</Category>
-        <Language>SQLSERVER2K SQL</Language>
-        <Public>false</Public>
-        <Name>Get_Rid_of_Hidden_Characters</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>STRINGS</Category>
-          <Language>SQLSERVER2K SQL</Language>
-          <Public>false</Public>
-          <Name>Get_Rid_of_Hidden_Characters</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>
---Use this to reveal the character
-SELECT ASCII(RIGHT(MyString,1))
-FROM dbo.tblWeirdChar
-
---and the ASCII code was 160, which is a non-breaking space.
-
---So, I used to replace it.
-
-UPDATE dbo.tblWeirdChar
-SET MyString = REPLACE(MyString,CHAR(160),'')</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>STRINGS</Category>
-        <Language>SQLSERVER2K SQL</Language>
-        <Public>false</Public>
-        <Name>NumericCharactersOnly</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>STRINGS</Category>
-          <Language>SQLSERVER2K SQL</Language>
-          <Public>false</Public>
-          <Name>NumericCharactersOnly</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>select 
-	*
-from 
-	thangela.NpowerNorthern_v1 a 
-INNER JOIN 
-	(
-		SELECT 
-			--Columns needed,
-			CAST( b.MPANCORE AS numeric(17,2) AS MPANCORE	
-		FROM 
-			EPPS.dbo.Customers b 
-		WHERE
-			b.MPANCORE  LIKE '%[^0-9.-]%'			--&lt;===============
-	) AS T
-	ON T.MPANCORE = a.MPAN1</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>STRINGS</Category>
-        <Language>SQLSERVER2K SQL</Language>
-        <Public>false</Public>
-        <Name>REPLACE_characters_in_a_variable</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>STRINGS</Category>
-          <Language>SQLSERVER2K SQL</Language>
-          <Public>false</Public>
-          <Name>REPLACE_characters_in_a_variable</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>
-
-/*
-One useful trick in SQL is the ability use @var = function(...) to assign a value. 
-If you have multiple records in your record set, your var is assigned multiple times with side-effects:
+            //add the 'DutchSeeder' class to the services collection as a Transient service
+            services.AddTransient&lt;DutchSeeder&gt;();  //Note DutchSeeder uses DutchContext (a scoped service) which is added above
+			... 
+        }
+/*	
+4] In the Configure method of the Startup.cs you have to call the seed if/when you are in Development:	
+	Project =&gt; Properties =&gt; Debug {left pane} =&gt; Environment Variables(Name='ASPNETCORE_ENVIRONMENT', Value='Development')
 */
 
-declare @badStrings table (item varchar(50))
+         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        {
+            ...
 
-INSERT INTO @badStrings(item)
-SELECT '&gt;' UNION ALL
-SELECT '&lt;' UNION ALL
-SELECT '(' UNION ALL
-SELECT ')' UNION ALL
-SELECT '!' UNION ALL
-SELECT '?' UNION ALL
-SELECT '@'
+            //We want this to happen last, so it goes at the bottom
+            // put the seeding method call
+            if (env.IsDevelopment())    //Project =&gt; Properties =&gt; Debug {left pane} =&gt; Environment Variables(Name='ASPNETCORE_ENVIRONMENT', Value='Development')
+            {
+                //Seed the database, but don't have the context, nor hosting environment at this point
+                // b/c we need a context, we therefore need a scope first while we seed the database
+                using (var scope = app.ApplicationServices.CreateScope())
+                {
+                    var seeder = scope.ServiceProvider.GetService&lt;DutchSeeder&gt;();
+                    seeder.Seed();
+                }
 
-declare @testString varchar(100), @newString varchar(100)
+            }
+		
+        }</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>CODE_02_Empty_ASP.NET_Core_API</Category>
+        <Language>C#</Language>
+        <Public>false</Public>
+        <Name>CODE_02__Startup.cs</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>CODE_02_Empty_ASP.NET_Core_API</Category>
+          <Language>C#</Language>
+          <Public>false</Public>
+          <Name>CODE_02__Startup.cs</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>CODE_01__Startup.cs
+//Modify: services.AddMvc()
+---------------------------
+using DutchTreat.Data;      //required for AddDbContext&lt;DutchContext&gt;()
+using DutchTreat.Services;  //for the IMailService
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+// required for 'UseSqlServer'
+using Microsoft.EntityFrameworkCore;
+// required for IConfiguration
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 
-set @teststring = 'Juliet ro&gt;&lt;0zs my s0x()rz!!?!one!@!@!@!'
-set @newString = @testString
 
-SELECT @newString = Replace(@newString, item, '') FROM @badStrings
+namespace DutchTreat
+{
+    public class Startup
+    {
+        //Private field to hold the configuration interface
+        private readonly IConfiguration _config;
 
-select @newString -- returns 'Juliet ro0zs my s0xrzone'
+        //constructor to inject some interfaces into our startup
+        public Startup(IConfiguration config)
+        {
+            _config = config;
+        }
 
 
---You can make the function more dynamic by passing in a comma-separated list of strings to replace, using a split function 
-(sqlteam.com/forums/topic.asp?TOPIC_ID=50648)
---to convert the list into a table, then returning the replaced string.
+        // This method gets called by the runtime. Use this method to add services to the container.
+        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+        public void ConfigureServices(IServiceCollection services)
+        {
+            //Add this and build the solution. Note need to add Using statement above to bring in the context
+            // By default it is added as a 'Scoped' service
+            services.AddDbContext&lt;DutchContext&gt;(cfg =&gt;
+            {
+                //could hard code a connection string in here, but instead we will use a configuration
+                // The IConfiguration object (i.e. _config) has a property for the connection string, 
+                //      that are stored in the configuration file (created by 'CreateDefaultBuilder' in Program.cs)
+                cfg.UseSqlServer(_config.GetConnectionString("DutchConnectionString"));
+            });
 
-\\\\\\\\\\\\\\\\\\\\\\CTE version:-- Uses a recursive CTE, and then recursive REPLACE of @teststring
 
-DECLARE @badStrings VARCHAR(100)
-DECLARE @teststring VARCHAR(100)
+            //AddTransient =&gt; have no data on themselves, just methods
+            //AddScoped =&gt; Kept around for the length of a connection, usually for length of request from client
+            //AddSingleton =&gt; created once and kept for the lifetime of the server being up.
+            //Later you would add support for a real mail service, so for now it just has an implementation that it can call
+            //and for now it would be calling the fake method: NullMailService
+            services.AddTransient&lt;IMailService, NullMailService&gt;();
 
-SET @badStrings = '&gt;&lt;()!?@'
-SET @teststring = 'Juliet ro&gt;&lt;0zs my s0x()rz!!?!one!@!@!@!'
+            //Without this code (i.e.  services.AddMvc();)  you would get this error:
+            //============================================================================================================================
+            //An error occurred while starting the application.
+            //    InvalidOperationException: Unable to find the required services. 
+            //    Please add all the required services by calling 'IServiceCollection.AddMvc' inside the call to 'ConfigureServices(...)' 
+            //    in the application startup code.
+            //============================================================================================================================
 
-;WITH CTE AS
-(
-  SELECT SUBSTRING(@badStrings, 1, 1) AS [String], 1 AS [Start], 1 AS [Counter]
-  UNION ALL
-  SELECT SUBSTRING(@badStrings, [Start] + 1, 1) AS [String], [Start] + 1, [Counter] + 1 
-  FROM CTE 
-  WHERE [Counter] &lt; LEN(@badStrings)
-)
+            //add the 'DutchSeeder' class to the services collection as a Transient service
+            services.AddTransient&lt;DutchSeeder&gt;();  //Note DutchSeeder uses DutchContext (a scoped service) which is added above
 
-SELECT @teststring = REPLACE(@teststring, CTE.[String], '') FROM CTE
+            //add 'IDutchRepository' as a service that can be used, but as an implementation use 'DutchRepository'
+            services.AddTransient&lt;IDutchRepository, DutchRepository&gt;();
 
-SELECT @teststring
-Juliet ro0zs my s0xrzone
+            //services.AddMvc();  //If we leave it just like this then the Order and OrderItem (i.e. header, detail) for a self-referencing loop which causes an error for the API when returning data.
+            //Since Json is the default data type returned we need to add in a Json option:
+            services.AddMvc()
+                .AddJsonOptions(opt =&gt; opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
+
+        }
+
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        {
+            //to see ERRORS in 'development'
+            // Project(menu) =&gt; Dutchtreat Properties =&gt; Debug {tag} =&gt; Environment variables {right pane} 
+            //          Name: ASPNETCORE ENVIRONMENT  Value: Development
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else // where the value of 'ASPNETCORE ENVIRONMENT' is not Development
+            {
+                app.UseExceptionHandler("/Error");
+            }
+
+            // The order matters in this Method
+            //app.UseDefaultFiles(); // This lets it find default files (e.g. index.html), COMMENT IT OUT in order to process the MVC files first
+            app.UseStaticFiles();  //This line lets you use .html etc files. They must be placed in the wwwroot folder of the project
+
+            //Without this (i.e. app.UseMvc) the .html would work, but not the MVC components           
+            app.UseMvc(cfg =&gt;
+            {
+                cfg.MapRoute("Default",                             //Set up the routes
+                    "{controller}/{action}/{id?}",                  // where things in braces are place-holders, vs putting specific controller and action names in there. The "?" means that "id" is optional
+                    new { controller = "App", Action = "Index" });  // and if the controller/action is missing then use this line
+            });
+
+            //We want this to happen last, so it goes at the bottom
+            // put the seeding method call
+            if (env.IsDevelopment())    //Project =&gt; Properties =&gt; Debug {left pane} =&gt; Environment Variables(Name='ASPNETCORE_ENVIRONMENT', Value='Development')
+            {
+                //Seed the database, but don't have the context, nor hosting environment at this point
+                // b/c we need a context, we therefore need a scope first while we seed the database
+                using (var scope = app.ApplicationServices.CreateScope())
+                {
+                    var seeder = scope.ServiceProvider.GetService&lt;DutchSeeder&gt;();
+                    seeder.Seed();
+                }
+
+            }
+
+
+            //// This was here by default
+            //if (env.IsDevelopment())
+            //{
+            //    app.UseDeveloperExceptionPage();
+            //}
+
+            //// example of responding to any query w/ a fixed output
+            //app.Run(async (context) =&gt;
+            //{
+            //    await context.Response.WriteAsync("&lt;html&gt;&lt;body&gt;&lt;h1&gt;Hello Glenn&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt;");
+            //    //await context.Response.WriteAsync("Hello World!");
+            //});
+        }
+    }
+}
 </Code>
       </SnippetValue>
     </value>
@@ -2259,857 +515,158 @@ Juliet ro0zs my s0xrzone
   <item>
     <key>
       <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>TABLE_VARIABLE</Category>
-        <Language>SQLSERVER2K SQL</Language>
+        <Category>CODE_04_Empty_ASP.NET_Core_AutoMapper</Category>
+        <Language>C#</Language>
         <Public>false</Public>
-        <Name>POPULATE_TVP_from_CTE</Name>
+        <Name>CODE_04_Startup.cs</Name>
         <Group>My Snippets</Group>
       </SnippetKey>
     </key>
     <value>
       <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
         <Key>
-          <Category>TABLE_VARIABLE</Category>
-          <Language>SQLSERVER2K SQL</Language>
+          <Category>CODE_04_Empty_ASP.NET_Core_AutoMapper</Category>
+          <Language>C#</Language>
           <Public>false</Public>
-          <Name>POPULATE_TVP_from_CTE</Name>
+          <Name>CODE_04_Startup.cs</Name>
           <Group>My Snippets</Group>
         </Key>
         <Keywords />
         <Imports />
-        <Code>use B2W_Reports
-go
-
-----------------------------------DEBUG PARMS START
-
-
-DECLARE @BU as nvarchar(max)
-SELECT @BU ='0_ALL'	--'HCC'	--'SSA'
-
-DECLARE @Mechanic as nvarchar(max)
-SELECT @Mechanic ='0_ALL'
-
-DECLARE @Week_1_Start date
-SELECT @Week_1_Start = ' '
-
-DECLARE @Week_1_USE bit
-SELECT @Week_1_USE = 0
-
-DECLARE @Week_2_Start date
-SELECT @Week_2_Start = '09-05-2016'
-
-DECLARE @Week_2_USE bit
-SELECT @Week_2_USE = 1
-
-DECLARE @Week_3_Start date
-SELECT @Week_3_Start = '09-12-2016'
-
-DECLARE @Week_3_USE bit
-SELECT @Week_3_USE = 1
-
-DECLARE @Week_4_Start date
-SELECT @Week_4_Start = '09-19-2016'
-
-DECLARE @Week_4_USE bit
-SELECT @Week_4_USE = 1
-
-DECLARE @Week_5_Start date
-SELECT @Week_5_Start = '09-26-2016'
-
-DECLARE @Week_5_USE bit
-SELECT @Week_5_USE = 1
-
-DECLARE @Week_6_Start date
-SELECT @Week_6_Start = ' '
-
-DECLARE @Week_6_USE bit
-SELECT @Week_6_USE = 1
-
---------------------------------DEBUG PARMS END
-
---=====================================Internal Variables - START
-DECLARE @BeginDate date
-
-DECLARE @EndDate date
-
-DECLARE @NoOfWeeks INT
-
-DECLARE @BeginEndDate_TVP TABLE(                                                 --&lt;=== DEFINE THE TVP
-    beginDate  date,
-    endDate  date,
-    NoOfWeeks INT
-    
-);
---=====================================Internal Variables - END
-
-
-							
-;	With CTE_Begin_End_Dates_ALL                                                 --&lt;=== POPULATE the CTE with some synthetic data
-AS 
-(
-	SELECT 1 as TheWeek, @Week_1_Start as START_DATE, @Week_1_USE as USE_Week, DATEADD(dd, 6, @Week_1_Start) as END_DATE
-	UNION 
-	SELECT 2, @Week_2_Start, @Week_2_USE, DATEADD(dd, 6, @Week_2_Start)
-	UNION 
-	SELECT 3, @Week_3_Start, @Week_3_USE, DATEADD(dd, 6, @Week_3_Start)	
-	UNION 
-	SELECT 4, @Week_4_Start, @Week_4_USE, DATEADD(dd, 6, @Week_4_Start)	
-	UNION 
-	SELECT 5, @Week_5_Start, @Week_5_USE, DATEADD(dd, 6, @Week_5_Start)	
-	UNION 
-	SELECT 6, @Week_6_Start, @Week_6_USE, DATEADD(dd, 6, @Week_6_Start)		
-)
-
-	INSERT INTO @BeginEndDate_TVP                                                    --&lt;=== POPULATE the TVP     
-	SELECT 
-			MIN(START_DATE) as BeginDate,
-			MAX(END_DATE) as EndDate,
-			SUM(CAST(USE_Week as INT)) as NoOfWeeks
-	FROM CTE_Begin_End_Dates_ALL
-	WHERE (
-			(USE_Week =1)
-			AND
-			(START_DATE &lt;&gt; '1900-01-01')
-		   )</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>TABLE_VARIABLE</Category>
-        <Language>SQLSERVER2K SQL</Language>
-        <Public>false</Public>
-        <Name>Populate_TVP_from_StoredProcedure_then_into_CTE_Then_into_tempTable</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>TABLE_VARIABLE</Category>
-          <Language>SQLSERVER2K SQL</Language>
-          <Public>false</Public>
-          <Name>Populate_TVP_from_StoredProcedure_then_into_CTE_Then_into_tempTable</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>Populate_TVP_from_StoredProcedure_then_into_CTE_Then_into_tempTable
-
-
-
-IF OBJECT_ID('tempdb..#prj_0013_SP_239') IS NOT NULL		--&lt;== Delete the tmp file before running
-
-	DROP TABLE #prj_0013_SP_239
-
-
-
-Declare	@CompletedWorkOrders_1ab TABLE					--&lt;=== Define the TVP 
-(
-		   [Equipment_No] nvarchar(100) NULL
-		  ,[WO_ID] int NOT NULL
-		  ,[MR_ID] int	NULL
-		  ,[MR_Reason] nvarchar(100)
-		  ,[MR_Created_Date] datetime
-		  ,[WO_Created_Date] datetime
-		  ,[WO_Due_Date] datetime
-		  ,[WO_Start_Date] datetime						
-		  ,[WO_End_Date] datetime
-		  ,[MR_Completed_Date] datetime
-		  ,[Mechanic] nvarchar(201)
-		  ,[WO_Priority] nvarchar(100)
-		  ,[WO_Problem_Description] nvarchar(200)
-		  ,[WO_Problem_Code] nvarchar(50)
-		  ,estimated_WO_Completed_Date datetime
-		  ,COUNT_MR_ID int
-		  ,COUNT_MR_Completed_Date int
-		  ,WO_Completed_Date datetime					 
-		  ,BackLog int
-		  ,Schedule int
-		  ,BU_Name nvarchar(100)
-		  ,Days_to_Create_WO int
-		  ,Days_from_Request int
-		  ,estimated_WO_Create_Date	datetime	
-)
-
-
-insert into @CompletedWorkOrders_1ab(					--&lt;=== Populate the TVP from the Stored Procedure
-							   [Equipment_No]
-							  ,[WO_ID]
-							  ,[MR_ID]
-							  ,[MR_Reason]
-							  ,[MR_Created_Date]
-							  ,[WO_Created_Date]
-							  ,[WO_Due_Date]
-							  ,[WO_Start_Date]
-							  ,[WO_End_Date]
-							  ,[MR_Completed_Date]
-							  ,[Mechanic]
-							  ,[WO_Priority]
-							  ,[WO_Problem_Description]
-							  ,[WO_Problem_Code]
-							  ,estimated_WO_Completed_Date
-							  ,COUNT_MR_ID
-							  ,COUNT_MR_Completed_Date
-							  ,WO_Completed_Date
-							  ,BackLog
-							  ,Schedule
-							  ,BU_Name
-							  ,Days_to_Create_WO
-							  ,Days_from_Request
-							  ,estimated_WO_Create_Date
-							) exec prj_0013_SP_226_sub_00C_Section_1ab @BeginDate, @EndDate, @BU, @Mechanic
-							
-;With CTE_CompletedWorkOrders_1ab                        --Populate a CTE from the TVP, and add,modify, or delete fields
-AS
-(							
-	select    --DISTINCT 
-				   [Equipment_No]
-				  ,[WO_ID]
-				  ,[MR_ID]
-				  ,[MR_Created_Date]
-				  ,[WO_Created_Date]
-				  ,[WO_Due_Date]
-				  ,[WO_Start_Date]
-				  ,[WO_End_Date]
-				  ,[MR_Completed_Date]
-				  ,[Mechanic]
-				  ,[WO_Priority]
-				  ,[WO_Problem_Description]
-				  ,[WO_Problem_Code]
-				  ,estimated_WO_Completed_Date
-				  ,WO_Completed_Date
-				  ,BackLog
-				  ,Schedule
-				  ,BU_Name
-				  ,'1ab' as [Sub_Sub_Population]
-				  ,'PM125' as [Sub_Population]
-				  ,estimated_WO_Create_Date				  
-	from @CompletedWorkOrders_1ab 
-)							
-			
-							
-	SELECT  DISTINCT			--&lt;==  POPULATE the Temp Table from a CTE.  I am using a #temp table rather than a CTE so that I can reference it multiple times below
-			Sub_Population
-			,WeekOfMonth
-			,Week_COUNT_WO_Completed_Sub_Population = Count([WO_ID]) OVER (PARTITION BY [Sub_Population], [WeekOfMonth]),			
-			DaysScheduled_WO = avg([avgDaysScheduled_WO]) OVER (PARTITION BY [Sub_Population], [WeekOfMonth]),			
-			DaysScheduled_MR = avg([avgDaysScheduled_MR]) OVER (PARTITION BY [Sub_Population], [WeekOfMonth])			
-			, FirstDayOfWeek
-			, LastDayOfWeek
-	INTO #prj_0013_SP_239														 
-	FROM CTE_Completed_WO_Stats                --&lt;=== This CTE is a product of the CTE above							
-							</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>Table</Category>
-        <Language>SQLSERVER2K SQL</Language>
-        <Public>false</Public>
-        <Name>CTE_CommonTableExpression</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>Table</Category>
-          <Language>SQLSERVER2K SQL</Language>
-          <Public>false</Public>
-          <Name>CTE_CommonTableExpression</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>USE AdventureWorks2008R2;
-GO
--- Define the CTE expression name and column list.
-WITH Sales_CTE (SalesPersonID, SalesOrderID, SalesYear)
-AS
--- Define the CTE query.
-(
-    SELECT SalesPersonID, SalesOrderID, YEAR(OrderDate) AS SalesYear
-    FROM Sales.SalesOrderHeader
-    WHERE SalesPersonID IS NOT NULL
-)
--- Define the outer query referencing the CTE name.
-SELECT SalesPersonID, COUNT(SalesOrderID) AS TotalSales, SalesYear
-FROM Sales_CTE
-GROUP BY SalesYear, SalesPersonID
-ORDER BY SalesPersonID, SalesYear;
-GO
-</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>TEST_DATA_simulation</Category>
-        <Language>SQLSERVER2K SQL</Language>
-        <Public>false</Public>
-        <Name>Create_a_Test_data_set_with_a_CTE</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>TEST_DATA_simulation</Category>
-          <Language>SQLSERVER2K SQL</Language>
-          <Public>false</Public>
-          <Name>Create_a_Test_data_set_with_a_CTE</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>with CTEOrders as
-(select cast(1 as int) as OrderID, cast('3/1/2012' as date) as OrderDate, cast(10.00 as money) as OrderAmt, 'Joe' as CustomerName
-union select 2, '3/1/2012', 11.00, 'Sam'
-union select 3, '3/2/2012', 10.00, 'Beth'
-union select 4, '3/2/2012', 15.00, 'Joe'
-union select 5, '3/2/2012', 17.00, 'Sam'
-union select 6, '3/3/2012', 12.00, 'Joe'
-union select 7, '3/4/2012', 10.00, 'Beth'
-union select 8, '3/4/2012', 18.00, 'Sam'
-union select 9, '3/4/2012', 12.00, 'Joe'
-union select 10, '3/4/2012', 11.00, 'Beth'
-union select 11, '3/5/2012', 14.00, 'Sam'
-union select 12, '3/6/2012', 17.00, 'Beth'
-union select 13, '3/6/2012', 19.00, 'Joe'
-union select 14, '3/7/2012', 13.00, 'Beth'
-union select 15, '3/7/2012', 16.00, 'Sam'
-)
-select OrderID
-,OrderDate
-,OrderAmt
-,CustomerName
-from CTEOrders;
-
-
-
-=====================================================================================================================================</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>TEST_DATA_simulation</Category>
-        <Language>SQLSERVER2K SQL</Language>
-        <Public>false</Public>
-        <Name>recursive_CTE</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>TEST_DATA_simulation</Category>
-          <Language>SQLSERVER2K SQL</Language>
-          <Public>false</Public>
-          <Name>recursive_CTE</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>DECLARE @theSeed INT = 1
-DECLARE @theMultiple INT = 2
-
-;WITH cte_MAIN(colA, colb, colC) AS
-(
-    (SELECT (@theSeed * @theMultiple) as colA, @theSeed as colB, @theMultiple as colC)
-
-    UNION ALL
-
-    (	SELECT (colA * @theMultiple) , colb, colC
-		FROM cte_MAIN 
-		WHERE colA &lt; 100
-	)
-)
-SELECT colA, colb, colc FROM cte_MAIN ORDER BY colA
-OPTION (MAXRECURSION 10);
-
-
---OUTPU
+        <Code>CODE_04_Startup.cs
 ------------------
-colA	colb	colc
-2	1	2
-4	1	2
-8	1	2
-16	1	2
-32	1	2
-64	1	2
-128	1	2
-
-================================================================
-
-
-DECLARE @seed INT = 1
-DECLARE @theCounter INT
-SELECT @theCounter = 2
-;with CTEOrders as
-(
-	select cast((1 * @seed)  as int) as aNumber, cast(@seed as INT) as theSeed
-
-	WHILE @theCounter &lt; 10
-		BEGIN
-			union select (2 * @seed), @seed
-			@theCounter = @theCounter +1
-		END
-
-)
-select aNumber, theSeed
-from CTEOrders;</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>Update</Category>
-        <Language>SQLSERVER2K SQL</Language>
-        <Public>false</Public>
-        <Name>Update_from_a_CTE</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>Update</Category>
-          <Language>SQLSERVER2K SQL</Language>
-          <Public>false</Public>
-          <Name>Update_from_a_CTE</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>--prj_0006_315_UPDATE_WindowsLoginID_ForEclipseUsers_v1.sql
-
-use barriere
-go
-
-;with CTE_DataForUpdate as
-(select cast(1 as int) as Data_ID, 'ABG' as newUSER_ID, 'abbieg' as AD_Login
-				union select 1, 'ABG', 'abbieg'
-				union select 174, 'ST', 'steves'
-				union select 175, 'TA', 'tammyd'
-				union select 176, 'TD', 'tracid'
-				union select 177, 'TEST_FE', 'TEST_FE'
-				union select 178, 'TEST_GM', 'TEST_GM'
-				union select 179, 'TEST_PM', 'TEST_PM'
-				union select 180, 'TESTDU1', 'TEST_DU_1'
-				union select 181, 'TESTDU2', 'TEST_DU_2'
-				union select 182, 'TESTDU3', 'TEST_DU_3'
-				union select 183, 'TESTDU4', 'TEST_DU_4'
-				union select 184, 'TESTDU5', 'TEST_DU_5'
-
-)
---select 
---		Data_ID
---		,newUSER_ID
---		,AD_Login
---from CTE_DataForUpdate;
-
-UPDATE  [barriere].[dbo].[SYS_USER] 
-SET     [WINDOWS_USER_ACCOUNT] = 
-        (
-          SELECT b.AD_Login 
-          FROM CTE_DataForUpdate b 
-          WHERE [barriere].[dbo].[SYS_USER].[USER_ID] = b.newUSER_ID
-        )   
-        </Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>UTILITIES</Category>
-        <Language>SQLSERVER2K SQL</Language>
-        <Public>false</Public>
-        <Name>Who_is_connected_how_and_when_with_What</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>UTILITIES</Category>
-          <Language>SQLSERVER2K SQL</Language>
-          <Public>false</Public>
-          <Name>Who_is_connected_how_and_when_with_What</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>SELECT * FROM sys.dm_exec_sessions
-where is_user_process = 1
-order by nt_user_name</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>VIEW</Category>
-        <Language>SQLSERVER2K SQL</Language>
-        <Public>false</Public>
-        <Name>UseCTE_in_View</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>VIEW</Category>
-          <Language>SQLSERVER2K SQL</Language>
-          <Public>false</Public>
-          <Name>UseCTE_in_View</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>--prj_0037_vw_501_EmployeePositions_v3.sql
+using AutoMapper;       //required after installing Nuget: AutoMapper
+using DutchTreat.Data;      //required for AddDbContext&lt;DutchContext&gt;()
+using DutchTreat.Services;  //for the IMailService
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+// required for 'UseSqlServer'
+using Microsoft.EntityFrameworkCore;
+// required for IConfiguration
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 
 
-use DB2_CRM
-go
-;
-Create View [dbo].[prj_0037_vw_501_EmployeePositions]
-AS
+namespace DutchTreat
+{
+    public class Startup
+    {
+        //Private field to hold the configuration interface
+        private readonly IConfiguration _config;
 
-with CTE_ONE (
-				 Name, 
-				 Accounting_First_Name, 
-				 Accounting_Middle_Name, 
-				 Accounting_Last_Name, 
-				 T29_PK, 
-				 T22_PK, 
-				 T9_PK, 
-				 Position_Prefix, 
-				 Position_Role_e37, 
-				 Position_Role,	
-				 Position_Character_Separator, 
-				 Position_Descriptor, 
-				 Position_Region_e38, 
-				 Position_Region,		
-				 Position_Override, 
-				 bUse_Credentials,
-				 Position_Suffix, 
-				 Position_Credentials, 
-				 Position_Alternate_1, 
-				 Position_Alternate_2, 
-				 CMIS_Access_e39,
-				 CMIS_Access, 
-				 CMIS_Role_e40,
-				 CMIS_Role, 
-				 bReverseOrder, 
-				 T29_Note
-			 )
-AS
-	(
-		SELECT 
-			T9_CCWNC_Employees.Name, 
-			T22_CCWNC_Employee_AccountingPortal.Accounting_First_Name, 
-			T22_CCWNC_Employee_AccountingPortal.Accounting_Middle_Name, 
-			T22_CCWNC_Employee_AccountingPortal.Accounting_Last_Name, 
-			T29_Employee_Positions.T29_PK, 
-			T22_CCWNC_Employee_AccountingPortal.T22_PK, 
-			T9_CCWNC_Employees.T9_PK, 
-			T29_Employee_Positions.Position_Prefix, 
-			T29_Employee_Positions.Position_Role_e37, 
-			(
-					Select [Enum].EnumDescription 
-					From Enum
-					where (
-							([Enum].EnumNameSpace_FK=37) 
-							and 
-							([Enum].EnumValue=T29_Employee_Positions.Position_Role_e37)
-						   )
-			) as Position_Role,	
-			T29_Employee_Positions.Position_Character_Separator, 
-			T29_Employee_Positions.Position_Descriptor, 
-			T29_Employee_Positions.Position_Region_e38, 
-			(
-					Select [Enum].EnumDescription 
-					From Enum
-					where (
-							([Enum].EnumNameSpace_FK=38) 
-							and 
-							([Enum].EnumValue=T29_Employee_Positions.Position_Region_e38)
-						   )
-			) as Position_Region,		
-			T29_Employee_Positions.Position_Override, 
-			T29_Employee_Positions.bUse_Credentials,
-			T29_Employee_Positions.Position_Suffix, 
-			T29_Employee_Positions.Position_Credentials, 
-			T29_Employee_Positions.Position_Alternate_1, 
-			T29_Employee_Positions.Position_Alternate_2, 
-			T29_Employee_Positions.CMIS_Access_e39, 
-			(
-				Select [Enum].EnumDescription 
-				From Enum
-				where (
-						([Enum].EnumNameSpace_FK=39) 
-						and 
-						([Enum].EnumValue=T29_Employee_Positions.CMIS_Access_e39)
-					  )
-			   ) as CMIS_Access,
-			T29_Employee_Positions.CMIS_Role_e40,
-			(
-				Select [Enum].EnumDescription 
-				From Enum
-				where (
-						([Enum].EnumNameSpace_FK=40) 
-						and 
-						([Enum].EnumValue=T29_Employee_Positions.CMIS_Role_e40)
-					  )
-			) as CMIS_Role,			 
-			T29_Employee_Positions.bReverseOrder, 
-			T29_Employee_Positions.T29_Note
-			
-		FROM  
-			(
-				T9_CCWNC_Employees 
-				INNER JOIN
-				T29_Employee_Positions 
-				ON T9_CCWNC_Employees.T9_PK = T29_Employee_Positions.T9_FK 
-			) 
-			INNER JOIN
-			T22_CCWNC_Employee_AccountingPortal 
-			ON T9_CCWNC_Employees.T9_PK = T22_CCWNC_Employee_AccountingPortal.T9_FK
-	)	
-
---select * from CTE_ONE
+        //constructor to inject some interfaces into our startup
+        public Startup(IConfiguration config)
+        {
+            _config = config;
+        }
 
 
-select
+        // This method gets called by the runtime. Use this method to add services to the container.
+        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+        public void ConfigureServices(IServiceCollection services)
+        {
+            //Add this and build the solution. Note need to add Using statement above to bring in the context
+            // By default it is added as a 'Scoped' service
+            services.AddDbContext&lt;DutchContext&gt;(cfg =&gt;
+            {
+                //could hard code a connection string in here, but instead we will use a configuration
+                // The IConfiguration object (i.e. _config) has a property for the connection string, 
+                //      that are stored in the configuration file (created by 'CreateDefaultBuilder' in Program.cs)
+                cfg.UseSqlServer(_config.GetConnectionString("DutchConnectionString"));
+            });
 
-				dbo.fn_Parse_OrgChart(bReverseOrder,Position_Role,Position_Character_Separator,Position_Descriptor) AS OrgChart,
+            //for AutoMapper NuGet package
+            services.AddAutoMapper();
 
-				 dbo.fn_Parse_CMIS(CMIS_Access_e39, CMIS_Access, CMIS_Role_e40, CMIS_Role) as CMIS_Position,
+            //--------------------------------------------------------------------
+            //AddTransient =&gt; have no data on themselves, just methods
+            //AddScoped =&gt; Kept around for the length of a connection, usually for length of request from client
+            //AddSingleton =&gt; created once and kept for the lifetime of the server being up.
+            //--------------------------------------------------------------------
+            //Later you would add support for a real mail service, so for now it just has an implementation that it can call
+            //and for now it would be calling the fake method: NullMailService
+            services.AddTransient&lt;IMailService, NullMailService&gt;();
 
-				 dbo.fn_Parse_BusinessCard( bReverseOrder,
-											Position_Prefix,
-											Position_Role,
-											Position_Character_Separator,
-											Position_Descriptor,
-											Position_Region_e38,
-											Position_Region,
-											bUse_Credentials,
-											Position_Suffix,
-											Position_Credentials,
-											Position_Override
-													)  as BusinessCardPosition,
+            //Without this code (i.e.  services.AddMvc();)  you would get this error:
+            //============================================================================================================================
+            //An error occurred while starting the application.
+            //    InvalidOperationException: Unable to find the required services. 
+            //    Please add all the required services by calling 'IServiceCollection.AddMvc' inside the call to 'ConfigureServices(...)' 
+            //    in the application startup code.
+            //============================================================================================================================
 
-				 Name, 
-				 Accounting_First_Name, 
-				 Accounting_Middle_Name, 
-				 Accounting_Last_Name, 
-				 T29_PK, 
-				 T22_PK, 
-				 T9_PK, 
-				 Position_Prefix, 
-				 Position_Role_e37, 
-				 Position_Role,	
-				 Position_Character_Separator, 
-				 Position_Descriptor, 
-				 Position_Region_e38, 
-				 Position_Region,		
-				 Position_Override, 
-				 bUse_Credentials,
-				 Position_Suffix, 
-				 Position_Credentials, 
-				 Position_Alternate_1, 
-				 Position_Alternate_2, 
-				 CMIS_Access_e39,
-				 CMIS_Access, 
-				 CMIS_Role_e40,
-				 CMIS_Role, 
-				 bReverseOrder, 
-				 T29_Note
+            //add the 'DutchSeeder' class to the services collection as a Transient service
+            services.AddTransient&lt;DutchSeeder&gt;();  //Note DutchSeeder uses DutchContext (a scoped service) which is added above
 
-from CTE_ONE
+            //add 'IDutchRepository' as a service that can be used, but as an implementation use 'DutchRepository'
+            services.AddTransient&lt;IDutchRepository, DutchRepository&gt;();
+
+            //services.AddMvc();  //If we leave it just like this then the Order and OrderItem (i.e. header, detail) for a self-referencing loop which causes an error for the API when returning data.
+            //Since Json is the default data type returned we need to add in a Json option:
+            services.AddMvc()
+                .AddJsonOptions(opt =&gt; opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
+
+        }
+
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        {
+            //to see ERRORS in 'development'
+            // Project(menu) =&gt; Dutchtreat Properties =&gt; Debug {tag} =&gt; Environment variables {right pane} 
+            //          Name: ASPNETCORE ENVIRONMENT  Value: Development
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else // where the value of 'ASPNETCORE ENVIRONMENT' is not Development
+            {
+                app.UseExceptionHandler("/Error");
+            }
+
+            // The order matters in this Method
+            //app.UseDefaultFiles(); // This lets it find default files (e.g. index.html), COMMENT IT OUT in order to process the MVC files first
+            app.UseStaticFiles();  //This line lets you use .html etc files. They must be placed in the wwwroot folder of the project
+
+            //Without this (i.e. app.UseMvc) the .html would work, but not the MVC components           
+            app.UseMvc(cfg =&gt;
+            {
+                cfg.MapRoute("Default",                             //Set up the routes
+                    "{controller}/{action}/{id?}",                  // where things in braces are place-holders, vs putting specific controller and action names in there. The "?" means that "id" is optional
+                    new { controller = "App", Action = "Index" });  // and if the controller/action is missing then use this line
+            });
+
+            //We want this to happen last, so it goes at the bottom
+            // put the seeding method call
+            if (env.IsDevelopment())    //Project =&gt; Properties =&gt; Debug {left pane} =&gt; Environment Variables(Name='ASPNETCORE_ENVIRONMENT', Value='Development')
+            {
+                //Seed the database, but don't have the context, nor hosting environment at this point
+                // b/c we need a context, we therefore need a scope first while we seed the database
+                using (var scope = app.ApplicationServices.CreateScope())
+                {
+                    var seeder = scope.ServiceProvider.GetService&lt;DutchSeeder&gt;();
+                    seeder.Seed();
+                }
+
+            }
 
 
-								
+            //// This was here by default
+            //if (env.IsDevelopment())
+            //{
+            //    app.UseDeveloperExceptionPage();
+            //}
 
+            //// example of responding to any query w/ a fixed output
+            //app.Run(async (context) =&gt;
+            //{
+            //    await context.Response.WriteAsync("&lt;html&gt;&lt;body&gt;&lt;h1&gt;Hello Glenn&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt;");
+            //    //await context.Response.WriteAsync("Hello World!");
+            //});
+        }
+    }
+}
 </Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>XML_Import</Category>
-        <Language>SQLSERVER2K SQL</Language>
-        <Public>false</Public>
-        <Name>Import_XML_Using_CTE</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>XML_Import</Category>
-          <Language>SQLSERVER2K SQL</Language>
-          <Public>false</Public>
-          <Name>Import_XML_Using_CTE</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>
-
---The ‘SINGLE_BLOB’ argument of OPENROWSET designates the 
---XML data into a Blob of data type VARBINARY(MAX) – this type also is limited to a size of 2GB
-
-
-	--query the XML Blob using a CTE (pulling from the XML file each time)
-WITH XmlFile 
-			(Contents) 
-AS (
-	SELECT CONVERT (XML, BulkColumn) 
-	FROM OPENROWSET (BULK 'G:\DATA_No_Backup\asset_tracking_dump_03-05-13.xml', SINGLE_BLOB) AS XmlData
-	)
-	
-SELECT *
-FROM XmlFile
-GO</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>XQuery_FLOWR</Category>
-        <Language>SQLSERVER2K SQL</Language>
-        <Public>false</Public>
-        <Name>data_ToStripOutXMLCharacters</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>XQuery_FLOWR</Category>
-          <Language>SQLSERVER2K SQL</Language>
-          <Public>false</Public>
-          <Name>data_ToStripOutXMLCharacters</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>  declare @xml xml
-
-  set @xml = (select top 1 [xml_data]
-  FROM [AssetManagment].[dbo].[XmlImportTest]) 
-
-
---FLOWR: this returns XML
-SELECT @xml.query(
-				'for $Machine in /assets/client/machine
-				let $User := $Machine/user
-				let $AdapterType := $Machine/hardware/item/details/AdapterType
-			    where $User = "ACCESSIICAREWNC\tgosnell"
-			    return ($AdapterType)'
-			   ) AS [AdapterType]
-
---FLOWR: this returns plain characters
-SELECT @xml.query(
-				'for $Machine in /assets/client/machine
-				let $User := $Machine/user
-				let $AdapterType := $Machine/hardware/item/details/AdapterType
-			    where $User = "ACCESSIICAREWNC\tgosnell"
-			    return data($AdapterType)'
-			   ) AS [AdapterType]</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>XQuery</Category>
-        <Language>SQLSERVER2K SQL</Language>
-        <Public>false</Public>
-        <Name>XQuery_Nodes_Within_CTE</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>XQuery</Category>
-          <Language>SQLSERVER2K SQL</Language>
-          <Public>false</Public>
-          <Name>XQuery_Nodes_Within_CTE</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>-- FROM: https://www.simple-talk.com/sql/database-administration/ad-hoc-xml-file-querying/
-
---use XQuery nodes() method within a CTE to get distinct authors
-
-WITH XmlFile (
-				Contents
-			  ) 
-AS (
-		SELECT CONVERT (XML, BulkColumn) 
-		FROM OPENROWSET (BULK 'C:\Books.xml', SINGLE_BLOB) AS XmlData
-	)
-SELECT DISTINCT x.[Computer Book Authors] 
-FROM(
-		SELECT c.value('(author)[1]', 'varchar(50)') AS [Computer Book Authors]
-		FROM   
-				XmlFile 
-				CROSS APPLY 
-				Contents.nodes ('(//book/genre[. = "Computer"]/..)') AS t(c)
-	)x;</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>XQuery</Category>
-        <Language>SQLSERVER2K SQL</Language>
-        <Public>false</Public>
-        <Name>XQuery_ValueMethod_within_CTE</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>XQuery</Category>
-          <Language>SQLSERVER2K SQL</Language>
-          <Public>false</Public>
-          <Name>XQuery_ValueMethod_within_CTE</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>--use XQuery value() method within a CTE
-WITH XmlFile 
-		(Contents) 
-AS (
-		SELECT CONVERT (XML, BulkColumn) 
-		FROM OPENROWSET (
-							BULK 'G:\DATA_No_Backup\From_CCWNC\2013_03_08_AssetManagement\asset_tracking_dump_03-05-13.xml', 
-							SINGLE_BLOB
-						) AS XmlData
-	)
--- note [1] i.e. singleton requirement for 'value'	
-SELECT Contents.value('(/assets/client/machine[user = "ACCESSIICAREWNC\darrington"]/hardware/item/details/AdapterType)[1]', 'varchar(50)') AS [AdapterType]
-FROM   XmlFile
-GO</Code>
       </SnippetValue>
     </value>
   </item>
