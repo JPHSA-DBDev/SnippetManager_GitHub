@@ -3,511 +3,613 @@
   <item>
     <key>
       <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>CODE_01_Empty_ASP.NET_Core_Web_Application</Category>
-        <Language>C#</Language>
+        <Category>ConnectionStrings</Category>
+        <Language>VB.NET</Language>
         <Public>false</Public>
-        <Name>CODE_01__Startup.cs</Name>
+        <Name>Excel_Connection_trings</Name>
         <Group>My Snippets</Group>
       </SnippetKey>
     </key>
     <value>
       <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
         <Key>
-          <Category>CODE_01_Empty_ASP.NET_Core_Web_Application</Category>
-          <Language>C#</Language>
+          <Category>ConnectionStrings</Category>
+          <Language>VB.NET</Language>
           <Public>false</Public>
-          <Name>CODE_01__Startup.cs</Name>
+          <Name>Excel_Connection_trings</Name>
           <Group>My Snippets</Group>
         </Key>
         <Keywords />
         <Imports />
-        <Code>CODE_01__Startup.cs
--------------------
-using DutchTreat.Data;      //required for AddDbContext&lt;DutchContext&gt;()
-using DutchTreat.Services;  //for the IMailService
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-// required for 'UseSqlServer'
-using Microsoft.EntityFrameworkCore;
-// required for IConfiguration
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+        <Code>'Excel_Connection_trings
+
+For Excel 2007:-------------------------------------------------------------
 
 
-namespace DutchTreat
-{
-    public class Startup
-    {
-        //Private field to hold the configuration interface
-        private readonly IConfiguration _config;
 
-        //constructor to inject some interfaces into our startup
-        public Startup(IConfiguration config)
-        {
-            _config = config;
-        }
+'Xlsx files (2007)
+'=================
+
+Provider=Microsoft.ACE.OLEDB.12.0;Data Source=c:\myFolder\myExcel2007file.xlsx;Extended Properties="Excel 12.0 Xml;HDR=YES";
+
+'"HDR=Yes;" indicates that the first row contains columnnames, not data. "HDR=No;" indicates the opposite.
 
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
-        public void ConfigureServices(IServiceCollection services)
-        {
-            //Add this and build the solution. Note need to add Using statement above to bring in the context
-            // By default it is added as a 'Scoped' service
-            services.AddDbContext&lt;DutchContext&gt;(cfg =&gt;
-            {
-                //could hard code a connection string in here, but instead we will use a configuration
-                // The IConfiguration object (i.e. _config) has a property for the connection string, 
-                //      that are stored in the configuration file (created by 'CreateDefaultBuilder' in Program.cs)
-                cfg.UseSqlServer(_config.GetConnectionString("DutchConnectionString"));
-            });
+
+'Treating data as text 
+'=================
+' Use this one when you want to treat all data in the file as text, overriding Excels column type "General" to guess what type of data is in the column.
 
 
-            //AddTransient =&gt; have no data on themselves, just methods
-            //AddScoped =&gt; Kept around for the length of a connection, usually for length of request from client
-            //AddSingleton =&gt; created once and kept for the lifetime of the server being up.
-            //Later you would add support for a real mail service, so for now it just has an implementation that it can call
-            //and for now it would be calling the fake method: NullMailService
-            services.AddTransient&lt;IMailService, NullMailService&gt;();
+Provider=Microsoft.ACE.OLEDB.12.0;Data Source=c:\myFolder\myExcel2007file.xlsx;Extended Properties="Excel 12.0 Xml;HDR=YES;IMEX=1";
 
-            //Without this code (i.e.  services.AddMvc();)  you would get this error:
-            //============================================================================================================================
-            //An error occurred while starting the application.
-            //    InvalidOperationException: Unable to find the required services. 
-            //    Please add all the required services by calling 'IServiceCollection.AddMvc' inside the call to 'ConfigureServices(...)' 
-            //    in the application startup code.
-            //============================================================================================================================
+'If you want to read the column headers into the result set (using HDR=NO even though there is a header) and the column data is numeric, 
+'    use IMEX=1 to avoid crash.
 
-            //add the 'DutchSeeder' class to the services collection as a Transient service
-            services.AddTransient&lt;DutchSeeder&gt;();  //Note DutchSeeder uses DutchContext (a scoped service) which is added above
+'To always use IMEX=1 is a safer way to retrieve data for mixed data columns. Consider the scenario that one Excel file might work fine cause that 
+'file's data causes the driver to guess one data type while another file, containing other data, causes the driver to guess another data type. This can cause your app to crash.
 
-            //add 'IDutchRepository' as a service that can be used, but as an implementation use 'DutchRepository'
-            services.AddTransient&lt;IDutchRepository, DutchRepository&gt;();
-            
-            services.AddMvc();  
+'Xlsb files
+'=================
+Provider=Microsoft.ACE.OLEDB.12.0;Data Source=c:\myFolder\myBinaryExcel2007file.xlsb;Extended Properties="Excel 12.0;HDR=YES";
 
-        }
+'You can also use this connection string to connect to older 97-2003 Excel workbooks.
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-        {
-            //to see ERRORS in 'development'
-            // Project(menu) =&gt; Dutchtreat Properties =&gt; Debug {tag} =&gt; Environment variables {right pane} 
-            //          Name: ASPNETCORE ENVIRONMENT  Value: Development
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else // where the value of 'ASPNETCORE ENVIRONMENT' is not Development
-            {
-                app.UseExceptionHandler("/Error");
-            }
+'   "HDR=Yes;" indicates that the first row contains columnnames, not data. "HDR=No;" indicates the opposite.
 
-            // The order matters in this Method
-            //app.UseDefaultFiles(); // This lets it find default files (e.g. index.html), COMMENT IT OUT in order to process the MVC files first
-            app.UseStaticFiles();  //This line lets you use .html etc files. They must be placed in the wwwroot folder of the project
+'Xlsm files
+'=================
 
-            //Without this (i.e. app.UseMvc) the .html would work, but not the MVC components           
-            app.UseMvc(cfg =&gt;
-            {
-                cfg.MapRoute("Default",                             //Set up the routes
-                    "{controller}/{action}/{id?}",                  // where things in braces are place-holders, vs putting specific controller and action names in there. The "?" means that "id" is optional
-                    new { controller = "App", Action = "Index" });  // and if the controller/action is missing then use this line
-            });
+Provider=Microsoft.ACE.OLEDB.12.0;Data Source=c:\myFolder\myExcel2007file.xlsm;Extended Properties="Excel 12.0 Macro;HDR=YES";
 
-            //We want this to happen last, so it goes at the bottom
-            // put the seeding method call
-            if (env.IsDevelopment())    //Project =&gt; Properties =&gt; Debug {left pane} =&gt; Environment Variables(Name='ASPNETCORE_ENVIRONMENT', Value='Development')
-            {
-                //Seed the database, but don't have the context, nor hosting environment at this point
-                // b/c we need a context, we therefore need a scope first while we seed the database
-                using (var scope = app.ApplicationServices.CreateScope())
-                {
-                    var seeder = scope.ServiceProvider.GetService&lt;DutchSeeder&gt;();
-                    seeder.Seed();
-                }
-
-            }
+'Important note!&lt;br/&gt;The quota " in the string needs to be escaped using your language specific escape syntax.&lt;br/&gt; c#, 
+'   c++&amp;nbsp;&amp;nbsp;&amp;nbsp;\"&lt;br/&gt; VB6, VBScript&amp;nbsp;&amp;nbsp;&amp;nbsp;""&lt;br/&gt; xml (web.config etc)&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;amp;quot;&lt;br/&gt; or maybe use a single quota '.
+'   "HDR=Yes;" indicates that the first row contains columnnames, not data. "HDR=No;" indicates the opposite.
 
 
-            //// This was here by default
-            //if (env.IsDevelopment())
-            //{
-            //    app.UseDeveloperExceptionPage();
-            //}
+------------------------------------------------------------------------------
 
-            //// example of responding to any query w/ a fixed output
-            //app.Run(async (context) =&gt;
-            //{
-            //    await context.Response.WriteAsync("&lt;html&gt;&lt;body&gt;&lt;h1&gt;Hello Glenn&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt;");
-            //    //await context.Response.WriteAsync("Hello World!");
-            //});
-        }
-    }
-}
-</Code>
+
+'Pre-Excel 2007 (.xls)
+
+'Standard
+'=====================
+
+Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\MyExcel.xls;Extended Properties="Excel 8.0;HDR=Yes;IMEX=1";
+
+'Standard alternative
+'=====================
+
+OLEDB;Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\MyExcel.xls;Extended Properties="Excel 8.0;HDR=Yes;IMEX=1";
+
+'Try this one if the one above is not working. Some reports that Excel 2003 need the exta OLEDB; section in the beginning of the string.
+
+
+'Important note!&lt;br/&gt;The quota " in the string needs to be escaped using your language specific escape 
+'syntax.&lt;br/&gt; c#, c++&amp;nbsp;&amp;nbsp;&amp;nbsp;\"&lt;br/&gt; VB6, VBScript&amp;nbsp;&amp;nbsp;&amp;nbsp;""&lt;br/&gt; xml (web.config etc)&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;amp;quot;&lt;br/&gt; or maybe use a single quota '.
+
+'"HDR=Yes;" indicates that the first row contains columnnames, not data. "HDR=No;" indicates the opposite.
+
+'"IMEX=1;" tells the driver to always read "intermixed" (numbers, dates, strings etc) data columns as text. Note that this option might affect excel sheet write access negative.
+
+'SQL syntax "SELECT [Column Name One], [Column Name Two] FROM [Sheet One$]". I.e. excel worksheet name followed by a "$" and wrapped in "[" "]" brackets.
+
+'Check out the [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Jet\4.0\Engines\Excel] located registry REG_DWORD "TypeGuessRows". 
+'    That's the key to not letting Excel use only the first 8 rows to guess the columns data type. Set this value to 0 to scan all rows. 
+'This might hurt performance. Please also note that adding the IMEX=1 option might cause the IMEX feature to set in after 
+'just 8 rows. Use IMEX=0 instead to be sure to force the registry TypeGuessRows=0 (scan all rows) to work.
+
+'If the Excel workbook is protected by a password, you cannot open it for data access, even by supplying the correct password with your connection string. 
+'    If you try, you receive the following error message: "Could not decrypt file."</Code>
       </SnippetValue>
     </value>
   </item>
   <item>
     <key>
       <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>CODE_01_Empty_ASP.NET_Core_Web_Application</Category>
-        <Language>C#</Language>
+        <Category>CSV_Export</Category>
+        <Language>SQLSERVER2K SQL</Language>
         <Public>false</Public>
-        <Name>CODE_01_about_Connection_String</Name>
+        <Name>some_ideas</Name>
         <Group>My Snippets</Group>
       </SnippetKey>
     </key>
     <value>
       <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
         <Key>
-          <Category>CODE_01_Empty_ASP.NET_Core_Web_Application</Category>
-          <Language>C#</Language>
+          <Category>CSV_Export</Category>
+          <Language>SQLSERVER2K SQL</Language>
           <Public>false</Public>
-          <Name>CODE_01_about_Connection_String</Name>
+          <Name>some_ideas</Name>
           <Group>My Snippets</Group>
         </Key>
         <Keywords />
         <Imports />
-        <Code>CODE_01_about_Connection_String
---------------------------------------------
-// 1] add code (AddDbContext) to 'ConfigureServices', in Startup.cs
---------------------------------------------
-using DutchTreat.Data;      //required for AddDbContext&lt;DutchContext&gt;()
-// required for 'UseSqlServer'
-using Microsoft.EntityFrameworkCore;
+        <Code>https://stackoverflow.com/questions/12567410/i-need-best-practice-in-t-sql-export-data-to-csv-with-header
 
-...
+--Using Microsoft.Jet.OLEDB.4.0, like this:
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
-        public void ConfigureServices(IServiceCollection services)
-        {
-            //Add this and build the solution. Note need to add Using statement above to bring in the context
-            services.AddDbContext&lt;DutchContext&gt;(cfg =&gt;
-            {
-                //could hard code a connection string in here, but instead we will use a configuration
-                // The IConfiguration object (i.e. _config) has a property for the connection string, 
-                //      that are stored in the configuration file (created by 'CreateDefaultBuilder' in Program.cs)
-                cfg.UseSqlServer(_config.GetConnectionString("DutchConnectionString"));
-            });
---------------------------------------------
-//2]  Modify 'BuildWebHost' in Program.cs: (1) ConfigureAppConfiguration, (2) SetupConfiguration
---------------------------------------------
-        /*
-         'CreateDefaultBuilder' sets up a configuration file that we can use
-         'ConfigureAppConfiguration' takes a delegate that is going to pass in a configuration builder 
-                so that we can add our own configuration options (e.g. the connection string)
-                To do this we create a method called 'SetupConfiguration' to keep the code  here simple
-                
-        */
-        public static IWebHost BuildWebHost(string[] args) =&gt;
-            WebHost.CreateDefaultBuilder(args)
-                .ConfigureAppConfiguration(SetupConfiguration)			//&lt;===============
-                .UseStartup&lt;Startup&gt;()
-                .Build();
+INSERT INTO OPENROWSET('Microsoft.Jet.OLEDB.4.0',
+                       'Text;Database=C:\Temp\;HDR=Yes;',
+                       'SELECT * FROM test.csv')
+            (object_id, name)
+SELECT object_id, name
+  FROM sys.tables;
+  
+  
+-----------------------
+---You could use a UNION to create a header row, like this:
 
-        private static void SetupConfiguration(WebHostBuilderContext ctx, IConfigurationBuilder builder)
-        {
-            //Remove the default configuration options
-            builder.Sources.Clear();
+SELECT 'object_id', 'name'
 
-            //builder allows for many types of configuration files. we will use a Json file, with path "config.json"
-            // AddJsonFile parms: path, optional, reload on change
-            // This example illustrates that you can have multple configuration sources combined into a single 'configuration'
-            //          conflicts are resolved (last in is the one that counts, i.e. the bottom most one is the one that rules)
-            //          So developer could use the first one, but when it is pushed out to production, the last one is the Production environments values, and they rule
-            builder.AddJsonFile("config.json", false, true)         //This requires we create a 'config.json' file om the root
-                //.AddXmlFile("config.xml", true)     //&lt;=== just to demonstrate that you can have multiple config files
-                .AddEnvironmentVariables();         //&lt;=== to demonstrate you can use environmental variables
-        }
+UNION ALL
 
---------------------------------------------
-//3]  Create config.json in root of project
---------------------------------------------
-/* 		This will allow us to store Hierarchies and values
-		The name "DutchConnectionString", in this file will be used in the 'AddDbContext' of Startup.cs
-		From the VS 2017 menu "View" =&gt; SQL Server Object Explorer =&gt; opens Pane named "SQL Server Object Explorer"
-			This shows SQL servers on local machine */
-			
-  "ConnectionStrings": {
-    //"DutchConnectionString": "server=(localdb)\\ProjectsV13;Database=DutchTreatDb;Integrated Security=true;MultipleActiveResultSets=true;"
-    //MultipleActiveResultSets is required for EF, to retrieve multiple streams of data at the same time.
-    "DutchConnectionString": "server=HOMETOWERVM05\\PROD;Database=JUNK;Integrated Security=true;MultipleActiveResultSets=true;"
-  },			
-			
---------------------------------------------			
-//4  Add the Constructor for DutchContext.cs
---------------------------------------------
-        //create constructor that takes the 'options' with my class as the 'type', and refer to it as 'options'
-        //  then call the base class with those options, this way it now knows which connection string to use from config.json
-        public DutchContext(DbContextOptions&lt;DutchContext&gt; options): base(options)
-        {
-            
-        }	
+SELECT object_id, name
+FROM sys.tables  
 
---------------------------------------------
-//5  re-build the object after this, and run the command (CMD or Powershell): 
---------------------------------------------  
-&gt;dotnet ef database update
-// It should respond:
-Done.</Code>
+------------------------------------------------------
+EXEC xp_cmdshell 'SQLCMD -S . -d MsVehicleReg2 -Q "SELECT * FROM tempViolationInfo" -s "," -o "O:\result.csv"'
+
+--------------------------------------------------------
+-- need to have the Microsoft.ACE.OLEDB.12.0 provider available
+--The Jet 4.0 provider will work, too, but it's ancient, so I used this one instead.
+--The .CSV file will have to exist already. 
+--	If you're using headers (HDR=YES), make sure the first line of the .CSV file is a delimited list of all the fields.
+
+INSERT INTO OPENROWSET('Microsoft.ACE.OLEDB.12.0','Text;Database=D:\;HDR=YES;FMT=Delimited','SELECT * FROM [FileName.csv]')
+SELECT Field1, Field2, Field3 FROM DatabaseName
+
+---------------------------------------------------------------------
+https://www.codeproject.com/Questions/546777/HowplusToplusExportplusDataplusToplustheplus-csvpl
+
+declare @sql varchar(8000)
+select @sql = 'bcp "select * from EmailVarification..tblTransaction" queryout c:\bcp\Tom.xls -c -t, -T -S' + @@servername
+exec master..xp_cmdshell @sql
+
+--in this query EmailVarification is DB name and tblTransaction is table name.
+--for execute this query you have to set path for write file.
+--currently in this query you have to create a "bcp" folder in "C:\ "Drive .</Code>
       </SnippetValue>
     </value>
   </item>
   <item>
     <key>
       <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>CODE_01_Empty_ASP.NET_Core_Web_Application</Category>
-        <Language>C#</Language>
+        <Category>DynamicSQL</Category>
+        <Language>SQLSERVER2K SQL</Language>
         <Public>false</Public>
-        <Name>CODE_01_about_SeedingTheDatabase</Name>
+        <Name>EXCEL_to_SQL_Import_multiple_Files</Name>
         <Group>My Snippets</Group>
       </SnippetKey>
     </key>
     <value>
       <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
         <Key>
-          <Category>CODE_01_Empty_ASP.NET_Core_Web_Application</Category>
-          <Language>C#</Language>
+          <Category>DynamicSQL</Category>
+          <Language>SQLSERVER2K SQL</Language>
           <Public>false</Public>
-          <Name>CODE_01_about_SeedingTheDatabase</Name>
+          <Name>EXCEL_to_SQL_Import_multiple_Files</Name>
           <Group>My Snippets</Group>
         </Key>
         <Keywords />
         <Imports />
-        <Code>CODE_01_about_SeedingTheDatabase
-
+        <Code>--p_0063_MAINT_301_NaturalHazards_ReadInData_CreateTables_v2.sql
 /*
-1] Create a class: DutchSeeder, in the Data folder
-	then create a constructor that takes a DbContext (ctx), and a local variable */
-
-    public class DutchSeeder
-    {
-        private readonly DutchContext _ctx;
-
-        public DutchSeeder(DutchContext ctx)
-        {
-            _ctx = ctx;
-        }
-
-        public void Seed()
-        {
-            //Before we create any queries, make sure the database exists
-            //Create if it doesn't exist
-            _ctx.Database.EnsureCreated();
-
-            //".Any()" returns true if there are any records in the Products table
-            //Not any
-            if (!_ctx.Products.Any())
-            {
-                //Need to create sample data if there are not any products
-            }
-
-        }
-    }
-/*
-2] In this example the author has a json file: "art.json" which he reads in to seed the table
-	so a bunch of code is added to the "Seed()" method to check to see if the database exists
-	and if it does not to pull data in from a JSON file	*/
-	
-	{See the CODE_01__Data/DutchSeeder.cs snippet for details}
-/*
-3] In the " ConfigureServices" method of Startup.cs you need to add something that calls the Seed method */
-
-        public void ConfigureServices(IServiceCollection services)
-        {
-            // By default it is added as a 'Scoped' service
-            services.AddDbContext&lt;DutchContext&gt;(cfg =&gt;
-                cfg.UseSqlServer(_config.GetConnectionString("DutchConnectionString"));
-            });
-			...
-            //AddTransient =&gt; have no data on themselves, just methods
-            //AddScoped =&gt; Kept around for the length of a connection, usually for length of request from client
-            //AddSingleton =&gt; created once and kept for the lifetime of the server being up.
-
-            //add the 'DutchSeeder' class to the services collection as a Transient service
-            services.AddTransient&lt;DutchSeeder&gt;();  //Note DutchSeeder uses DutchContext (a scoped service) which is added above
-			... 
-        }
-/*	
-4] In the Configure method of the Startup.cs you have to call the seed if/when you are in Development:	
-	Project =&gt; Properties =&gt; Debug {left pane} =&gt; Environment Variables(Name='ASPNETCORE_ENVIRONMENT', Value='Development')
+	************************************************************************************
+	NOTE: This runs in the DEV instance, and uses "Local System" to run the SQL Server
+	Uses: 
+	Modified: 3/19/2018 - uses dynamic SQL
+	Created: 3/19/2018
+	By: glenn garson
+	************************************************************************************
 */
 
-         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-        {
-            ...
+use p_0063
+go
 
-            //We want this to happen last, so it goes at the bottom
-            // put the seeding method call
-            if (env.IsDevelopment())    //Project =&gt; Properties =&gt; Debug {left pane} =&gt; Environment Variables(Name='ASPNETCORE_ENVIRONMENT', Value='Development')
-            {
-                //Seed the database, but don't have the context, nor hosting environment at this point
-                // b/c we need a context, we therefore need a scope first while we seed the database
-                using (var scope = app.ApplicationServices.CreateScope())
-                {
-                    var seeder = scope.ServiceProvider.GetService&lt;DutchSeeder&gt;();
-                    seeder.Seed();
-                }
+--CREATE TABLE --------------------------------------------
+IF OBJECT_ID('dbo.NaturalHazards_2018_03_19') IS NOT NULL
+    DROP TABLE dbo.NaturalHazards_2018_03_19
 
-            }
-		
-        }</Code>
+SELECT ROW_NUMBER() OVER (ORDER BY (SELECT 100)) AS RowOrder, *, 'Beverly' as fromWho 
+Into NaturalHazards_2018_03_19
+FROM OPENROWSET('Microsoft.ACE.OLEDB.15.0',
+                         'Excel 12.0 Xml;HDR=NO;Database=C:\DATA\p_0063\TEST\Beverly.xlsx',
+				         'SELECT * FROM [Natural_Hazards$A7:H15]');
+
+--=======================================Variables - START
+SET NOCOUNT ON
+
+DECLARE @ExcelWorkBookList TABLE (ExcelWorkBookName NVARCHAR(128) NOT NULL) 
+
+-- This is where you put the list of tables to be archived.
+INSERT @ExcelWorkBookList VALUES 
+('Nicole'),
+('Rosanna'),
+('Tammy'),
+('Thomas'),
+('Trudy'),
+('Wanda')
+
+DECLARE 
+  @sqlcmd VARCHAR(4000),
+  @theDynamicRecord  VARCHAR(128)
+  --=======================================Variables - END
+
+  -- Loop through the Excel Workbooks in the list
+DECLARE theCursor CURSOR LOCAL FORWARD_ONLY STATIC READ_ONLY FOR
+SELECT ExcelWorkBookName
+FROM @ExcelWorkBookList
+ORDER BY ExcelWorkBookName
+
+OPEN theCursor 
+FETCH NEXT FROM theCursor INTO @theDynamicRecord
+WHILE @@FETCH_STATUS = 0 
+BEGIN 
+-------------------------------------------------------------------------------
+
+
+  --SET @sqlcmd = 'IF OBJECT_ID(''dbo.' + @theDynamicRecord + ''' ) IS NOT NULL
+		--		 DROP TABLE dbo.' + @theDynamicRecord + ''
+
+  SET @sqlcmd = 'INSERT INTO NaturalHazards_2018_03_19
+				 SELECT ROW_NUMBER() OVER (ORDER BY (SELECT 100)) AS RowOrder, *, '''+ @theDynamicRecord + ''' as fromWho 
+				 FROM OPENROWSET(''Microsoft.ACE.OLEDB.15.0'',
+                 ''Excel 12.0 Xml;HDR=NO;Database=C:\DATA\p_0063\TEST\'+ @theDynamicRecord + '.xlsx'',
+				 ''SELECT * FROM [Natural_Hazards$A7:H15]'');'
+
+-------------------------------------------------------------------------------
+   print '-------------------'
+   PRINT @sqlcmd
+   print '-------------------'
+  EXEC (@sqlcmd) 
+  FETCH NEXT FROM theCursor INTO @theDynamicRecord
+END
+
+CLOSE theCursor 
+DEALLOCATE theCursor
+
+go
+
+
+-------------------------------------------
+Select * from NaturalHazards_2018_03_19</Code>
       </SnippetValue>
     </value>
   </item>
   <item>
     <key>
       <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>CODE_02_Empty_ASP.NET_Core_API</Category>
-        <Language>C#</Language>
+        <Category>EXCEL_AUTOMATION</Category>
+        <Language>VB.NET</Language>
         <Public>false</Public>
-        <Name>CODE_02__Startup.cs</Name>
+        <Name>CreateAndSaveExcelWorkBook</Name>
         <Group>My Snippets</Group>
       </SnippetKey>
     </key>
     <value>
       <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
         <Key>
-          <Category>CODE_02_Empty_ASP.NET_Core_API</Category>
-          <Language>C#</Language>
+          <Category>EXCEL_AUTOMATION</Category>
+          <Language>VB.NET</Language>
           <Public>false</Public>
-          <Name>CODE_02__Startup.cs</Name>
+          <Name>CreateAndSaveExcelWorkBook</Name>
           <Group>My Snippets</Group>
         </Key>
         <Keywords />
         <Imports />
-        <Code>CODE_01__Startup.cs
-//Modify: services.AddMvc()
----------------------------
-using DutchTreat.Data;      //required for AddDbContext&lt;DutchContext&gt;()
-using DutchTreat.Services;  //for the IMailService
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-// required for 'UseSqlServer'
-using Microsoft.EntityFrameworkCore;
-// required for IConfiguration
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
+        <Code>'Create And Save Excel Workbook
+'gig_Create_Excel_INI_File
+
+'
+'0] mod_Global
+'1] Button Command
+'2] c_gigExcelAutomator
+'3] releaseObjects
+'=================================================
+
+'0] mod_Global
+
+    Friend g_sAppPath As String = c_gigFileManager.fn_DirectoryOfThisApplication
 
 
-namespace DutchTreat
-{
-    public class Startup
-    {
-        //Private field to hold the configuration interface
-        private readonly IConfiguration _config;
+'1] Button Command
 
-        //constructor to inject some interfaces into our startup
-        public Startup(IConfiguration config)
-        {
-            _config = config;
-        }
+    Private Sub btn_CreateINIFile_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_CreateINIFile.Click
+        CreateThisAppINI()
+        MsgBox("INI file has been created!")
+    End Sub
 
-
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
-        public void ConfigureServices(IServiceCollection services)
-        {
-            //Add this and build the solution. Note need to add Using statement above to bring in the context
-            // By default it is added as a 'Scoped' service
-            services.AddDbContext&lt;DutchContext&gt;(cfg =&gt;
-            {
-                //could hard code a connection string in here, but instead we will use a configuration
-                // The IConfiguration object (i.e. _config) has a property for the connection string, 
-                //      that are stored in the configuration file (created by 'CreateDefaultBuilder' in Program.cs)
-                cfg.UseSqlServer(_config.GetConnectionString("DutchConnectionString"));
-            });
+    Sub CreateThisAppINI()
+        Dim oXLAutomator As New c_gigExcelAutomator
+        oXLAutomator.CreateAppINI()
+    End Sub
 
 
-            //AddTransient =&gt; have no data on themselves, just methods
-            //AddScoped =&gt; Kept around for the length of a connection, usually for length of request from client
-            //AddSingleton =&gt; created once and kept for the lifetime of the server being up.
-            //Later you would add support for a real mail service, so for now it just has an implementation that it can call
-            //and for now it would be calling the fake method: NullMailService
-            services.AddTransient&lt;IMailService, NullMailService&gt;();
+'2] c_gigExcelAutomator
 
-            //Without this code (i.e.  services.AddMvc();)  you would get this error:
-            //============================================================================================================================
-            //An error occurred while starting the application.
-            //    InvalidOperationException: Unable to find the required services. 
-            //    Please add all the required services by calling 'IServiceCollection.AddMvc' inside the call to 'ConfigureServices(...)' 
-            //    in the application startup code.
-            //============================================================================================================================
+Option Explicit On
+'Option Strict On
+Imports Excel = Microsoft.Office.Interop.Excel
+Imports Microsoft.Office.Interop
+Imports Microsoft.Office.Core
+'Imports System.Data.OleDb
 
-            //add the 'DutchSeeder' class to the services collection as a Transient service
-            services.AddTransient&lt;DutchSeeder&gt;();  //Note DutchSeeder uses DutchContext (a scoped service) which is added above
+'Imports System.Drawing.ColorTranslator
+'Reference: COM =&gt; Microsoft Excel 12.0 Object Library
 
-            //add 'IDutchRepository' as a service that can be used, but as an implementation use 'DutchRepository'
-            services.AddTransient&lt;IDutchRepository, DutchRepository&gt;();
+Public Class c_gigExcelAutomator
 
-            //services.AddMvc();  //If we leave it just like this then the Order and OrderItem (i.e. header, detail) for a self-referencing loop which causes an error for the API when returning data.
-            //Since Json is the default data type returned we need to add in a Json option:
-            services.AddMvc()
-                .AddJsonOptions(opt =&gt; opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
+    Friend Shared Function fnReadExcel_PassBackDataSet(ByVal sPathAndFileOfExcelFile As String, ByVal sNameOfTableToCreate As String, ByVal sSourceSheetName As String) As DataSet
+        'Imports System.Data.OleDb
+            Dim sOLEConnString As String
+            Dim MyConnection As System.Data.OleDb.OleDbConnection
+            Dim DtSet As System.Data.DataSet
+            Dim MyCommand As System.Data.OleDb.OleDbDataAdapter
 
-        }
+        Try
+            sOLEConnString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source='" &amp; sPathAndFileOfExcelFile &amp; "';Excel 12.0 Xml;IMEX=1;HDR=YES;"
+            MyConnection = New System.Data.OleDb.OleDbConnection(sOLEConnString)
+            MyCommand = New System.Data.OleDb.OleDbDataAdapter("select * from [" &amp; sSourceSheetName &amp; "$]", MyConnection)
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-        {
-            //to see ERRORS in 'development'
-            // Project(menu) =&gt; Dutchtreat Properties =&gt; Debug {tag} =&gt; Environment variables {right pane} 
-            //          Name: ASPNETCORE ENVIRONMENT  Value: Development
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else // where the value of 'ASPNETCORE ENVIRONMENT' is not Development
-            {
-                app.UseExceptionHandler("/Error");
-            }
+            MyCommand.TableMappings.Add("Table", sNameOfTableToCreate)
+ '           MyCommand.TableMappings.Add(sNameOfTableToCreate, sSourceSheetName)
+            DtSet = New System.Data.DataSet
+            MyCommand.Fill(DtSet)
+            'DataGridView1.DataSource = DtSet.Tables(0)
 
-            // The order matters in this Method
-            //app.UseDefaultFiles(); // This lets it find default files (e.g. index.html), COMMENT IT OUT in order to process the MVC files first
-            app.UseStaticFiles();  //This line lets you use .html etc files. They must be placed in the wwwroot folder of the project
+        Catch ex As Exception
+            MsgBox(ex.ToString)
+        Finally
+            releaseObject(MyCommand)
+            releaseObject(MyConnection)
+        End Try
+            fnReadExcel_PassBackDataSet = DtSet
+    End Function
 
-            //Without this (i.e. app.UseMvc) the .html would work, but not the MVC components           
-            app.UseMvc(cfg =&gt;
-            {
-                cfg.MapRoute("Default",                             //Set up the routes
-                    "{controller}/{action}/{id?}",                  // where things in braces are place-holders, vs putting specific controller and action names in there. The "?" means that "id" is optional
-                    new { controller = "App", Action = "Index" });  // and if the controller/action is missing then use this line
-            });
+    Friend Sub CreateAppINI()
 
-            //We want this to happen last, so it goes at the bottom
-            // put the seeding method call
-            if (env.IsDevelopment())    //Project =&gt; Properties =&gt; Debug {left pane} =&gt; Environment Variables(Name='ASPNETCORE_ENVIRONMENT', Value='Development')
-            {
-                //Seed the database, but don't have the context, nor hosting environment at this point
-                // b/c we need a context, we therefore need a scope first while we seed the database
-                using (var scope = app.ApplicationServices.CreateScope())
-                {
-                    var seeder = scope.ServiceProvider.GetService&lt;DutchSeeder&gt;();
-                    seeder.Seed();
-                }
+        'On Error GoTo ErrorHandler
 
-            }
+        '==================================
+        Dim oXL As Excel.Application
+        Dim oWB As Excel.Workbook
+        Dim oSheet As Excel.Worksheet
+        'Dim oRng As Excel.Range
+
+        'Dim g_sAppPath As String
 
 
-            //// This was here by default
-            //if (env.IsDevelopment())
-            //{
-            //    app.UseDeveloperExceptionPage();
-            //}
+        '===== Check to see if INI file already exists ======================
 
-            //// example of responding to any query w/ a fixed output
-            //app.Run(async (context) =&gt;
-            //{
-            //    await context.Response.WriteAsync("&lt;html&gt;&lt;body&gt;&lt;h1&gt;Hello Glenn&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt;");
-            //    //await context.Response.WriteAsync("Hello World!");
-            //});
-        }
-    }
-}
+        'g_sAppPath = c_gigFileManager.fn_DirectoryOfThisApplication
+        If c_gigFileManager.fn_b_TheFileExists(g_sAppPath &amp; g_sINIFileName) Then
+            MessageBox.Show("The INI file already exists, it will be renamed first, then a new one created")
+            Try
+                My.Computer.FileSystem.RenameFile(g_sAppPath &amp; g_sINIFileName, "OLD_" &amp; g_sINIFileName)
+            Catch eIO As System.IO.IOException
+                Debug.Print("The file: " &amp; "OLD_" &amp; g_sINIFileName &amp; " was present, and deleted")
+                My.Computer.FileSystem.DeleteFile(g_sAppPath &amp; "OLD_" &amp; g_sINIFileName)
+                My.Computer.FileSystem.RenameFile(g_sAppPath &amp; g_sINIFileName, "OLD_" &amp; g_sINIFileName)
+            Catch ex As Exception
+                MsgBox(ex.Message)
+                'delete it then 
+                ' then rename it
+            End Try
+
+        Else
+            MessageBox.Show("The INI file does NOT already exists, It will be created")
+        End If
+        '===== Now Create the INI File
+
+
+
+        ' Start Excel and get Application object.
+        oXL = CreateObject("Excel.Application")
+        oXL.Visible = True
+
+        ' Get a new workbook.
+        oWB = oXL.Workbooks.Add
+
+        oSheet = oWB.Sheets("Sheet1")
+
+        Try
+            PopulateTheFirstSheet(oSheet)
+        Catch ex As Exception
+
+            MsgBox("PopulateTheFirstSheet: " &amp; ex.Message)
+
+        End Try
+
+
+        oSheet = oWB.Sheets("Sheet2")
+        PopulateTheSecondSheet(oSheet)
+
+        'oSheet = oWB.Sheets("Sheet3")
+        'oSheet.Name = "ReflectionMacros"
+        oSheet.Activate()
+
+
+
+        oSheet.SaveAs(g_sAppPath &amp; k_ADE_INI_FileName &amp; ".xlsx")
+
+
+
+        oXL.Visible = True
+        oXL.UserControl = True
+
+        ' Make sure you release object references.
+        'releaseObject(oRng)
+        releaseObject(oSheet)
+        releaseObject(oWB)
+        releaseObject(oXL)
+
+        '==================================
+
+        '            Exit Sub
+        'ErrorHandler:
+
+        '            Select Case Err.Number
+        '                Case 57
+        '                    My.Computer.FileSystem.DeleteFile(g_sAppPath &amp; "OLD_" &amp; g_sINIFileName)
+        '                    Resume
+        '                Case Else
+        '                    MsgBox("error: " &amp; Err.Number &amp; " " &amp; Err.Description)
+        '            End Select
+
+    End Sub
+
+    Sub PopulateTheFirstSheet(ByRef xSheet As Excel.Worksheet)
+        'Dim iR As Integer = 0
+        'Dim iC As Integer = 0
+        Dim oRange1 As Excel.Range
+
+        xSheet.Name = k_NameOfFirstSheetInINIFile
+
+        With xSheet
+            .Cells(1, 1).Value = k_NameOfCol_1_InFacilityDataSetTable0
+            .Cells(1, 2).Value = k_NameOfCol_2_InFacilityDataSetTable0
+            .Cells(1, 3).Value = k_NameOfCol_3_InFacilityDataSetTable0
+            .Cells(1, 4).Value = k_NameOfCol_4_InFacilityDataSetTable0
+            .Cells(1, 5).Value = k_NameOfCol_5_InFacilityDataSetTable0
+            .Cells(1, 6).Value = k_NameOfCol_6_InFacilityDataSetTable0
+
+            For iR = 1 To g_iMaxFacility
+                .Cells(iR + 1, 1).Value = g_arrFacility(iR).iFacilityIDNo
+                .Cells(iR + 1, 2).Value = g_arrFacility(iR).sFacilityName
+                .Cells(iR + 1, 3).Value = g_arrFacility(iR).sVISTA_Host
+                .Cells(iR + 1, 4).Value = g_arrFacility(iR).sFacility_STN_number
+            Next
+
+
+            For iR = 1 To 20
+                For iC = 1 To 6
+                    oRange1 = .Range(.Cells(iR, iC), .Cells(iR, iC))
+
+                    If iC &lt;= 4 Then
+                        oRange1.Interior.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.LightGray)
+                        oRange1.Font.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Black)
+                    Else
+                        oRange1.Interior.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White)
+                        oRange1.Font.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White)
+                    End If
+
+
+                    If iR = 1 Then
+                        oRange1.BorderAround(Excel.XlLineStyle.xlContinuous, Excel.XlBorderWeight.xlMedium, Excel.XlColorIndex.xlColorIndexAutomatic)
+                        oRange1.Font.Bold = True
+                    Else
+                        oRange1.BorderAround(Excel.XlLineStyle.xlContinuous, Excel.XlBorderWeight.xlHairline, Excel.XlColorIndex.xlColorIndexAutomatic)
+                        oRange1.Font.Bold = False
+
+                    End If
+
+                    'If iC &lt;= 4 Then
+                    '    oRange1.Font.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Black)
+                    'Else
+                    '    oRange1.Font.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White)
+                    'End If
+                Next
+            Next
+
+            For iC = 1 To 6
+                DirectCast(.Columns(iC), Excel.Range).AutoFit()
+            Next
+
+        End With
+
+
+
+        releaseObject(oRange1)
+    End Sub
+
+    Sub PopulateTheSecondSheet(ByRef xSheet As Excel.Worksheet)
+
+        Dim oRange1 As Excel.Range
+
+        xSheet.Name = k_NameOfSecondSheetInINIFile
+
+        With xSheet
+            .Cells(1, 1).Value = "JobIDNo"
+            .Cells(1, 2).Value = "Job Name"
+            .Cells(1, 3).Value = "Job Parm Array Length"
+            .Cells(1, 4).Value = "Read Me"
+
+            For iC = 5 To 15        '&lt;== gigDebug: figoure out how to get the max of all the Parm Array Lengths
+                .Cells(1, iC).Value = "Parm: " &amp; CStr(iC - 4)
+            Next
+        End With
+
+        For iR = 1 To g_iMaxJobList
+            With g_arrJobList(iR)
+                xSheet.Cells(iR + 1, 1).Value = .iJob_IDNo
+                xSheet.Cells(iR + 1, 2).Value = .sJob_Name
+                xSheet.Cells(iR + 1, 3).Value = .iJob_Parm_Array_Length
+                xSheet.Cells(iR + 1, 4).Value = .sJob_ReadMe
+                Dim iPreParmColumns As Integer = 4                  'Number of columns before the Parm Columns.
+                For iC = (1 + iPreParmColumns) To (.iJob_Parm_Array_Length + iPreParmColumns)
+                    xSheet.Cells(iR + 1, iC).Value = .fnRetrieveAValueFrom_ParmNameArray(iC - iPreParmColumns)
+                Next
+            End With
+        Next
+
+
+        With xSheet
+            For iR = 1 To g_iMaxJobList
+                For iC = 1 To 15        '&lt;== gigDebug: figoure out how to get the max of all the Parm Array Lengths
+                    oRange1 = .Range(.Cells(iR, iC), .Cells(iR, iC))
+                    If iR = 1 Then
+                        oRange1.Interior.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.LightGray)
+                        oRange1.BorderAround(Excel.XlLineStyle.xlContinuous, Excel.XlBorderWeight.xlMedium, Excel.XlColorIndex.xlColorIndexAutomatic)
+                        oRange1.Font.Bold = True
+                    Else
+                        oRange1.BorderAround(Excel.XlLineStyle.xlContinuous, Excel.XlBorderWeight.xlHairline, Excel.XlColorIndex.xlColorIndexAutomatic)
+                        oRange1.Font.Bold = False
+
+                    End If
+                    oRange1.Font.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Black)
+                Next
+            Next
+
+            For iC = 1 To 15
+                DirectCast(.Columns(iC), Excel.Range).AutoFit()
+            Next
+
+        End With
+
+
+
+        releaseObject(oRange1)
+    End Sub
+
+
+
+    Function fnObject2WorkSheet(ByVal oX As Object) As Excel.Worksheet
+        fnObject2WorkSheet = CType(oX, Excel.Worksheet)
+    End Function
+
+End Class
+
+
+'3] releaseObjects
+
+Module mod_General
+
+
+
+    Friend Sub releaseObject(ByVal obj As Object)
+        Try
+            System.Runtime.InteropServices.Marshal.ReleaseComObject(obj)
+            obj = Nothing
+        Catch ex As Exception
+            obj = Nothing
+        Finally
+            GC.Collect()
+        End Try
+    End Sub
+
+End Module
+
 </Code>
       </SnippetValue>
     </value>
@@ -515,157 +617,2009 @@ namespace DutchTreat
   <item>
     <key>
       <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>CODE_04_Empty_ASP.NET_Core_AutoMapper</Category>
-        <Language>C#</Language>
+        <Category>EXCEL</Category>
+        <Language>VB.NET</Language>
         <Public>false</Public>
-        <Name>CODE_04_Startup.cs</Name>
+        <Name>ACE.OLEDB_ConnectionString</Name>
         <Group>My Snippets</Group>
       </SnippetKey>
     </key>
     <value>
       <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
         <Key>
-          <Category>CODE_04_Empty_ASP.NET_Core_AutoMapper</Category>
-          <Language>C#</Language>
+          <Category>EXCEL</Category>
+          <Language>VB.NET</Language>
           <Public>false</Public>
-          <Name>CODE_04_Startup.cs</Name>
+          <Name>ACE.OLEDB_ConnectionString</Name>
           <Group>My Snippets</Group>
         </Key>
         <Keywords />
         <Imports />
-        <Code>CODE_04_Startup.cs
-------------------
-using AutoMapper;       //required after installing Nuget: AutoMapper
-using DutchTreat.Data;      //required for AddDbContext&lt;DutchContext&gt;()
-using DutchTreat.Services;  //for the IMailService
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-// required for 'UseSqlServer'
-using Microsoft.EntityFrameworkCore;
-// required for IConfiguration
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
+        <Code>'From: http://stackoverflow.com/questions/11562267/system-data-oledb-oledbexception-could-not-find-installable-isam
 
 
-namespace DutchTreat
-{
-    public class Startup
-    {
-        //Private field to hold the configuration interface
-        private readonly IConfiguration _config;
+'One error I was getting: "Could not find installable ISAM" before I tried this
 
-        //constructor to inject some interfaces into our startup
-        public Startup(IConfiguration config)
-        {
-            _config = config;
-        }
+If you use more than 1 extended Property Then the value tokens must be quoted, 
+otherwise there Is no way For the driver To distinguish them from the other non-extended properties In the connection String;
+
+e.g.: ...Extended Properties=""Excel 8.0;IMEX=1"""
+
+String.Format(@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=pricelist.xlsx;Extended Properties=""Excel 12.0 Xml;HDR=YES""");
 
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
-        public void ConfigureServices(IServiceCollection services)
-        {
-            //Add this and build the solution. Note need to add Using statement above to bring in the context
-            // By default it is added as a 'Scoped' service
-            services.AddDbContext&lt;DutchContext&gt;(cfg =&gt;
-            {
-                //could hard code a connection string in here, but instead we will use a configuration
-                // The IConfiguration object (i.e. _config) has a property for the connection string, 
-                //      that are stored in the configuration file (created by 'CreateDefaultBuilder' in Program.cs)
-                cfg.UseSqlServer(_config.GetConnectionString("DutchConnectionString"));
-            });
 
-            //for AutoMapper NuGet package
-            services.AddAutoMapper();
+///////This worked For Me In prj_0011//////////////////////////////////////////////////////////////
 
-            //--------------------------------------------------------------------
-            //AddTransient =&gt; have no data on themselves, just methods
-            //AddScoped =&gt; Kept around for the length of a connection, usually for length of request from client
-            //AddSingleton =&gt; created once and kept for the lifetime of the server being up.
-            //--------------------------------------------------------------------
-            //Later you would add support for a real mail service, so for now it just has an implementation that it can call
-            //and for now it would be calling the fake method: NullMailService
-            services.AddTransient&lt;IMailService, NullMailService&gt;();
+sExcelFileConnectionString = "provider=Microsoft.ACE.OLEDB.12.0;Data Source=" &amp; sFilePathAndName &amp; ";Extended Properties=""Excel 12.0;"""
 
-            //Without this code (i.e.  services.AddMvc();)  you would get this error:
-            //============================================================================================================================
-            //An error occurred while starting the application.
-            //    InvalidOperationException: Unable to find the required services. 
-            //    Please add all the required services by calling 'IServiceCollection.AddMvc' inside the call to 'ConfigureServices(...)' 
-            //    in the application startup code.
-            //============================================================================================================================
+'This worked for mixed data type in a .xls file: 
 
-            //add the 'DutchSeeder' class to the services collection as a Transient service
-            services.AddTransient&lt;DutchSeeder&gt;();  //Note DutchSeeder uses DutchContext (a scoped service) which is added above
-
-            //add 'IDutchRepository' as a service that can be used, but as an implementation use 'DutchRepository'
-            services.AddTransient&lt;IDutchRepository, DutchRepository&gt;();
-
-            //services.AddMvc();  //If we leave it just like this then the Order and OrderItem (i.e. header, detail) for a self-referencing loop which causes an error for the API when returning data.
-            //Since Json is the default data type returned we need to add in a Json option:
-            services.AddMvc()
-                .AddJsonOptions(opt =&gt; opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
-
-        }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-        {
-            //to see ERRORS in 'development'
-            // Project(menu) =&gt; Dutchtreat Properties =&gt; Debug {tag} =&gt; Environment variables {right pane} 
-            //          Name: ASPNETCORE ENVIRONMENT  Value: Development
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else // where the value of 'ASPNETCORE ENVIRONMENT' is not Development
-            {
-                app.UseExceptionHandler("/Error");
-            }
-
-            // The order matters in this Method
-            //app.UseDefaultFiles(); // This lets it find default files (e.g. index.html), COMMENT IT OUT in order to process the MVC files first
-            app.UseStaticFiles();  //This line lets you use .html etc files. They must be placed in the wwwroot folder of the project
-
-            //Without this (i.e. app.UseMvc) the .html would work, but not the MVC components           
-            app.UseMvc(cfg =&gt;
-            {
-                cfg.MapRoute("Default",                             //Set up the routes
-                    "{controller}/{action}/{id?}",                  // where things in braces are place-holders, vs putting specific controller and action names in there. The "?" means that "id" is optional
-                    new { controller = "App", Action = "Index" });  // and if the controller/action is missing then use this line
-            });
-
-            //We want this to happen last, so it goes at the bottom
-            // put the seeding method call
-            if (env.IsDevelopment())    //Project =&gt; Properties =&gt; Debug {left pane} =&gt; Environment Variables(Name='ASPNETCORE_ENVIRONMENT', Value='Development')
-            {
-                //Seed the database, but don't have the context, nor hosting environment at this point
-                // b/c we need a context, we therefore need a scope first while we seed the database
-                using (var scope = app.ApplicationServices.CreateScope())
-                {
-                    var seeder = scope.ServiceProvider.GetService&lt;DutchSeeder&gt;();
-                    seeder.Seed();
-                }
-
-            }
+'When reading data, and concerned about reading mixed data correctly, set bActAsIfHeadersExist = false
+'When reading whatever, and NOT concerned about reading mixed data correctly, set bActAsIfHeadersExist = true
+        
+If bActAsIfHeadersExist Then
+    sExcelFileConnectionString = "provider=Microsoft.ACE.OLEDB.12.0;Data Source=" &amp; sFilePathAndName &amp; ";Extended Properties=""Excel 12.0;IMEX=1;MaxScanRows=0;ImportMixedTypes=Text;"""
+Else
+	'has : HDR=NO
+    sExcelFileConnectionString = "provider=Microsoft.ACE.OLEDB.12.0;Data Source=" &amp; sFilePathAndName &amp; ";Extended Properties=""Excel 12.0;IMEX=1;HDR=NO;MaxScanRows=0;ImportMixedTypes=Text;"""
+End If
 
 
-            //// This was here by default
-            //if (env.IsDevelopment())
-            //{
-            //    app.UseDeveloperExceptionPage();
-            //}
 
-            //// example of responding to any query w/ a fixed output
-            //app.Run(async (context) =&gt;
-            //{
-            //    await context.Response.WriteAsync("&lt;html&gt;&lt;body&gt;&lt;h1&gt;Hello Glenn&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt;");
-            //    //await context.Response.WriteAsync("Hello World!");
-            //});
-        }
-    }
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+////////////////How To read Or write excel file using ACE OLEDB data provider//////////////////////////////////////////////
+
+Provider : It Is the main oledb provider that Is used To open the excel sheet. 
+	This can be Microsoft.Jet.OLEDB.4.0 For Excel 97 onwards Excel file format Or Microsoft.ACE.OLEDB.12.0. 
+	So far it Is tested With upto Excel 2010 version.
+
+
+Data Source : It Is the full path of the excel workbook. 
+	Replace With the full path of your existing excel workbook/ file.
+
+
+Extended Properties (Optional) : Extended properties can be applied To Excel workbooks which may change the overall activity of the excel workbook from your program. 
+	The most common ones are the following :
+
+		ImportMixedTypes=Text; ' {undocumented so far}
+
+		HDR : It represents Header of the fields In the excel table. 
+			Default Is YES. If you dont have fieldnames In the header of your worksheet, 
+			you can specify HDR=NO which will take the columns of the tables that it finds As f1,f2 etc.
+		
+		
+		ReadOnly : You can also open excel workbook In ReadOnly mode by specifying ReadOnly=True; 
+			By Default ReadOnly attribute Is False, so you can modify data within your workbook
+		
+		
+		FirstRowHasNames : It Is the same As HDR, it Is always Set To 1 ( which means True) 
+			you can specify it As False If you dont have your header row. 
+			If HDR Is YES provider disregards this Property. 
+			You can change the Default behaviour of your environment by changing the 
+				Registry Value- [HKLM\Software\Microsoft\Jet\4.0\Engines\Excel\FirstRowHasNames] To 00 (which Is False)
+		
+		
+		MaxScanRows : Excel does Not provide the detailed schema defination of the tables it finds. 
+			It need To scan the rows before deciding the data types of the fields. 
+			MaxScanRows specifies the number of cells To be scanned before deciding the data type of the column. 
+			By Default the value of this Is 8. You can specify any value from 1 – 16 For 1 To 16 rows. 
+			You can also make the value To 0 so that it searches all existing rows before deciding the data type. 
+			You can change the Default behaviour of this Property by changing the value of [HKLM\Software\Microsoft\Jet\4.0\Engines\Excel\TypeGuessRows] 
+				which Is 8 by Default.  
+			Currently MaxScanRows Is ignored, so you need only To depend On TypeGuessRows Registry value. 
+			Hope Microsoft fixes this issue To its later versions
+		
+		
+		IMEX : (A Caution) As mentioned above excel have To guess a number Or rows To Select the most appropriate data type of the column,
+			 a serious problem may occur of you have mixed data In one column. 
+			 Say you have data of both Integer And text On a Single column, 
+			 In that Case excel will choose its data type based On majority of the data. 
+			 Thus it selects the data For the majority data type that Is selected, 
+			 And returns NULL For the minority data type. If the two types are equally mixed In the column, 
+			 the provider chooses numeric over text.
+		For e.g., In your eight (8) scanned rows, 
+			If the column contains five (5) numeric values And three (3) text values, the provider returns five (5) numbers And three (3) null values.
+		To work around this problem For data,
+			Set “IMEX=1″ In the Extended Properties section of the connection String. 
+			This enforces the ImportMixedTypes=Text registry setting.  
+			You can change the enforcement of type by changing [HKLM\Software\Microsoft\Jet\4.0\Engines\Excel\ImportMixedTypes] To numeric As well
+		</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>EXCEL</Category>
+        <Language>VB.NET</Language>
+        <Public>false</Public>
+        <Name>ACE.OLEDB_provider_IsNotRegistered</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>EXCEL</Category>
+          <Language>VB.NET</Language>
+          <Public>false</Public>
+          <Name>ACE.OLEDB_provider_IsNotRegistered</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>Possible errors And exceptions
+
+    1)”Microsoft.ACE.OLEDB.12.0-provider” is Not registered
+    
+    Reason:This is because of mismatch b/w compilation configuration in Visual Studio And the ACE version installed on the system.
+    
+    Resolution:Make sure that both are same. Compile your app using the 64x bits if 64 bits ACE is installed Or use 32 bits ACE.
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>EXCEL</Category>
+        <Language>VB.NET</Language>
+        <Public>false</Public>
+        <Name>SQL_CommandString_READ_WRITE_CREATE_DROP_UPDATE</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>EXCEL</Category>
+          <Language>VB.NET</Language>
+          <Public>false</Public>
+          <Name>SQL_CommandString_READ_WRITE_CREATE_DROP_UPDATE</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>'FROM:	http://yoursandmyideas.wordpress.com/2011/02/05/how-to-read-or-write-excel-file-using-ace-oledb-data-provider/
+'1] Command String - READ
+'2] Command String - WRITE
+'3] Command String - CREATE Excel WorkSheet
+'4] Command String - DROP Excel WorkSheet
+'5] Command String - UPDATE
+
+see the notes in SQLBulkCopy for OLEDB And connections strings for these commands
+
+///////////////'1] Command String   - READ
+Think of each excel sheet As a MS SQL table from which data is to be fetched. Thus, complete excel file As a database.
+
+
+
+' a) In order to read the excel sheet, “SELECT” command is used. 
+'	Either you may want to read the complete excel sheet Or you may be interested in reading just a block of data. 
+'	Both scenarios are supported And this is what us different from defining the MS SQL “Select” query.
+'	Range (block of data) is defined using A2:R5 format.
+
+'Below is the sample command string to read the complete data in an excel sheet:
+
+Select * from [NameOfExcelSheet$]
+
+'Note: This may read empty rows, columns as well if there is any hidden data or there are empty rows in b/w the filled data.
+
+
+'b) How to specify range to read a block of data from excel sheet?
+
+'Below is the sample command string to read the complete data in an excel sheet:
+
+Select * from [NameOfExcelSheet$A1:E5]
+
+'Another way to specify range is:
+
+Select * from [NameOfExcelSheet$A1:E]
+
+'it will read all rows starting from row# ‘1’ and 5 columns from column# ‘A’ to ‘E’
+
+///////////////'2] Command String   - WRITE
+
+'This also corresponds to DML queries (INSERT,UPDATE and DELETE) in MS SQL.
+'You can write:
+
+INSERT INTO [NameOfExcelSheet] VALUES('firsttextcol', 2, '4/11/2009');
+'[I assume First Column is char field, 2nd col is integer, 3rd is Date]
+
+DELETE FROM [NameOfExcelSheet] Where secondintcol=2;
+
+UPDATE [NameOfExcelSheet] SET secondintcol = 3 where firsttextcol = ‘firsttextcol’;
+
+'As in MS SQL, you can use [] (Square brackets) to allow spaces within column names and table names.
+
+/////////////////Cannot expand named range///////////////
+'When you specify a worksheet as your source, 
+	'the provider adds new records below existing records in the worksheet As space allows. 
+	'When you specify a range (named Or unnamed), Jet also adds new records below the existing records in the range As space allows. 
+	'However, if you requery on the original range, the resulting recordset does Not include the newly added records outside the range. 
+	'Using MDAC you cannot add new rows beyond the defined limits of the range, 
+	'otherwise you will receive Exception: “Cannot expand named range”
+
+'e.g.: i am able to insert one record into excel sheet. when i try to enter second record it fails an errors pop ups saying ” Cannot expand named range.”
+
+
+
+
+
+//////////////'3] Command String - CREATE Excel WorkSheet
+
+'Simple. Use
+
+Create table [NameOfExcelSheet] ()
+
+'For e.g. 
+
+Create table [myTableName] (col1 int, col2 char(20))
+
+//////////////'4] Command String - DROP Excel WorkSheet
+
+To drop an excel worksheet, just use
+
+Drop table [NameOfExcelSheet]
+
+'If this is the last worksheet, it will not delete the workbook file. You need to do it yourself.
+
+/////////////'5] Command String - UPDATE
+'basically you are targetting a set of rows. 
+'Since ‘where’ is supported, you can specify conditions As follows: 
+
+update set colName = ” where ‘colName’ &gt;= ‘LowerBoundValue’ And ‘colName’ &lt;= 'UpperBoundValue'. 
+
+'Think of how may a Sql query look like And then transform it As per it's syntax.
+
+
+
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>EXPORT_Excel_CSV_TEXT</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>Export_Excell_icrosoft.ACE.OLEDB.12.0</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>EXPORT_Excel_CSV_TEXT</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>Export_Excell_icrosoft.ACE.OLEDB.12.0</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>https://stackoverflow.com/questions/26267224/the-ole-db-provider-microsoft-ace-oledb-12-0-for-linked-server-null
+
+ERROR: Cannot create an instance of OLE DB provider "Microsoft.ACE.OLEDB.12.0" for linked server "(null)".
+
+-- I'm running Office 365 (64bit). I have loaded the Microsoft Access Database Engine (64bit). 
+--This is in Visual Studio 2013 with SSDT as well as SQL Server 2012. 
+    
+--First, I ran...
+
+sp_configure 'show advanced options', 1;
+RECONFIGURE;
+GO
+sp_configure 'Ad Hoc Distributed Queries', 1;
+RECONFIGURE;
+GO    
+    
+--Followed by...with no love.
+
+EXEC sys.sp_addsrvrolemember @loginame = N'&lt;&lt;Domain\User&gt;&gt;', @rolename = N'sysadmin';
+GO
+
+EXEC master.dbo.sp_MSset_oledb_prop N'Microsoft.ACE.OLEDB.15.0', N'AllowInProcess', 1 
+GO 
+EXEC master.dbo.sp_MSset_oledb_prop N'Microsoft.ACE.OLEDB.15.0', N'DynamicParameters', 1 
+GO     
+    
+    
+    
+    SELECT * FROM OPENROWSET('Microsoft.ACE.OLEDB.15.0', 
+    'Excel 12.0;Database=C:\Users\UserName\Folder\SomeFile.xlsx;;HDR=NO;IMEX=1', [Table 1$])
+    
+--I have changed the code to read Microsoft.ACE.OLEDB.12.0 as I have seen that as well, still no love.    
+===========================================================================================================================
+--Here was one solution to the error
+https://www.aspsnippets.com/Articles/The-OLE-DB-provider-Microsoft.Ace.OLEDB.12.0-for-linked-server-null.aspx
+
+--Run the following Query in your SQL Server Management Studio close it and start again
+
+USE [master] 
+GO 
+EXEC master.dbo.sp_MSset_oledb_prop N'Microsoft.ACE.OLEDB.12.0', N'AllowInProcess', 1 
+GO 
+EXEC master.dbo.sp_MSset_oledb_prop N'Microsoft.ACE.OLEDB.12.0', N'DynamicParameters', 1 
+GO 
+
+==================================================================================================================
+--another solution	
+--If you are the admin on this Windows system, you can set also choose Local System account. 
+--This way you won't need to worry about changing the pwd. Works great! Thanks for the tip!! </Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>IMPORT_Excel_CSV_TEXT</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>ERRORS</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>IMPORT_Excel_CSV_TEXT</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>ERRORS</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+Msg 7399, Level 16, State 1, Line 1
+The OLE DB provider "Microsoft.ACE.OLEDB.12.0" for linked server "(null)" reported an error. Access denied.
+Msg 7301, Level 16, State 2, Line 1
+Cannot obtain the required interface ("IID_IDBCreateCommand") from OLE DB provider "Microsoft.ACE.OLEDB.12.0" for linked server "(null)".
+
+Ref:
+https://www.aspsnippets.com/Articles/The-OLE-DB-provider-Microsoft.Ace.OLEDB.12.0-for-linked-server-null.aspx
+
+--I removed the underscore in the file name: 
+--	the “Access Denied” part of the error went away.
+--Now it says:
+Msg 7314, Level 16, State 1, Line 1
+The OLE DB provider "Microsoft.ACE.OLEDB.12.0" for linked server "(null)" does not contain the table "NaturalHazards$". The table either does not exist or the current user does not have permissions on that table.
+
+DID NOT GET IT TO WORK
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+SELECT * FROM OPENROWSET('Microsoft.ACE.OLEDB.12.0','Excel 12.0;Database=C:\DATA\TESTv4.xlsx;HDR=YES',NaturalHazards$) 
+--TRIED BOTH 12 AND 15
+
+OLE DB provider "Microsoft.ACE.OLEDB.15.0" for linked server "(null)" returned message "Unspecified error".
+Msg 7303, Level 16, State 1, Line 10
+Cannot initialize the data source object of OLE DB provider "Microsoft.ACE.OLEDB.15.0" for linked server "(null)".
+
+OLE DB provider "Microsoft.ACE.OLEDB.12.0" for linked server "(null)" returned message "Unspecified error".
+Msg 7303, Level 16, State 1, Line 10
+Cannot initialize the data source object of OLE DB provider "Microsoft.ACE.OLEDB.12.0" for linked server "(null)".
+
+DID NOT GET IT TO WORK
+///////////////////////////////////////////////////////////////////
+
+OLE DB provider "Microsoft.ACE.OLEDB.12.0" for linked server "(null)" returned message "Unspecified error".
+Msg 7303, Level 16, State 1, Line 10
+Cannot initialize the data source object of OLE DB provider "Microsoft.ACE.OLEDB.12.0" for linked server "(null)".
+
+ref: https://visakhm.blogspot.ae/2013/12/how-to-solve-microsoftaceoledb120-error.html
+
+EXEC master.dbo.sp_MSset_oledb_prop N'Microsoft.ACE.OLEDB.12.0' 
+    , N'AllowInProcess', 1 
+GO
+
+
+EXEC master.dbo.sp_MSset_oledb_prop N'Microsoft.ACE.OLEDB.12.0'
+    , N'DynamicParameters', 1
+GO</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>IMPORT_Excel_CSV_TEXT</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>LINKED_Server_for_Excel</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>IMPORT_Excel_CSV_TEXT</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>LINKED_Server_for_Excel</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>https://blog.learningtree.com/using-openrowset-to-read-excel-worksheets-from-sql-server-part-2-linked-sql-queries/
+--Since an Excel worksheet is not really a “server”, 
+--	it is probably best to take the time to write an SQL script 
+--	to create a linked server rather than use the GUI. 
+--Once you have created a script, you can easily change the workbook path 
+--	and filename for future projects.
+
+--Remember that when you define a linked server, 
+--	SQL Server does not check to see that your settings will work. 
+--Therefore, the sp_addlinkedserver can execute without error even with erroneous parameter values. 
+--It is only when you attempt to execute a query will you discover 
+--	whether your linked server definition is actually correc
+
+--The 32-bit Version
+--If you are using 32-bit SQL Server, you must create a linked server for Microsoft.Jet.OLEDB.4.0. 
+
+
+///////////////////////////////////////////////////////////// - Linked Server setup
+-- the Excel version number entered in the @provstr 
+--	does not need to match your version of Excel. 
+--You might as well enter the correct number to make your code more self-documenting, 
+--	but it should work regardless.
+
+--The value for @srvproduct cannot be null, but the actual value is not used and is irrelevant. 
+
+EXEC sp_addlinkedserver
+@server=OrderValues_EXCEL32,
+@srvproduct='Whatever',				
+@provider= 'Microsoft.Jet.OLEDB.4.0',
+@datasrc= 'c:\Temp\OrderValues.xls', — xlsx files do not work in 32-bit version
+@provstr= 'Excel 8.0;'-- version doesn't matter
+
+--The 64-bit Version
+EXEC sp_addlinkedserver
+@server=OrderValues_EXCEL64,
+@srvproduct='Whatever',				--The value for @srvproduct cannot be null, but the actual value is not used and is irrelevant. 
+@provider= 'Microsoft.ACE.OLEDB.12.0',
+@datasrc= 'c:\Temp\OrderValues.xlsx',
+@provstr= 'Excel 12.0;' -- version doesn't matter</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>IMPORT_Excel_CSV_TEXT</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>OPENROWSET__CreateTable_Append_xlsx_to_SQL_table</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>IMPORT_Excel_CSV_TEXT</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>OPENROWSET__CreateTable_Append_xlsx_to_SQL_table</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>--p_0063_MAINT_301_NaturalHazards_ReadInData_CreateTables_v1.sql
+
+/*
+	************************************************************************************
+	NOTE: This runs in the DEV instance, and uses "Local System" to run the SQL Server
+	Uses: 
+	Created: 3/19/2018
+	By: glenn garson
+	************************************************************************************
+*/
+
+use p_0063
+go
+
+--CREATE TABLE --------------------------------------------
+IF OBJECT_ID('dbo.NaturalHazards_2018_03_19') IS NOT NULL
+    DROP TABLE dbo.NaturalHazards_2018_03_19
+
+SELECT ROW_NUMBER() OVER (ORDER BY (SELECT 100)) AS RowOrder, *, 'Beverly' as fromWho 
+Into NaturalHazards_2018_03_19
+FROM OPENROWSET('Microsoft.ACE.OLEDB.15.0',
+                         'Excel 12.0 Xml;HDR=NO;Database=C:\DATA\p_0063\TEST\Beverly.xlsx',
+				         'SELECT * FROM [Natural_Hazards$A7:H15]');
+
+-- Append to Table -----------------------------------------
+INSERT INTO NaturalHazards_2018_03_19
+SELECT ROW_NUMBER() OVER (ORDER BY (SELECT 100)) AS RowOrder, *, 'Nicole' as fromWho 
+FROM OPENROWSET('Microsoft.ACE.OLEDB.15.0',
+                         'Excel 12.0 Xml;HDR=NO;Database=C:\DATA\p_0063\TEST\Nicole.xlsx',
+				         'SELECT * FROM [Natural_Hazards$A7:H15]');
+
+
+INSERT INTO NaturalHazards_2018_03_19
+SELECT ROW_NUMBER() OVER (ORDER BY (SELECT 100)) AS RowOrder, *, 'Rosanna' as fromWho 
+FROM OPENROWSET('Microsoft.ACE.OLEDB.15.0',
+                         'Excel 12.0 Xml;HDR=NO;Database=C:\DATA\p_0063\TEST\Rosanna.xlsx',
+				         'SELECT * FROM [Natural_Hazards$A7:H15]');
+
+INSERT INTO NaturalHazards_2018_03_19
+SELECT ROW_NUMBER() OVER (ORDER BY (SELECT 100)) AS RowOrder, *, 'Tammy' as fromWho 
+FROM OPENROWSET('Microsoft.ACE.OLEDB.15.0',
+                         'Excel 12.0 Xml;HDR=NO;Database=C:\DATA\p_0063\TEST\Tammy.xlsx',
+				         'SELECT * FROM [Natural_Hazards$A7:H15]');
+
+INSERT INTO NaturalHazards_2018_03_19
+SELECT ROW_NUMBER() OVER (ORDER BY (SELECT 100)) AS RowOrder, *, 'Thomas' as fromWho 
+FROM OPENROWSET('Microsoft.ACE.OLEDB.15.0',
+                         'Excel 12.0 Xml;HDR=NO;Database=C:\DATA\p_0063\TEST\Thomas.xlsx',
+				         'SELECT * FROM [Natural_Hazards$A7:H15]');
+
+INSERT INTO NaturalHazards_2018_03_19
+SELECT ROW_NUMBER() OVER (ORDER BY (SELECT 100)) AS RowOrder, *, 'Trudy' as fromWho 
+FROM OPENROWSET('Microsoft.ACE.OLEDB.15.0',
+                         'Excel 12.0 Xml;HDR=NO;Database=C:\DATA\p_0063\TEST\Trudy.xlsx',
+				         'SELECT * FROM [Natural_Hazards$A7:H15]');
+
+
+INSERT INTO NaturalHazards_2018_03_19
+SELECT ROW_NUMBER() OVER (ORDER BY (SELECT 100)) AS RowOrder, *, 'Wanda' as fromWho 
+FROM OPENROWSET('Microsoft.ACE.OLEDB.15.0',
+                         'Excel 12.0 Xml;HDR=NO;Database=C:\DATA\p_0063\TEST\Wanda.xlsx',
+				         'SELECT * FROM [Natural_Hazards$A7:H15]');
+
+-------------------------------------------
+Select * from NaturalHazards_2018_03_19</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>IMPORT_Excel_CSV_TEXT</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>OPENROWSET_to_read_EXCEL_data_v2</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>IMPORT_Excel_CSV_TEXT</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>OPENROWSET_to_read_EXCEL_data_v2</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>OPENROWSET_to_read_EXCEL_data_v2
+-- This is based on WBSQL1 at JPHSA
+
+////////////////////////////////////////////////////--OLEDB drivers
+https://community.flexerasoftware.com/archive/index.php?t-201524.html
+
+--Check registry:
+--For 64-bit:
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Office\14.0\Access Connectivity Engine\InstallRoot
+--For 32-bit:
+HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Office\14.0\Access Connectivity Engine\InstallRoot
+
+
+Microsoft Access Runtime 2010
+v 14.0.4763.1000
+Microsoft Access Runtime 2013
+v 15.0.4569.1506
+Microsoft Access Runtime 2016  (Installed today)  
+v 16.0.4288.1001
+
+in the folder: C:\Program Files (x86)\Microsoft Office
+
+
+/////////////////////////////////////////////////////-- SETUP
+--I  set the OLEDB.15 Provider to the following
+		--Dynamic parameter [1]
+		--DisallowAdHocAccess [0]
+		--AllowInProcess [1]
+
+
+EXEC sp_configure 'Show Advanced', 1
+RECONFIGURE
+
+EXEC sp_configure 'Ad hoc dis', 1
+RECONFIGURE
+--Then used regedit to change the 1 to 0
+--The above setting, created a registry entry DisallowAdHocAccess at: 
+	HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Microsoft SQL Server\MSSQL11.SQL2012\Providers\Microsoft.ACE.OLEDB.12.0
+--Set the value of DisallowAdHocAccess to 0.
+--Restart the SQL service.
+
+EXEC master.dbo.sp_MSset_oledb_prop N'Microsoft.ACE.OLEDB.15.0' 
+    , N'AllowInProcess', 1
+RECONFIGURE     
+GO
+
+EXEC master.dbo.sp_MSset_oledb_prop N'Microsoft.ACE.OLEDB.15.0'
+    , N'DynamicParameters', 1
+RECONFIGURE
+GO
+
+/////////////////////////////////////////////////////-- run as administrator
+
+-- Initially I was able to read an Excel file by opening SSMS "run as Administrator" using this:
+
+SELECT * FROM OPENROWSET('Microsoft.ACE.OLEDB.15.0',
+                         'Excel 12.0 Xml;HDR=YES;Database=C:\DATA\TESTv4.xlsx',
+				         'SELECT * FROM [NaturalHazards$]');
+
+////////////////////////////////////////////////////-- run as me
+
+--Add local administrator login:  WBSQL1\Administrator
+--	Default database:master
+--Server Roles {tab}
+--	public
+--	serveradmin
+--		Members of the serveradmin fixed server role can change server-wide configuration options and shut down the server.
+--	sysadmin
+--		Members of the sysadmin fixed server role can perform any activity in the server.
+--	setupadmin
+--		Members of the setupadmin fixed server role can add and remove linked servers by using Transact-SQL statements.
+--	diskadmin
+--		The diskadmin fixed server role is used for managing disk files.
+--	bulkadmin
+--		Members of the bulkadmin fixed server role can run the BULK INSERT statement
+
+--||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||This script runs, while logged on as ggarson
+use master
+go
+
+EXECUTE AS LOGIN='WBSQL1\Administrator'
+
+SELECT * FROM OPENROWSET('Microsoft.ACE.OLEDB.15.0',
+                         'Excel 12.0 Xml;HDR=YES;Database=C:\DATA\TESTv4.xlsx',
+				         'SELECT * FROM [NaturalHazards$]');
+REVERT
+
+GO
+--||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>IMPORT_Excel_CSV_TEXT</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>OPENROWSET_to_read_EXCEL_data_v3</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>IMPORT_Excel_CSV_TEXT</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>OPENROWSET_to_read_EXCEL_data_v3</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>OPENROWSET_to_read_EXCEL_data_v3
+
+--This deals with the reading specific cells from the Excel sheet, and using Local System
+
+--The problem was I was getting this error, when I tried the setings in:OPENROWSET_to_read_EXCEL_data_v2
+--	when I tried to read specific cells from the Excel spreadsheet.
+
+Msg 7399, Level 16, State 1, Line 32
+The OLE DB provider "Microsoft.ACE.OLEDB.16.0" for linked server "(null)" reported an error. The provider reported an unexpected catastrophic failure.
+Msg 7303, Level 16, State 1, Line 32
+
+-- I was trying to run this, but it gave me the error above:
+
+SELECT * FROM OPENROWSET('Microsoft.ACE.OLEDB.15.0',
+                         'Excel 12.0 Xml;HDR=NO;Database=C:\DATA\TESTv0.xlsx',
+				         'SELECT * FROM [NaturalHazards$B7:H15]');
+
+-- Up to now I had been using the service account to run "SQL Server(DEV)"
+
+----------------------------------------------------------------
+EXEC master.dbo.sp_MSset_oledb_prop N'Microsoft.ACE.OLEDB.15.0', N'AllowInProcess', 1
+ 
+GO
+
+EXEC master.dbo.sp_MSset_oledb_prop N'Microsoft.ACE.OLEDB.15.0', N'DynamicParameters', 1
+
+GO
+----------------------------------------------------------------
+USE [MSDB]
+GO
+
+sp_configure 'show advanced options', 1
+GO
+RECONFIGURE WITH OverRide
+GO
+sp_configure 'Ad Hoc Distributed Queries', 1   --Then used regedit to change to 0
+GO
+RECONFIGURE WITH OverRide
+GO
+--Then used regedit to change the 1 to 0
+--The above setting, created a registry entry DisallowAdHocAccess at: 
+	HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Microsoft SQL Server\MSSQL11.SQL2012\Providers\Microsoft.ACE.OLEDB.12.0
+--Set the value of DisallowAdHocAccess to 0.
+--Restart the SQL service.
+
+
+--With these settings;
+EXEC master.dbo.sp_MSset_oledb_prop
+
+provider_name				allow_in_process	disallow_adhoc_access	dynamic_parameters	index_as_access_path	level_zero_only	nested_queries	non_transacted_updates	sql_server_like
+Microsoft.ACE.OLEDB.12.0	1					0						1					0	0	0	0	0
+Microsoft.ACE.OLEDB.15.0	1					0						1					0	0	0	0	0
+Microsoft.ACE.OLEDB.16.0	1					0						1					0	0	0	0	0
+
+////////////////////////////////////////////////////--THIS WORKED
+-- So I tried the following:
+--1] I replaced the Service account as the Logon for "SQL Server(DEV)"
+		(x) This account
+		JPHSA01\SQL_DEV_DataEngine
+		P: jpHsa_001
+	with:
+		Local System   --&lt;===============  This appears to be the key
+		
+--2] I ran SSMS as myself (ggarson)
+
+--3] Using this script:
+
+SELECT * FROM OPENROWSET('Microsoft.ACE.OLEDB.15.0',
+                         'Excel 12.0 Xml;HDR=NO;Database=C:\DATA\TESTv0.xlsx',
+				         'SELECT * FROM [NaturalHazards$B7:H15]'); 
+--OUTPUT				         
+F1	F2	F3	F4	F5	F6	F7
+3	2	2	3	2	2	2
+1	1	1	1	2	2	2
+2	1	1	1	2	2	2
+1	1	1	1	3	3	3
+0	0	0	0	0	0	0
+1	1	1	1	0	0	0
+1	1	1	1	0	0	0
+0	0	0	0	0	0	0
+1	1	1	1	2	2	2				         
+////////////////////////////////////////////////////</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>IMPORT_Excel_CSV_TEXT</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>OPENROWSET_to_read_EXCEL_data</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>IMPORT_Excel_CSV_TEXT</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>OPENROWSET_to_read_EXCEL_data</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>https://blog.learningtree.com/using-openrowset-to-read-excel-worksheets-from-sql-server-part-2-linked-sql-queries/
+Using OPENROWSET
+==================
+--In my opinion, it is wiser to use OPENROWSET to link to data in Excel workbooks 
+--	rather than define a linked server. 
+--It is common to grab data from many different workbooks, 
+--	and the OPENROWSET function enables you to query different workbooks 
+--	without having to define many multiple linked servers. 
+--Just as with linked server definitions, 
+--	you must use the 32-bit version if you are using 32-bit SQL Server, 
+--	and as before you will not be able to query xlsx files. 
+--If you are using 64-bit SQL Server, 
+--	then either the 32- or the 64-bit technique are available to you.
+
+Configure ad-hoc distributed queries
+====================================
+--You will not be able to use OPENROWSET until you have configured your server 
+--	to allow ad-hoc distributed queries. 
+--You can check the current configuration setting by running the following query 
+--	in the Management Studio. 
+--Notice that when using sp_configure, 
+--	it is not necessary to type out the entire configuration setting name; 
+--	you must only type out enough so that the name is unambiguously distinguished 
+--	from other configuration setting names.
+
+EXEC sp_configure 'Ad hoc dis'
+
+--If you get an error message, 
+--	it may be that your server is not configured to show the advanced configuration options. 
+--You can turn on advanced options as follows:
+
+EXEC sp_configure 'Show Advanced', 1
+
+RECONFIGURE
+
+--You should now be able to check the current setting of Ad Hoc Distributed Queries. 
+--If it is 0, you must turn it on.
+
+EXEC sp_configure 'Ad hoc dis', 1
+
+RECONFIGURE
+
+--Check the value once again to ensure the value is now 1.
+
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\query from NameRange
+
+===&gt;&gt;&gt; my Idea from SSIS to read only certain cell range
+===&gt;&gt;&gt; sheetName$B7:H15
+--Try with a $ sign for Table, and 
+
+--The 32-bit Version
+SELECT * FROM OPENROWSET(
+'Microsoft.Jet.OLEDB.4.0'
+,'Excel 8.0;Database=C:\Temp\OrderValues.xls;HDR=YES'
+,results) 
+-- “results” is a named range in excel
+
+--The 64-bit Version
+SELECT * FROM OPENROWSET(
+'Microsoft.ACE.OLEDB.12.0'
+,'Excel 12.0;Database=C:\Temp\OrderValues.xlsx;HDR=YES'
+,results) 
+-- “results” is a named range in excel
+
+/////////////////////////////////////////////////////////////SELECT INTO from NameRange
+--Try with a $ sign for Table, and 
+SELECT * INTO #testTable
+
+FROM OPENROWSET(
+
+'Microsoft.ACE.OLEDB.12.0'
+
+,'Excel 2.0;Database=C:\Temp\OrderValues.xlsx;HDR=YES'
+
+,results)</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>IMPORT_Excel_CSV_TEXT</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>script_from_LearningTree_example</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>IMPORT_Excel_CSV_TEXT</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>script_from_LearningTree_example</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>-- daniel_buskirk@learningtree.me
+USE Northwind
+
+/* ***** Defining a linked server for Excel ***** */
+
+-- 32-bit version 
+EXEC sp_addlinkedserver 
+	@server=OrderValues_EXCEL32,
+    @srvproduct='Whatever',
+    @provider= 'Microsoft.Jet.OLEDB.4.0',
+    @datasrc= 'c:\Temp\OrderValues.xls', -- xlsx files do not work in 32-bit version
+    @provstr= 'Excel 8.0;' -- version number doesn't matter
+
+-- sp_dropserver @server='OrderValues_Excel32'
+
+
+-- 64-bit version
+EXEC sp_addlinkedserver 
+	@server=OrderValues_EXCEL64,
+    @srvproduct='Whatever',
+    @provider= 'Microsoft.ACE.OLEDB.12.0',
+    @datasrc= 'c:\Temp\OrderValues.xlsx', 
+	@provstr= 'Excel 5.0;' -- version number doesn't matter
+
+-- sp_dropserver @server='OrderValues_Excel64'
+
+-- results is a named range in the Excel spreadsheet
+SELECT	ProductName
+		, xl.* 
+FROM OrderValues_EXCEL32...results AS xl
+JOIN Products AS p
+ON xl.ProductID = p.ProductID
+
+SELECT xl.* FROM OrderValues_EXCEL64...results AS xl -- results is a named range
+SELECT xl.* FROM OrderValues_EXCEL64...OrderData$ AS xl -- OrderData is a sheet name
+
+/* ***** Using OPENROWSET ***** */
+
+/*
+To use OPENROWSET with any remote server, including Excel, SQL Server must be
+configured to allow ad-hoc distributed queries
+*/
+
+EXEC sp_configure 'Show Advanced', 1
+RECONFIGURE
+
+EXEC sp_configure 'Ad hoc dis', 1
+RECONFIGURE
+
+-- 32-bit version
+SELECT * FROM OPENROWSET(
+				'Microsoft.Jet.OLEDB.4.0'
+				,'Excel 8.0;Database=C:\Temp\OrderValues.xls;HDR=YES'
+				,results) -- results is a named range in excel
+
+-- doesn't work; you cannot open xlsx files with the 32-bit version
+SELECT * FROM OPENROWSET(
+				'Microsoft.Jet.OLEDB.4.0'
+				,'Excel 8.0;Database=C:\Temp\OrderValues.xlsx;HDR=YES'
+				,results) -- results is a named range in excel
+				
+-- 64-bit				
+SELECT * FROM OPENROWSET(
+				'Microsoft.ACE.OLEDB.12.0'
+				,'Excel 12.0;Database=C:\Temp\OrderValues.xls;HDR=YES'
+				,results) -- results is a named range in excel
+				
+SELECT * FROM OPENROWSET(
+				'Microsoft.ACE.OLEDB.12.0'
+				,'Excel 12.0;Database=C:\Temp\OrderValues.xlsx;HDR=YES'
+				,results) -- results is a named range in excel
+
+SELECT	p.ProductName
+		,xl.*
+FROM	OPENROWSET(
+			'Microsoft.ACE.OLEDB.12.0'
+			,'Excel 12.0;Database=C:\Temp\OrderValues.xlsx;HDR=YES'
+			,results) AS xl
+JOIN	Products AS p
+ON		p.ProductID = xl.ProductID
+
+-- Importing Excel data into an SQL Server table
+
+SELECT * INTO #testTable
+FROM	OPENROWSET(
+			'Microsoft.ACE.OLEDB.12.0'
+			,'Excel 12.0;Database=C:\Temp\OrderValues.xlsx;HDR=YES'
+			,results) 
+
+SELECT * FROM #testTable
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>INI</Category>
+        <Language>VB.NET</Language>
+        <Public>false</Public>
+        <Name>gig_Create_Excel_INI_File</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>INI</Category>
+          <Language>VB.NET</Language>
+          <Public>false</Public>
+          <Name>gig_Create_Excel_INI_File</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>'gig_Create_Excel_INI_File
+
+'
+'0] mod_Global
+'1] Button Command
+'2] c_gigExcelAutomator
+'3] releaseObjects
+'=================================================
+
+'0] mod_Global
+
+    Friend g_sAppPath As String = c_gigFileManager.fn_DirectoryOfThisApplication
+
+
+'1] Button Command
+
+    Private Sub btn_CreateINIFile_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_CreateINIFile.Click
+        CreateThisAppINI()
+        MsgBox("INI file has been created!")
+    End Sub
+
+    Sub CreateThisAppINI()
+        Dim oXLAutomator As New c_gigExcelAutomator
+        oXLAutomator.CreateAppINI()
+    End Sub
+
+
+'2] c_gigExcelAutomator
+
+Option Explicit On
+'Option Strict On
+Imports Excel = Microsoft.Office.Interop.Excel
+Imports Microsoft.Office.Interop
+Imports Microsoft.Office.Core
+'Imports System.Data.OleDb
+
+'Imports System.Drawing.ColorTranslator
+'Reference: COM =&gt; Microsoft Excel 12.0 Object Library
+
+Public Class c_gigExcelAutomator
+
+    Friend Shared Function fnReadExcel_PassBackDataSet(ByVal sPathAndFileOfExcelFile As String, ByVal sNameOfTableToCreate As String, ByVal sSourceSheetName As String) As DataSet
+        'Imports System.Data.OleDb
+            Dim sOLEConnString As String
+            Dim MyConnection As System.Data.OleDb.OleDbConnection
+            Dim DtSet As System.Data.DataSet
+            Dim MyCommand As System.Data.OleDb.OleDbDataAdapter
+
+        Try
+            sOLEConnString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source='" &amp; sPathAndFileOfExcelFile &amp; "';Excel 12.0 Xml;IMEX=1;HDR=YES;"
+            MyConnection = New System.Data.OleDb.OleDbConnection(sOLEConnString)
+            MyCommand = New System.Data.OleDb.OleDbDataAdapter("select * from [" &amp; sSourceSheetName &amp; "$]", MyConnection)
+
+            MyCommand.TableMappings.Add("Table", sNameOfTableToCreate)
+ '           MyCommand.TableMappings.Add(sNameOfTableToCreate, sSourceSheetName)
+            DtSet = New System.Data.DataSet
+            MyCommand.Fill(DtSet)
+            'DataGridView1.DataSource = DtSet.Tables(0)
+
+        Catch ex As Exception
+            MsgBox(ex.ToString)
+        Finally
+            releaseObject(MyCommand)
+            releaseObject(MyConnection)
+        End Try
+            fnReadExcel_PassBackDataSet = DtSet
+    End Function
+
+    Friend Sub CreateAppINI()
+
+        'On Error GoTo ErrorHandler
+
+        '==================================
+        Dim oXL As Excel.Application
+        Dim oWB As Excel.Workbook
+        Dim oSheet As Excel.Worksheet
+        'Dim oRng As Excel.Range
+
+        'Dim g_sAppPath As String
+
+
+        '===== Check to see if INI file already exists ======================
+
+        'g_sAppPath = c_gigFileManager.fn_DirectoryOfThisApplication
+        If c_gigFileManager.fn_b_TheFileExists(g_sAppPath &amp; g_sINIFileName) Then
+            MessageBox.Show("The INI file already exists, it will be renamed first, then a new one created")
+            Try
+                My.Computer.FileSystem.RenameFile(g_sAppPath &amp; g_sINIFileName, "OLD_" &amp; g_sINIFileName)
+            Catch eIO As System.IO.IOException
+                Debug.Print("The file: " &amp; "OLD_" &amp; g_sINIFileName &amp; " was present, and deleted")
+                My.Computer.FileSystem.DeleteFile(g_sAppPath &amp; "OLD_" &amp; g_sINIFileName)
+                My.Computer.FileSystem.RenameFile(g_sAppPath &amp; g_sINIFileName, "OLD_" &amp; g_sINIFileName)
+            Catch ex As Exception
+                MsgBox(ex.Message)
+                'delete it then 
+                ' then rename it
+            End Try
+
+        Else
+            MessageBox.Show("The INI file does NOT already exists, It will be created")
+        End If
+        '===== Now Create the INI File
+
+
+
+        ' Start Excel and get Application object.
+        oXL = CreateObject("Excel.Application")
+        oXL.Visible = True
+
+        ' Get a new workbook.
+        oWB = oXL.Workbooks.Add
+
+        oSheet = oWB.Sheets("Sheet1")
+
+        Try
+            PopulateTheFirstSheet(oSheet)
+        Catch ex As Exception
+
+            MsgBox("PopulateTheFirstSheet: " &amp; ex.Message)
+
+        End Try
+
+
+        oSheet = oWB.Sheets("Sheet2")
+        PopulateTheSecondSheet(oSheet)
+
+        'oSheet = oWB.Sheets("Sheet3")
+        'oSheet.Name = "ReflectionMacros"
+        oSheet.Activate()
+
+
+
+        oSheet.SaveAs(g_sAppPath &amp; k_ADE_INI_FileName &amp; ".xlsx")
+
+
+
+        oXL.Visible = True
+        oXL.UserControl = True
+
+        ' Make sure you release object references.
+        'releaseObject(oRng)
+        releaseObject(oSheet)
+        releaseObject(oWB)
+        releaseObject(oXL)
+
+        '==================================
+
+        '            Exit Sub
+        'ErrorHandler:
+
+        '            Select Case Err.Number
+        '                Case 57
+        '                    My.Computer.FileSystem.DeleteFile(g_sAppPath &amp; "OLD_" &amp; g_sINIFileName)
+        '                    Resume
+        '                Case Else
+        '                    MsgBox("error: " &amp; Err.Number &amp; " " &amp; Err.Description)
+        '            End Select
+
+    End Sub
+
+    Sub PopulateTheFirstSheet(ByRef xSheet As Excel.Worksheet)
+        'Dim iR As Integer = 0
+        'Dim iC As Integer = 0
+        Dim oRange1 As Excel.Range
+
+        xSheet.Name = k_NameOfFirstSheetInINIFile
+
+        With xSheet
+            .Cells(1, 1).Value = k_NameOfCol_1_InFacilityDataSetTable0
+            .Cells(1, 2).Value = k_NameOfCol_2_InFacilityDataSetTable0
+            .Cells(1, 3).Value = k_NameOfCol_3_InFacilityDataSetTable0
+            .Cells(1, 4).Value = k_NameOfCol_4_InFacilityDataSetTable0
+            .Cells(1, 5).Value = k_NameOfCol_5_InFacilityDataSetTable0
+            .Cells(1, 6).Value = k_NameOfCol_6_InFacilityDataSetTable0
+
+            For iR = 1 To g_iMaxFacility
+                .Cells(iR + 1, 1).Value = g_arrFacility(iR).iFacilityIDNo
+                .Cells(iR + 1, 2).Value = g_arrFacility(iR).sFacilityName
+                .Cells(iR + 1, 3).Value = g_arrFacility(iR).sVISTA_Host
+                .Cells(iR + 1, 4).Value = g_arrFacility(iR).sFacility_STN_number
+            Next
+
+
+            For iR = 1 To 20
+                For iC = 1 To 6
+                    oRange1 = .Range(.Cells(iR, iC), .Cells(iR, iC))
+
+                    If iC &lt;= 4 Then
+                        oRange1.Interior.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.LightGray)
+                        oRange1.Font.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Black)
+                    Else
+                        oRange1.Interior.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White)
+                        oRange1.Font.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White)
+                    End If
+
+
+                    If iR = 1 Then
+                        oRange1.BorderAround(Excel.XlLineStyle.xlContinuous, Excel.XlBorderWeight.xlMedium, Excel.XlColorIndex.xlColorIndexAutomatic)
+                        oRange1.Font.Bold = True
+                    Else
+                        oRange1.BorderAround(Excel.XlLineStyle.xlContinuous, Excel.XlBorderWeight.xlHairline, Excel.XlColorIndex.xlColorIndexAutomatic)
+                        oRange1.Font.Bold = False
+
+                    End If
+
+                    'If iC &lt;= 4 Then
+                    '    oRange1.Font.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Black)
+                    'Else
+                    '    oRange1.Font.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White)
+                    'End If
+                Next
+            Next
+
+            For iC = 1 To 6
+                DirectCast(.Columns(iC), Excel.Range).AutoFit()
+            Next
+
+        End With
+
+
+
+        releaseObject(oRange1)
+    End Sub
+
+    Sub PopulateTheSecondSheet(ByRef xSheet As Excel.Worksheet)
+
+        Dim oRange1 As Excel.Range
+
+        xSheet.Name = k_NameOfSecondSheetInINIFile
+
+        With xSheet
+            .Cells(1, 1).Value = "JobIDNo"
+            .Cells(1, 2).Value = "Job Name"
+            .Cells(1, 3).Value = "Job Parm Array Length"
+            .Cells(1, 4).Value = "Read Me"
+
+            For iC = 5 To 15        '&lt;== gigDebug: figoure out how to get the max of all the Parm Array Lengths
+                .Cells(1, iC).Value = "Parm: " &amp; CStr(iC - 4)
+            Next
+        End With
+
+        For iR = 1 To g_iMaxJobList
+            With g_arrJobList(iR)
+                xSheet.Cells(iR + 1, 1).Value = .iJob_IDNo
+                xSheet.Cells(iR + 1, 2).Value = .sJob_Name
+                xSheet.Cells(iR + 1, 3).Value = .iJob_Parm_Array_Length
+                xSheet.Cells(iR + 1, 4).Value = .sJob_ReadMe
+                Dim iPreParmColumns As Integer = 4                  'Number of columns before the Parm Columns.
+                For iC = (1 + iPreParmColumns) To (.iJob_Parm_Array_Length + iPreParmColumns)
+                    xSheet.Cells(iR + 1, iC).Value = .fnRetrieveAValueFrom_ParmNameArray(iC - iPreParmColumns)
+                Next
+            End With
+        Next
+
+
+        With xSheet
+            For iR = 1 To g_iMaxJobList
+                For iC = 1 To 15        '&lt;== gigDebug: figoure out how to get the max of all the Parm Array Lengths
+                    oRange1 = .Range(.Cells(iR, iC), .Cells(iR, iC))
+                    If iR = 1 Then
+                        oRange1.Interior.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.LightGray)
+                        oRange1.BorderAround(Excel.XlLineStyle.xlContinuous, Excel.XlBorderWeight.xlMedium, Excel.XlColorIndex.xlColorIndexAutomatic)
+                        oRange1.Font.Bold = True
+                    Else
+                        oRange1.BorderAround(Excel.XlLineStyle.xlContinuous, Excel.XlBorderWeight.xlHairline, Excel.XlColorIndex.xlColorIndexAutomatic)
+                        oRange1.Font.Bold = False
+
+                    End If
+                    oRange1.Font.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Black)
+                Next
+            Next
+
+            For iC = 1 To 15
+                DirectCast(.Columns(iC), Excel.Range).AutoFit()
+            Next
+
+        End With
+
+
+
+        releaseObject(oRange1)
+    End Sub
+
+
+
+    Function fnObject2WorkSheet(ByVal oX As Object) As Excel.Worksheet
+        fnObject2WorkSheet = CType(oX, Excel.Worksheet)
+    End Function
+
+End Class
+
+
+'3] releaseObjects
+
+Module mod_General
+
+
+
+    Friend Sub releaseObject(ByVal obj As Object)
+        Try
+            System.Runtime.InteropServices.Marshal.ReleaseComObject(obj)
+            obj = Nothing
+        Catch ex As Exception
+            obj = Nothing
+        Finally
+            GC.Collect()
+        End Try
+    End Sub
+
+End Module
+
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>SQLBulkCopy</Category>
+        <Language>VB.NET</Language>
+        <Public>false</Public>
+        <Name>c_ImportExcel_LoadIntoSQLTable</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>SQLBulkCopy</Category>
+          <Language>VB.NET</Language>
+          <Public>false</Public>
+          <Name>c_ImportExcel_LoadIntoSQLTable</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>c_ImportExcel_LoadIntoSQLTable
+
+'From: http://digitaldeviation.com/articles/import-excel-spreadsheet-sql
+
+===========================================================================
+
+'FROM : http://digitaldeviation.com/articles/import-excel-spreadsheet-sql
+'I used your code and it works great. 
+
+' It took me awhile to figure out how to have a "Where" filter criteria on the Select and gave odd errors 
+'like 
+'       "No value given for one or more required parameters." 
+'or 
+' "Could Not find installable ISAM error". 
+
+'In case others read this here is the syntax I had to use for that:
+
+'If you have no headers in your xls (HDR=No), 
+' then do this where the number after the "F" is the column number:
+'Dim excelCmd As New OleDbCommand("SELECT F1, F3, F4, F6, F7, F56, F57 FROM [" + SheetName + "$] WHERE F1 = '012'", excelConn)
+
+'If you have a heading as the 1st row in your xls (HDR=Yes), then use the actual column names from the header like this:
+'Dim excelCmd As New OleDbCommand("SELECT mfg, pcode, rdc, catno, bench, [Tot Dis Serv lines], [Tot Serv lines] FROM [" + SheetName + "$] WHERE mfg = '012'", excelConn)
+
+============USAGE===============================================================
+
+    Sub Try_c_ImportExcel_LoadIntoSQLTable()
+
+
+        Dim xlImport As New c_ImportExcel_LoadIntoSQLTable
+        If xlImport.ImportExcelBulk("zzz_prj_0011_TEMP_001", "C:\Data\TEMP_DATA\PPL_02_20_2012_WorkingVersion.xls", "DATA") Then
+            'Worked
+            MessageBox.Show("Success: Data was uploaded")
+        Else
+            'Failed
+            MessageBox.Show("Failed")
+        End If
+    End Sub
+
+
+==============Class===================================================================
+
+Imports System.Data.SqlClient
+Imports System.Data.OleDb
+
+
+Public Class c_ImportExcel_LoadIntoSQLTable
+
+
+    'BuildSQLConnString '--Builds a valid SQL connection string
+    Private Function BuildSQLConnString() As SqlConnectionStringBuilder
+        Dim connBuild As New SqlConnectionStringBuilder
+        connBuild.DataSource = "SQL-SERVER\PRODUCTION"
+        connBuild.InitialCatalog = "DB1_Main"
+        connBuild.ConnectTimeout = 300
+        'false = sql auth; true = windows auth
+        connBuild.IntegratedSecurity = True
+        'these get turned off with integrated security
+        'connBuild.UserID = "USER"
+        'connBuild.Password = "PASSWORD"
+        connBuild.PersistSecurityInfo = True
+        Return connBuild
+    End Function
+
+    'BuildXLConnString '--Builds a valid Excel connection string
+    Private Function BuildXLConnString(ByVal DSource As String) As OleDbConnectionStringBuilder
+        Dim connBuild As New OleDbConnectionStringBuilder
+        connBuild.Provider = "Microsoft.Jet.OLEDB.4.0"
+        'connBuild.Provider = "Microsoft.ACE.OLEDB.12.0"
+        connBuild.DataSource = DSource
+        connBuild.Add("Extended Properties", "Excel 8.0;IMEX=1;HDR=Yes;") 'IMEX=1; - Tells the driver to read everything as intermixed text 'HDR=Yes; - Tells the driver that there is a header row in the sheet
+        Return connBuild
+    End Function
+
+    'ImportExcelBulk '--Imports an Excel spreadsheet using SQLBulkCopy
+    Public Function ImportExcelBulk(ByVal SQLTableName As String, ByVal ExcelFile As String, ByVal SheetName As String) As Boolean
+        'Create the connection strings
+        Dim excelConnString As String = BuildXLConnString(ExcelFile).ToString
+        Dim sqlConnString As String = BuildSQLConnString.ToString
+        'Set up the connection
+        Using excelConn As New OleDbConnection(excelConnString)
+            'Excel command object
+            Dim excelCmd As New OleDbCommand("SELECT * FROM [" + SheetName + "$]", excelConn)
+            'Open the Excel connection 
+            excelConn.Open()
+            'Set up the DataReader
+            Dim excelRead As OleDbDataReader = excelCmd.ExecuteReader
+            'Set up the SQLBulkCopy 
+            Using bulkCopy As New SqlBulkCopy(sqlConnString)
+                'Set the destinationtable
+                bulkCopy.DestinationTableName = SQLTableName
+                Try
+                    'Write the data to the server
+                    bulkCopy.WriteToServer(excelRead)
+                    'Success
+                    Return True
+                Catch ex As Exception
+                    'Error
+                    Return False
+                Finally
+                    'Close the DataReader
+                    If Not excelRead.IsClosed Then
+                        excelRead.Close()
+                    End If
+                End Try
+            End Using 'end bulkCopy
+        End Using 'end excelConn
+    End Function
+End Class
+
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>SQLBulkCopy</Category>
+        <Language>VB.NET</Language>
+        <Public>false</Public>
+        <Name>CommandString</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>SQLBulkCopy</Category>
+          <Language>VB.NET</Language>
+          <Public>false</Public>
+          <Name>CommandString</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>'1] Command String
+'2] Example function
+
+
+///////////////'1] Command String
+Think of each excel sheet As a MS SQL table from which data is to be fetched. Thus, complete excel file As a database.
+
+
+
+' a) In order to read the excel sheet, “SELECT” command is used. 
+'	Either you may want to read the complete excel sheet Or you may be interested in reading just a block of data. 
+'	Both scenarios are supported And this is what us different from defining the MS SQL “Select” query.
+'	Range (block of data) is defined using A2:R5 format.
+
+'Below is the sample command string to read the complete data in an excel sheet:
+
+Select * from [NameOfExcelSheet$]
+
+'Note: This may read empty rows, columns as well if there is any hidden data or there are empty rows in b/w the filled data.
+
+
+'b) How to specify range to read a block of data from excel sheet?
+
+'Below is the sample command string to read the complete data in an excel sheet:
+
+Select * from [NameOfExcelSheet$A1:E5]
+
+'Another way to specify range is:
+
+Select * from [NameOfExcelSheet$A1:E]
+
+'it will read all rows starting from row# ‘1’ and 5 columns from column# ‘A’ to ‘E’
+
+
+
+
+
+
+
+
+
+
+///////////////'2] Example function
+
+   Friend Function fn_ReturnArrayOfJustTheData_FromExcelWorkSheet_OfJustOneColumn_With_A_Header(sFilePathAndName As String, sSheetName As String, iZeroBasedColumnNumber_ToUseFromExcelSelection As Integer, Optional iNoOfRowsToGet As Integer = 0) As Object()
+        Const k_SubName As String = "fn_ReturnArrayOfJustTheData_FromExcelWorkSheet_OfJustOneColumn_With_A_Header"
+
+        'requires: Imports System.Data.SqlClient
+
+        'Dim arrStrX As String()
+        Dim sSelectStatement As String
+        Dim sExcelFileConnectionString As String
+        Dim sNameOfInternalDataSetTable As String
+        Dim arData() As Object
+        Dim misValue As Object = System.Reflection.Missing.Value
+
+
+
+        sSheetName = sSheetName &amp; "$"
+        sSelectStatement = "select * from [" &amp; sSheetName &amp; "]"
+        sFilePathAndName = "'" &amp; sFilePathAndName &amp; "'"
+        'sExcelFileConnectionString = "provider=Microsoft.Jet.OLEDB.4.0;Data Source=" &amp; sFilePathAndName &amp; ";Extended Properties=Excel 8.0;"
+        'sExcelFileConnectionString = "provider=Microsoft.Jet.OLEDB.4.0;Data Source=" &amp; sFilePathAndName &amp; ";Extended Properties=Excel 8.0;IMEX=1;HDR=NO;TypeGuessRows=0;ImportMixedTypes=Text;"
+        'sExcelFileConnectionString = "provider=Microsoft.Jet.OLEDB.4.0;Data Source=" &amp; sFilePathAndName &amp; ";Extended Properties=Excel 8.0;ImportMixedTypes=Text;"
+
+        '============ACE======================
+        'sExcelFileConnectionString = "provider=Microsoft.ACE.OLEDB.12.0;;Data Source=" &amp; sFilePathAndName &amp; ";Extended Properties=Excel 14.0;IMEX=1;HDR=NO;TypeGuessRows=0;ImportMixedTypes=Text;"
+        sExcelFileConnectionString = "provider=Microsoft.ACE.OLEDB.12.0;Data Source=" &amp; sFilePathAndName &amp; ";Extended Properties=""Excel 12.0;"""
+
+        Try
+
+            Dim connX As System.Data.OleDb.OleDbConnection
+            Dim dsX As System.Data.DataSet
+            Dim OleDataAdaptX As System.Data.OleDb.OleDbDataAdapter
+
+            connX = New System.Data.OleDb.OleDbConnection(sExcelFileConnectionString)
+
+            OleDataAdaptX = New System.Data.OleDb.OleDbDataAdapter(sSelectStatement, connX)
+
+
+            sNameOfInternalDataSetTable = "InternalTableName"
+            OleDataAdaptX.TableMappings.Add("Table", sNameOfInternalDataSetTable)
+            dsX = New System.Data.DataSet
+            OleDataAdaptX.Fill(dsX)
+            'OleDataAdaptX.Fill()
+            '===============================
+
+            ReDim arData((dsX.Tables(0).Rows.Count) - 1)
+
+            If iNoOfRowsToGet = 0 Then  'This is the default situation where the Number of rows to get is not given by the calling routine
+
+                For intCounter As Integer = 0 To dsX.Tables(0).Rows.Count - 1
+
+                    arData(intCounter) = dsX.Tables(0).Rows(intCounter).Item(iZeroBasedColumnNumber_ToUseFromExcelSelection).ToString
+
+                Next
+            Else  'This is the situation where the Number of rows to get is  given by the calling routine
+
+                For intCounter As Integer = 0 To iNoOfRowsToGet - 1
+
+                    arData(intCounter) = dsX.Tables(0).Rows(intCounter).Item(iZeroBasedColumnNumber_ToUseFromExcelSelection).ToString
+
+                Next
+
+            End If
+            'Debug.Print("START - List of Column Headers EXPECTED ===============================")
+            'For intCounter As Integer = 0 To dsX.Tables(0).Rows.Count
+            '    Debug.Print(CStr(intCounter) &amp; "] " &amp; arData(intCounter))
+            'Next
+            'Debug.Print("END - List of Column Headers EXPECTED ===============================")
+            connX.Close()
+        Catch
+            'error handling goes here
+            UnhandledExceptionHandler(k_SubName, k_sModule)
+        End Try
+
+        Return arData
+
+
+    End Function
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>SQLBulkCopy</Category>
+        <Language>VB.NET</Language>
+        <Public>false</Public>
+        <Name>ConnectionString_ACE.OLEDB</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>SQLBulkCopy</Category>
+          <Language>VB.NET</Language>
+          <Public>false</Public>
+          <Name>ConnectionString_ACE.OLEDB</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>'From: http://stackoverflow.com/questions/11562267/system-data-oledb-oledbexception-could-not-find-installable-isam
+
+
+'One error I was getting: "Could not find installable ISAM" before I tried this
+
+If you use more than 1 extended Property Then the value tokens must be quoted, 
+otherwise there Is no way For the driver To distinguish them from the other non-extended properties In the connection String;
+
+e.g.: ...Extended Properties=""Excel 8.0;IMEX=1"""
+
+String.Format(@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=pricelist.xlsx;Extended Properties=""Excel 12.0 Xml;HDR=YES""");
+
+
+
+///////This worked For Me In prj_0011//////////////////////////////////////////////////////////////
+
+sExcelFileConnectionString = "provider=Microsoft.ACE.OLEDB.12.0;Data Source=" &amp; sFilePathAndName &amp; ";Extended Properties=""Excel 12.0;"""
+
+'This worked for mixed data type in a .xls file:
+ sExcelFileConnectionString = "provider=Microsoft.ACE.OLEDB.12.0;Data Source=" &amp; sFilePathAndName &amp; ";Extended Properties=""Excel 12.0;IMEX=1;MaxScanRows=0;ImportMixedTypes=Text;"""
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+////////////////How To read Or write excel file using ACE OLEDB data provider//////////////////////////////////////////////
+
+Provider : It Is the main oledb provider that Is used To open the excel sheet. 
+	This can be Microsoft.Jet.OLEDB.4.0 For Excel 97 onwards Excel file format Or Microsoft.ACE.OLEDB.12.0. 
+	So far it Is tested With upto Excel 2010 version.
+
+
+Data Source : It Is the full path of the excel workbook. 
+	Replace With the full path of your existing excel workbook/ file.
+
+
+Extended Properties (Optional) : Extended properties can be applied To Excel workbooks which may change the overall activity of the excel workbook from your program. 
+	The most common ones are the following :
+
+
+
+		HDR : It represents Header of the fields In the excel table. 
+			Default Is YES. If you dont have fieldnames In the header of your worksheet, 
+			you can specify HDR=NO which will take the columns of the tables that it finds As f1,f2 etc.
+		
+		
+		ReadOnly : You can also open excel workbook In ReadOnly mode by specifying ReadOnly=True; 
+			By Default ReadOnly attribute Is False, so you can modify data within your workbook
+		
+		
+		FirstRowHasNames : It Is the same As HDR, it Is always Set To 1 ( which means True) 
+			you can specify it As False If you dont have your header row. 
+			If HDR Is YES provider disregards this Property. 
+			You can change the Default behaviour of your environment by changing the 
+				Registry Value- [HKLM\Software\Microsoft\Jet\4.0\Engines\Excel\FirstRowHasNames] To 00 (which Is False)
+		
+		
+		MaxScanRows : Excel does Not provide the detailed schema defination of the tables it finds. 
+			It need To scan the rows before deciding the data types of the fields. 
+			MaxScanRows specifies the number of cells To be scanned before deciding the data type of the column. 
+			By Default the value of this Is 8. You can specify any value from 1 – 16 For 1 To 16 rows. 
+			You can also make the value To 0 so that it searches all existing rows before deciding the data type. 
+			You can change the Default behaviour of this Property by changing the value of [HKLM\Software\Microsoft\Jet\4.0\Engines\Excel\TypeGuessRows] 
+				which Is 8 by Default.  
+			Currently MaxScanRows Is ignored, so you need only To depend On TypeGuessRows Registry value. 
+			Hope Microsoft fixes this issue To its later versions
+		
+		
+		IMEX : (A Caution) As mentioned above excel have To guess a number Or rows To Select the most appropriate data type of the column,
+			 a serious problem may occur of you have mixed data In one column. 
+			 Say you have data of both Integer And text On a Single column, 
+			 In that Case excel will choose its data type based On majority of the data. 
+			 Thus it selects the data For the majority data type that Is selected, 
+			 And returns NULL For the minority data type. If the two types are equally mixed In the column, 
+			 the provider chooses numeric over text.
+		For e.g., In your eight (8) scanned rows, 
+			If the column contains five (5) numeric values And three (3) text values, the provider returns five (5) numbers And three (3) null values.
+		To work around this problem For data,
+			Set “IMEX=1″ In the Extended Properties section of the connection String. 
+			This enforces the ImportMixedTypes=Text registry setting.  
+			You can change the enforcement of type by changing [HKLM\Software\Microsoft\Jet\4.0\Engines\Excel\ImportMixedTypes] To numeric As well
+		</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>VBA_ACCESS_ADO</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>Function_CreateConnectionString</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>VBA_ACCESS_ADO</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>Function_CreateConnectionString</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>'refernece: Microsoft ActiveX Data Objects 2.8 Library
+
+
+Function CreateConnectionFromString() As ADODB.Connection
+
+    ' Define Variables
+    Dim cn As New ADODB.Connection
+    
+    ' The paths have been truncated in this example.
+    ' For this to work properly, the developer need to
+    ' specify the correct Database and MDW file paths.
+    cn.ConnectionString = _
+        "Provider=Microsoft.ACE.OLEDB.12.0;" &amp; _
+        "User ID=Admin;" &amp; _
+        "Data Source=D:\Sample.accdb;" &amp; _
+        "Mode=Share Deny None;" &amp; _
+        "Jet OLEDB:System database=D:\System.mdw;" &amp; _
+        "Jet OLEDB:Database Password="""";" &amp; _
+        "Jet OLEDB:Support Complex Data=True"
+        
+    ' Open the Connection
+    cn.Open
+    
+    ' Return the Connection
+    Set CreateConnectionFromString = cn
+
+End Function</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>VBA_ACCESS</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>Populate_LocalTable_FromExcel</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>VBA_ACCESS</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>Populate_LocalTable_FromExcel</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>'  EXAMPLE: USING SQL FUNCTIONS IN THE INSERT INTO STATEMENT
+'    cn.Execute "INSERT INTO [T3_ECP_Enrollment_t] (EDIT, LASTNAME, FIRSTNAME, MI, DOB, LASTVISIT, CHARTS) IN '" &amp; sPathFileName_CurrentDB &amp; "' SELECT [Edit], [PatientLast], [PatientFirst], MID([PatientMiddle],1,1), [DOB], [LastVisit(Days)], [# Charts] FROM [TalkingEMR_Patientlist$]"
+
+
+
+Sub Populate_CombinedHospital_FromExcel(sPathFileName As String)
+
+    'Reference: Microsoft ActiveX Date Objects 2.8 Library
+
+    On Error GoTo ErrorHandler
+    '==============================
+    Dim cn As ADODB.Connection
+    Dim dbs As Database
+    Dim SQLstring As String
+    Dim sPath As String
+    Dim sFileName As String
+    Dim sPathFileName_CurrentDB As String
+    
+    Set dbs = CurrentDb
+    Set cn = New ADODB.Connection
+
+    
+    '0] Get the Location of the access DB
+    sPath = Application.CurrentProject.Path
+    sFileName = Application.CurrentProject.Name
+    sPathFileName_CurrentDB = sPath &amp; "\" &amp; sFileName
+    
+    '2] Open the Connection
+     cn.Open "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" &amp; sPathFileName &amp; ";Extended Properties='Excel 12.0;HDR=Yes;IMEX=1'"
+    
+'===============
+   SQLstring = "INSERT INTO [CombinedHospital_t] "
+   'List from Access Table:
+   SQLstring = SQLstring &amp; "([FACILITY CODE] ,  [ACCOUNT NUMBER] ,  [MEDICAID ID] ,  [SOCIAL SECURITY NUMBER] ,[PATIENT TYPE] ,  [ADMISSION DATE] ,  [DISCHARGE DATE] ,  [LAST NAME] ,  [FIRST NAME] ,[MIDDLE INITIAL] ,  [ADDRESS LINE 1] ,  "
+   SQLstring = SQLstring &amp; "[ADDRESS LINE 2] ,  [CITY] ,  [COUNTY] ,[STATE] ,  [ZIP CODE] ,  [HOME PHONE] , [ALTERNATE PHONE] , [BIRTH DATE] ,  [AGE ON ADMIT] ,[PCP NAME] ,[PRIMARY INSURANCE] ,[SECONDARY INSURANCE] ,[TERTIARY INSURANCE] ,[PRINCIPLE ICD9 CODE] , "
+   SQLstring = SQLstring &amp; "[PRINCIPLE ICD9 DESCRIPTION] ,[2ND ICD9 CODE] ,[2ND ICD9 DESCRIPTION] ,[3RD ICD9 CODE] ,[3RD ICD9 DESCRIPTION] ,[4TH ICD9 CODE] ,[4TH ICD9 DESCRIPTION] ,[5TH ICD9 CODE] ,[5TH ICD9 DESCRIPTION] ,[6TH ICD9 CODE] ,[6TH ICD9 DESCRIPTION] , "
+   SQLstring = SQLstring &amp; "[7TH ICD9 CODE] ,[7TH ICD9 DESCRIPTION] ,[PRINCIPLE PROCEDURE CODE] ,[PRINCIPLE PROCEDURE DESCRIPTION] ,[SECONDARY PROCEDURE CODE] ,[SECONDARY PROCEDURE DESCRIPTION])"
+   
+   SQLstring = SQLstring &amp; "IN '" &amp; sPathFileName_CurrentDB
+   SQLstring = SQLstring &amp; "' SELECT "
+   'List from Excel Spreadsheet:
+   SQLstring = SQLstring &amp; "[FACILITY CODE] ,  [ACCOUNT NUMBER] ,  [MEDICAID ID] ,  [SOCIAL SECURITY NUMBER] ,[PATIENT TYPE] ,  [ADMISSION DATE] ,  [DISCHARGE DATE] ,  [LAST NAME] ,  [FIRST NAME] ,[MIDDLE INITIAL] ,  [ADDRESS LINE 1] ,  "
+   SQLstring = SQLstring &amp; "[ADDRESS LINE 2] ,  [CITY] ,  [COUNTY] ,[STATE] ,  [ZIP CODE] ,  [HOME PHONE] , [ALTERNATE PHONE] , [BIRTH DATE] ,  [AGE ON ADMIT] ,[PCP NAME] ,[PRIMARY INSURANCE] ,[SECONDARY INSURANCE] ,[TERTIARY INSURANCE] ,[PRINCIPLE ICD9 CODE] , "
+   SQLstring = SQLstring &amp; "[PRINCIPLE ICD9 DESCRIPTION] ,[2ND ICD9 CODE] ,[2ND ICD9 DESCRIPTION] ,[3RD ICD9 CODE] ,[3RD ICD9 DESCRIPTION] ,[4TH ICD9 CODE] ,[4TH ICD9 DESCRIPTION] ,[5TH ICD9 CODE] ,[5TH ICD9 DESCRIPTION] ,[6TH ICD9 CODE] ,[6TH ICD9 DESCRIPTION] , "
+   SQLstring = SQLstring &amp; "[7TH ICD9 CODE] ,[7TH ICD9 DESCRIPTION] ,[PRINCIPLE PROCEDURE CODE] ,[PRINCIPLE PROCEDURE DESCRIPTION] ,[SECONDARY PROCEDURE CODE] ,[SECONDARY PROCEDURE DESCRIPTION]"
+   
+   SQLstring = SQLstring &amp; "FROM [Sheet1$]"
+'===============
+    
+    cn.Execute SQLstring
+   
+   
+   
+CleanUp:
+    dbs.Close
+    Set dbs = Nothing
+    cn.Close
+    Set cn = Nothing
+
+   
+'    MsgBox ("Done!")
+    
+    Exit Sub
+    
+'==============================
+ErrorHandler:
+    Select Case Err.Number
+'         Case vbObjectError + 111
+'            'MsgBox "Error: vbObjectError + 111"
+'            Exit Sub
+        Case Else
+            MsgBox "Populate_CombinedHospital_FromExcel - Error: " &amp; Err.Number &amp; " " &amp; Err.Description
+            
+    End Select
+    GoTo CleanUp
+    
+End Sub
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>VBA_ACCESS</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>PopulateRemoteTableFromExcel</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>VBA_ACCESS</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>PopulateRemoteTableFromExcel</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>PopulateRemoteTableFromExcel
+
+
+
+
+
+Sub Populate_T3_ECP_Enrollment_t(sPathFileName As String)
+
+    'Reference: Microsoft ActiveX Date Objects 2.8 Library
+
+    On Error GoTo ErrorHandler
+    Dim errADO As ADODB.Error
+    '==============================
+    Dim cn As ADODB.Connection
+    Dim dbs As Database
+    Dim SQLstring As String
+    Dim sPath As String
+    Dim sFileName As String
+    Dim sPathFileName_CurrentDB As String
+    
+    Set dbs = CurrentDb
+    Set cn = New ADODB.Connection
+
+    
+    '0] Get the Location of the access DB
+    sPath = Application.CurrentProject.Path
+    sFileName = Application.CurrentProject.Name
+    sPathFileName_CurrentDB = sPath &amp; "\" &amp; sFileName
+    
+    '2] Open the Connection
+    'cn.Open "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=H:\Daily Reports\Downloads ECP\TalkingEMR_Patientlist.xls;Extended Properties='Excel 12.0';"
+    
+    cn.Open "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" &amp; sPathFileName &amp; ";Extended Properties='Excel 12.0';"
+    
+    
+   ' cn.Open "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=H:\Daily Reports\Downloads ECP\TalkingEMR_Patientlist_2.xls;Extended Properties='Excel 12.0;HDR=Yes;IMEX=1'"
+                
+    '3] Copy the Records from one of the sheets in the Excel Spreadsheet to an Access DB Table
+    cn.Execute "INSERT INTO [T3_ECP_Enrollment_t] (EDIT, LASTNAME, FIRSTNAME, MI, DOB, LASTVISIT, CHARTS) IN '" &amp; sPathFileName_CurrentDB &amp; "' SELECT [Edit], [PatientLast], [PatientFirst], MID([PatientMiddle],1,1), CDate([DOB]), [LastVisit(Days)], [# Charts] FROM [TalkingEMR_Patientlist$] WHERE NOT([DOB] IS NULL)" '[DOB]
+'    cn.Execute "INSERT INTO [T3_ECP_Enrollment_t] (EDIT, LASTNAME, FIRSTNAME, MI, DOB, LASTVISIT, CHARTS) IN '" &amp; sPathFileName_CurrentDB &amp; "' SELECT [Edit], [PatientLast], [PatientFirst], [PatientMiddle], [DOB], [LastVisit(Days)], [# Charts] FROM [TalkingEMR_Patientlist$]"
+'    cn.Execute "INSERT INTO [T3_ECP_Enrollment_t] (EDIT, LASTNAME, FIRSTNAME, MI, DOB, LASTVISIT, CHARTS) IN '" &amp; sPathFileName_CurrentDB &amp; "' SELECT [Edit], [PatientLast], [PatientFirst], MID([PatientMiddle],1,1), [DOB], [LastVisit(Days)], [# Charts] FROM [TalkingEMR_Patientlist$]"
+'    cn.Execute "INSERT INTO [T3_ECP_Enrollment_t] (EDIT, LASTNAME, FIRSTNAME, MI, DOB, LASTVISIT, CHARTS) IN '" &amp; sPathFileName_CurrentDB &amp; "' SELECT [Edit], [PatientLast], [PatientFirst], MID([PatientMiddle],1,1), CDate(#01/10/11#), [LastVisit(Days)], [# Charts] FROM [TalkingEMR_Patientlist$]" '[DOB]
+'    cn.Execute "INSERT INTO [T3_ECP_Enrollment_t] (EDIT, LASTNAME, FIRSTNAME, MI, DOB, LASTVISIT, CHARTS) IN '" &amp; sPathFileName_CurrentDB &amp; "' SELECT [Edit], [PatientLast], [PatientFirst], MID([PatientMiddle],1,1), '01/02/11', [LastVisit(Days)], [# Charts] FROM [TalkingEMR_Patientlist$]" '[DOB]
+'    cn.Execute "INSERT INTO [T3_ECP_Enrollment_t] (EDIT, LASTNAME, FIRSTNAME, MI, DOB, LASTVISIT, CHARTS) IN '" &amp; sPathFileName_CurrentDB &amp; "' SELECT [Edit], [PatientLast], [PatientFirst], MID([PatientMiddle],1,1), CDate([DOB]), [LastVisit(Days)], [# Charts] FROM [TalkingEMR_Patientlist$] WHERE NOT([DOB] IS NULL)" '[DOB]
+'       The one above worked when the table has DOB defined as varchar, and when it was DATETIME
+
+
+'Format(CDate(ApptDate), "Medium Date")
+   
+CleanUp:
+    dbs.Close
+    Set dbs = Nothing
+    cn.Close
+    Set cn = Nothing
+
+   
+'    MsgBox ("Done!")
+    
+    Exit Sub
+    
+'==============================
+ErrorHandler:
+
+   Debug.Print "VBA error number: " &amp; Err.Number &amp; vbCrLf &amp; " (" &amp; Err.Description &amp; ")"
+   Debug.Print "Listed below is information " &amp; "regarding this error " &amp; vbCrLf &amp; "contained in the ADO Errors collection."
+   For Each errADO In cn.Errors
+      Debug.Print vbTab &amp; "Error Number: " &amp; errADO.Number
+      Debug.Print vbTab &amp; "Error Description: " &amp; errADO.Description
+      Debug.Print vbTab &amp; "Jet Error Number: " &amp; errADO.SQLState
+      Debug.Print vbTab &amp; "Native Error Number: " &amp; errADO.NativeError
+      Debug.Print vbTab &amp; "Source: " &amp; errADO.Source
+      Debug.Print vbTab &amp; "Help Context: " &amp; errADO.HelpContext
+      Debug.Print vbTab &amp; "Help File: " &amp; errADO.HelpFile
+   Next
+
+
+    Select Case Err.Number
+'        Case 2105
+'            MsgBox "This error happens if you try to run the Start button on the ? record" &amp; vbCrLf &amp; " just ignore it and set the Public Voucher by hand."
+'         Case 3021
+'           ' This happens if you are on a "NEW" record, i.e. no PK has been created, and you try to change your settings
+'            Resume Next
+'         Case vbObjectError + 111
+'            'MsgBox "Error: vbObjectError + 111"
+'            Exit Sub
+        Case Else
+            MsgBox "Populate_T3_ECP_Enrollment_t - Error: " &amp; Err.Number &amp; " " &amp; Err.Description
+            
+    End Select
+    GoTo CleanUp
+    
+End Sub
 </Code>
       </SnippetValue>
     </value>
