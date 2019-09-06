@@ -3,46 +3,454 @@
   <item>
     <key>
       <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>POWERSHELL_browser</Category>
-        <Language>VBSCRIPT</Language>
+        <Category>Functions</Category>
+        <Language>SQLSERVER2K SQL</Language>
         <Public>false</Public>
-        <Name>URL of each Favorite in alphabetical order =&gt; CSV file on Desktop</Name>
+        <Name>fn_10_Integers_To_PhoneNumbe</Name>
         <Group>My Snippets</Group>
       </SnippetKey>
     </key>
     <value>
       <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
         <Key>
-          <Category>POWERSHELL_browser</Category>
-          <Language>VBSCRIPT</Language>
+          <Category>Functions</Category>
+          <Language>SQLSERVER2K SQL</Language>
           <Public>false</Public>
-          <Name>URL of each Favorite in alphabetical order =&gt; CSV file on Desktop</Name>
+          <Name>fn_10_Integers_To_PhoneNumbe</Name>
           <Group>My Snippets</Group>
         </Key>
         <Keywords />
         <Imports />
-        <Code>'# URL of each Favorite in alphabetical order =&gt; CSV file on Desktop
+        <Code>
+----------------------------------------------------------------------------
+--fn_10_Integers_To_PhoneNumber.sql
+--		To call the function:
+--   	dbo.fn_10_Integers_To_PhoneNumber(A.HOMEPHONE) AS [HOME PHONE],
 
-# Gathers a list of the current users IE Favorites
-Get-ChildItem $env:userprofile\favorites -Recurse -Include *.url |
- where {select-string -InputObject $_ -Quiet "^URL=http"} | 
- select @{Name="Name"; Expression={[IO.Path]::GetFileNameWithoutExtension($_.FullName)}},
- @{Name="URL"; Expression={get-content $_ | ? {$_ -match "^URL=http"} | % {$_.Substring(4)}}} |
-#Sorts and exports them to a CSV on user's Desktop
- sort Name |Export-Csv -Path $env:userprofile\Desktop\favorites.csv -NoTypeInformation
-#Opens the CSV file for reading
-Invoke-Item $env:userprofile\Desktop\favorites.csv
+----------------------------------------------------------------------------
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[fn_10_Integers_To_PhoneNumber]') and xtype in (N'FN', N'IF', N'TF'))
+drop function [dbo].[fn_10_Integers_To_PhoneNumber]
+GO
+
+-- **********************************************************************************************************************
+-- Convert unformatted 10 digit Numbers (i.e., no embedded punctuation) to  "xxx.xxx.xxxx" phone number display format.
+-- Example: 
+--	PRINT dbo.fn_10_Integers_To_PhoneNumber('1234567890') --returns '123.456.7890' 
+-- ***********************************************************************************************************************
+CREATE FUNCTION fn_10_Integers_To_PhoneNumber
+	(@c10Numbers	CHAR(10))
+	RETURNS	CHAR(12)
+AS
+BEGIN
+     RETURN SUBSTRING(@c10Numbers, 1, 3) + '.' + SUBSTRING(@c10Numbers, 4, 3) + '.' + SUBSTRING(@c10Numbers, 7,4) 
+END</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>Functions</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>fn_9_Integers_To_SSN.sql</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>Functions</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>fn_9_Integers_To_SSN.sql</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
 
 
-'# OUTPUT
-'=================================================================================
-'Name							URL
-'Access Achieve					https://magellan.learn.com/laprovider
-'Anasazi - Logon					https://ansoaz.cernerworks.com/JEF/auth/login.aspx
-'Bing							http://go.microsoft.com/fwlink/p/?LinkId=255142
-'Clicial Advisor					https://ca.magellanhealth.com/vpn/index.html
-'Contacts - New					http://wbsql1/Reports_PROD/report/Reports_For_All_Users/001_Telephone_Contacts
-'Dev Essentials  - Visual Studio	https://www.visualstudio.com/dev-essentials/
+
+-- fn_9_Integers_To_SSN.sql
+
+
+-- Example
+--   CCNCclaims.dbo.fn_9_Integers_To_SSN([SSN])
+
+
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[fn_9_Integers_To_SSN]') and xtype in (N'FN', N'IF', N'TF'))
+drop function [dbo].[fn_9_Integers_To_SSN]
+GO
+
+-- **********************************************************************************************************************
+-- Convert unformatted Social-Security Numbers (i.e., no embedded hyphens) to standard "xxx-xx-xxxx" SSN display format.
+-- Example: 
+--	PRINT dbo.fn_9_Integers_To_SSN('123456789') --returns '123-45-6789' 
+-- ***********************************************************************************************************************
+CREATE FUNCTION fn_9_Integers_To_SSN
+	(@cSSN	CHAR(9))
+	RETURNS	CHAR(11)
+AS
+BEGIN
+     RETURN SUBSTRING(@cSSN, 1, 3) + '-' + SUBSTRING(@cSSN, 4, 2) + '-' + SUBSTRING(@cSSN, 6,4) 
+END</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>Functions</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>fn_TRIM</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>Functions</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>fn_TRIM</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>-- fn_TRIM.sql
+
+-- Example
+--   CCNCclaims.dbo.fn_TRIM([LAST_NAME])
+
+USE
+CCNCclaims
+go
+
+
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[fn_TRIM]') and xtype in (N'FN', N'IF', N'TF'))
+drop function [dbo].[fn_TRIM]
+GO
+
+-- **********************************************************************************************************************
+-- Equivalent to: RTrim(LTrim()).
+-- Example: 
+--	PRINT dbo.fn_TRIM('   123456789    ') --returns '123456789' 
+-- ***********************************************************************************************************************
+CREATE FUNCTION fn_TRIM
+	(@vcX	VARCHAR(max))
+	RETURNS	VARCHAR(max)
+AS
+BEGIN
+     RETURN RTrim(LTrim(@vcX)) 
+END</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>SELECT_COMPLEX</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>Divide_by_Zero</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>SELECT_COMPLEX</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>Divide_by_Zero</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+http://stackoverflow.com/questions/861778/how-to-avoid-the-divide-by-zero-error-in-sql
+--In order to avoid a "Division by zero" error we have programmed it like this:
+
+Select Case when divisor=0 then null
+Else dividend / divisor
+End ,,,
+
+--But here is a much nicer way of doing it:
+--Any number divided by NULL gives NULL, and no error is generated. 
+Select dividend / nullif(divisor, 0) ...
+--Now the only problem is to remember the NullIf bit, if I use the "/" key.
+
+///////
+
+SELECT COALESCE(dividend / NULLIF(divisor,0), 0) FROM sometable
+
+////////////////
+--Any number divided by NULL gives NULL, and no error is generated.
+SELECT club_id, males, females, males/NULLIF(females, 0) AS ratio
+  FROM school_clubs;
+  
+  ////////////
+
+SELECT Dividend / ISNULL(NULLIF(Divisor,0),1) AS Result
+
+///////////////////
+--I wrote a function a while back to handle it for my stored procedures:
+
+print 'Creating safeDivide Stored Proc ...'
+go
+
+if exists (select * from dbo.sysobjects where  name = 'safeDivide') drop function safeDivide;
+go
+
+create function dbo.safeDivide( @Numerator decimal(38,19), @divisor decimal(39,19))
+   returns decimal(38,19)
+begin
+ -- **************************************************************************
+ --  Procedure: safeDivide()
+ --     Author: Ron Savage, Central, ex: 1282
+ --       Date: 06/22/2004
+ --
+ --  Description:
+ --  This function divides the first argument by the second argument after
+ --  checking for NULL or 0 divisors to avoid "divide by zero" errors.
+ -- Change History:
+ --
+ -- Date        Init. Description
+ -- 05/14/2009  RS    Updated to handle really freaking big numbers, just in
+ --                   case. :-)
+ -- 05/14/2009  RS    Updated to handle negative divisors.
+ -- **************************************************************************
+   declare @p_product    decimal(38,19);
+
+   select @p_product = null;
+
+   if ( @divisor is not null and @divisor &lt;&gt; 0 and @Numerator is not null )
+      select @p_product = @Numerator / @divisor;
+
+   return(@p_product)
+end
+go
+
+/////////////////////
+CREATE FUNCTION dbo.Divide(@Numerator Real, @Denominator Real)
+RETURNS Real AS
+/*
+Purpose:      Handle Division by Zero errors
+Description:  User Defined Scalar Function
+Parameter(s): @Numerator and @Denominator
+
+Test it:
+
+SELECT 'Numerator = 0' Division, dbo.fn_CORP_Divide(0,16) Results
+UNION ALL
+SELECT 'Denominator = 0', dbo.fn_CORP_Divide(16,0)
+UNION ALL
+SELECT 'Numerator is NULL', dbo.fn_CORP_Divide(NULL,16)
+UNION ALL
+SELECT 'Denominator is NULL', dbo.fn_CORP_Divide(16,NULL)
+UNION ALL
+SELECT 'Numerator &amp; Denominator is NULL', dbo.fn_CORP_Divide(NULL,NULL)
+UNION ALL
+SELECT 'Numerator &amp; Denominator = 0', dbo.fn_CORP_Divide(0,0)
+UNION ALL
+SELECT '16 / 4', dbo.fn_CORP_Divide(16,4)
+UNION ALL
+SELECT '16 / 3', dbo.fn_CORP_Divide(16,3)
+
+*/
+BEGIN
+    RETURN
+        CASE WHEN @Denominator = 0 THEN
+            NULL
+        ELSE
+            @Numerator / @Denominator
+        END
+END
+GO</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>SQLBulkCopy</Category>
+        <Language>VB.NET</Language>
+        <Public>false</Public>
+        <Name>MSDN_example</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>SQLBulkCopy</Category>
+          <Language>VB.NET</Language>
+          <Public>false</Public>
+          <Name>MSDN_example</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+'SqlBulkCopy will FAIL when bulk loading a DataTable column of type SqlDateTime 
+'	into a SQL Server column whose Type Is one of the Date/time types added In SQL Server 2008. 
+
+
+'1] VB.Net Code:
+
+Imports System.Data.SqlClient
+  
+  Module Module1
+      Sub Main()
+          Dim connectionString As String = GetConnectionString()
+  
+          ' Open a connection to the AdventureWorks database.
+          Using sourceConnection As SqlConnection = _
+             New SqlConnection(connectionString)
+              sourceConnection.Open()
+  
+              ' Perform an initial count on the destination table.
+              Dim commandRowCount As New SqlCommand( _
+              "SELECT COUNT(*) FROM dbo.BulkCopyDemoMatchingColumns;", _
+                  sourceConnection)
+              Dim countStart As Long = _
+                 System.Convert.ToInt32(commandRowCount.ExecuteScalar())
+              Console.WriteLine("Starting row count = {0}", countStart)
+  
+              ' Get data from the source table as a SqlDataReader.
+              Dim commandSourceData As SqlCommand = New SqlCommand( _
+                 "SELECT ProductID, Name, ProductNumber " &amp; _
+                 "FROM Production.Product;", sourceConnection)
+              Dim reader As SqlDataReader = commandSourceData.ExecuteReader
+  
+              ' Open the destination connection. In the real world you would 
+              ' not use SqlBulkCopy to move data from one table to the other   
+              ' in the same database. This is for demonstration purposes only.
+              Using destinationConnection As SqlConnection = _
+                  New SqlConnection(connectionString)
+                  destinationConnection.Open()
+  
+                  ' Set up the bulk copy object. 
+                  ' The column positions in the source data reader 
+                  ' match the column positions in the destination table, 
+                  ' so there is no need to map columns.
+                  Using bulkCopy As SqlBulkCopy = _
+                    New SqlBulkCopy(destinationConnection)
+                      bulkCopy.DestinationTableName = _
+                      "dbo.BulkCopyDemoMatchingColumns"
+  
+                      Try
+                          ' Write from the source to the destination.
+                          bulkCopy.WriteToServer(reader)
+  
+                      Catch ex As Exception
+                          Console.WriteLine(ex.Message)
+  
+                      Finally
+                          ' Close the SqlDataReader. The SqlBulkCopy
+                          ' object is automatically closed at the end
+                          ' of the Using block.
+                          reader.Close()
+                      End Try
+                  End Using
+  
+                  ' Perform a final count on the destination table
+                  ' to see how many rows were added.
+                  Dim countEnd As Long = _
+                      System.Convert.ToInt32(commandRowCount.ExecuteScalar())
+                  Console.WriteLine("Ending row count = {0}", countEnd)
+                  Console.WriteLine("{0} rows were added.", countEnd - countStart)
+  
+                  Console.WriteLine("Press Enter to finish.")
+                  Console.ReadLine()
+              End Using
+          End Using
+      End Sub
+  
+      Private Function GetConnectionString() As String
+          ' To avoid storing the sourceConnection string in your code, 
+          ' you can retrieve it from a configuration file. 
+          Return "Data Source=(local);" &amp; _
+              "Integrated Security=true;" &amp; _
+              "Initial Catalog=AdventureWorks;"
+      End Function
+  End Module
+
+
+
+
+
+
+'2] T-SQL to set up table for SQLBulkCopy  example:
+
+USE AdventureWorks
+  
+  If EXISTS (Select * FROM dbo.sysobjects 
+   WHERE id = object_id(N'[dbo].[BulkCopyDemoMatchingColumns]') 
+   And OBJECTPROPERTY(id, N'IsUserTable') = 1)
+      DROP TABLE [dbo].[BulkCopyDemoMatchingColumns]
+  
+  CREATE TABLE [dbo].[BulkCopyDemoMatchingColumns](
+      [ProductID] [int] IDENTITY(1,1) Not NULL,
+      [Name] [nvarchar](50) Not NULL,
+      [ProductNumber] [nvarchar](25) Not NULL,
+   CONSTRAINT [PK_ProductID] PRIMARY KEY CLUSTERED 
+  (
+      [ProductID] ASC
+  ) On [PRIMARY]
+  ) On [PRIMARY]
+  
+  If EXISTS (Select * FROM dbo.sysobjects 
+   WHERE id = object_id(N'[dbo].[BulkCopyDemoDifferentColumns]') 
+   And OBJECTPROPERTY(id, N'IsUserTable') = 1)
+      DROP TABLE [dbo].[BulkCopyDemoDifferentColumns]
+  
+  CREATE TABLE [dbo].[BulkCopyDemoDifferentColumns](
+      [ProdID] [int] IDENTITY(1,1) Not NULL,
+      [ProdNum] [nvarchar](25) Not NULL,
+      [ProdName] [nvarchar](50) Not NULL,
+   CONSTRAINT [PK_ProdID] PRIMARY KEY CLUSTERED 
+  (
+      [ProdID] ASC
+  ) On [PRIMARY]
+  ) On [PRIMARY]
+  
+  If EXISTS (Select * FROM dbo.sysobjects 
+   WHERE id = object_id(N'[dbo].[BulkCopyDemoOrderHeader]') 
+   And OBJECTPROPERTY(id, N'IsUserTable') = 1)
+      DROP TABLE [dbo].[BulkCopyDemoOrderHeader]
+  
+  CREATE TABLE [dbo].[BulkCopyDemoOrderHeader](
+      [SalesOrderID] [int] IDENTITY(1,1) Not NULL,
+      [OrderDate] [datetime] Not NULL,
+      [AccountNumber] [nvarchar](15) NULL,
+   CONSTRAINT [PK_SalesOrderID] PRIMARY KEY CLUSTERED 
+  (
+      [SalesOrderID] ASC
+  ) On [PRIMARY]
+  ) On [PRIMARY]
+  
+  If EXISTS (Select * FROM dbo.sysobjects 
+   WHERE id = object_id(N'[dbo].[BulkCopyDemoOrderDetail]') 
+   And OBJECTPROPERTY(id, N'IsUserTable') = 1)
+      DROP TABLE [dbo].[BulkCopyDemoOrderDetail]
+  
+  CREATE TABLE [dbo].[BulkCopyDemoOrderDetail](
+      [SalesOrderID] [int] Not NULL,
+      [SalesOrderDetailID] [int] Not NULL,
+      [OrderQty] [smallint] Not NULL,
+      [ProductID] [int] Not NULL,
+      [UnitPrice] [money] Not NULL,
+   CONSTRAINT [PK_LineNumber] PRIMARY KEY CLUSTERED 
+  (
+      [SalesOrderID] ASC,
+      [SalesOrderDetailID] ASC
+  ) On [PRIMARY]
+  ) On [PRIMARY]
+
+
 </Code>
       </SnippetValue>
     </value>
@@ -50,74 +458,213 @@ Invoke-Item $env:userprofile\Desktop\favorites.csv
   <item>
     <key>
       <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>POWERSHELL_User_Profile</Category>
-        <Language>VBSCRIPT</Language>
+        <Category>Stored_Procedure</Category>
+        <Language>SQLSERVER2K SQL</Language>
         <Public>false</Public>
-        <Name>Copy_Users_Favorites_Cookies_etc</Name>
+        <Name>LIST_of_StoredProc_in_Database</Name>
         <Group>My Snippets</Group>
       </SnippetKey>
     </key>
     <value>
       <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
         <Key>
-          <Category>POWERSHELL_User_Profile</Category>
-          <Language>VBSCRIPT</Language>
+          <Category>Stored_Procedure</Category>
+          <Language>SQLSERVER2K SQL</Language>
           <Public>false</Public>
-          <Name>Copy_Users_Favorites_Cookies_etc</Name>
+          <Name>LIST_of_StoredProc_in_Database</Name>
           <Group>My Snippets</Group>
         </Key>
         <Keywords />
         <Imports />
-        <Code>
-#'CopyLocalUserDirectoriesFromProfile.ps1
+        <Code>https://stackoverflow.com/questions/219434/query-to-list-all-stored-procedures
 
-#'Set-ExecutionPolicy -Scope CurrentUser unrestricted -Force
+select * 
+  from RiskMngt.information_schema.routines 
+ where routine_type = 'PROCEDURE'
+ 
+ /*
+ If for some reason you had non-system stored procedures in the master database, 
+ you could use the query (this will filter out MOST system stored procedures):
+ */
 
-$ErrorActionPreference = "Continue"  #' suppresses an error "An item with the specified name xxx already exists." but it is not a problem
+select * 
+  from master.information_schema.routines 
+ where routine_type = 'PROCEDURE' 
+   and Left(Routine_Name, 3) NOT IN ('sp_', 'xp_', 'ms_')
+ 
+  --=============================================================================
+   
+SELECT name, type
+FROM dbo.sysobjects
+WHERE type IN (
+    'P', -- stored procedures
+    'FN', -- scalar functions 
+    'IF', -- inline table-valued functions
+    'TF' -- table-valued functions
+)
+ORDER BY type, name   
 
-$thisComputerName = $env:computername
-$theFolderName = "$thisComputerName" +  "__$(Get-Date -Format "yyyy_M_d")"
-$destinationPath = 'H:\'
-$myDocumentsPath = [Environment]::GetFolderPath("MyDocuments")
+  --=============================================================================
 
-if(!(test-path "$destination\$theFolderName")){
-  new-item "$destination\$theFolderName" -ItemType Directory
-    if(!(test-path "$destination\$theFolderName\desktop")){
-      new-item "$destinationPath\$theFolderName\desktop"   -ItemType Directory
-      new-item "$destinationPath\$theFolderName\favorites" -ItemType Directory
-      new-item "$destinationPath\$theFolderName\Documents"      -ItemType Directory
-}}
+--If you want to find the list of all SPs in all Databases you can use the below query :
 
-Copy-Item "$env:userprofile\desktop" -Destination "$destinationPath\$theFolderName" -Recurse
-Copy-Item "$env:userprofile\Favorites" -Destination "$destinationPath\$theFolderName" -Recurse
-Copy-Item $myDocumentsPath -Destination "$destinationPath\$theFolderName" -Recurse
+    CREATE TABLE #ListOfSPs 
+    (
+        DBName varchar(100), 
+        [OBJECT_ID] INT,
+        SPName varchar(100)
+    )
+
+    EXEC sp_msforeachdb 'USE [?]; INSERT INTO #ListOfSPs Select ''?'', Object_Id, Name FROM sys.procedures'
+
+    SELECT 
+        * 
+    FROM #ListOfSPs</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>TroubleShooting</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>LIST_of_objects_in_Database</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>TroubleShooting</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>LIST_of_objects_in_Database</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>--P_0025_TASK_06_CREATE_TABLE_T200_RiskManagement_TableList_Archive.sql
 
 
-$ErrorActionPreference = "Stop"
+ use RiskMngt
+ go
+			 SELECT 
+			 [name]
+			, [type]
+			,CASE 
+					WHEN [type] = 'P' THEN 'StoredProcedure'
+					WHEN [type] = 'FN' THEN 'scalar functions'
+					WHEN [type] = 'IF' THEN 'inline table-valued functions'
+					WHEN [type] = 'TF' THEN 'table-valued functions'
+					WHEN [type] = 'U' THEN 'StoredProcedure'
+					WHEN [type] = 'V' THEN 'View'
+					ELSE 'OTHER'
+					END AS type_description
+			, [name]
+			, [id]
+			, [xtype]
+			, [uid]
+			, [info]
+			, [status]
+			, [base_schema_ver]
+			, [replinfo]
+			, [parent_obj]
+			, [crdate]
+			, [ftcatid]
+			, [schema_ver]
+			, [stats_schema_ver]
+			, [type]
+			, [userstat]
+			, [sysstat]
+			, [indexdel]
+			, [refdate]
+			, [version]
+			, [deltrig]
+			, [instrig]
+			, [updtrig]
+			, [seltrig]
+			, [category]
+			, [cache]
+FROM dbo.sysobjects
 
-============================================================================================================
-'https://community.spiceworks.com/topic/1862095-powershell-script-to-copy-user-s-favorites-cookies
-=================================================================================================== LOCAL
-#'CopyLocalUserDirectoriesFromProfile.ps1
-#' NOTE this does throw an error "An item with the specified name xxx already exists." but it is not a problem
-#'Set-ExecutionPolicy -Scope CurrentUser unrestricted -Force
+--WHERE type IN (
+--    'P', -- stored procedures
+--    ,'FN' -- scalar functions 
+--    ,'IF' -- inline table-valued functions
+--    ,'TF' -- table-valued functions
+--	,'U' -- Tables
+--)
+ORDER BY 1  
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>TroubleShooting</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>LIST_of_StoredProc_in_Database</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>TroubleShooting</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>LIST_of_StoredProc_in_Database</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>https://stackoverflow.com/questions/219434/query-to-list-all-stored-procedures
 
-$destination = '\\win10vm\ALL_Share\Junk'
+select * 
+  from RiskMngt.information_schema.routines 
+ where routine_type = 'PROCEDURE'
+ 
+ /*
+ If for some reason you had non-system stored procedures in the master database, 
+ you could use the query (this will filter out MOST system stored procedures):
+ */
 
-if(!(test-path "$destination\$env:username")){
-  new-item "$destination\$env:username" -ItemType Directory
-    if(!(test-path "$destination\$env:username\desktop")){
-      new-item "$destination\$env:username\desktop"   -ItemType Directory
-      new-item "$destination\$env:username\favorites" -ItemType Directory
-      new-item "$destination\$env:username\docs"      -ItemType Directory
-      new-item "$destination\$env:username\cookies"   -ItemType Directory
-}}
+select * 
+  from master.information_schema.routines 
+ where routine_type = 'PROCEDURE' 
+   and Left(Routine_Name, 3) NOT IN ('sp_', 'xp_', 'ms_')
+ 
+  --=============================================================================
+   
+SELECT name, type
+FROM dbo.sysobjects
+WHERE type IN (
+    'P', -- stored procedures
+    'FN', -- scalar functions 
+    'IF', -- inline table-valued functions
+    'TF' -- table-valued functions
+)
+ORDER BY type, name   
 
-Copy-Item "$env:userprofile\desktop" -Destination "$destination\$env:username" -Recurse
-Copy-Item "$env:userprofile\Favorites" -Destination "$destination\$env:username" -Recurse
-Copy-Item "$env:userprofile\My Documents" -Destination "$destination\$env:username" -Recurse
-Copy-Item "$env:userprofile\cookies" -Destination "$destination\$env:username" -Recurse
-===================================================================================================</Code>
+  --=============================================================================
+
+--If you want to find the list of all SPs in all Databases you can use the below query :
+
+    CREATE TABLE #ListOfSPs 
+    (
+        DBName varchar(100), 
+        [OBJECT_ID] INT,
+        SPName varchar(100)
+    )
+
+    EXEC sp_msforeachdb 'USE [?]; INSERT INTO #ListOfSPs Select ''?'', Object_Id, Name FROM sys.procedures'
+
+    SELECT 
+        * 
+    FROM #ListOfSPs</Code>
       </SnippetValue>
     </value>
   </item>
