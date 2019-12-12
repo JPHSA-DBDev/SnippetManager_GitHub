@@ -1,2 +1,390 @@
 <?xml version="1.0" encoding="utf-8"?>
-<dictionary />
+<dictionary>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>Info_Tables</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>Compare Two Tables_3</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>Info_Tables</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>Compare Two Tables_3</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+-- http://www.experts-exchange.com/Microsoft/Development/MS-SQL-Server/SQL-Server-2005/Q_23675913.html
+
+
+
+
+
+set nocount on
+ 
+declare    @dbName1      varchar(64)
+          ,@dbName2      varchar(64)
+          ,@IncludeIndex bit
+ 
+set @dbName1        = 'YourFirstDBName'
+set @dbName2        = 'YourSecondDBName'
+set @IncludeIndex   = 1
+ 
+declare   @errStr        varchar(255)
+ 
+if    not exists (select null from master.sys.sysdatabases where Name = @dbName1)
+   or not exists (select null from master.sys.sysdatabases where Name = @dbName2)
+     begin
+          set @errStr='One or more of the databases to test were not found (' + @dbName1 + ', ' + @dbName2 + ')'
+          goto exit_error
+     end
+ 
+create table #dbData1
+     (TABLE_CATALOG                     varchar(64)
+     ,TABLE_SCHEMA                      varchar(64)
+     ,TABLE_NAME                        varchar(255)
+     ,COLUMN_NAME                       varchar(255)
+     ,ORDINAL_POSITION                  int
+     ,COLUMN_DEFAULT                    varchar(255)
+     ,IS_NULLABLE                       char(3)
+     ,DATA_TYPE                         varchar(32)
+     ,CHARACTER_MAXIMUM_LENGTH          bigint
+     ,CHARACTER_OCTET_LENGTH            bigint
+     ,NUMERIC_PRECISION                 int
+     ,NUMERIC_PRECISION_RADIX           int
+     ,NUMERIC_SCALE                     int
+     ,DATETIME_PRECISION                int
+     ,CHARACTER_SET_CATALOG             varchar(64)
+     ,CHARACTER_SET_SCHEMA              varchar(64)
+     ,CHARACTER_SET_NAME                varchar(64)
+     ,COLLATION_CATALOG                 varchar(64)
+     ,COLLATION_SCHEMA                  varchar(64)
+     ,COLLATION_NAME                    varchar(64)
+     ,DOMAIN_CATALOG                    varchar(64)
+     ,DOMAIN_SCHEMA                     varchar(64)
+     ,DOMAIN_NAME                       varchar(64)
+     )
+ 
+create table #dbData2
+     (TABLE_CATALOG                     varchar(64)
+     ,TABLE_SCHEMA                      varchar(64)
+     ,TABLE_NAME                        varchar(255)
+     ,COLUMN_NAME                       varchar(255)
+     ,ORDINAL_POSITION                  int
+     ,COLUMN_DEFAULT                    varchar(255)
+     ,IS_NULLABLE                       char(3)
+     ,DATA_TYPE                         varchar(32)
+     ,CHARACTER_MAXIMUM_LENGTH          bigint
+     ,CHARACTER_OCTET_LENGTH            bigint
+     ,NUMERIC_PRECISION                 int
+     ,NUMERIC_PRECISION_RADIX           int
+     ,NUMERIC_SCALE                     int
+     ,DATETIME_PRECISION                int
+     ,CHARACTER_SET_CATALOG             varchar(64)
+     ,CHARACTER_SET_SCHEMA              varchar(64)
+     ,CHARACTER_SET_NAME                varchar(64)
+     ,COLLATION_CATALOG                 varchar(64)
+     ,COLLATION_SCHEMA                  varchar(64)
+     ,COLLATION_NAME                    varchar(64)
+     ,DOMAIN_CATALOG                    varchar(64)
+     ,DOMAIN_SCHEMA                     varchar(64)
+     ,DOMAIN_NAME                       varchar(64)
+     )
+ 
+create table #IndexData1
+     (Table_Schema                      varchar(64)
+     ,Table_Name                        nvarchar(255)
+     ,Index_Name                        nvarchar(255)
+     ,Index_Description                 nvarchar(1000)
+     ,Index_Keys                        nvarchar(255)
+     )
+ 
+create table #IndexData2
+     (Table_Schema                      varchar(64)
+     ,Table_Name                        nvarchar(255)
+     ,Index_Name                        nvarchar(255)
+     ,Index_Description                 nvarchar(1000)
+     ,Index_Keys                        nvarchar(255)
+     )
+ 
+create table #missingTables
+     (TABLE_CATALOG                     varchar(64)
+     ,TABLE_SCHEMA                      varchar(64)
+     ,TABLE_NAME                        varchar(255)
+     )
+ 
+create table #missingColumns
+     (TABLE_CATALOG                     varchar(64)
+     ,TABLE_SCHEMA                      varchar(64)
+     ,TABLE_NAME                        varchar(255)
+     ,COLUMN_NAME                       varchar(255)
+     ,ORDINAL_POSITION                  int
+     )
+ 
+create table #DiffColumnDef
+     (TABLE_SCHEMA                      varchar(64)
+     ,TABLE_NAME                        varchar(255)
+     ,COLUMN_NAME                       varchar(255)
+     ,DATA_TYPE1                        varchar(32)
+     ,DATA_TYPE2                        varchar(32)
+     ,CHARACTER_MAXIMUM_LENGTH1         bigint
+     ,CHARACTER_MAXIMUM_LENGTH2         bigint
+     ,COLUMN_DEFAULT1                   varchar(255)
+     ,COLUMN_DEFAULT2                   varchar(255)
+     ,IS_NULLABLE1                      char(3)
+     ,IS_NULLABLE2                      char(3)
+     )
+ 
+create table #DiffColumnPos
+     (TABLE_SCHEMA                      varchar(64)
+     ,TABLE_NAME                        varchar(255)
+     ,COLUMN_NAME                       varchar(255)
+     ,ORDINAL_POSITION1                 int
+     ,ORDINAL_POSITION2                 int
+     )
+ 
+create table #IndexDiff
+     (Database_Name                     varchar(64)
+     ,Table_Name                        varchar(64)
+     ,Table_Schema                      varchar(64)
+     ,Index_Name                        varchar(64)
+     ,Index_Description                 nvarchar(1000)
+     ,Index_Keys                        nvarchar(1000)
+     )
+ 
+insert into #dbData1
+exec ('select * from [' + @dbName1 + '].information_schema.columns')
+insert into #dbData2
+exec ('select * from [' + @dbName2 + '].information_schema.columns')
+ 
+ 
+if @IncludeIndex=1
+begin -- if @IncludeIndex=1
+     /* Gather index info
+     */
+     declare @Cmd   nvarchar(1000)
+     declare IndexCursor cursor for
+     select distinct 'Print ''Checking Index: ' + d1.Table_Schema +'.' + d1.Table_name  +'''
+insert into #IndexData1 (Index_Name,Index_Description,Index_Keys)
+          exec ' + @dbName1 + '.' + d1.Table_Schema + '.sp_helpindex [' + d1.Table_Name + ']
+     insert into #IndexData2 (Index_Name,Index_Description,Index_Keys)
+          exec ' + @dbName2 + '.' + d1.Table_Schema + '.sp_helpindex [' + d1.Table_Name + ']
+     update #IndexData1 set Table_Name = ''' + d1.Table_Name + ''',Table_Schema = ''' + d1.Table_Schema + ''' where Table_Name is null
+     update #IndexData2 set Table_Name = ''' + d1.Table_Name + ''',Table_Schema = ''' + d1.Table_Schema + ''' where Table_Name is null
+     '
+ 
+     from #DbData1 d1
+       join #DbData2 d2
+         on d1.table_Name = d2.Table_Name
+         and d1.Table_Schema = d2.table_schema
+ 
+ 
+     open IndexCursor
+     fetch next from IndexCursor into @Cmd
+     while @@Fetch_Status=0
+     begin
+ 
+          exec(@Cmd)
+ 
+          fetch next from IndexCursor into @Cmd
+     end
+     close IndexCursor
+     deallocate IndexCursor
+ 
+ 
+     insert into #IndexDiff (database_name,Table_Name,table_schema,Index_Name,Index_Description,Index_Keys)
+     select @DbName2,d1.Table_Name,d1.Table_Schema,d1.Index_Name,d1.Index_Description,d1.Index_Keys
+     from #IndexData1 d1
+       left outer join #IndexData2 d2
+         on d1.Table_Name = d2.Table_Name
+         and d1.Index_Name= d2.Index_Name
+         and d1.Index_Description = d2.Index_Description
+         and d1.Index_Keys = d2.Index_Keys
+     where d2.Index_Name is null
+ 
+     insert into #IndexDiff (database_name,Table_Name,table_schema,Index_Name,Index_Description,Index_Keys)
+     select @DbName1,d2.Table_Name,d2.Table_Schema,d2.Index_Name,d2.Index_Description,d2.Index_Keys
+     from #IndexData2 d2
+       left outer join #IndexData1 d1
+         on d1.Table_Name = d2.Table_Name
+         and d1.Index_Name= d2.Index_Name
+         and d1.Index_Description = d2.Index_Description
+         and d1.Index_Keys = d2.Index_Keys
+     where d1.Index_Name is null
+end -- if @IncludeIndex=1
+ 
+insert into #missingTables
+select distinct @dbName2, d1.table_schema, d1.table_name
+from #dbData1 d1
+where not exists 
+     (select null from #dbData2 d2 
+      where d1.table_schema = d2.table_schema
+        and d1.table_name = d2.table_name
+     )
+ 
+insert into #missingTables
+select distinct @dbName1, d2.table_schema, d2.table_name
+from #dbData2 d2
+where not exists 
+     (select null from #dbData1 d1
+      where d1.table_schema = d2.table_schema
+        and d1.table_name = d2.table_name
+     )
+ 
+ 
+ 
+ 
+insert into #missingcolumns
+select distinct @dbName2, d1.table_schema, d1.table_name, d1.column_name,d1.Ordinal_Position
+from #dbData1 d1
+where not exists 
+     (select null from #dbData2 d2 
+      where d1.table_schema = d2.table_schema
+        and d1.table_name = d2.table_name
+        and d1.column_name = d2.column_name
+     )
+and not exists 
+     (select null from #missingTables m2
+      where d1.table_schema = m2.table_schema
+        and d1.table_name = m2.table_name
+     )
+ 
+insert into #missingcolumns
+select distinct @dbName1, d2.table_schema, d2.table_name, d2.column_name,d2.Ordinal_Position
+from #dbData2 d2
+where not exists 
+     (select null from #dbData1 d1
+      where d1.table_schema = d2.table_schema
+        and d1.table_name = d2.table_name
+        and d1.column_name = d2.column_name
+     )
+and not exists 
+     (select null from #missingTables m2
+      where d2.table_schema = m2.table_schema
+        and d2.table_name = m2.table_name
+     )
+ 
+ 
+ 
+ 
+insert into #DiffColumnDef
+select d1.table_schema, d1.table_name, d1.column_name
+     ,d1.DATA_TYPE,d2.DATA_TYPE,d1.CHARACTER_MAXIMUM_LENGTH,d2.CHARACTER_MAXIMUM_LENGTH
+     ,d1.COLUMN_DEFAULT,d2.COLUMN_DEFAULT
+     ,d1.IS_NULLABLE,d2.IS_NULLABLE
+from #dbData1 d1
+  join #dbData2 d2
+    on d1.table_schema = d2.table_schema
+    and d1.table_name = d2.table_name
+    and d1.column_name = d2.column_name
+where d1.DATA_TYPE &lt;&gt; d2.DATA_TYPE
+   or d1.COLUMN_DEFAULT &lt;&gt; d2.COLUMN_DEFAULT
+   or d1.IS_NULLABLE &lt;&gt; d2.IS_NULLABLE
+   or isnull(d1.CHARACTER_MAXIMUM_LENGTH,0) &lt;&gt; isnull(d2.CHARACTER_MAXIMUM_LENGTH,0)
+ 
+insert into #DiffColumnPos
+select d1.table_schema, d1.table_name, d1.column_name
+     ,d1.ORDINAL_POSITION,d2.ORDINAL_POSITION
+from #dbData1 d1
+  join #dbData2 d2
+    on d1.table_schema = d2.table_schema
+    and d1.table_name = d2.table_name
+    and d1.column_name = d2.column_name
+where d1.ORDINAL_POSITION &lt;&gt; d2.ORDINAL_POSITION
+ 
+select * from #missingTables
+order by table_catalog,table_schema,table_name
+ 
+select * from #DiffColumnDef
+order by table_schema,table_name,column_name
+ 
+select * from #missingColumns
+order by table_catalog,table_schema,table_name,column_name
+ 
+select * from #DiffColumnPos
+order by table_schema,table_name,ordinal_position1,column_name
+ 
+if @IncludeIndex=1
+begin
+     select * from #IndexDiff 
+     order by database_name,table_name,table_schema,index_name,index_description,index_keys
+end
+ 
+ 
+ 
+goto exit_ok
+ 
+exit_error:
+raiserror(@errStr,16,1)
+exit_ok:
+ 
+ 
+ 
+go
+if object_id('tempdb..#dbData1') is not null
+     drop table #dbData1
+if object_id('tempdb..#dbData2') is not null
+     drop table #dbData2
+if object_id('tempdb..#missingtables') is not null
+     drop table #missingtables
+if object_id('tempdb..#missingcolumns') is not null
+     drop table #missingcolumns
+if object_id('tempdb..#DiffColumnDef') is not null
+     drop table #DiffColumnDef
+if object_id('tempdb..#DiffColumnPos') is not null
+     drop table #DiffColumnPos
+if object_id('tempdb..#IndexData1') is not null
+     drop table #IndexData1
+if object_id('tempdb..#IndexData2') is not null
+     drop table #IndexData2
+if object_id('tempdb..#IndexDiff') is not null
+     drop table #IndexDiff
+
+Open in New WindowSelect All
+bashka_abdyli:
+08/25/08 11:00 AM, ID: 22307609
+You can use this tool it is very sofisticated. Also there is a trial to download :
+
+http://www.apexsql.com/sql_tools_diff.asp
+townsma:
+08/25/08 11:11 AM, ID: 22307705
+I have found one of the best tools for this to be Redgate at www.red-gate.com. Again there is a trial version, but it is really easy to use, 
+        and will also fix up the differences if you want it to.
+Conain:
+08/25/08 11:15 AM, ID: 22307728
+Hey Brandon Thanks very much for the script sure it would help me a lot.
+I have few questions does this script only brings the differences in table structures from two tables.
+I would also like to know like if one table has Default, check constraint and all other constraints which might be missing in other table.
+
+If the script given by you can bring that differences as well, also if not then please let me know where to modify to get that information.
+
+Thanks for your help.
+BrandonGalderisi:
+08/25/08 11:42 AM, ID: 22307944
+It only shows differences, not the items that are alike.
+
+It does not give differences in constraints (check or default).
+
+Default and check constraints can be implemented by comparing the data in sys.default_constraints and sys.check_constraints respectively.
+
+You can just add a temp table and use the other queries as templates.  The parent_object_id is the id of the table in those tables.
+Conain:
+08/25/08 12:57 PM, ID: 22308654
+Hi,
+Thanks all for your help, I have downloaded the red-gate tool as well, this tool is very comprehensive.
+
+Also the query given by Brandon is very good, I would use query and modify to get what I need thanks very much guys.
+20110705-EE-VQP-215-X
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+</dictionary>
