@@ -1,0 +1,5 @@
+this file is the one that is used: mysnippets.xml
+
+Complete version was used to create these:
+mysnipptsMinusCsharpVBnetJavascript.xml
+mysnippetsJustCsharpVBnetJavascript.xml
