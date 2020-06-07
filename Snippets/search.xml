@@ -1,2 +1,2498 @@
 <?xml version="1.0" encoding="utf-8"?>
-<dictionary />
+<dictionary>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_MISC</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>Services_for_List_of_Remote_computers</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_MISC</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>Services_for_List_of_Remote_computers</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>Services_for_List_of_Remote_computers
+
+
+https://social.technet.microsoft.com/Forums/ie/en-US/edd9d9f6-1b03-411c-8785-dc3de53359bd/script-to-get-list-of-remote-services-filtered-based-on-log-on-as-account?forum=winserverpowershell
+
+#'You can use the Win32_Service WMI Class
+#'For example, to find out the list of services running under the Local System Account 
+#'    on a remote computer named Demo123, 
+#'       you may use the following code:
+
+
+Get-WMIObject Win32_Service -ComputerName Demo123 | Where-Object{$_.StartName -eq 'LocalSystem'} | Sort-Object -Property StartName | Format-Table Name, StartName
+
+#'To run this as a script,
+#'Input all server names in a text file (one on each line)
+#'
+
+$compArray = get-content C:\Scripts\Servers.txt
+foreach($strComputer in $compArray)
+{
+Get-WMIObject Win32_Service -ComputerName $strComputer | Where-Object{$_.StartName -eq 'LocalSystem'} | Sort-Object -Property StartName | Format-Table Name, StartName
+}
+---------------------------------------------------------------------------
+
+&gt;Get-Service -ComputerName "Server02"
+
+-----------------------------
+
+&gt; Get-Service -Name "WinRM" -ComputerName "localhost", "Server01", "Server02" | Format-Table -Property MachineName, Status, Name, DisplayName -auto
+
+
+---------------------------------------------------------------------------
+https://social.technet.microsoft.com/Forums/windowsserver/en-US/75b3dcde-af1e-4d87-9eff-ce923b090ef8/get-services-from-remote-computers?forum=winserverpowershell
+
+#'I recommend to import the server names from a textfile:
+#'$server = Get-Content -path C:\User\Test\Desktop\...
+$server = get-content -path C:\DATA\PowerShellScripts\computers.txt
+
+#'After that you are going through a foreach-loop to execute the code for each server:
+$server | foreach { (Get-Service -Name ccm* -computername $_) |
+ Select-Object Status, Name, DisplayName | 
+ConvertTo-HTML | Out-File "C:\DATA\PowerShellScripts\computerServicesList.htm"}
+
+-------------------------------------------------------------
+
+$array = @()            
+foreach($i in (gc computers.txt)) {            
+ $svc = Get-Service winrm -ComputerName $i -ea "0"            
+ $obj = New-Object psobject -Property @{            
+  Name = $svc.name            
+  Status = $svc.status            
+  Computer = $i            
+  }            
+ $array += $obj            
+}                      
+$array | Select Computer,Name,Status | FT -AutoSize</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Network_subnet_IP_DNS_etc</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>Get-SubNetItems.ps1</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Network_subnet_IP_DNS_etc</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>Get-SubNetItems.ps1</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>'Get-SubNetItems.ps1
+'https://gallery.technet.microsoft.com/scriptcenter/SubNet-Scan-dad0311f
+
+I ended up putting this in the MyFunctions Module
+
+
+'This file Get-SubNetItems.ps1 contains only definition of Get-SubNetItems function. To use this tool try this:
+'1) Load file with cmdlet definition. Don't forget first . It is important to load the cmdlets in the current namespace.
+'PS&gt;. P:\Get-SubNetIte​ms.ps1
+
+'2) And next try use function.
+
+'Basic
+PS&gt;Get-SubNetItems -StartScanIP 10.0.0.1 -EndScanIP 10.0.0.10
+'Formated
+Get-SubNetItems -StartScanIP 10.0.0.1 -EndScanIP 10.0.0.10 | Format-Table -Property Host, IP, OS_Name, OS_Ver, WMI  -AutoSize
+'To File
+Get-SubNetItems -StartScanIP 10.0.0.1 -EndScanIP 10.0.0.254 | Format-Table -Property Host, IP, OS_Name, OS_Ver, WMI  -AutoSize | Out-File C:\ListOfComputers.txt
+===================================================================================
+Function Get-SubNetItems
+{
+&lt;# 
+	.SYNOPSIS 
+		Scan subnet machines
+		
+	.DESCRIPTION 
+		Use Get-SubNetItems to receive list of machines in specific IP range.
+
+	.PARAMETER StartScanIP 
+		Specify start of IP range.
+
+	.PARAMETER EndScanIP
+		Specify end of IP range.
+
+	.PARAMETER Ports
+		Specify ports numbers to scan if open or not.
+		
+	.PARAMETER MaxJobs
+		Specify number of threads to scan.
+		
+	.PARAMETER ShowAll
+		Show even adress is inactive.
+	
+	.PARAMETER ShowInstantly 
+		Show active status of scaned IP address instanly. 
+	
+	.PARAMETER SleepTime  
+		Wait time to check if threads are completed.
+ 
+	.PARAMETER TimeOut 
+		Time out when script will be break.
+
+	.EXAMPLE 
+		PS C:\&gt;$Result = Get-SubNetItems -StartScanIP 10.10.10.1 -EndScanIP 10.10.10.10 -ShowInstantly -ShowAll
+		10.10.10.7 is active.
+		10.10.10.10 is active.
+		10.10.10.9 is active.
+		10.10.10.1 is inactive.
+		10.10.10.6 is active.
+		10.10.10.4 is active.
+		10.10.10.3 is inactive.
+		10.10.10.2 is active.
+		10.10.10.5 is active.
+		10.10.10.8 is inactive.
+
+		PS C:\&gt; $Result | Format-Table IP, Active, WMI, WinRM, Host, OS_Name -AutoSize
+
+		IP           Active   WMI WinRM Host              OS_Name
+		--           ------   --- ----- ----              -------
+		10.10.10.1    False False False
+		10.10.10.2     True  True  True pc02.mydomain.com Microsoft Windows Server 2008 R2 Enterprise
+		10.10.10.3    False False False
+		10.10.10.4     True  True  True pc05.mydomain.com Microsoft Windows Server 2008 R2 Enterprise
+		10.10.10.5     True  True  True pc06.mydomain.com Microsoft Windows Server 2008 R2 Enterprise
+		10.10.10.6     True  True  True pc07.mydomain.com Microsoft(R) Windows(R) Server 2003, Standard Edition
+		10.10.10.7     True False False
+		10.10.10.8    False False False
+		10.10.10.9     True  True False pc09.mydomain.com Microsoft Windows Server 2008 R2 Enterprise
+		10.10.10.10    True  True False pc10.mydomain.com Microsoft Windows XP Professional
+
+	.EXAMPLE 
+		PS C:\&gt; Get-SubNetItems -StartScanIP 10.10.10.2 -Verbose
+		VERBOSE: Creating own list class.
+		VERBOSE: Start scaning...
+		VERBOSE: Starting job (1/20) for 10.10.10.2.
+		VERBOSE: Trying get part of data.
+		VERBOSE: Trying get last part of data.
+		VERBOSE: All jobs is not completed (1/20), please wait... (0)
+		VERBOSE: Trying get last part of data.
+		VERBOSE: All jobs is not completed (1/20), please wait... (5)
+		VERBOSE: Trying get last part of data.
+		VERBOSE: All jobs is not completed (1/20), please wait... (10)
+		VERBOSE: Trying get last part of data.
+		VERBOSE: Geting job 10.10.10.2 result.
+		VERBOSE: Removing job 10.10.10.2.
+		VERBOSE: Scan finished.
+
+
+		RunspaceId : d2882105-df8c-4c0a-b92c-0d078bcde752
+		Active     : True
+		Host       : pc02.mydomain.com
+		IP         : 10.10.10.2
+		OS_Name    : Microsoft Windows Server 2008 R2 Enterprise
+		OS_Ver     : 6.1.7601 Service Pack 1
+		WMI        : True
+		WinRM      : True
+		
+	.EXAMPLE 	
+		PS C:\&gt; $Result = Get-SubNetItems -StartScanIP 10.10.10.1 -EndScanIP 10.10.10.25 -Ports 80,3389,5900	
+
+		PS C:\&gt; $Result | Select-Object IP, Host, MAC, @{l="Ports";e={[string]::join(", ",($_.Ports | Select-Object @{Label="Ports";Expression={"$($_.Port)-$($_.Status)"}} | Select-Object -ExpandProperty Ports))}} | Format-Table * -AutoSize
+		
+		IP          Host              MAC               Ports
+		--          ----              ---               -----
+		10.10.10.1                                      80-False, 3389-False, 5900-False
+		10.10.10.2  pc02.mydomain.com 00-15-AD-0C-82-20 80-True, 3389-False, 5900-False
+		10.10.10.5  pc05.mydomain.com 00-15-5D-1C-80-25 80-True, 3389-False, 5900-False
+		10.10.10.7  pc07.mydomain.com 00-15-4D-0C-81-04 80-True, 3389-True, 5900-False
+		10.10.10.9  pc09.mydomain.com 00-15-4A-0C-80-31 80-True, 3389-True, 5900-False
+		10.10.10.10 pc10.mydomain.com 00-15-5D-02-1F-1C 80-False, 3389-True, 5900-False
+
+	.NOTES 
+		Author: Michal Gajda
+		
+		ChangeLog:
+		v1.3
+		-Scan items in subnet for MAC
+		-Basic port scan on items in subnet
+		-Fixed some small spelling bug
+		
+		v1.2
+		-IP Range Ganerator upgrade
+		
+		v1.1
+		-ProgressBar upgrade
+		
+		v1.0:
+		-Scan subnet for items
+		-Scan items in subnet for WMI Access
+		-Scan items in subnet for WinRM Access
+#&gt;
+
+	[CmdletBinding(
+		SupportsShouldProcess=$True,
+		ConfirmImpact="Low" 
+	)]	
+	param(
+		[parameter(Mandatory=$true)]
+		[System.Net.IPAddress]$StartScanIP,
+		[System.Net.IPAddress]$EndScanIP,
+		[Int]$MaxJobs = 20,
+		[Int[]]$Ports,
+		[Switch]$ShowAll,
+		[Switch]$ShowInstantly,
+		[Int]$SleepTime = 5,
+		[Int]$TimeOut = 90
+	)
+
+	Begin{}
+
+	Process
+	{
+		if ($pscmdlet.ShouldProcess("$StartScanIP $EndScanIP" ,"Scan IP range for active machines"))
+		{
+			if(Get-Job -name *.*.*.*)
+			{
+				Write-Verbose "Removing old jobs."
+				Get-Job -name *.*.*.* | Remove-Job -Force
+			}
+			
+			$ScanIPRange = @()
+			if($EndScanIP -ne $null)
+			{
+				Write-Verbose "Generating IP range list."
+				# Many thanks to Dr. Tobias Weltner, MVP PowerShell and Grant Ward for IP range generator
+				$StartIP = $StartScanIP -split '\.'
+	  			[Array]::Reverse($StartIP)  
+	  			$StartIP = ([System.Net.IPAddress]($StartIP -join '.')).Address 
+				
+				$EndIP = $EndScanIP -split '\.'
+	  			[Array]::Reverse($EndIP)  
+	  			$EndIP = ([System.Net.IPAddress]($EndIP -join '.')).Address 
+				
+				For ($x=$StartIP; $x -le $EndIP; $x++) {    
+					$IP = [System.Net.IPAddress]$x -split '\.'
+					[Array]::Reverse($IP)   
+					$ScanIPRange += $IP -join '.' 
+				}
+			
+			}
+			else
+			{
+				$ScanIPRange = $StartScanIP
+			}
+
+			Write-Verbose "Creating own list class."
+			$Class = @"
+			public class SubNetItem {
+				public bool Active;
+				public string Host;
+				public System.Net.IPAddress IP;
+				public string MAC;
+				public System.Object Ports;
+				public string OS_Name;
+				public string OS_Ver;
+				public bool WMI;
+				public bool WinRM;
+			}
+"@		
+
+			Write-Verbose "Start scaning..."	
+			$ScanResult = @()
+			$ScanCount = 0
+			Write-Progress -Activity "Scan IP Range $StartScanIP $EndScanIP" -Status "Scaning:" -Percentcomplete (0)
+			Foreach($IP in $ScanIPRange)
+			{
+	 			Write-Verbose "Starting job ($((Get-Job -name *.*.*.* | Measure-Object).Count+1)/$MaxJobs) for $IP."
+				Start-Job -Name $IP -ArgumentList $IP,$Ports,$Class -ScriptBlock{ 
+				
+					param
+					(
+					[System.Net.IPAddress]$IP = $IP,
+					[Int[]]$Ports = $Ports,
+					$Class = $Class 
+					)
+					
+					Add-Type -TypeDefinition $Class
+					
+					if(Test-Connection -ComputerName $IP -Quiet)
+					{
+						#Get Hostname
+						Try
+						{
+							$HostName = [System.Net.Dns]::GetHostbyAddress($IP).HostName
+						}
+						Catch
+						{
+							$HostName = $null
+						}
+						
+						#Get WMI Access, OS Name and version via WMI
+						Try
+						{
+							#I don't use Get-WMIObject because it havent TimeOut options. 
+							$WMIObj = [WMISearcher]''  
+							$WMIObj.options.timeout = '0:0:10' 
+							$WMIObj.scope.path = "\\$IP\root\cimv2"  
+							$WMIObj.query = "SELECT * FROM Win32_OperatingSystem"  
+							$Result = $WMIObj.get()  
+
+							if($Result -ne $null)
+							{
+								$OS_Name = $Result | Select-Object -ExpandProperty Caption
+								$OS_Ver = $Result | Select-Object -ExpandProperty Version
+								$OS_CSDVer = $Result | Select-Object -ExpandProperty CSDVersion
+								$OS_Ver += " $OS_CSDVer"
+								$WMIAccess = $true					
+							}
+							else
+							{
+								$WMIAccess = $false	
+							}
+						}	
+						catch
+						{
+							$WMIAccess = $false					
+						}
+						
+						#Get WinRM Access, OS Name and version via WinRM
+						if($HostName)
+						{
+							$Result = Invoke-Command -ComputerName $HostName -ScriptBlock {systeminfo} -ErrorAction SilentlyContinue 
+						}
+						else
+						{
+							$Result = Invoke-Command -ComputerName $IP -ScriptBlock {systeminfo} -ErrorAction SilentlyContinue 
+						}
+						
+						if($Result -ne $null)
+						{
+							if($OS_Name -eq $null)
+							{
+								$OS_Name = ($Result[2..3] -split ":\s+")[1]
+								$OS_Ver = ($Result[2..3] -split ":\s+")[3]
+							}	
+							$WinRMAccess = $true
+						}
+						else
+						{
+							$WinRMAccess = $false
+						}
+						
+						#Get MAC Address
+						Try
+						{
+							$result= nbtstat -A $IP | select-string "MAC"
+							$MAC = [string]([Regex]::Matches($result, "([0-9A-F][0-9A-F]-){5}([0-9A-F][0-9A-F])"))
+						}
+						Catch
+						{
+							$MAC = $null
+						}
+						
+						#Get ports status
+						$PortsStatus = @()
+						ForEach($Port in $Ports)
+						{
+							Try
+							{							
+								$TCPClient = new-object Net.Sockets.TcpClient
+								$TCPClient.Connect($IP, $Port)
+								$TCPClient.Close()
+								
+								$PortStatus = New-Object PSObject -Property @{            
+		        					Port		= $Port
+									Status      = $true
+								}
+								$PortsStatus += $PortStatus
+							}	
+							Catch
+							{
+								$PortStatus = New-Object PSObject -Property @{            
+		        					Port		= $Port
+									Status      = $false
+								}	
+								$PortsStatus += $PortStatus
+							}
+						}
+
+						
+						$HostObj = New-Object SubNetItem -Property @{            
+		        					Active		= $true
+									Host        = $HostName
+									IP          = $IP 
+									MAC         = $MAC
+									Ports       = $PortsStatus
+		        					OS_Name     = $OS_Name
+									OS_Ver      = $OS_Ver               
+		        					WMI         = $WMIAccess      
+		        					WinRM       = $WinRMAccess      
+		        		}
+						$HostObj
+					}
+					else
+					{
+						$HostObj = New-Object SubNetItem -Property @{            
+		        					Active		= $false
+									Host        = $null
+									IP          = $IP  
+									MAC         = $null
+									Ports       = $null
+		        					OS_Name     = $null
+									OS_Ver      = $null               
+		        					WMI         = $null      
+		        					WinRM       = $null      
+		        		}
+						$HostObj
+					}
+				} | Out-Null
+				$ScanCount++
+				Write-Progress -Activity "Scan IP Range $StartScanIP $EndScanIP" -Status "Scaning:" -Percentcomplete ([int](($ScanCount+$ScanResult.Count)/(($ScanIPRange | Measure-Object).Count) * 50))
+				
+				do
+				{
+					Write-Verbose "Trying get part of data."
+					Get-Job -State Completed | Foreach {
+						Write-Verbose "Geting job $($_.Name) result."
+						$JobResult = Receive-Job -Id ($_.Id)
+
+						if($ShowAll)
+						{
+							if($ShowInstantly)
+							{
+								if($JobResult.Active -eq $true)
+								{
+									Write-Host "$($JobResult.IP) is active." -ForegroundColor Green
+								}
+								else
+								{
+									Write-Host "$($JobResult.IP) is inactive." -ForegroundColor Red
+								}
+							}
+							
+							$ScanResult += $JobResult	
+						}
+						else
+						{
+							if($JobResult.Active -eq $true)
+							{
+								if($ShowInstantly)
+								{
+									Write-Host "$($JobResult.IP) is active." -ForegroundColor Green
+								}
+								$ScanResult += $JobResult
+							}
+						}
+						Write-Verbose "Removing job $($_.Name)."
+						Remove-Job -Id ($_.Id)
+						Write-Progress -Activity "Scan IP Range $StartScanIP $EndScanIP" -Status "Scaning:" -Percentcomplete ([int](($ScanCount+$ScanResult.Count)/(($ScanIPRange | Measure-Object).Count) * 50))
+					}
+					
+					if((Get-Job -name *.*.*.*).Count -eq $MaxJobs)
+					{
+						Write-Verbose "Jobs are not completed ($((Get-Job -name *.*.*.* | Measure-Object).Count)/$MaxJobs), please wait..."
+						Sleep $SleepTime
+					}
+				}
+				while((Get-Job -name *.*.*.*).Count -eq $MaxJobs)
+			}
+			
+			$timeOutCounter = 0
+			do
+			{
+				Write-Verbose "Trying get last part of data."
+				Get-Job -State Completed | Foreach {
+					Write-Verbose "Geting job $($_.Name) result."
+					$JobResult = Receive-Job -Id ($_.Id)
+
+					if($ShowAll)
+					{
+						if($ShowInstantly)
+						{
+							if($JobResult.Active -eq $true)
+							{
+								Write-Host "$($JobResult.IP) is active." -ForegroundColor Green
+							}
+							else
+							{
+								Write-Host "$($JobResult.IP) is inactive." -ForegroundColor Red
+							}
+						}
+						
+						$ScanResult += $JobResult	
+					}
+					else
+					{
+						if($JobResult.Active -eq $true)
+						{
+							if($ShowInstantly)
+							{
+								Write-Host "$($JobResult.IP) is active." -ForegroundColor Green
+							}
+							$ScanResult += $JobResult
+						}
+					}
+					Write-Verbose "Removing job $($_.Name)."
+					Remove-Job -Id ($_.Id)
+					Write-Progress -Activity "Scan IP Range $StartScanIP $EndScanIP" -Status "Scaning:" -Percentcomplete ([int](($ScanCount+$ScanResult.Count)/(($ScanIPRange | Measure-Object).Count) * 50))
+				}
+				
+				if(Get-Job -name *.*.*.*)
+				{
+					Write-Verbose "All jobs are not completed ($((Get-Job -name *.*.*.* | Measure-Object).Count)/$MaxJobs), please wait... ($timeOutCounter)"
+					Sleep $SleepTime
+					$timeOutCounter += $SleepTime				
+
+					if($timeOutCounter -ge $TimeOut)
+					{
+						Write-Verbose "Time out... $TimeOut. Can't finish some jobs  ($((Get-Job -name *.*.*.* | Measure-Object).Count)/$MaxJobs) try remove it manualy."
+						Break
+					}
+				}
+			}
+			while(Get-Job -name *.*.*.*)
+			
+			Write-Verbose "Scan finished."
+			Return $ScanResult | Sort-Object {"{0:d3}.{1:d3}.{2:d3}.{3:d3}" -f @([int[]]([string]$_.IP).split('.'))}
+		}
+	}
+	
+	End{}
+}
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Objects</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>Example_1_k_PropertyExpanding_to_text</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Objects</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>Example_1_k_PropertyExpanding_to_text</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+'Objects come down the pipeline.
+'Sometimes the object coming down the pipeline is a nested object
+'Sometimes the object coming down the pipeline is an array, or array of nested objects
+
+'This gets rid of the object and just gives us that property, but can only expand 1 property at a time
+&gt;Get-Service winrm | Select -ExpandProperty RequiredServices
+'OUTPUT
+#'Status   Name               DisplayName                           
+#'------   ----               -----------                           
+#'Running  RPCSS              Remote Procedure Call (RPC)           
+#'Running  HTTP               HTTP Service         
+==============================================================
+'1] when you do this to a list of objects with a single property "name" you get this:
+'you get this in the text file:
+'OUTPUT
+=========
+Name      '&lt;==== you get the name header 
+----       
+corn       
+tomato     
+cucumber   
+carrot     
+radish     
+peas       
+turnip     
+potato     
+broccoli   
+zucchini   
+spinach    
+cauliflower
+pepper     
+eggplant   
+
+
+'2] however if you expand the field you get this:
+&gt;Get-Vegetable | Select -expandproperty Name -Unique
+'OUTPUT
+=========
+corn     '&lt;==== you don't get the name header, b/c it is not an object
+tomato     
+cucumber   
+carrot     
+radish     
+peas       
+turnip     
+potato     
+broccoli   
+zucchini   
+spinach    
+cauliflower
+pepper     
+eggplant
+
+=============================================================
+&gt;help Get-Vegetable -Parameter name
+
+#'-Name &lt;String&gt;
+#'    The name of a vegetable
+#'    
+#'    Required?                    false
+#'    Position?                    0
+#'    Default value                None
+#'    Accept pipeline input?       True (ByPropertyName, ByValue) &lt;====
+#'    Accept wildcard characters?  true
+#'   
+
+ 'If you do this it won't work, b/c it is sending 'objects' with hidden characters to the file
+ ' qne the parm needs a string
+&gt;Get-Vegetable | Select Name -Unique | out-file c:\work\veglist.txt
+&gt;get-content c:\work\veglist.txt | Where {$_ -like "c*"} | Get-Vegetable
+
+
+'You can send the text into a file by expanding it
+&gt;Get-Vegetable | Select -expandproperty Name -Unique | out-file c:\work\veglist.txt
+&gt;get-content c:\work\veglist.txt | Where {$_ -like "c*"} | Get-Vegetable
+'So now the names (that are text) are being piped back into the commandlet as a Parm
+
+'Or pull the text directly, and then send it as a Parm to the commandlet
+&gt;Get-Vegetable | Select -expandproperty Name -Unique | Where {$_ -like "c*"} |  Get-Vegetable
+
+'OUTPUT
+=======
+#'UPC     Count Name          State    Color     
+#'---     ----- ----          -----    -----     
+#'4432        6 corn          Roasted  yellow    
+#'4262        9 cucumber      Raw      green     
+#'4166        8 carrot        Raw      orange    
+#'4573       10 cauliflower   Steamed  white        
+
+
+============================================================= .propertyname to expand a field
+'This will output the expanded 'name' field as text
+(get-vegetable).name
+
+'Here you get a list of all the services that meet the criteria, as text, rather than objects
+(get-service | where status -eq running).DisplayName | Sort | more
+
+===============================================================================================
+'NOT real clear on this
+'NOTE: subitems to expand them, and then create variables out of them
+								"$($_.name).txt"
+								"$($_.count) entries"
+
+get-eventlog application -EntryType Error,Warning | Group Source | foreach {
+$file = Join-Path -path C:\work -ChildPath "$($_.name).txt"
+"$($_.count) entries" | Out-File -FilePath $file
+$_.group | foreach {
+ $_ | Select TimeGenerated,EntryType | Out-File -FilePath $file -Append
+ $_ | Select -ExpandProperty Message | Out-File -FilePath $file -Append
+}
+Get-Item $file
+}</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Objects</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>Example_1_l_Pipeline_Parameter_Binding</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Objects</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>Example_1_l_Pipeline_Parameter_Binding</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>Example_1_l_Pipeline_Parameter_Binding
+
+Pipeline_Parameter_Binding
+=================================================================================================
+'ByValue
+
+'ByPropertyName
+
+#'To examine the Parameters of a command you can use the "-Parameter" option of Help to get info about a particular parameter of the command
+
+&gt;help Get-Service
+'OUTPUT
+====================
+#'NAME
+#'    Get-Service
+#'    
+#'SYNOPSIS
+#'    Gets the services on a local or remote computer.
+#'    
+#'    
+#'SYNTAX
+#'    Get-Service [-ComputerName &lt;String[]&gt;] [-DependentServices] -DisplayName &lt;String[]&gt; [-Exclude &lt;String[]&gt;] [-Include &lt;String[]&gt;] [-RequiredServices] 
+#'    [&lt;CommonParameters&gt;]
+#'    
+#'    Get-Service [-ComputerName &lt;String[]&gt;] [-DependentServices] [-Exclude &lt;String[]&gt;] [-Include &lt;String[]&gt;] [-InputObject &lt;ServiceController[]&gt;] [-RequiredServices] 
+#'    [&lt;CommonParameters&gt;]
+#'    
+#'    Get-Service [[-Name] &lt;String[]&gt;] [-ComputerName &lt;String[]&gt;] [-DependentServices] [-Exclude &lt;String[]&gt;] [-Include &lt;String[]&gt;] [-RequiredServices] [&lt;CommonParameters&gt;]
+#'    
+#'...
+
+'Then to get more info about one of the parameters (e.g. 'Computername'):
+&gt;help Get-Service -Parameter Computername    '&lt;== This gets more info about that parm
+'OUTPUT
+=================
+#'-ComputerName &lt;String[]&gt;
+#'    Gets the services running on the specified computers. The default is the local computer.
+#'    
+#'    Type the NetBIOS name, an IP address, or a fully qualified domain name (FQDN) of a remote computer. To specify the local computer, type the computer name, a dot 
+#'    (.), or localhost.
+#'    
+#'    This parameter does not rely on Windows PowerShell remoting. You can use the ComputerName parameter of Get-Service even if your computer is not configured to run 
+#'    remote commands.
+#'    
+#'    Required?                    false
+#'    Position?                    named
+#'    Default value                None
+#'    Accept pipeline input?       True (ByPropertyName)   &lt;=== Here you can see it by "ByPropertyName"
+#'    Accept wildcard characters?  false#'
+#'
+=================================================================================================
+&gt;help restart-service -Parameter name
+#'-Name &lt;String[]&gt;
+#'    Specifies the service names of the services to restart.
+#'    
+#'    Required?                    true
+#'    Position?                    0
+#'    Default value                None
+#'    Accept pipeline input?       True (ByPropertyName, ByValue)		&lt;===== by both
+#'    Accept wildcard characters?  false
+#'
+
+#' Feed list to cmdlet, use '-PassThru' to see results 
+&gt;'bits','winrm' | restart-service -PassThru			&lt;=== NOTE the apostrophes, in the string, comment it out
+
+'The same comandlet has another parameter that is just ByValue, 
+'	AND it is a "&lt;ServiceController[]&gt;" object
+&gt;help restart-service -Parameter inputobject
+'OUTPUT
+=========
+#'-InputObject &lt;ServiceController[]&gt;
+#'    Specifies ServiceController objects that represent the services to restart. Enter a variable that contains the objects, or type a command or expression that gets 
+#'    the objects.
+#'    
+#'    Required?                    true
+#'    Position?                    0
+#'    Default value                None
+#'    Accept pipeline input?       True (ByValue)
+#'    Accept wildcard characters?  false
+#'    
+
+#'Note that the cmdlet "Get-Service" returns a "&lt;ServiceController[]&gt;" object
+
+Get-Service winrm | Get-Member
+'OUTPUT
+=========
+#'   TypeName: System.ServiceProcess.ServiceController
+#'
+#'Name                      MemberType    Definition                                                                                                                       
+#'----                      ----------    ----------                                                                                                                       
+#'Name                      AliasProperty Name = ServiceName                                                                                                               
+#'RequiredServices          AliasProperty RequiredServices = ServicesDependedOn 
+#'....
+
+'So this works as well as using the names
+&gt;get-service winrm | restart-service -PassThru</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Registry</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>invoke-command</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Registry</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>invoke-command</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>Invoke-command -computer RemoteComputerName {Get-ItemProperty HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\run}
+
+'This would work if you have sufficient permission on the remote machine, WinRM is configured for you to connect to it.</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Remoting___Sessions</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>about_POWERSHELL_Remoting___Sessions</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Remoting___Sessions</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>about_POWERSHELL_Remoting___Sessions</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>about_POWERSHELL_Remoting___Sessions
+-------------------------------------------------------------------------------------------------------	
+#'		There are several default session configurations	
+		&gt;Get-PSSessionConfiguration
+		
+		'Pop-up response: WinRM service is not started currently. Running this command will start WinRM service.
+-------------------------------------------------------------------------------------------------------</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Remoting___Sessions</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>PSSessions_compared_to_CIM_Sessions</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Remoting___Sessions</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>PSSessions_compared_to_CIM_Sessions</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>PSSessions_compared_to_CIM_Sessions
+
+
+https://blogs.technet.microsoft.com/heyscriptingguy/2014/01/31/comparing-powershell-pssessions-and-cim-sessions/
+
+#'
+#'-CIM and PS sessions both leverage the Windows Remote Management (WinRM) service
+#'-WinRM is an HTTP-based service, so both CIM sessions and Windows 
+#'	PowerShell sessions also support connectivity through an authenticated proxy server connection
+#'-Windows PowerShell sessions offer the ability to deploy arbitrary scripts to remote systems via the WinRM service.
+#'	. These scripts can return any type of .NET object as a result to the host session, 
+#'		and they are not restricted to CIM information.
+#'-A Windows PowerShell session will stay connected, by default, until the idle timer runs out. 
+#'	In Windows PowerShell 4.0 and Windows PowerShell 3.0, you can disconnect Windows PowerShell sessions by using the Disconnect-PSSession cmdlet,
+#'	and then reconnect to the session by using the Connect-PSSession cmdlet.
+
+PSSession
+---------	
+#'a cmdlet run by using a PSSession runs on the target 
+#'      computer. It requires Windows PowerShell on the target system. 
+#'      Furthermore, the cmdlet sends data back to the local computer. 
+#'PSSessions only work with WinRM.      
+      	
+      	
+CIM sessions
+----
+#'CimSessions can use DCOM, or WinRM
+#'CIM sessions are more limited than PS Sessions, 
+#'	because they cannot execute arbitrary commands and return arbitrary objects. 
+#'However, they provide the unique benefit of taking up fewer system resources. 
+#'CIM sessions stay dormant in the background of a Windows PowerShell session 
+#'	until an instruction is received.
+#'Upon receipt of an instruction, the CIM session will connect to the remote computer, 
+#'	retrieve the results, and then disconnect from the remote system.
+ 
+	
+https://blogs.technet.microsoft.com/heyscriptingguy/2013/09/08/remoting-the-implicit-way/
+
+#'Use the ComputerName parameter of a cmdlet to run commands in a TEMPORARY session:
+
+&gt; Get-Process -ComputerName Server01
+
+#'Or, use the Invoke-Command cmdlet to run the command in a TEMPORARY session:
+
+&gt; Invoke-Command -ComputerName Server01 {Get-PSScheduledJob}
+
+#'Or, create a session on the remote computer, 
+#'and then use the Invoke-Command cmdlet to run commands in the session:
+
+&gt; $s = New-PSSession -ComputerName Server01
+&gt; Invoke-Command -Session $s {Get-ScheduledJob}
+
+#'Or, use the Enter-PSSession cmdlet to start an INTERACTIVE session 
+#'    and then run the commands in the INTERACTIVE session:
+
+&gt; $s = New-PSSession -ComputerName Server01
+&gt; Enter-PSSession -Session $s
+
+[SERVER01]: PS C:\&gt; Get-ScheduledJob
+
+#'In every case, you sit at one computer and run commands on another computer. 
+#'     The commands get information from the remote computer and return the results to the local computer.	
+	
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Remoting__Invoke-Command</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>PSSessions_compared_to_CIM_Sessions</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Remoting__Invoke-Command</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>PSSessions_compared_to_CIM_Sessions</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>PSSessions_compared_to_CIM_Sessions
+
+
+https://blogs.technet.microsoft.com/heyscriptingguy/2014/01/31/comparing-powershell-pssessions-and-cim-sessions/
+
+#'
+#'-CIM and PS sessions both leverage the Windows Remote Management (WinRM) service
+#'-WinRM is an HTTP-based service, so both CIM sessions and Windows 
+#'	PowerShell sessions also support connectivity through an authenticated proxy server connection
+#'-Windows PowerShell sessions offer the ability to deploy arbitrary scripts to remote systems via the WinRM service.
+#'	. These scripts can return any type of .NET object as a result to the host session, 
+#'		and they are not restricted to CIM information.
+#'-A Windows PowerShell session will stay connected, by default, until the idle timer runs out. 
+#'	In Windows PowerShell 4.0 and Windows PowerShell 3.0, you can disconnect Windows PowerShell sessions by using the Disconnect-PSSession cmdlet,
+#'	and then reconnect to the session by using the Connect-PSSession cmdlet.
+
+PSSession
+---------	
+#'a cmdlet run by using a PSSession runs on the target 
+#'      computer. It requires Windows PowerShell on the target system. 
+#'      Furthermore, the cmdlet sends data back to the local computer. 
+#'PSSessions only work with WinRM.      
+      	
+      	
+CIM sessions
+----
+#'CimSessions can use DCOM, or WinRM
+#'CIM sessions are more limited than PS Sessions, 
+#'	because they cannot execute arbitrary commands and return arbitrary objects. 
+#'However, they provide the unique benefit of taking up fewer system resources. 
+#'CIM sessions stay dormant in the background of a Windows PowerShell session 
+#'	until an instruction is received.
+#'Upon receipt of an instruction, the CIM session will connect to the remote computer, 
+#'	retrieve the results, and then disconnect from the remote system.
+ 
+	
+https://blogs.technet.microsoft.com/heyscriptingguy/2013/09/08/remoting-the-implicit-way/
+
+#'Use the ComputerName parameter of a cmdlet to run commands in a TEMPORARY session:
+
+&gt; Get-Process -ComputerName Server01
+
+#'Or, use the Invoke-Command cmdlet to run the command in a TEMPORARY session:
+
+&gt; Invoke-Command -ComputerName Server01 {Get-PSScheduledJob}
+
+#'Or, create a session on the remote computer, 
+#'and then use the Invoke-Command cmdlet to run commands in the session:
+
+&gt; $s = New-PSSession -ComputerName Server01
+&gt; Invoke-Command -Session $s {Get-ScheduledJob}
+
+#'Or, use the Enter-PSSession cmdlet to start an INTERACTIVE session 
+#'    and then run the commands in the INTERACTIVE session:
+
+&gt; $s = New-PSSession -ComputerName Server01
+&gt; Enter-PSSession -Session $s
+
+[SERVER01]: PS C:\&gt; Get-ScheduledJob
+
+#'In every case, you sit at one computer and run commands on another computer. 
+#'     The commands get information from the remote computer and return the results to the local computer.	
+	
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Remoting__Invoke-Command</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>Remoting_Overview</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Remoting__Invoke-Command</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>Remoting_Overview</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>Remoting_Overview
+
+1-to-1 Remoting
+===============
+
+#'returns TRUE if enabled, FALSE if not enabled
+[bool](Test-WSMan -ComputerName 'IT-0744' -ErrorAction SilentlyContinue) 
+
+Enter-PSSession
+-------------- 
+'connects to a remote computer and gives you a commandline
+'	prompt on that computer.
+'While connected to a remote machine via Enter-PSSession, your prompt changes and
+'	displays the name of the remote system in square brackets.
+'All of your interactive keyboard input is sent to the
+'	remote machine, and all results are marshaled back to you.
+
+&gt;Enter-PSSession -ComputerName SERVER2
+
+'Enter-PSSession is really meant for interactive use by a
+'	human being, not for batch use by a script. If you wanted to send a command to a remote
+'	computer, from within a script, Invoke-Command is the right way to do it.
+
+1-to-Many Remoting
+====================
+
+Invoke-Command temporary session
+--------------------------------
+'With this technique, you specify one or more computer names and a command (or a
+'	semicolon-separated list of commands); PowerShell sends the commands, via Remoting, to
+'	the specified computers.
+&gt;Invoke-Command -computername DC01,CLIENT1 -scriptBlock { Get-Service }
+'OR
+&gt;Invoke-Command -computername DC01,CLIENT1 -filePath c:\Scripts\Task.ps1
+
+
+Invoke-Command persistent session
+--------------------------------
+PS&gt; $Session = New-PSSession -ComputerName CLIENT1
+PS&gt; Invoke-Command -Session $Session -scriptBlock { $test = 1 }
+PS&gt; Invoke-Command -Session $Session -scriptBlock { $test }
+'OUTPUT
+-------
+'1
+PS&gt; Remove-PSSession -Session $Session
+
+Sessions
+========
+'By default, only 10 simultaneous connections to a remote
+'	machine are permitted.
+#'When you run Enter-PSSession or Invoke-Command and use their -ComputerName
+#'parameter, Remoting creates a connection (or session), does whatever you've asked it to,
+#'and then closes the connection (in the case of an interactive session created with Enter-
+#'PSSession, PowerShell knows you're done when you run Exit-PSSession).
+#'There's some
+#'overhead involved in that set-up and tear-down, and so PowerShell also offers the option of
+#'creating a persistent connection - called a PSSession. 
+#'You run New-PSSession to create a
+#'new, persistent session. Then, rather than using -ComputerName with Enter-PSSession or
+#'Invoke-Command, you use their -Session parameter and pass an existing, open PSSession
+#'object. That lets the commands re-use the persistent connection you'd previously created.
+#'When you use persistent sessions, on the other hand, re-connections are much faster, and
+#'since you are keeping and reusing sessions, they will preserve state.
+
+
+
+#'Powershell remoting sends a command, usually using WSMan, from Client to Server
+#'	by default uses Port (the port can be modified):
+#'							http:  5985
+#'							https: 5986
+#'							
+#'	Server listens on those Ports, then passes the command to an EndPoint
+#'		The EndPoint is a plugin, like a connection, in this case it is a Powershell instance
+#'		The results are serialized and sent back to the Client
+#'		
+
+
+-------------------------------------------------------------------------------------------------------	
+#'		There are several default session configurations	
+		&gt;Get-PSSessionConfiguration
+		
+		'Pop-up response: WinRM service is not started currently. Running this command will start WinRM service.
+-------------------------------------------------------------------------------------------------------
+'To enable on a local machine, so that it can be the Server (i.e. so that it can recieve commands)
+'	Must run elevated
+'	Run once per machine
+
+&gt;Enable-PSRemoting
+	-'	Runs Set-WSManQuickConfig
+	-'	Configures WinRM to AutoStart
+	-'	Configures Firewall settings
+	-'	Registers session configurations and listeners
+	
+'OR can use Group Policy	
+	
+'To disable remoting
+&gt;Disable-PSRemoting</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Remoting_CIM</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>CIM_ErrorHandling</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Remoting_CIM</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>CIM_ErrorHandling</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>'Errors from CIM remoting tend to be .NET types of errors
+'This one lets you switch from one protocol to the other
+
+#' notice error behavior
+Get-Service -Name BITS,Nobody,WinRM
+
+
+
+#' try each in turn
+Get-Service -Name BITS,Nobody,WinRM -EA Continue
+Get-Service -Name BITS,Nobody,WinRM -EA SilentlyContinue
+Get-Service -Name BITS,Nobody,WinRM -EA Inquire
+Get-Service -Name BITS,Nobody,WinRM -EA Stop
+
+
+
+#' moving from this... The processing would continue even if there is an error
+        Write-Verbose "Connecting to $computer over $protocol"
+        $session = New-CimSession -ComputerName $computer `
+                                  -SessionOption $option
+
+
+#' to this... This should be used when just one thing, on one computer is happening.
+        Write-Verbose "Connecting to $computer over $protocol"
+        $params = @{'ComputerName'=$Computer
+                    'SessionOption'=$option
+                    'ErrorAction'='Stop'}       #'' Put a terminating action into the session, when the script has a problem, rather than allowing processing to continue.
+        $session = New-CimSession @params
+
+
+
+#' observe structure - will not execute as-is
+ PROCESS {
+    foreach ($computer in $computername) {
+ 
+        if ($protocol -eq 'Dcom') {
+            $option = New-CimSessionOption -Protocol Dcom
+        } else {
+            $option = New-CimSessionOption -Protocol Wsman
+        }
+ 
+        Try {
+            Write-Verbose "Connecting to $computer over $protocol"
+            $params = @{'ComputerName'=$Computer
+                        'SessionOption'=$option
+                        'ErrorAction'='Stop'}
+            $session = New-CimSession @params            #'' so if it were to stop here it would jump to the 'Catch' section
+  
+            Write-Verbose "Querying from $computer"
+            $os_params = @{'ClassName'='Win32_OperatingSystem'
+                           'CimSession'=$session}
+            $os = Get-CimInstance @os_params
+
+            $cs_params = @{'ClassName'='Win32_ComputerSystem'
+                           'CimSession'=$session}
+            $cs = Get-CimInstance @cs_params
+
+            $sysdrive = $os.SystemDrive
+            $drive_params = @{'ClassName'='Win32_LogicalDisk'
+                              'Filter'="DeviceId='$sysdrive'"
+                              'CimSession'=$session}
+            $drive = Get-CimInstance @drive_params
+
+            $proc_params = @{'ClassName'='Win32_Processor'
+                             'CimSession'=$session}
+            $proc = Get-CimInstance @proc_params |
+                    Select-Object -first 1
+
+  
+            Write-Verbose "Closing session to $computer"
+            $session | Remove-CimSession
+  
+            Write-Verbose "Outputting for $computer"
+            $obj = [pscustomobject]@{'ComputerName'=$computer
+                       'OSVersion'=$os.version
+                       'SPVersion'=$os.servicepackmajorversion
+                       'OSBuild'=$os.buildnumber
+                       'Manufacturer'=$cs.manufacturer
+                       'Model'=$cs.model
+                       'Procs'=$cs.numberofprocessors
+                       'Cores'=$cs.numberoflogicalprocessors
+                       'RAM'=($cs.totalphysicalmemory / 1GB)
+                       'Arch'=$proc.addresswidth
+                       'SysDriveFreeSpace'=$drive.freespace}
+            Write-Output $obj
+        } Catch {
+                                                 #'Empty CATCH section
+        } #'try/catch
+ 
+    } #'foreach
+} #'PROCESS
+
+
+#'' HERE IS A CATCH section that has been filled out.
+
+#' observe catch behavior - will not execute as-is
+        } Catch {
+            Write-Warning "FAILED $computer on $protocol"
+            
+            #' Did we specify protocol fallback?
+            #' If so, try again. If we specified logging,
+            #' we won't log a problem here - we'll let
+            #' the logging occur if this fallback also
+            #' fails
+            If ($ProtocolFallback) {
+                If ($Protocol -eq 'Dcom') {
+                    $newprotocol = 'Wsman'
+                } else {
+                    $newprotocol = 'Dcom'
+                } #'if protocol
+
+                Write-Verbose "Trying again with $newprotocol"
+                $params = @{'ComputerName'=$Computer
+                            'Protocol'=$newprotocol
+                            'ProtocolFallback'=$False}
+                
+                If ($PSBoundParameters.ContainsKey('LogFailuresToPath')){
+                    $params += @{'LogFailuresToPath'=$LogFailuresToPath}
+                } #'if logging
+
+                Get-MachineInfo @params
+            } #'if protocolfallback
+
+            #' if we didn't specify fallback, but we
+            #' did specify logging, then log the error,
+            #' because we won't be trying again
+            If (-not $ProtocolFallback -and
+                $PSBoundParameters.ContainsKey('LogFailuresToPath')){
+                Write-Verbose "Logging to $LogFailuresToPath"
+                $computer | Out-File $LogFailuresToPath -Append
+            } #' if write to log
+
+        } #'try/catch
+
+
+
+
+#' pseudo-code
+Try {
+	$ErrorActionPreference = "Stop"
+	#' run something that doesn't have -ErrorAction
+	$ErrorActionPreference = "Continue"
+} Catch {
+	#' ...
+}
+
+
+
+#' pseudo-code (tend to be .NET types of errors)
+Try {
+	#' something here generates an exception
+} Catch [Exception.Type.One] {
+	#' deal with that exception here
+} Catch [Exception.Type.Two] {
+	#' deal with the other exception here
+} Catch {
+	#' deal with anything else here
+} Finally {
+	#' run something else
+}
+
+
+
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Remoting_CIM</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>Test_and_TroubleShooting_remote_ClientServer</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Remoting_CIM</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>Test_and_TroubleShooting_remote_ClientServer</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>#'On client side
+
+winrm quickconfig
+#'winrm set winrm/config/client '@{TrustedHosts="Computer1,Computer2"}'
+winrm set winrm/config/client '@{TrustedHosts="HOME-LAPTOP"}'
+
+#'On server side
+
+Enable-PSRemoting -Force
+winrm quickconfig
+
+#'for https
+
+winrm create winrm/config/Listener?Address=*+Transport=HTTPS @{Hostname="_";CertificateThumbprint="_"}
+
+#'for http
+
+winrm create winrm/config/Listener?Address=*+Transport=HTTP
+
+#'Test with
+
+Test-WsMan HOME-LAPTOP
+Test-WsMan HOME-LAPTOP -UseSSL
+
+
+#'Edit: Set TrustedHosts with PowerShell
+#'Or with PowerShell (as Admin)
+
+#'Set-Item -Path WSMan:\localhost\Client\TrustedHosts -Value "Computer1,Computer2"
+Set-Item -Path WSMan:\localhost\Client\TrustedHosts -Value "HOME-LAPTOP"
+
+#'And check (don't need Admin for that)
+
+Get-Item WSMan:\localhost\Client\TrustedHosts</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Remoting</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>about_POWERSHELL_Remoting</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Remoting</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>about_POWERSHELL_Remoting</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>about_POWERSHELL_Remoting
+
+#'returns TRUE if enabled, FALSE if not enabled
+[bool](Test-WSMan -ComputerName 'IT-0744' -ErrorAction SilentlyContinue) 
+
+get more notes from:
+https://blogs.technet.microsoft.com/heyscriptingguy/2012/07/24/an-introduction-to-powershell-remoting-part-two-configuring-powershell-remoting/
+https://blogs.technet.microsoft.com/heyscriptingguy/2012/07/25/an-introduction-to-powershell-remoting-part-three-interactive-and-fan-out-remoting/
+https://blogs.technet.microsoft.com/heyscriptingguy/2012/07/27/an-introduction-to-powershell-remoting-part-five-constrained-powershell-endpoints/
+https://blogs.technet.microsoft.com/heyscriptingguy/2012/07/26/an-introduction-to-powershell-remoting-part-four-sessions-and-implicit-remoting/
+
+
+
+'    To verify that remoting is configured correctly (on local machine as the server), 
+'	 run a test command such as
+'    the following command, which creates a remote session on the local 
+'    computer.
+
+          New-PSSession
+
+#'there are already many techniques available for working with remote computers Besides PowerShell. 
+#'- Windows Management Instrumentation (WMI), which is commonly used with VBScript. 
+#'-  executables from resource kits or non-Microsoft tools that allow remote management, 
+#'        for example, 
+#'            the Sysinternals PSExec tools.
+#'Even many of the Windows PowerShell cmdlets have a ComputerName parameter to specify remote computers. 
+
+#' Power Shell Remoting is built on Microsoft’s implementation of the Web Services for Management (WSMan) protocol,
+#' and it uses the Windows Remote Management (WinRM) service to manage communication and authentication
+#'
+#' PowerShell Remoting connects my local Windows PowerShell session with another session running on the remote system.
+#' The commands that I enter are sent to the remote computer, executed locally, and then the results are sent back. 
+#'
+#' A major advantage over other methods of remote management is that a single port is used for every application that uses WSMan. 
+#' There are several authentication methods, including Kerberos protocol and Windows Challenge/Response. 
+#' The communication between two computers is encrypted at the protocol layer, 
+#'
+#' With fan-out remoting, I provide Windows PowerShell a list of computers along with the command I want them to run. 
+#'    Windows PowerShell “fans-out” and sends the command to the remote computers in parallel. 
+#'    Each remote system runs the command locally and sends the results back. 
+#'    This is different from the common VBScript technique of using a foreach loop to perform operations against a list of computers, one at a time.
+
+
+https://msexchange.me/2014/07/26/how-to-detect-whether-powershell-remoting-is-enabled/
+'To test whether powershell remoting is enabled
+'Just log on to the machine for which you want to Test this &amp; enter below commands
+&gt; Enter-PSSession -ComputerName localhost
+
+'If machine is not enabled for powershell remoting below is the output:
+' it shows a red error:  "Connecting to remote server failed..."
+
+'If machine is enabled for powershell remoting below is the output:
+[localhost]: PS C:\Users</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Remoting</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>Enable_remoting_on_Server_or_Listening_Computer</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Remoting</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>Enable_remoting_on_Server_or_Listening_Computer</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>'1] Start PowerShell on the listening Machine in elevated session
+'2] Enable Powershell:
+	&gt;Enable-PSRemoting -Force
+	
+#'When running the Enable-PSRemoting function, the function performs the following steps:
+#'
+#'        Starts or restarts the WinRM service
+#'
+#'        Sets the WinRM service startup type to Automatic
+#'
+#'        Creates a listener to accept requests from any Internet Protocol (IP) address
+#'
+#'        Enables inbound firewall exceptions for WSMAN traffic
+#'
+#'        Sets a target listener named Microsoft.powershell
+#'
+#'        Sets a target listener named Microsoft.powershell.workflow
+#'
+#'        Sets a target listener named Microsoft.powershell32
+	
+------------------------------------------------------------
+
+	
+'3] Enable RDP
+'	a) Create a remote ISE session to the computer
+'	b) Then run this command on the remote session:
+'		Where “server1”, “Server2” is a list of computers
+&gt;Set-ItemProperty -Path "HKLM:\System\CurrentControlSet\Control\Terminal Server" -Name "fDenyTSConnections" –Value 1
+
+
+'From CMD to enable RDP, where computername is the name of the computer
+&gt;Reg add “\\computername\HKLM\SYSTEM\CurentControlSet\Control\Terminal Server”  /v fDenyTSConnections /t REG_DWORD /d  /f
+
+e.g. 
+&gt;Reg add “\\cLT-103110\HKLM\SYSTEM\CurentControlSet\Control\Terminal Server”  /v fDenyTSConnections /t REG_DWORD /d  /f
+
+
+'OR from Powershell, on a my Client 
+&gt;Invoke-Command –Computername “server1”, “Server2” –ScriptBlock {Set-ItemProperty -Path "HKLM:\System\CurrentControlSet\Control\Terminal Server" -Name "fDenyTSConnections" –Value }
+
+&gt;Invoke-Command –Computername “LT-” –ScriptBlock {Set-ItemProperty -Path "HKLM:\System\CurrentControlSet\Control\Terminal Server" -Name "fDenyTSConnections" –Value }</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Remoting</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>get_local_machines_remotingConfiguration_using_a_VBSCriptCommand</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Remoting</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>get_local_machines_remotingConfiguration_using_a_VBSCriptCommand</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>&gt;winrm get winrm/config</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Remoting</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>GroupPolicySettings_to_enable_PowerShellRemoting</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Remoting</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>GroupPolicySettings_to_enable_PowerShellRemoting</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>https://blogs.technet.microsoft.com/heyscriptingguy/2012/07/24/an-introduction-to-powershell-remoting-part-two-configuring-powershell-remoting/
+
+1] Windows Remote Management service is set to start automatically
+	 Computer Configuration\Windows Settings\Security Settings\System Services
+	 Windows Remote Management (WS-Management)
+	 [x] Define This Policy Setting: Automatic
+2] To setup the listener	 
+	Enable Automatic Configuration of Listeners
+	Configuration\Administrative Templates\Windows Components\Windows Remote Management (WinRM)\WinRM Service
+	An IP can be specified for systems that have multiple IP addresses assigned, or asterisks can be used to listen to all addresses.
+	Allow Automatic Configuration of Listeners: (x) Enabled
+3] The firewall exception
+	can be added at Computer Configuration\Administrative Templates\Network\Network Connections\Windows Firewall\Domain Profile
+	If there are no Windows XP or Windows Server 2003 systems that need to be configured, the firewall exceptions can also be configured through Computer Configuration\Windows Settings\Security Settings\Windows Firewall with Advanced Security\Inbound Rules by using a predefined rule for Windows Remote Management.
+	Inbound rule =&gt; Firewall Rule Type
+		(x)Predefined: Windows Remote Management
+		
+If Group Policy isn’t an option, 
+or PowerShell Remoting needs to be configured on an individual basis, 
+the Enable-PSRemoting cmdlet can be used to perform the tasks of enabling the WinRM service, 
+configuring the listener, and putting firewall rules into place.
+		</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Remoting</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>How_To_from_PluralSight</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Remoting</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>How_To_from_PluralSight</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>&lt;#'-----------------------------------------------------------------------------
+  Beginning PowerShell Scripting for Developers
+  Simple script that will just 'Do Something'
+
+  Author: Robert C. Cain | @ArcaneCode | arcanecode@gmail.com
+          http://arcanecode.com
+ 
+  This module is Copyright (c) 2015 Robert C. Cain. All rights reserved.
+  The code herein is for demonstration purposes. No warranty or guarentee
+  is implied or expressly granted. 
+  This module may not be reproduced in whole or in part without the express
+  written consent of the author. 
+-----------------------------------------------------------------------------#&gt;
+
+
+#'-----------------------------------------------------------------------------#'
+#' A few definitions, the "remote" computer is the machine you want to remote
+#' control from PowerShell. The "local" computer is the one you are using,
+#' i.e. running PowerShell on. 
+#'-----------------------------------------------------------------------------#'
+
+#' First, you will need to enable remoting on the computer you want to control
+#' ON the REMOTE COMPUTER, enter the command below. (-Force will run without
+#' prompts)
+
+Enable-PSRemoting -Force
+
+#' If you are NOT running on a domain, for example doing this on a home
+#' network, you will need to do a few other things. 
+#' On both the remote computer and the local computer, run:
+#' This tells it to trust ALL hosts (!!!!)
+
+Set-Item wsman:\localhost\client\trustedhosts *
+
+#' Instead of an *, you could specify the IP Addresses of the machines. 
+
+#' You will then need to restart the Windows Remote Management service
+#' on both computers.
+Restart-Service WinRM
+
+#' On the LOCAL computer you are using, you can test by using Test-WSMan
+#' followed by the name of the remote computer. 
+#' wsman
+Test-WSMan ACSrv
+
+#' Now execute a command on the remote system
+#' The Script block could be stored in a variable
+Invoke-Command -ComputerName BCC-EXPLORER3DB `
+               -ScriptBlock { Get-ChildItem C:\ } `
+               -Credential glenng
+#' It immediately challenges me for my password, then it runs successfully
+
+
+#' You can also open up a PowerShell window which will execute
+#' on the remote computer
+Enter-PSSession -ComputerName BCC-EXPLORER3 -Credential glenng
+
+#' Now the console screen shows that it is actually on the remote server:
+#' [BCC-EXPLORER3]: PS C:\Users\glenng\Documents&gt; 
+
+#' To exit the remote server in the console window:
+exit   'OR &gt; Exit-PSSession
+
+#' In the PowerShell ISE there is an icon in the menu bar to launch a remote session
+#' It will ask for the computer and my UserID, then challenge me for the password.
+#' When it succeeds it will open a new tab in the ISE that is on the remote computer
+
+
+#'-----------------------------------------------------------------------------#'
+#' Fix for network connection profile public {this was not a problem for me at BCC}
+#'-----------------------------------------------------------------------------#'
+Get-NetConnectionProfile           #' I think this is not available in Windows 7
+
+#' Temporarily Set to Private
+Set-NetConnectionProfile `
+  -InterfaceAlias 'vEthernet (HWired)' `
+  -NetworkCategory Private
+
+Set-NetConnectionProfile `
+  -InterfaceAlias 'vEthernet (Internal Ethernet Port Windows Phone Emulator Internal Switch)' `
+  -NetworkCategory Private
+
+
+#' Put them back
+Set-NetConnectionProfile `
+  -InterfaceAlias 'vEthernet (HWired)' `
+  -NetworkCategory Public
+
+Set-NetConnectionProfile `
+  -InterfaceAlias 'vEthernet (Internal Ethernet Port Windows Phone Emulator Internal Switch)' `
+  -NetworkCategory Public
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Remoting</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>Limit_which_IP_Addresses_powershell_is_listening_on</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Remoting</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>Limit_which_IP_Addresses_powershell_is_listening_on</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+'This gets the listner info
+&gt; winrm e winrm/config/listener
+
+
+
+&gt;New-WSManInstance winrm/config/Listener SelectorSet@{Address="IP:192.168.100.2";
+
+'Remove a listener
+&gt;Remove-WSManInstance -ResourceUri winrm/config/Listener -SelectorSet 
+    Address=test.fabrikam.com;Transport=http
+
+'Create a new listener
+&gt;New-WSManInstance winrm/config/Listener -SelectorSet @{Address="IP:xxx.xxx.xxx.xxxx";Transport="HTTPS"} -ValueSet @{HostName='xxxxxxxxxxxx.xxxxxxxxxxx.xxxx';CertificateThumbprint='XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'}
+
+'Check listener configuration:
+&gt; winrm e winrm/config/listener
+
+'Disable a listener on the local computer
+'Important: The ValueSet parameter is case-sensitive when matching the properties specified.
+&gt; set-wsmaninstance -ResourceUri winrm/config/listener -SelectorSet @{address="*";transport="https"} -ValueSet @{Enabled="false"}
+
+'THIS DID NOT WORK, it may have problems with specifying a single IP address
+&gt; set-wsmaninstance -ResourceUri winrm/config/listener -SelectorSet @{address="169.254.53.69";transport="http"} -ValueSet @{Enabled="false"}
+
+
+'Disable a listener on a remote computer
+Set-WSManInstance -ResourceUri winrm/config/listener -ComputerName "SERVER02" -SelectorSet @{address="*";transport="https"} -ValueSet @{Enabled="false"}
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Remoting</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>Remoting_Overview</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Remoting</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>Remoting_Overview</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>1-to-1 Remoting
+===============
+
+#'returns TRUE if enabled, FALSE if not enabled
+[bool](Test-WSMan -ComputerName 'IT-0744' -ErrorAction SilentlyContinue) 
+
+Enter-PSSession
+-------------- 
+'connects to a remote computer and gives you a commandline
+'	prompt on that computer.
+'While connected to a remote machine via Enter-PSSession, your prompt changes and
+'	displays the name of the remote system in square brackets.
+'All of your interactive keyboard input is sent to the
+'	remote machine, and all results are marshaled back to you.
+
+&gt;Enter-PSSession -ComputerName SERVER2
+
+'Enter-PSSession is really meant for interactive use by a
+'	human being, not for batch use by a script. If you wanted to send a command to a remote
+'	computer, from within a script, Invoke-Command is the right way to do it.
+
+1-to-Many Remoting
+====================
+
+Invoke-Command temporary session
+--------------------------------
+'With this technique, you specify one or more computer names and a command (or a
+'	semicolon-separated list of commands); PowerShell sends the commands, via Remoting, to
+'	the specified computers.
+&gt;Invoke-Command -computername DC01,CLIENT1 -scriptBlock { Get-Service }
+'OR
+&gt;Invoke-Command -computername DC01,CLIENT1 -filePath c:\Scripts\Task.ps1
+
+
+Invoke-Command persistent session
+--------------------------------
+PS&gt; $Session = New-PSSession -ComputerName CLIENT1
+PS&gt; Invoke-Command -Session $Session -scriptBlock { $test = 1 }
+PS&gt; Invoke-Command -Session $Session -scriptBlock { $test }
+'OUTPUT
+-------
+'1
+PS&gt; Remove-PSSession -Session $Session
+
+Sessions
+========
+'By default, only 10 simultaneous connections to a remote
+'	machine are permitted.
+#'When you run Enter-PSSession or Invoke-Command and use their -ComputerName
+#'parameter, Remoting creates a connection (or session), does whatever you've asked it to,
+#'and then closes the connection (in the case of an interactive session created with Enter-
+#'PSSession, PowerShell knows you're done when you run Exit-PSSession).
+#'There's some
+#'overhead involved in that set-up and tear-down, and so PowerShell also offers the option of
+#'creating a persistent connection - called a PSSession. 
+#'You run New-PSSession to create a
+#'new, persistent session. Then, rather than using -ComputerName with Enter-PSSession or
+#'Invoke-Command, you use their -Session parameter and pass an existing, open PSSession
+#'object. That lets the commands re-use the persistent connection you'd previously created.
+#'When you use persistent sessions, on the other hand, re-connections are much faster, and
+#'since you are keeping and reusing sessions, they will preserve state.
+
+
+
+#'Powershell remoting sends a command, usually using WSMan, from Client to Server
+#'	by default uses Port (the port can be modified):
+#'							http:  5985
+#'							https: 5986
+#'							
+#'	Server listens on those Ports, then passes the command to an EndPoint
+#'		The EndPoint is a plugin, like a connection, in this case it is a Powershell instance
+#'		The results are serialized and sent back to the Client
+#'		
+
+
+-------------------------------------------------------------------------------------------------------	
+#'		There are several default session configurations	
+		&gt;Get-PSSessionConfiguration
+		
+		'Pop-up response: WinRM service is not started currently. Running this command will start WinRM service.
+-------------------------------------------------------------------------------------------------------
+'To enable on a local machine, so that it can be the Server (i.e. so that it can recieve commands)
+'	Must run elevated
+'	Run once per machine
+
+&gt;Enable-PSRemoting
+	-'	Runs Set-WSManQuickConfig
+	-'	Configures WinRM to AutoStart
+	-'	Configures Firewall settings
+	-'	Registers session configurations and listeners
+	
+'OR can use Group Policy	
+	
+'To disable remoting
+&gt;Disable-PSRemoting</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Remoting</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>TroubleShooting_PowerShellRemoting</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Remoting</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>TroubleShooting_PowerShellRemoting</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>#'returns TRUE if enabled, FALSE if not enabled
+[bool](Test-WSMan -ComputerName 'IT-0744' -ErrorAction SilentlyContinue) 
+
+&gt;Test-Connection
+'The Test-WSMan cmdlet submits an identification request that determines whether the WinRM service is running on a local or remote computer
+&gt;Test-WSMan
+
+'Connects to the WinRM service on a remote computer.
+&gt;Connect-WSMan  {to see if you can connect to the server}
+----------------------------------------
+			&gt;Connect-WSMan -ComputerName "server01"
+			PS C:\&gt; cd wsman:
+			PS WSMan:\&gt;
+			PS WSMan:\&gt; dir
+			WSManConfig: Microsoft.WSMan.Management\WSMan::WSMan
+			
+			ComputerName                                  Type
+			------------                                  ----
+			localhost                                     Container
+			server01                                      Container      
+			
+-----------------------------------------
+&gt;Get-PSSessionConfiguration  {run on the server}
+
+
+'ERROR MESSAGES:
+Get-WmiObject : The RPC server is unavailable. (Exception from HRESULT: 0x800706BA)
+...
+    + CategoryInfo          : InvalidOperation: (:) [Get-WmiObject], COMException
+    + FullyQualifiedErrorId : GetWMICOMException,Microsoft.PowerShell.Commands.GetWmiObjectCommand</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Remoting</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>TroubleShooting</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Remoting</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>TroubleShooting</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>https://devops-collective-inc.gitbooks.io/secrets-of-powershell-remoting/content/manuscript/diagnostics-and-troubleshooting.html
+
+'we started by importing the PSDiagnostics module
+&gt;Import-Module PSDiagnostics
+'Also run this
+&gt;Enable-PSWSManCombinedTrace
+'We then disabled the trace by running Disable-PSWSManCombinedTrace, so that the log would only contain the details from that particular attempt (we cleared the log between attempts, so that each scenario provided a fresh diagnostics log).
+
+#'================================================
+
+
+
+#'=============================================
+#'PSDiagnostics module contains 10 functions:    
+#'    Disable-PSTrace
+#'    Disable-PSWSManCombinedTrace 
+#'    Disable-WSManTrace 
+#'    Enable-PSTrace
+#'    Enable-PSWSManCombinedTrace 
+#'    Enable-WSManTrace
+#'    Get-LogProperties
+#'    Set-LogProperties
+#'    Start-Trace
+#'    Stop-Trace
+
+
+#'============================================= test session, Start and end logging before and after session
+cls
+
+Import-Module PSDiagnostics
+
+Enable-PSWSManCombinedTrace
+
+Enter-PSSession IT-0959
+
+dir
+cd..
+dir
+
+Disable-PSWSManCombinedTrace
+#'=============================================
+#' This will get a list of the logs:
+Get-WinEvent -ListLog *powershell*
+
+#' This is the log we want to look at
+Get-WinEvent Microsoft-Windows-PowerShell/Operational #'-MaxEvents 222
+
+Get-WinEvent Microsoft-Windows-PowerShell/Admin -MaxEvents 22
+
+Get-WinEvent Microsoft-Windows-PowerShell-DesiredStateConfiguration-FileDownloadManager/Operational -MaxEvents 22
+
+Get-WinEvent Microsoft-Windows-WinRM/Operational
+
+#'------------------------------------------
+#'running Enable-PSWSManCombinedTrace and Disable-PSWSManCombined trace actually create log events themselves. 
+#'We'll often run the Enable command, and then wait a few minutes to actually do anything with Remoting. 
+#'That way, we can tell by the timestamp in the log when the "real" traffic began. 
+#'We'll wait a few more minutes before running the Disable command, again so that we can easily tell when the "real" log traffic ended. 
+#'Also note that we'll be getting information from two logs, WinRM and PowerShell, 
+
+#'============================================= test session, Start and end logging before and after session
+$cred = Get-Credential
+
+Import-Module PSDiagnostics
+Enable-PsWsmanCombinedTrace
+Invoke-Command -script { get-service } -computer IT-0959 -Credential $cred
+Disable-PsWsmanCombinedTrace
+#'=============================================IT-0986
+
+Invoke-Command -script { get-service } -computer IT-0986 -Credential $cred</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Remoting</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>TrustedHosts</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Remoting</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>TrustedHosts</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+
+http://windowsitpro.com/windows/modify-trustedhosts-powershell
+
+
+'to set TrustedHosts to every machine in your domain namespace use:
+
+&gt;Set-Item -Path WSMan:\localhost\Client\TrustedHosts -Value '*.savilltech.net'
+
+'To set to have no trusted hosts use:
+
+Set-Item -Path WSMan:\localhost\Client\TrustedHosts -Value ''
+
+'To avoid the prompt to make the change add -Force, for example:
+
+Set-Item -Path WSMan:\localhost\Client\TrustedHosts -Value '' -Force
+
+
+'To read the list:
+ &gt;ls WSMan:\localhost\Client\TrustedHosts
+ 'OR
+ &gt;Get-WSManInstance -ResourceURI winrm/config/client | select -ExpandProperty TrustedHosts
+ =================================
+ Set-Item WSMan:\localhost\Client\TrustedHosts -value 192.168.1.13
+#'This sets the value to 192.168.1.13, it also overwrites any existing values
+  
+
+#' If you want to set a subnet you can use the PowerShell wildcard character
+Set-Item WSMan:\localhost\Client\TrustedHosts -value 192.168.1.*  
+  
+#' both the examples above will overwrite the current value of the trustedhosts property
+#' to add to instead of overwriting you need to use the concatenate dynamic parameter available in the WSMAN provider
+#' Thanks to @alexandair for that bit of info
+
+set-item WSMan:\localhost\Client\TrustedHosts -Value "192.168.0.*" -Concatenate
+ =================================
+ 'multiple machines
+ 
+ 'a] 
+ &gt;winrm set winrm/config/client '@{TrustedHosts="machineA,machineB"}'
+ 'if anyone gets an Error: Invalid use of command line ... response, try removing the single quotation marks
+  
+ 'b] 
+ &gt; Set-Item WSMan:\localhost\Client\TrustedHosts -Value 'machineA,machineB'
+
+'to append to the list, the -Concatenate parameter can be used
+
+Set-Item WSMan:\localhost\Client\TrustedHosts -Value 'machineC' -Concatenate
+
+'c]
+PS C:\&gt; $current=(get-item WSMan:\localhost\Client\TrustedHosts).value
+PS C:\&gt; $current+=",testdsk23,alpha123"
+PS C:\&gt; set-item WSMan:\localhost\Client\TrustedHosts –value $current
+  =================================
+ 
+ 'The function has a single parameter – the computername that defaults to the local machine.
+ function get-trustedhost {
+
+	[CmdletBinding()]
+	
+	param (
+	
+			[string]$computername = $env:COMPUTERNAME
+			
+			)
+	
+	if (Test-Connection -ComputerName $computername -Quiet -Count 1) {
+	
+			Get-WSManInstance -ResourceURI winrm/config/client -ComputerName $computername | select -ExpandProperty TrustedHosts
+	
+	}
+	
+	else {
+	
+	Write-Warning -Message “$computername is unreachable”
+	
+	}
+
+}</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Remoting</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>WinRM_and_WinRS</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Remoting</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>WinRM_and_WinRS</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>#'New in Windows Vista, Windows Server 2003 R2, Windows Server 2008 (and Server 2008 Core) 
+#'are WinRM &amp; WinRS. 
+#'Windows Remote Management (known as WinRM) 
+#'    is a handy new remote management service. 
+
+WinRM
+======================================================================
+#'WinRM is the “server” component of this remote management application 
+#'    and WinRS (Windows Remote Shell) is the “client” for WinRM, 
+#'    which runs on the remote computer attempting to remotely manage the WinRM server. 
+#'However, I should note that BOTH computers must have WinRM installed and enabled on them 
+#'    for WinRS to work and retrieve information from the remote system.
+
+#'While WinRM listens on port 80 by default, 
+#'    it doesn't mean traffic is unencrypted. 
+#'Traffic by default is only accepted by WinRM when it is encrypted using the Negotiate or Kerberos SSP. 
+#'WinRM uses HTTP (TCP 80) or HTTPS (TCP 443). 
+#'    WinRM also includes helper code that lets the WinRM listener 
+#'    to share port 80 with IIS or any other application that may need to use that port.
+
+#'WinRM with SCVMM uses Kerberos for authentication, 
+#'    and does not support fall-back to NTLM. 
+#'There will be an error instead. 
+#'If no credentials are specified, 
+#'    then the logged-on credentials are used to authenticate against the remote machine. 
+#'    This allows for a single sign-on experience.
+
+WinRS
+============================================================================
+#'Remote Shell, (WinRS) is used to execute a program on a remote host. 
+#'Similar in operation to the former Sysinternals tool PSExec, 
+#'WinRS leverages Windows Remote Management to let you launch processes on remote machines. 
+
+
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Remoting</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>WMI_vs_CIM_session</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Remoting</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>WMI_vs_CIM_session</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>https://blogs.technet.microsoft.com/heyscriptingguy/2016/02/08/should-i-use-cim-or-wmi-with-windows-powershell/
+
+remember that CIM = WMI = CIM
+
+CIM provides a common definition of management information for 
+	systems, networks, applications, and services, 
+	and it allows for vendor extensions. 
+WMI is the Microsoft implementation of CIM for the Windows platform.
+
+The big difference between the WMI cmdlets and the CIM cmdlets is that 
+	the CIM cmdlets use WSMAN (WinRM) to connect to remote machines. 
+
+These WMI cmdlets were introduced in Windows PowerShell 1.0 and 2.0:
+	Get-WmiObject	(Get-WmiObject is one of the original PowerShell cmdlets.)
+					( In PowerShell 1.0, Get-WmiObject was the only cmdlet with the option to access another system.)
+	Invoke-WmiMethod
+	Register-WmiEvent
+	Remove-WmiObject
+	Set-WmiInstance
+	
+There are CIM cmdlets that are directly equivalent to the WMI cmdlets:
+	Get-CimInstance
+	Invoke-CimMethod
+	Register-CimIndicationEvent
+	Remove-CimInstance
+	Set-CimInstance	
+	
+You also get extra cmdlets for working with CIM classes:
+	Get-CimAssociatedInstance
+	Get-CimClass
+	New-CimInstance	
+	
+	
+	
+WMI cmdlets
+----------
+The big drawback to the WMI cmdlets is that they use DCOM to access remote machines.
+DCOM isn’t firewall friendly, can be blocked by networking equipment, and gives some arcane errors when things go wrong.
+
+CIM cmdlets
+-------------
+The CIM cmdlets appeared in PowerShell 3.0 as part of the new API for working with CIM classes, 
+	which is more standards based. 
+	
+	
+NOTE
+-----
+CDXML, which enables a CIM class to be wrapped in some simple XML and published as a PowerShell module. This is how over 60% of the cmdlets in Windows 8 and later are produced.
+
+	
+CIM Sessions
+------------
+In the same way that you can create PowerShell remoting sessions, 
+	you can create and manage CIM sessions by using these cmdlets:
+
+Get-CimSession
+New-CimSession
+New-CimSessionOption
+Remove-CimSession
+
+
+Example WMI vs CIM - Get last boot time
+========================================
+&gt;Get-WmiObject -Class Win32_OperatingSystem | select @{N='LastBootTime'; E={$_.ConvertToDateTime($_.LastBootUpTime)}}
+OUTPUT
+---------
+'LastBootTime
+'------------
+'31/01/2016 09:44:54
+
+'VS
+
+&gt;Get-CimInstance -ClassName Win32_OperatingSystem | select LastBootUpTime
+'OUTPUT
+------------
+'LastBootUpTime
+'--------------
+'31/01/2016 09:44:54
+
+
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Remoting</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>WORKGROUP_machines</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Remoting</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>WORKGROUP_machines</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+
+https://blogs.msdn.microsoft.com/wmi/2009/07/24/powershell-remoting-between-two-workgroup-machines/
+
+The computer you’re sitting in front of is called the client machine, 
+	while the computer you’re trying to remotely access is called the server machine.
+	
+First, configure the SERVER machine to allow access. 
+---------------------------------------------------	
+&gt;Enable-PSRemoting –force
+
+If one of the network cards on your computer has the network connection type set to “Public” 
+	then the required port won’t be opened in your firewall settings.
+	
+If you’d rather not change your network connection type, 
+	you’ll have to manually configure your firewall to allow traffic through.	
+	
+Make sure that the password for your Administrator account is not empty!  
+	If it is, you won’t be able to log in remotely.
+	
+Now you’ll need to configure your CLIENT machine. 
+------------------------------------------------
+
+ enable WinRM local access so that you can modify the proper settings. 
+ To do this, start the WinRM service and enable the local account token filter policy 
+ 
+ Both of the next 2 steps are unnecessary if 
+ 	you’ve already run the Enable-PSRemoting cmdlet on your client machine.
+ 
+ &gt;Start-Service WinRM
+ &gt;Set-ItemProperty –Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System –Name  LocalAccountTokenFilterPolicy –Value 1 –Type DWord
+ 
+ next (on the SERVER)
+ --------
+ Now that WinRM local access is enabled, 
+ 	you’ll need to add the name of your server machine to the TrustedHosts setting in the WinRM configuration, 
+ 	which enables your client machine to connect to your server machine 
+ 	using an authentication mechanism that does not authenticate the server (like Kerberos does):
+
+&gt;Set-Item WSMan:\localhost\Client\TrustedHosts –Value &lt;ServerMachineName&gt; -Force
+
+This command replaces any previous value that was stored in TrustedHosts!  
+	If there is an existing list of servers and you don’t want to remove then, 
+	use the –Concatenate parameter:
+	
+&gt;Set-Item WSMan:\localhost\Client\TrustedHosts –Value &lt;ServerMachineName&gt; -Force -Concatenate
+
+If you want to use your server machine’s IP address instead of its name, 
+	you must specify explicit credentials when you connect.
+	
+------------------------------------------------
+'From client (HOMETOWER) to server (HOME-LAPTOP)	
+&gt;Test-WSMan home-laptop	
+'OUTPUT
+--------
+#'wsmid           : http://schemas.dmtf.org/wbem/wsman/identity/1/wsmanidentity.xsd
+#'ProtocolVersion : http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd
+#'ProductVendor   : Microsoft Corporation
+#'ProductVersion  : OS: 0.0.0 SP: 0.0 Stack: 3.0#'
+#'	
+
+'INVOKE-COMMAND works	
+&gt;Invoke-Command -ComputerName home-laptop -ScriptBlock { Get-ChildItem C:\ } -credential glenn
+'OUTPUT
+--------
+#'
+#'    Directory: C:\
+#'
+#'
+#'Mode                LastWriteTime         Length Name                                                         PSComputerName                                             
+#'----                -------------         ------ ----                                                         --------------                                             
+#'d-----       12/18/2016   3:20 PM                DATA                                                         home-laptop                                                
+#'d-----       12/18/2016   7:58 AM                Downloads                                                    home-laptop                                                
+#'d-----        4/12/2016   1:36 AM                eSupport                                                     home-laptop                                                
+#'d-----        7/16/2016   6:47 AM                PerfLogs                                                     home-laptop                                                
+#'d-r---        8/29/2017   9:21 AM                Program Files                                                home-laptop                                                
+#'d-r---        5/13/2017   4:48 PM                Program Files (x86)                                          home-laptop                                                
+#'d-r---       12/18/2016   1:13 PM                Users                                                        home-laptop                                                
+#'d-----        8/29/2017   5:50 PM                Windows                                                      home-laptop                                                
+#'d-----        3/31/2017   5:49 AM                Windows.old                                                  home-laptop   
+	
+'BUT 'Get-CimInstance' fails from the client
+&gt;Get-CimInstance –ClassName Win32_ComputerSystem –Computer HOME-LAPTOP -Verbose	
+' Access is denied.	
+
+'I can enter a session on the client (i.e. HOMETOWER) to the server:
+&gt;Enter-PSSession -ComputerName home-laptop -Credential glenn
+'Now we are actually on the server
+'Then create an option variable
+[home-laptop]: &gt; $CimOption = New-CimSessionOption -Protocol Dcom
+'Then enter a CIM Session locally on the Server:
+[home-laptop]: PS C:\Users\glenn\Documents&gt; $CimSession = New-CimSession  -SessionOption $CimOption
+'and we can confirm we are on the Server:
+&gt;Get-ChildItem C:\
+'it returns the contents of the Server's C Drive
+	
+------------------------------------------------	
+To check if the WinRM service is running:
+               &gt;Get-Service WinRM
+
+To check the version of WinRM that’s installed:
+               &gt;Test-WSMan –Auth default
+
+To check the remoting configuration for PowerShell:
+               &gt;Get-PSSessionConfiguration
+
+To verify that local WinRM access is working:
+               &gt;New-PSSession
+
+To check if the local account token filter policy is enabled (on Windows Vista and Windows Server 2008):
+                &gt;Get-ItemProperty –Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System –Name LocalAccountTokenFilterPolicy*
+
+To check if the network access policy “Sharing and security model for local accounts” is set to Classic (on Windows XP):
+                Get-ItemProperty –Path HKLM:\System\CurrentControlSet\Control\Lsa –Name ForceGuest*
+
+To check the WinRM listener settings:
+               &gt;winrm enumerate winrm/config/listener
+
+For additional help and troubleshooting steps:
+                Get-Help about_remote_troubleshooting</Code>
+      </SnippetValue>
+    </value>
+  </item>
+</dictionary>
