@@ -1,2 +1,772 @@
 <?xml version="1.0" encoding="utf-8"?>
-<dictionary />
+<dictionary>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>PyCharm</Category>
+        <Language>PYTHON</Language>
+        <Public>false</Public>
+        <Name>PyCharm_VirtualEnvironment_Setup_1</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>PyCharm</Category>
+          <Language>PYTHON</Language>
+          <Public>false</Public>
+          <Name>PyCharm_VirtualEnvironment_Setup_1</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>PyCharm_VirtualEnvironment_Setup_1
+
+Python virtual environment using Pycharm [2020]
+https://www.youtube.com/watch?v=IHJADdUT2Pc
+#'Purpose: keep codebase and dependencies seperate between projects
+#'
+
+File =&gt; New Project
+
+	#EXAMPLE: on work computer (Crescent)
+	Location: C:\JUNK\PythonProjects\untitled
+	#replace untitled with name of project: whatever
+	C:\JUNK\PythonProjects\whatever
+	
+	Project Interpreter: New Virtualenv environment
+	(x) New Environment using: Virtualenv
+	Location: C:\JUNK\PythonProjects\whatever\env
+	Base Interpreter: C:\Program Files (x86)\Python37-32\python.exe
+	
+	[ ] Inherit global site-packages
+	[ ] Make available to all projects
+ 
+ 	( ) Existing Interpreter
+ 	
+ 	[CREATE]
+ 	
+ #It creates a new project with a virtual environment
+ 
+ 
+ # To add a library to this project's virtual environment
+ # example add 'requests'
+ 
+ File {menu} =&gt; Settings =&gt; {find the project in left pane} e.g. Project:whatever
+ 	{Select the project in the left pane} =&gt; 
+ 	{Select the 'project interpreter' in the right pane	
+ 	{Should see: pip, and setuptools}
+ 	{Click the '+' (on the right) }
+ 	{in the Search bar, type 'requests'}
+ 	{can specify the version at the bottom}
+ [Install Package]   {bottom left}
+ 	{should say 'Package 'requests' installed successfully'}	
+ </Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>PYTHON_DATA_from_internet</Category>
+        <Language>PYTHON</Language>
+        <Public>false</Public>
+        <Name>about_PYTHON_DATA_from_internet</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>PYTHON_DATA_from_internet</Category>
+          <Language>PYTHON</Language>
+          <Public>false</Public>
+          <Name>about_PYTHON_DATA_from_internet</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>about_PYTHON_DATA_from_internet
+
+==============================================================requests package
+#this is the package that comes with Python
+from urllib import request
+
+#BUT the most popular package for requests is actually called "requests"
+#reference for it:
+	https://requests.readthedocs.io/en/master/
+#To install it from CMD
+&gt; python -m pip install requests
+#OR from terminal in PyCharm
+&gt; pip3 install requests</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>PYTHON_DATA_from_internet</Category>
+        <Language>PYTHON</Language>
+        <Public>false</Public>
+        <Name>read_HTML_form_URL</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>PYTHON_DATA_from_internet</Category>
+          <Language>PYTHON</Language>
+          <Public>false</Public>
+          <Name>read_HTML_form_URL</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>from urllib import request
+
+theRequest = request.urlopen("http://www.google.com")
+
+print(theRequest)
+# #OUTPUT
+# # ------------------
+# #&lt;http.client.HTTPResponse object at 0x000001BED5141CA0&gt;
+
+print(theRequest.getcode())
+#OUTPUT
+# ------------------
+# 200               # this is an HTTP status code: the request was fine and we can read the data
+
+print(theRequest.read())
+#OUTPUT
+# ------------------
+# returns a long string of HTML code for the page</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>PYTHON_DATA_from_internet</Category>
+        <Language>PYTHON</Language>
+        <Public>false</Public>
+        <Name>read_JSON_data_Print_each_record_on_seperate_Line_Import_requests</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>PYTHON_DATA_from_internet</Category>
+          <Language>PYTHON</Language>
+          <Public>false</Public>
+          <Name>read_JSON_data_Print_each_record_on_seperate_Line_Import_requests</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>#read_JSON_data_Print_each_record_on_seperate_Line_Import_requests
+
+#FIRST, need to install 'requests' package
+#from terminal in PyCharm
+&gt; pip3 install requests
+
+====================================================================
+
+
+
+#get a Joke from Official Joke API
+# search google for: Joke API
+# first returned website: https://github.com/15Dkatz/official_joke_api
+# go to the page, look for: Endpoints =&gt; Grab a random joke! =&gt; https://official-joke-api.appspot.com/random_joke
+#IF you plug that URL into browser: it brings you to a page with a JSON object
+#for example:
+# {"id":24,"type":"programming","setup":"A SQL query walks into a bar, walks up to two tables and asks...","punchline":"'Can I join you?'"}
+#IF you modify the URL to this (i.e. replace "_joke" with  "_ten" )
+# https://official-joke-api.appspot.com/random_ten
+#THEN it returns an Array of objects:
+# e.g. {'id': 338, 'type': 'general', 'setup': 'Why did the fireman wear red, white, and blue suspenders?', 'punchline': 'To hold his pants up.'}
+
+# from urllib import request
+import requests
+import json
+
+theURL = "https://official-joke-api.appspot.com/random_ten"
+theRequest = requests.get(theURL)
+theResponse = requests.get(theURL)
+
+print("\n \n \n")
+print(f"HTML status code: {theResponse.status_code} ")
+print("\n \n \n")
+#OUTPUT
+# ------------------
+# 200               # this is an HTTP status code: the request was fine and we can read the data
+
+theData = theResponse.text
+theJSONdata = json.loads(theData)
+print(f"The JSON data: \n {theJSONdata} ")
+print("\n \n \n")
+
+
+class Joke:
+    def __init__(self, setup, punchline) -&gt; None:
+        self.setup = setup
+        self.punchline = punchline
+    def __str__(self) -&gt; str:
+        return f" The SETUP: {self.setup} , and the PUNCHLINE: {self.punchline}"
+
+
+listJokes = []
+
+for j in theJSONdata:
+    theSetup = j["setup"]
+    thePunchline = j["punchline"]
+    joke = Joke(theSetup,thePunchline)
+    listJokes.append(joke)
+
+print(f"There are {len(listJokes)} jokes in the List of Jokes")
+
+for theJoke in listJokes:
+    print(theJoke)</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>PYTHON_DATA_from_internet</Category>
+        <Language>PYTHON</Language>
+        <Public>false</Public>
+        <Name>read_JSON_data_Print_each_record_on_seperate_Line</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>PYTHON_DATA_from_internet</Category>
+          <Language>PYTHON</Language>
+          <Public>false</Public>
+          <Name>read_JSON_data_Print_each_record_on_seperate_Line</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>#THIS USES THE DEFAULT 'request' package
+
+#get a Joke from Official Joke API
+# search google for: Joke API
+# first returned website: https://github.com/15Dkatz/official_joke_api
+# go to the page, look for: Endpoints =&gt; Grab a random joke! =&gt; https://official-joke-api.appspot.com/random_joke
+#IF you plug that URL into browser: it brings you to a page with a JSON object
+#for example:
+# {"id":24,"type":"programming","setup":"A SQL query walks into a bar, walks up to two tables and asks...","punchline":"'Can I join you?'"}
+#IF you modify the URL to this (i.e. replace "_joke" with  "_ten" )
+# https://official-joke-api.appspot.com/random_ten
+#THEN it returns an Array of objects:
+# e.g. {'id': 338, 'type': 'general', 'setup': 'Why did the fireman wear red, white, and blue suspenders?', 'punchline': 'To hold his pants up.'}
+
+from urllib import request
+import json
+
+theURL = "https://official-joke-api.appspot.com/random_ten"
+theRequest = request.urlopen(theURL)
+print("\n \n \n")
+print(f"HTML return code: {theRequest.getcode()} ")
+print("\n \n \n")
+#OUTPUT
+# ------------------
+# 200               # this is an HTTP status code: the request was fine and we can read the data
+
+theData = theRequest.read()
+theJSONdata = json.loads(theData)
+print(f"The JSON data: \n {theJSONdata} ")
+print("\n \n \n")
+
+
+class Joke:
+    def __init__(self, setup, punchline) -&gt; None:
+        self.setup = setup
+        self.punchline = punchline
+    def __str__(self) -&gt; str:
+        return f" The SETUP: {self.setup} , and the PUNCHLINE: {self.punchline}"
+
+
+listJokes = []
+
+for j in theJSONdata:
+    theSetup = j["setup"]
+    thePunchline = j["punchline"]
+    joke = Joke(theSetup,thePunchline)
+    listJokes.append(joke)
+
+print(f"There are {len(listJokes)} jokes in the List of Jokes")
+
+for theJoke in listJokes:
+    print(theJoke)</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>PYTHON_Speech</Category>
+        <Language>PYTHON</Language>
+        <Public>false</Public>
+        <Name>example_from_JokesAPI</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>PYTHON_Speech</Category>
+          <Language>PYTHON</Language>
+          <Public>false</Public>
+          <Name>example_from_JokesAPI</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+
+#get a Joke from Official Joke API
+# search google for: Joke API
+# first returned website: https://github.com/15Dkatz/official_joke_api
+# go to the page, look for: Endpoints =&gt; Grab a random joke! =&gt; https://official-joke-api.appspot.com/random_joke
+#IF you plug that URL into browser: it brings you to a page with a JSON object
+#for example:
+# {"id":24,"type":"programming","setup":"A SQL query walks into a bar, walks up to two tables and asks...","punchline":"'Can I join you?'"}
+#IF you modify the URL to this (i.e. replace "_joke" with  "_ten" )
+# https://official-joke-api.appspot.com/random_ten
+#THEN it returns an Array of objects:
+# e.g. {'id': 338, 'type': 'general', 'setup': 'Why did the fireman wear red, white, and blue suspenders?', 'punchline': 'To hold his pants up.'}
+
+import json
+import pyttsx3
+# from urllib import request
+import requests
+
+theURL = "https://official-joke-api.appspot.com/random_ten"
+theRequest = requests.get(theURL)
+theResponse = requests.get(theURL)
+
+print("\n \n \n")
+print(f"HTML status code: {theResponse.status_code} ")
+print("\n \n \n")
+#OUTPUT
+# ------------------
+# 200               # this is an HTTP status code: the request was fine and we can read the data
+
+theData = theResponse.text
+theJSONdata = json.loads(theData)
+print(f"The JSON data: \n {theJSONdata} ")
+print("\n \n \n")
+
+
+class Joke:
+    def __init__(self, setup, punchline) -&gt; None:
+        self.setup = setup
+        self.punchline = punchline
+    def __str__(self) -&gt; str:
+        return f" The SETUP: {self.setup} , and the PUNCHLINE: {self.punchline}"
+
+
+listJokes = []
+
+
+for j in theJSONdata:
+    
+        theSetup = j["setup"]
+        thePunchline = j["punchline"]
+        joke = Joke(theSetup,thePunchline)
+        listJokes.append(joke)
+
+
+print(f"There are {len(listJokes)} jokes in the List of Jokes")
+
+jCounter: int = 0
+for theJoke in listJokes:
+    print(theJoke)
+    if jCounter &lt;= 3:
+        pyttsx3.speak(theJoke.setup)
+        pyttsx3.speak(theJoke.punchline)
+    jCounter += 1
+
+pyttsx3.speak("Glenn Garson is the bomb")</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>RUBY_Misc</Category>
+        <Language>PYTHON</Language>
+        <Public>false</Public>
+        <Name>04_Create_RubyOnRails_Project_Windows</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>RUBY_Misc</Category>
+          <Language>PYTHON</Language>
+          <Public>false</Public>
+          <Name>04_Create_RubyOnRails_Project_Windows</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+
+#In this example, Use folder: C:\DATA\Ruby (on vm_WIN_10_DEV)
+
+Create the empty project
+=========================
+1] CMD
+#	CD to the folder for all the projects: C:\DATA\Ruby
+#	Project Name: demo_project, and create the configuration files for working with MySQL
+#		by default it would use the sqllite database, but that could be changed later
+	&gt; rails new demo_project -d mysql	
+2] open the Atom IDE =&gt; File {menu} =&gt; Open Folder
+	{chose the folder} C:\DATA\Ruby\demo_project
+	{the MVC components live in the "app" folder
+
+Configure the Database, and create the user 
+=========================
+# use the MySQL command line
+
+# by convention use the same name as the project, as you use for the MySQL database (Stupid idea)
+# then append "_development", which is the 'Environment'
+# Generally there are 3 environments: development, test, production
+--------------------------------------------------------------------------------------------
+#create a local user w/ limited access for this database and this Ruby on Rails project, 
+#	with password "demo_project_password"  visible, as text
+3] #from the MySQL command window
+
+	&gt;CREATE DATABASE demo_project_development;							#create the database
+	&gt;create user demo_project_user;										#create the user
+	&gt;ALTER USER demo_project_user IDENTIFIED BY 'project_password';		#set the user's password
+	&gt;GRANT ALL ON demo_project_development.* TO 'demo_project_user';	#Grant user all privileges on the database
+	#then you can quit the MySQL command line
+	
+	&gt;show databases; 		#to confirm that the database is there
+--------------------------------------------------------------------------------------------
+
+4] Configure some things for the project, go into the project using Atom
+	=&gt; Config {folder} =&gt; database.yml {file}
+	====================================================ORIG
+	default: &amp;default
+	  adapter: mysql2
+	  encoding: utf8
+	  pool: &lt;%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %&gt;
+	  username: root
+	  password:
+	  host: localhost
+	
+	development:
+	  &lt;&lt;: *default
+	  database: demo_project_development	
+	====================================================Change it to:
+	default: &amp;default
+	  adapter: mysql2
+	  encoding: utf8
+	  pool: &lt;%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %&gt;
+	  username: demo_project_user
+	  password: project_password
+	  host: localhost
+	
+	development:
+	  &lt;&lt;: *default
+	  database: demo_project_development
+	====================================================
+	{then save the changes} 	
+	
+5] #To test that the username and password are working, just run the following command. If it succeeds, that proves that it is 
+	#connecting with the credentials	
+	#from command line, in the project folder
+	&gt;rails db:schema:dump
+	#IF there are no Errors, then it is working
+	# and you should also see the file: "demo_project {folder} =&gt; db {folder} =&gt; schema.rb {file}
+	
+6] #Tell Puma to boot up and run the project so that it can respond to HTTP requests
+	CMD: CD to the project folder
+	&gt; rails server
+	#OUTPUT
+	#-----------------------------
+	C:\DATA\Ruby\demo_project&gt;rails server
+	=&gt; Booting Puma
+	=&gt; Rails 5.2.1 application starting in development
+	=&gt; Run `rails server -h` for more startup options
+	*** SIGUSR2 not implemented, signal based restart unavailable!
+	*** SIGUSR1 not implemented, signal based restart unavailable!
+	*** SIGHUP not implemented, signal based logs reopening unavailable!
+	Puma starting in single mode...
+	* Version 3.12.0 (ruby 2.5.1-p57), codename: Llamas in Pajamas
+	* Min threads: 5, max threads: 5
+	* Environment: development
+	* Listening on tcp://0.0.0.0:3000
+	Use Ctrl-C to stop
+	#-------------------------------------------------------------
+	#should now be able to browse to it: http://localhost:3000</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>RUBY_Misc</Category>
+        <Language>PYTHON</Language>
+        <Public>false</Public>
+        <Name>05_RubyOnRails_EssentialTraining_Lynda.Com_C_Configure_a_Project</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>RUBY_Misc</Category>
+          <Language>PYTHON</Language>
+          <Public>false</Public>
+          <Name>05_RubyOnRails_EssentialTraining_Lynda.Com_C_Configure_a_Project</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>05_RubyOnRails_EssentialTraining_Lynda.Com_c_Configure_a_Project
+-----------------------------------------------------------------
+chap 2 exercise 02_03
+
+#File: Gemfile
+---------------
+# Once you make any changes in the file and save it, you need to 'bundle' it
+# from CMD, located at root of project:
+&gt; bundle install
+# any time you make changes to the file, you have to repeat this command
+
+#File: config/application.rb
+----------------------------
+#Usually you will not modify the file, rather you would modify the  config/environments/*, and config/initializers
+
+#Even if a Rails project does not use a database, it has to have one configured before it can get up and running
+
+1] #So start up MySQL from the CMD:
+	&gt; mysql -u root -p  #This will challenge us for the password (i.e. Abcd@1234)
+	
+--------------------------------------------------------------------------------------------
+#create a local user w/ limited access for this database and this Ruby on Rails project, 
+#	with password "simple_cms_password"  visible, as text
+2a] #from the MySQL command window
+
+	#NOTE to show users:
+		&gt;select host, user from mysql.user;
+
+
+	&gt;CREATE DATABASE simple_cms_development;							#create the database
+	&gt;create user simple_cms_user;										#create the user
+	&gt;ALTER USER simple_cms_user IDENTIFIED BY 'simple_cms_user_password';		#set the user's password
+	&gt;GRANT ALL ON simple_cms_development.* TO 'simple_cms_user';	#Grant user all privileges on the database
+	#and the Test database for the test project
+	&gt;CREATE DATABASE simple_cms_test;							#create the database
+	&gt;GRANT ALL ON simple_cms_test.* TO 'simple_cms_user';	#Grant user all privileges on the database
+	
+	#Exit out of the MySQL application
+	&gt;quit
+--------------------------------------------------------------------------------------------
+	
+3] #Configure some things for the project, go into the project using Atom
+	=&gt; Config {folder} =&gt; database.yml {file}
+	====================================================ORIG
+	default: &amp;default
+	  adapter: mysql2
+	  encoding: utf8
+	  pool: &lt;%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %&gt;
+	  username: root
+	  password:
+	  host: localhost
+	
+	development:
+	  &lt;&lt;: *default
+	  database: simple_cms_development	
+	====================================================Change it to:
+	default: &amp;default
+	  adapter: mysql2
+	  encoding: utf8
+	  pool: &lt;%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %&gt;
+	  username: simple_cms_user
+	  password: simple_cms_user_password
+	  host: localhost
+	
+	development:
+	  &lt;&lt;: *default
+	  database: simple_cms_development
+	====================================================
+	{then save the changes} 
+	
+4] #To test that the username and password are working, just run the following command. If it succeeds, that proves that it is 
+	#connecting with the credentials	
+	#from command line, in the project folder
+	&gt;rails db:schema:dump
+	#IF there are no Errors, then it is working 
+	#	if there was an error check to make the username/password is correct
+	# and you should also see the file: "demo_project {folder} =&gt; db {folder} =&gt; schema.rb {file}
+	
+5] #Tell Puma to boot up and run the project so that it can respond to HTTP requests
+	CMD: CD to the project folder
+	&gt; rails server
+	#OUTPUT
+	#-----------------------------
+	C:\DATA\Ruby\simple_cms&gt;rails server
+	=&gt; Booting Puma
+	=&gt; Rails 5.2.1 application starting in development
+	=&gt; Run `rails server -h` for more startup options
+	*** SIGUSR2 not implemented, signal based restart unavailable!
+	*** SIGUSR1 not implemented, signal based restart unavailable!
+	*** SIGHUP not implemented, signal based logs reopening unavailable!
+	Puma starting in single mode...
+	* Version 3.12.0 (ruby 2.5.1-p57), codename: Llamas in Pajamas
+	* Min threads: 5, max threads: 5
+	* Environment: development
+	* Listening on tcp://0.0.0.0:3000
+	Use Ctrl-C to stop
+	#-------------------------------------------------------------
+	#should now be able to browse to it: http://localhost:3000
+
+	Cntrl-C 	#{To stop the web server}</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>RUBY_Misc</Category>
+        <Language>PYTHON</Language>
+        <Public>false</Public>
+        <Name>05_RubyOnRails_EssentialTraining_Lynda.Com_d_Start_Stop_webServer</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>RUBY_Misc</Category>
+          <Language>PYTHON</Language>
+          <Public>false</Public>
+          <Name>05_RubyOnRails_EssentialTraining_Lynda.Com_d_Start_Stop_webServer</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>05_RubyOnRails_EssentialTraining_Lynda.Com_d_Start_Stop_webServer
+------------------------------------------------------------------
+
+http://localhost:3000
+
+#Tell Puma to boot up and run the project so that it can respond to HTTP requests
+	CMD: CD to the project folder
+	&gt; rails server
+	#OUTPUT
+	#-----------------------------
+	C:\DATA\Ruby\simple_cms&gt;rails server
+	=&gt; Booting Puma
+	=&gt; Rails 5.2.1 application starting in development
+	=&gt; Run `rails server -h` for more startup options
+	*** SIGUSR2 not implemented, signal based restart unavailable!
+	*** SIGUSR1 not implemented, signal based restart unavailable!
+	*** SIGHUP not implemented, signal based logs reopening unavailable!
+	Puma starting in single mode...
+	* Version 3.12.0 (ruby 2.5.1-p57), codename: Llamas in Pajamas
+	* Min threads: 5, max threads: 5
+	* Environment: development
+	* Listening on tcp://0.0.0.0:3000
+	Use Ctrl-C to stop
+	#-------------------------------------------------------------
+	#should now be able to browse to it: http://localhost:3000
+	# You need to leave the CMD window open, b/c it is the webserver
+
+	Cntrl-C 	#{To stop the web server}</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>RUBY_Misc</Category>
+        <Language>PYTHON</Language>
+        <Public>false</Public>
+        <Name>05_RubyOnRails_EssentialTraining_Lynda.Com_f_Rails_Architecture</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>RUBY_Misc</Category>
+          <Language>PYTHON</Language>
+          <Public>false</Public>
+          <Name>05_RubyOnRails_EssentialTraining_Lynda.Com_f_Rails_Architecture</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>1] public #folder in root
+		  #you can put static HTML files in there, so that a URL for static html page will find it
+		  #That does not mean you should put static pages there.
+		  
+		  # /public is the firt place the Web Server looks (for exact match to a page specified in the URL)
+		  # in Rails, if the Web Server does not find the requested page in '/public' it then goes to the MVC Rails Framework
+		  #Puma knows that the folder /public is the default path for requests,
+		  #	BUT, in production you will have to specify that default path in the 'routes'
+		  
+		  #If you were to place a page (static_page.html) in the public folder then you would request it like this:
+		  http://localhost:3000/static_page.html
+		  
+		  #If you were to first create a 'demo' folder in /public folder and  place a page (static_page.html) in the public folder then you would request it like this:
+		  http://localhost:3000/demo/static_page.html
+		  #BUT if you used this URL
+		  http://localhost:3000/demo/index
+		  #that would go to the Controller (named 'demo') and the view (named 'index')
+		  
+		  #Then if you rename the 'static_page.html' page to be just 'index'
+		  #and then if you used this URL
+		  http://localhost:3000/demo/index	
+		  # you would go to the static html page, b/c it's name matches the URL
+		  
+2] Route Types	
+		
+		  # types of routes
+		  Simple route
+		  				#example
+		  				get 'demo/index'
+		  				
+		  				#which is Equivalent to:
+		  				match "demo/index", :to =&gt; "demo#index",
+		  				  :via =&gt; :get
+		  Default route 
+		  				#this type may go away in future versions of Rails
+		  				#syntax
+		  				:controller/:action/:id
+		  				
+		  				#example
+		  				get ':controller(/:action(/:id))'
+		  				
+		  				#which is Equivalent to:
+		  				match ':controller(/:action(/:id))',		# the '(' are for optional parts
+		  				  :via =&gt; :get
+		  
+		  Root route
+		  				#route to the homepage of web site
+		  				
+		  				#short version
+		  				root "demo#index"
+		  				
+		  				#could write it with long syntax
+		  				match "/", :to =&gt; "demo#index", :via =&gt; :get
+		  
+		  Resourceful route</Code>
+      </SnippetValue>
+    </value>
+  </item>
+</dictionary>
