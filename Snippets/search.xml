@@ -1,2 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<dictionary />
+<dictionary>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Security</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>Get-FileHash_to_check_a_Files_Hash</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Security</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>Get-FileHash_to_check_a_Files_Hash</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+&gt;CD {to the folder that has the file in question}
+&gt; Get-FileHash
+[space] [tab] to scroll through files in the path
+
+compare the SHA256 output with the value from the download website in order to confirm the file's validity
+
+or use online calculator:
+https://md5file.com/calculator
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+</dictionary>
