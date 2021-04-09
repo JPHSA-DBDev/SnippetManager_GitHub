@@ -3,34 +3,3856 @@
   <item>
     <key>
       <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>POWERSHELL_Security</Category>
-        <Language>VBSCRIPT</Language>
+        <Category>about_PYTHON_XML</Category>
+        <Language>PYTHON</Language>
         <Public>false</Public>
-        <Name>Get-FileHash_to_check_a_Files_Hash</Name>
+        <Name>Snippets_Read</Name>
         <Group>My Snippets</Group>
       </SnippetKey>
     </key>
     <value>
       <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
         <Key>
-          <Category>POWERSHELL_Security</Category>
-          <Language>VBSCRIPT</Language>
+          <Category>about_PYTHON_XML</Category>
+          <Language>PYTHON</Language>
           <Public>false</Public>
-          <Name>Get-FileHash_to_check_a_Files_Hash</Name>
+          <Name>Snippets_Read</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>import xml.etree.ElementTree as ET
+
+tree = ET.parse("/home/whatever/data/xmlFiles/mysnippets.xml")
+root = tree.getroot()
+
+theCount_1 = 0
+theCount_2 = 0
+theCount_3 = 0
+theCount_4 = 0
+theCount_5 = 0
+nodesTocheck_1 = 1
+nodesTocheck_2 = 1
+nodesTocheck_3 = 1
+nodesTocheck_4 = 2
+nodesTocheck_5 = 2
+for item_1 in root.findall("item"):
+    while theCount_1 &lt;= nodesTocheck_1:
+        theCount_1 += 1
+        print(item_1.tag, theCount_1)
+        theCount_2 = 0
+        while theCount_2 &lt;= nodesTocheck_2:
+            for item_2 in item_1:
+                theCount_2 += 1
+                print("-----", item_2.tag)
+                theCount_3 = 0
+                while theCount_3 &lt;= nodesTocheck_3:
+                    for item_3 in item_2:
+                        theCount_3 += 1
+                        print("-----", "-----", item_3.tag)
+                        theCount_4 = 0
+                        while theCount_4 &lt;= nodesTocheck_4:
+                            for item_4 in item_3:
+                                theCount_4 += 1
+                                print("-----", "-----","-----", "-----",item_4.tag)
+                                print("                                ", item_4.attrib)
+                                print("==&gt;", item_4.text)
+                                if item_4.text == 'VB.NET':
+                                    print('ding, ding, ding')
+
+
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>ASP.NET_5</Category>
+        <Language>TEXT</Language>
+        <Public>false</Public>
+        <Name>Installation_Issues</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>ASP.NET_5</Category>
+          <Language>TEXT</Language>
+          <Public>false</Public>
+          <Name>Installation_Issues</Name>
           <Group>My Snippets</Group>
         </Key>
         <Keywords />
         <Imports />
         <Code>
-&gt;CD {to the folder that has the file in question}
-&gt; Get-FileHash
-[space] [tab] to scroll through files in the path
 
-compare the SHA256 output with the value from the download website in order to confirm the file's validity
+can get ASP.NET 5 RC from: https://get.asp.net/
+then on the page: https://get.asp.net/OtherDownloads, it gave some commands to install .NET Version Manager (DNVM)
 
-or use online calculator:
-https://md5file.com/calculator
+
+1. Install the .NET Version Manager (DNVM)
+Use these snippets to install DNVM (.NET Version Manager), 
+a command-line utility to update and configure which DNX (.NET Execution Environment) to use.
+
+To install DNVM on Windows open a command prompt and run the following
+
+@powershell -NoProfile -ExecutionPolicy unrestricted -Command "&amp;{iex ((new-object net.webclient).DownloadString('https://dist.asp.net/dnvm/dnvminstall.ps1'))}"
+        
+To install DNVM on Linux or OS X open a terminal and run the following
+
+curl -sSL https://dist.asp.net/dnvm/dnvminstall.sh | sh &amp;&amp; source ~/.dnx/dnvm/dnvm.sh
+    
+2. Install a DNX (.NET Execution Environment)
+Use this snippet to install the latest stable DNX (.NET Execution Environment).
+
+dnvm install latest
+        </Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>ASPNET_aspnetdb_Using_Membership_Class</Category>
+        <Language>ASP</Language>
+        <Public>false</Public>
+        <Name>GetAUser_CodeBehind_snippet</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>ASPNET_aspnetdb_Using_Membership_Class</Category>
+          <Language>ASP</Language>
+          <Public>false</Public>
+          <Name>GetAUser_CodeBehind_snippet</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>Dim user As MembershipUser
+                user = Membership.GetUser(GetUserLogin(uid))
+                user.Email = Trim(tbEmail.Text)
+                Membership.UpdateUser(user)</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>ASPNET_Bind_Eval</Category>
+        <Language>ASP</Language>
+        <Public>false</Public>
+        <Name>readMe_ASPNET_Bind_Eval</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>ASPNET_Bind_Eval</Category>
+          <Language>ASP</Language>
+          <Public>false</Public>
+          <Name>readMe_ASPNET_Bind_Eval</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>readMe_ASPNET_Bind_Eval
+
+#EVAL vs #BIND
+===============
+For a read-only (one way databinding) databound control, 
+	they are the same
+
+For 2 way databinding 
+	(using a datasource in which you want to update, insert, etc with declarative databinding), 
+	you'll need to use #Bind.
+
+Simple as that. 
+	Eval is read only, 
+	Bind allows for data to go two ways. 
+	
+the Bind keyword works like Eval to display data and can retrieve the value you've entered when updating or inserting a record.
+In addition, 
+	Bind is very useful in TemplateFields used in the GridView and DetailsView. 
+	Bind stores the value of the bound control property into a collection of values 
+		that the FormView control automatically retrieves and uses to compose the parameter list of the insert or edit command. 
+	The argument passed to Bind must match the name of a field in the data container.
+	
+=========================================================================================	
+For example, the textbox in the code snippet provides the value for the notes field. 		
+
+&lt;asp:TextBox Runat="server" ID="TheNotes"
+     Text='&lt;%# Bind("notes") %&gt;' /&gt;
+
+=========================================================================================	
+Eval() is a shortcut for Container.DataItem().
+Since Eval() uses Reflection, it causes overhead. From a optimization standpoint, it is better to use Container.DataItem()
+
+=========================================================================================
+I was working on databinding in an asp.net 2.0 app and found the following difference which i felt i must share with you.
+    The following expression does not work:
+    
+     '&lt;%# Bind("Step")  &amp; " / " &amp; Bind("Step") %&gt;' /&gt;
+     
+     
+    it displays only "10" in the gridview column while the expected result should be "10 / 10"
+    
+    I used eval for the same:
+    
+     '&lt;%# Eval("Step")  &amp; " / " &amp; Eval("Step") %&gt;' /&gt;
+     
+     
+    And i got the desired result - "10 / 10" was displayed in the gridview column
+    I assume we can't use multiple expression operations like concatenation doesnt work with bind 
+    	(a reason could be Bind allows for data to go two ways 
+    	and hence expression might create problem for data to go back to datasource 
+
+=========================================================================================
+
+For read-only controls they are the same. 
+For 2 way databinding, using a datasource
+	 in which you want to update, insert, etc with declarative databinding,
+	 you'll need to use Bind.
+
 </Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>ASPNET_C#_EntityFramework</Category>
+        <Language>ASP</Language>
+        <Public>false</Public>
+        <Name>1_Simple_DropDown_GridView_readMe</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>ASPNET_C#_EntityFramework</Category>
+          <Language>ASP</Language>
+          <Public>false</Public>
+          <Name>1_Simple_DropDown_GridView_readMe</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>1_Simple_DropDown_GridView_
+
+without QueryExtender, just hard-coded into the Markup instead: Where and SortBy
+
+from Plurasight ASP.NET WebForms
+
+
+There is no Code-behind
+Used SQL database: AdventureWorks on SQL-SERVER\DEV
+
+
+No special refences added to the project
+
+
+
+Notes from Notepad of PluralSight video:
+
+
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+DEMO
+
+Start out with an empty Web Application Project:
+Start with the default web.config file, and a datasource in the 'App_Data' folder
+The folder is added by right-clicking on the Project in the 'Solution Explorer' =&gt; Add =&gt; Add ASP.NET Folder =&gt; App_Data
+
+
+
+Add new:
+
+
+
+ADO.NET Entity Data Model:
+
+
+
+AdventureWorksLT.edmx (AWModel.edmx)
+
+
+
+
+
+AdventureWorksLT_DataEntities  (AWDataEntities)
+
+
+
+Just choose the table that we are interested in.
+
+AdventureWorksLT_DataModel  (AWDataModel)
+
+Now have the Class shown on the Designer Surface:
+
+
+
+If you choose to, you could click , select fields and delete them from the Model
+
+Right click the Project in 'Solution Explorer' = &gt; Build
+
+Here is the code  in the 'AWModel.Designer.cs" file   
+
+{remember: 
+AdventureWorksLT.edmx (AWModel.edmx)}
+
+
+
+Now add new Web Form:
+
+
+
+Name it Default.aspx
+
+
+
+Then add a drop down to the design surface of the .aspx page, after some text:
+
+
+
+Then drop a 'GridView' in below that, after the word "Customers:"
+
+
+
+Then configure 'Data Source', for the Drop-Down
+
+ NOTE: [x] Enable AutoPostBack  is checked so that  we don't need a button to do the Post-back
+
+
+
+Entity Data Source:
+
+
+
+Next Window:
+
+
+
+
+
+We have one Entity (in this example) and one 'Entity Set' which is a collection of Entities
+
+
+
+So this is  the field that will be in the drop down.
+Note 
+	Can not specify Value/Diisplay 
+	Can not specify filter nor sort, though there is a "EntitypeFilter"
+	
+In the next window, nothing is listed for what to display, so will have to do some manual coding:
+
+In my follow-along example, the two  fields  are in fact populated
+	Data field: SalesPerson
+	Value: Salesperson
+
+
+
+Click 'Ok' in that window.
+
+This is the default MarkUp:
+
+
+
+In his example, he had to add in the "DataTextField"
+
+
+
+Then he added the word DISTINCT to the Select statement:
+
+
+
+Choose new data source for GridView:
+
+
+
+Select and name  a Entity Data Source:
+
+
+
+Pick the connection:
+
+
+
+When you get to this:
+	Yes you want to work with Customers   Entity, but we need a WHERE clause:
+	
+
+
+Then choose other Column related option checkboxes:
+
+
+
+Click link to "Edit Columns"
+
+This shows that you don't see a detailed list of columns in the lower left box, rather they will just auto-generate:
+
+
+
+The default markup for the EntityDataSource for the GridView is:
+
+
+
+So he added a "WHERE" clause:
+
+
+
+Then add in a &lt;WhereParameters&gt; tag:
+
+
+
+With a "ControlParameter" inside it:
+
+
+
+Add the Parameter, without the @ symbol
+Get the Control ID from the DropDown control
+
+
+(NOTE: snippet above left off the "/&gt;" at the end of the 'Control Parameter' tag
+
+This  uses  a LINQ syntax behind the scenes, by converting it into an "Expression Tree"
+
+
+
+
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>BOOTSTRAP</Category>
+        <Language>ASP</Language>
+        <Public>false</Public>
+        <Name>about_BOOTSTRAP</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>BOOTSTRAP</Category>
+          <Language>ASP</Language>
+          <Public>false</Public>
+          <Name>about_BOOTSTRAP</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>about_BOOTSTRAP
+
+see snippet: "CODE_01_about_Bootstrap", under section "CODE_01_Empty_ASP.NET_Core_Web_Application", under C# language
+for more details on setting up bootstrap
+
+
+&lt;!--
+http://getbootstrap.com/
+http://bootswatch.com/	{free themes}
+https://wrapbootstrap.com/	{themes for sale}
+http://en.wikipedia.org/wiki/Bootstrap_%28front-end_framework%29
+
+ use boot styles: GetBootStrap.com
+ 
+ 
+ ============ 
+ GRID SYSTEM 
+ (a) if you exceed 12, it wraps to the next row
+ (b) the last two characters are for the columns (e.g:  .col-xx-2 is 2 columns wide)
+ (c) The middle two characters are the screen size 
+ 		(e.g. .col-lg-xx is &gt;= 1200px, where lg is deskto size or larger)
+ 		(e.g. .col-md-xx is &gt;= 992px)
+ 		(e.g. .col-sm-xx is &gt;= 768px)
+ 		(e.g. .col-xs-xx is &lt; 768px)
+ 		To describe sizes for different devices: (e.g.  .col-md-6 .col-xs-12)
+ ============ 
+ (1) .col-xx-12		12 column Grid
+ (2) .col-xx-6
+ (3) .col-xx-4
+ (4) .col-xx-3
+ (6) .col-xx-2
+ 
+ Then there are offsets:
+ =======================
+ .col-xx-8 .col-xx-offset-2 	{an 8 column section that is centered w/ 2 columns on each side}
+ .col-xx-6 (and) .col-xx-3 .col-xx-offset-2 {a 6 col, 2 space, then 3 col, then 2 spaces}
+ 
+--&gt;
+
+&lt;!--Default- actually looks like a button --&gt;
+&lt;p&gt;&lt;button data-bind="click: save" &gt;Save&lt;/button&gt;&lt;/p&gt;
+&lt;!--flat Grey Button --&gt;
+&lt;p&gt;&lt;button data-bind="click: save" class="btn btn-primary"&gt;Save&lt;/button&gt;&lt;/p&gt;
+&lt;!--flat Blue button, white font, with hover over, and click effect --&gt;
+&lt;p&gt;&lt;button data-bind="click: save" class="btn btn-primary"&gt;Save&lt;/button&gt;&lt;/p&gt;
+&lt;!--flat white button, with grey edge, "&lt;&lt;" that says 'back to List" --&gt;
+&lt;p&gt;&lt;a href="/" class="btn btn-default btn-sm"&gt;&amp;laquo; back to List &lt;/a&gt;&lt;/p&gt;
+
+&lt;!--Then add classes to the Input controls, and give the &lt;input&gt; controls unique ID's 	--&gt;
+
+ &lt;input class="form-control" name="CustomerName" id="CustomerName" data-bind="value: CustomerName, event: {change: flagSalesOrderAsEdited}" /&gt;
+ &lt;input class="form-control" name="PONumber" id="PONumber" data-bind="value: PONumber, event: {change: flagSalesOrderAsEdited}" /&gt;
+ 
+&lt;!--Then add 'for' attribute to &lt;label&gt; controls, to link them to inputs, where each label 'links' to an input ID --&gt;
+ 	for="CustomerName"
+ 	for="PONumber"
+
+&lt;!--Then the bootstrap styles for the &lt;div&gt; controls: --&gt;
+	class="form-group"
+&lt;!-- and for the &lt;label&gt; controls: --&gt;
+	class="control-label"
+&lt;!-- for the &lt;input&gt; controls: --&gt;
+	class="form-control"
+	
+&lt;!-- For DELETE, use a RED button: --&gt;
+&lt;p&gt;&lt;button class="btn btn-danger" data-bind="click: save"&gt;Delete&lt;/button&gt;&lt;/p&gt;
+
+
+
+
+
+
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>CDC_Change_Data_Capture</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>Insert_Operation_and_CaptureDataFrom_Insert_Operation</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>CDC_Change_Data_Capture</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>Insert_Operation_and_CaptureDataFrom_Insert_Operation</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>--From: http://www.dotnetfunda.com/articles/show/1924/cdc-in-sql-server-2008-r2-part-i
+-- Using the first Snippet
+
+
+--INSERT:  Following query would insert a record into Employee table
+
+INSERT INTO [TrialDB].[DBO].[Employee]
+
+           ([NationalIDNumber]          
+
+           ,[ContactID]
+
+           ,[LoginID]
+
+           ,[ManagerID]
+
+           ,[Title]
+
+           ,[BirthDate]
+
+           ,[MaritalStatus]
+
+           ,[Gender]
+
+           ,[HireDate]        
+
+           ,[VacationHours]
+
+           ,[SickLeaveHours] 
+
+)
+
+VALUES
+
+       (14417807
+
+           ,1209
+
+           ,'trial\guy1'
+
+           ,16
+
+           ,'Production Technician - WC60'
+
+           ,NULL
+
+           ,'M'
+
+           ,'M'
+
+           ,GETDATE()          
+
+           ,21
+
+           ,30
+
+           )
+           
+           
+-- This would capture the operation
+
+SELECT            
+           
+           
+           
+           
+           </Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>CSS__and_ServerSideControls</Category>
+        <Language>ASP</Language>
+        <Public>false</Public>
+        <Name>readMe_CSS__and_ServerSideControls</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>CSS__and_ServerSideControls</Category>
+          <Language>ASP</Language>
+          <Public>false</Public>
+          <Name>readMe_CSS__and_ServerSideControls</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>readMe_CSS__and_ServerSideControls
+
+
+Better to use Class selectors rather than ID selectors
+in CSS, see details in the next two snippets</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DATES</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>Business _Workdays_and_Holidays_EXLUDED_COUNT_example_from_CRESCENT</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DATES</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>Business _Workdays_and_Holidays_EXLUDED_COUNT_example_from_CRESCENT</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>--0000_General_SNIPPET_063_BusinessDaysBetween2Dates.sql
+/*
+
+	This counts the hops between days, but to get the number of business days including the first and last day: you have to add 1
+
+	See the bottom cte: cte_CalendarBusinessDaysAndHolidays
+	This is where your data would be coming from
+	The code above that is the part that has to be there all the time, but the table: [edwCrescent].[dbo].[DimDate] is company dependent
+
+	https://stackoverflow.com/questions/252519/count-work-days-between-two-dates
+*/
+--from: P_0000_RES_913_CountBusinessDaysBetween2Dates_v3_usingCalendarOfHolidays.sql
+
+--==================================================================   GENERATE DATA - START
+--1] This generates some test dates. replace this section with your dates dateset. 
+--Make sure that there is a field in YYYYMMDD format, and a field in DATE or DATETIME format
+DECLARE @START_DATE_of_cteCalendar DATETIME
+
+SELECT @START_DATE_of_cteCalendar = '2019-08-01 00:00:00.000'	  --&lt;============= CHANGE THIS to the start of your calendar
+
+DECLARE @END_DATE_of_cteCalendar DATETIME
+
+SELECT @END_DATE_of_cteCalendar = '2019-09-017 12:00:00.000';	  --&lt;============= CHANGE THIS to the end of your calendar
+
+WITH cte_rowNumbers
+		AS (
+			SELECT ROW_NUMBER() OVER (ORDER BY (SELECT 1)) - 1 AS [Incrementor]
+			FROM [master].[sys].[columns] sc1
+			CROSS JOIN [master].[sys].[columns] sc2
+			)
+, cte_theDates
+		AS (
+			SELECT DATEADD(DAY, cte.[Incrementor], @START_DATE_of_cteCalendar) AS theDate
+			FROM cte_rowNumbers cte
+			WHERE DATEADD(DAY, cte.[Incrementor], @START_DATE_of_cteCalendar) &lt;= @END_DATE_of_cteCalendar
+			)
+, cte_Start2End_withHolidays
+		AS (
+			SELECT theDate, 
+			(SELECT 'TheCalculation' = (SELECT RIGHT('0000' + CAST(year(theDate) AS NVARCHAR), 4)) + (SELECT RIGHT('00' + CAST(MONTH(theDate) AS NVARCHAR), 2)) + (SELECT RIGHT('00' + CAST(DAY(theDate) AS NVARCHAR), 2))
+					) AS YYYYMMDD
+			FROM cte_theDates
+			)
+,cte_CalendarBusinessDaysAndHolidays
+		AS (
+			SELECT 
+			calendar.theDate
+			, calendar.YYYYMMDD
+			, CASE WHEN Holidays.[IsCRMHoliday] = 'Y' THEN 1 ELSE 0 END AS [IsCRMHoliday]
+			, SUM(CASE WHEN Holidays.[IsCRMHoliday] = 'Y' THEN 1 ELSE 0 END) OVER () AS Total_HolidayCount
+			, (DATEDIFF(dd, @START_DATE_of_cteCalendar, @END_DATE_of_cteCalendar)) - (DATEDIFF(wk, @START_DATE_of_cteCalendar, @END_DATE_of_cteCalendar) * 2) + (CASE WHEN DATENAME(dw, @START_DATE_of_cteCalendar) = 'Saturday' THEN 1 ELSE 0 END) - (CASE WHEN DATENAME(dw, @END_DATE_of_cteCalendar) = 'Saturday' THEN 1 ELSE 0 END) - SUM(CASE WHEN Holidays.[IsCRMHoliday] = 'Y' THEN 1 ELSE 0 END) OVER () AS Total_BusinessDayCount
+			, (SUM(CASE WHEN Holidays.[IsCRMHoliday] = 'Y' THEN 1 ELSE 0 END) OVER (ORDER BY calendar.YYYYMMDD)) AS runningTotal_Holidays
+			, (DATEDIFF(dd, @START_DATE_of_cteCalendar, calendar.YYYYMMDD)) - (DATEDIFF(wk, @START_DATE_of_cteCalendar, calendar.YYYYMMDD) * 2) + (CASE WHEN DATENAME(dw, @START_DATE_of_cteCalendar) = 'Saturday' THEN 1 ELSE 0 END) - (CASE WHEN DATENAME(dw, calendar.YYYYMMDD) = 'Saturday' THEN 1 ELSE 0 END) - (SUM(CASE WHEN Holidays.[IsCRMHoliday] = 'Y' THEN 1 ELSE 0 END) OVER (ORDER BY calendar.YYYYMMDD)) --Running total of holidays
+				AS runningTotal_BusinessDays
+			FROM cte_Start2End_withHolidays calendar
+				LEFT JOIN [edwCrescent].[dbo].[DimDate] Holidays --&lt;==== table with Crescent Bank Holidays
+				ON calendar.YYYYMMDD = Holidays.[DateKey]
+			WHERE calendar.YYYYMMDD IS NOT NULL
+		)
+--====================================================================   GENERATE DATA - END
+--==================================================================== HERE Is the code
+--SELECT top(11) *
+--FROM cte_CalendarBusinessDaysAndHolidays
+
+,cte_SampleDates AS
+(
+SELECT 
+	'08-01-2019' as FromDate,
+	'08-05-2019' as ToDate
+)	
+SELECT 
+		sd.*
+		,cbdah_from.runningTotal_BusinessDays as BusinessDay_from
+		,cbdah_to.runningTotal_BusinessDays as BusinessDay_to
+
+FROM 
+	cte_SampleDates sd
+	LEFT OUTER JOIN
+	cte_CalendarBusinessDaysAndHolidays cbdah_from
+	ON sd.FromDate = cbdah_from.theDate
+
+	LEFT OUTER JOIN
+	cte_CalendarBusinessDaysAndHolidays cbdah_to
+	ON sd.ToDate = cbdah_to.theDate</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DATES</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>Business_WorkDays_Count_Minus_Holidays</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DATES</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>Business_WorkDays_Count_Minus_Holidays</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>Business_WorkDays_Count_Minus_Holidays
+--Using Holiday table from Crescent Bank as an Example
+--https://stackoverflow.com/questions/252519/count-work-days-between-two-dates
+--P_0000_RES_913_CountBusinessDaysBetween2Dates_v1.sql
+--from: 0000_General_SNIPPET_049_Holidays_BusinessDays_edwCrescent_v1.sql
+
+--==================================================================   GENERATE DATA - START
+--1] This generates some test dates. replace this section with your dates dateset. 
+--Make sure that there is a field in YYYYMMDD format, and a field in DATE or DATETIME format
+DECLARE @START_DATE datetime
+SELECT @START_DATE = '2019-08-01 00:00:00.000'
+
+DECLARE @END_DATE datetime
+SELECT @END_DATE = '2019-09-017 12:00:00.000'
+
+;WITH cte AS
+(
+  SELECT ROW_NUMBER() OVER (ORDER BY (SELECT 1)) - 1 AS [Incrementor]
+  FROM   [master].[sys].[columns] sc1
+  CROSS JOIN [master].[sys].[columns] sc2
+)
+,
+cte_theDates as
+(
+SELECT 
+	DATEADD(DAY, cte.[Incrementor], @START_DATE) as theDate
+	,	(DATENAME(weekday, DATEADD(DAY, cte.[Incrementor], @START_DATE)) + '_' + LEFT(NEWID(),8) ) as theDate2
+
+FROM   cte
+WHERE  DATEADD(DAY, cte.[Incrementor], @START_DATE) &lt; @END_DATE			--GETDATE();
+)
+
+,cte_YourInputDataSet as
+(
+Select 
+theDate
+,theDate2 as someDataField
+,(SELECT     'TheCalculation' = 
+					( SELECT RIGHT('0000' + CAST(year( theDate) AS NVARCHAR),4)  ) +
+					( SELECT RIGHT('00' + CAST(MONTH( theDate) AS NVARCHAR),2)  ) +
+					( SELECT RIGHT('00' + CAST(DAY( theDate) AS NVARCHAR),2)  )
+					) AS YYYYMMDD
+from cte_theDates
+)
+--====================================================================   GENERATE DATA - END
+
+--==================================================================== HERE Is the code
+SELECT 
+	urData.*
+	,CASE	
+		WHEN Holidays.[IsCRMHoliday] = 'Y' THEN 1
+		ELSE 0
+		End as [IsCRMHoliday]
+	,SUM(CASE	
+		WHEN Holidays.[IsCRMHoliday] = 'Y' THEN 1
+		ELSE 0
+		End) OVER() as TotalHolidayCount
+	,(DATEDIFF(dd, @START_DATE, @END_DATE) )
+			  -(DATEDIFF(wk, @START_DATE, @END_DATE) * 2)
+			  +(CASE WHEN DATENAME(dw, @START_DATE) = 'Saturday' THEN 1 ELSE 0 END) 
+			  - (CASE WHEN DATENAME(dw, @END_DATE) = 'Saturday' THEN 1 ELSE 0 END)
+			  - SUM(CASE	
+					WHEN Holidays.[IsCRMHoliday] = 'Y' THEN 1
+					ELSE 0
+					End) OVER() 
+			  As BusinessDayCount_from_START_2_END
+	,(SUM(CASE	
+						WHEN Holidays.[IsCRMHoliday] = 'Y' THEN 1
+						ELSE 0
+						End ) OVER (ORDER BY urData.YYYYMMDD))	as runningTotalHolidays
+	,(DATEDIFF(dd, @START_DATE, urData.YYYYMMDD) )
+			  -(DATEDIFF(wk, @START_DATE, urData.YYYYMMDD) * 2)
+			  +(CASE WHEN DATENAME(dw, @START_DATE) = 'Saturday' THEN 1 ELSE 0 END) 
+			  - (CASE WHEN DATENAME(dw, urData.YYYYMMDD) = 'Saturday' THEN 1 ELSE 0 END)
+			  - (SUM(CASE	
+						WHEN Holidays.[IsCRMHoliday] = 'Y' THEN 1
+						ELSE 0
+						End ) OVER (ORDER BY urData.YYYYMMDD))						--Running total of holidays
+			  As BusinessDayCount_from_START_2_YYYYMMDD
+FROM
+	cte_YourInputDataSet urData
+	LEFT OUTER JOIN
+	[edwCrescent].[dbo].[DimDate] Holidays			--&lt;==== table with Crescent Bank Holidays
+	ON urData.YYYYMMDD = Holidays.[DateKey]
+Where urData.YYYYMMDD is not NULL
+
+
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DATES</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>UseAPriorDateBasedOnTheDayOfTheWeekToday</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DATES</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>UseAPriorDateBasedOnTheDayOfTheWeekToday</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>--0000_General_SNIPPET_047_UseAPriorDateBasedOnTheDayOfTheWeekToday.sql
+
+;WITH cte AS
+(
+  SELECT ROW_NUMBER() OVER (ORDER BY (SELECT 1)) - 1 AS [Incrementor]
+  FROM   [master].[sys].[columns] sc1
+  CROSS JOIN [master].[sys].[columns] sc2
+)
+,
+cte_theDates as
+(
+SELECT DATEADD(DAY, cte.[Incrementor], '2019-07-01') as theDate
+FROM   cte
+WHERE  DATEADD(DAY, cte.[Incrementor], '2019-07-01') &lt; '2019-08-29'			--GETDATE();
+)
+Select 
+	theDate, 
+	datepart(dw, theDate) as theNumberDatePart,
+	DATENAME(dw,theDate) as theWordDataPart,
+	CASE
+		WHEN datepart(dw, theDate) = 3
+			THEN DATEADD(DAY, -4, theDate)
+		WHEN datepart(dw, theDate) = 2
+			THEN DATEADD(DAY, -3, theDate)
+		ELSE DATEADD(DAY, -2, theDate)
+		END as PostDateToUse
+
+from cte_theDates 
+ORDER BY theDate DESC
+
+
+--OUTPUT
+--------------------------
+--theDate	theNumberDatePart	theWordDataPart	PostDateToUse
+--2019-08-28 00:00:00.000	4	Wednesday	2019-08-26 00:00:00.000
+--2019-08-27 00:00:00.000	3	Tuesday		2019-08-23 00:00:00.000
+--2019-08-26 00:00:00.000	2	Monday		2019-08-23 00:00:00.000
+--2019-08-25 00:00:00.000	1	Sunday		2019-08-23 00:00:00.000
+--2019-08-24 00:00:00.000	7	Saturday	2019-08-22 00:00:00.000
+--2019-08-23 00:00:00.000	6	Friday		2019-08-21 00:00:00.000
+--2019-08-22 00:00:00.000	5	Thursday	2019-08-20 00:00:00.000
+--2019-08-21 00:00:00.000	4	Wednesday	2019-08-19 00:00:00.000
+--2019-08-20 00:00:00.000	3	Tuesday		2019-08-16 00:00:00.000
+--2019-08-19 00:00:00.000	2	Monday		2019-08-16 00:00:00.000
+--2019-08-18 00:00:00.000	1	Sunday		2019-08-16 00:00:00.000
+--2019-08-17 00:00:00.000	7	Saturday	2019-08-15 00:00:00.000
+--2019-08-16 00:00:00.000	6	Friday		2019-08-14 00:00:00.000
+--2019-08-15 00:00:00.000	5	Thursday	2019-08-13 00:00:00.000
+--2019-08-14 00:00:00.000	4	Wednesday	2019-08-12 00:00:00.0</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>EntityFramework</Category>
+        <Language>TEXT</Language>
+        <Public>false</Public>
+        <Name>EF_Migrations_about</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>EntityFramework</Category>
+          <Language>TEXT</Language>
+          <Public>false</Public>
+          <Name>EF_Migrations_about</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>/* I am using VS 2013 Express for this example
+
+'Migrations' are a feature of EF that allow you to 
+a) configure Database Schemas with C# code
+b) Seed your database with C# code
+
+Migrations can then track changes you are making in your entity classes,
+and it can keep the Database Schema in sync with the changes you make in 
+your C# code.
+
+
+To get to the Migrations:
+--------------------------
+a) View {menu} =&gt; Other Windows =&gt; Package Manager console
+	OR type package in the quick Launch entry box {in upper right of IDE}
+b) Then 'Package Manager Console' opens in bottom pane. It is a 'PowerShell' command line
+c) enter command: Enable-Migrations -ContextTypeName OdeToFoodDb
+---------------------------------------------------------------------------------------------------------------
+Dealt with Error in this next section:
+---------------------------------------------------------------------------------------------------------------
+Got error: The term 'Enable-Migrations' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path
+ was included, verify that the path is correct and try again.
+
+enter command: 
+*/
+Install-Package EntityFramework -IncludePrerelease
+/*
+It responded: Installing 'EntityFramework 6.1.2-beta2'....
+			  Successfully uninstalled 'EntityFramework 5.0.0'.
+			
+Then I restarted VS	
+
+For this example it responded like this after I repeated the original command: Enable-Migrations -ContextTypeName OdeToFoodDb
+"Migrations have already been enabled in project 'OdeToFood'. To overwrite the existing migrations configuration, use the -Force parameter."
+So I submitted this command:
+*/
+ Enable-Migrations -ContextTypeName OdeToFoodDb -Force
+/*
+NOTE "-Force" made it overwrite the "Configuration.cs" file that was already there from the author.
+
+It responded:
+Checking if the context targets an existing database...
+Detected database created with a database initializer. Scaffolded migration '201412051643041_InitialCreate' corresponding to existing database. To use an automatic migration instead, delete the Migrations folder and re-run Enable-Migrations specifying the -EnableAutomaticMigrations parameter.
+Code First Migrations enabled for project OdeToFood.
+---------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------
+
+
+Now there is a new root folder in my solution called "Migrations"
+The author ended up with two files in the folder, 
+	I ended up with three files, but I also have two connections in my web.config, he only had one.
+------------------------------
+Configuration.cs
+201412051643041_InitialCreate.cs		&lt;= This one is from 2014, and is probably mine {This is the Schema Change Script generated in C#}
+201210161548264_InitialCreate.cs		&lt;= This one is from 2012, and is probably from the Author
+
+
+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
+The first time you want to create the database from the code-first code, use this command:
+
+&gt;Add-Migration InitialCreate
+
+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+	
+The configuration.cs file can be set to run automatically.
+It also has a seed method for putting data into the tables, see notes in the snippet: EntityFramework_Migrations__Configuration.cs
+It (Configuration.cs) can be run either automatically, or from the PackageManager Console: 
+*/
+Update-Database -Verbose
+/*
+---------------------------------------------------------------------------------------------------------------
+Dealt with Error in this next section:
+---------------------------------------------------------------------------------------------------------------
+I got the message: "The project 'OdeToFood' failed to build.", so I deleted the file: "201210161548264_InitialCreate.cs", 
+and ran it again, here is the response:
+=======================================
+PM&gt; Update-Database -Verbose
+Using StartUp project 'OdeToFood'.
+Using NuGet project 'OdeToFood'.
+Specify the '-Verbose' flag to view the SQL statements being applied to the target database.
+Target database is: 'OdeToFoodDb' (DataSource: .\SQLEXPRESS, Provider: System.Data.SqlClient, Origin: Configuration).
+Upgrading history table.
+CREATE TABLE [dbo].[__MigrationHistory2] (
+    [MigrationId] [nvarchar](150) NOT NULL,
+    [ContextKey] [nvarchar](300) NOT NULL,
+    [Model] [varbinary](max) NOT NULL,
+    [ProductVersion] [nvarchar](32) NOT NULL,
+    CONSTRAINT [PK_dbo.__MigrationHistory2] PRIMARY KEY ([MigrationId], [ContextKey])
+)
+INSERT INTO [dbo].[__MigrationHistory2]
+SELECT LEFT([MigrationId], 150), 'OdeToFood.Models.OdeToFoodDb', [Model], LEFT([ProductVersion], 32) FROM [dbo].[__MigrationHistory]
+DROP TABLE [dbo].[__MigrationHistory]
+EXECUTE sp_rename @objname = N'dbo.__MigrationHistory2', @newname = N'__MigrationHistory', @objtype = N'OBJECT'
+Caution: Changing any part of an object name could break scripts and stored procedures.
+No pending explicit migrations.
+Running Seed method.
+=======================================
+Now I can see the records in the table, and I see the new table: __MigrationHistory2
+and when I run the MVC application, I can see the records as well.
+---------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------
+
+
+Now if you modify one of the record classes in the Application (e.g.  RestaurantReview) by adding a field, then you could do one of two things:
+a) Could tell the EF that I explicitly need a migration script to move the DB schema as it exists to a schema with a new field in it
+OR
+b) I can update the C# record, and let EF figure it out, b/c it has this setting:
+*/
+AutomaticMigrationsEnabled = true;
+/*
+
+EF tracks the migrations that have been done, and what needs to be done in a hidden table called _MigrationHistory, which is a table on the SQL server.
+
+So if I add a field to the RestaurantReview called: "JUNK":
+*/
+public  double dblJUNK { get; set; }
+
+/* then in the PackageManager Console run the command to update the schema automatically: */
+Update-Database -Verbose
+/* It gave me this:
+=======================================
+PM&gt; Update-Database -Verbose
+Using StartUp project 'OdeToFood'.
+Using NuGet project 'OdeToFood'.
+Specify the '-Verbose' flag to view the SQL statements being applied to the target database.
+Target database is: 'OdeToFoodDb' (DataSource: .\SQLEXPRESS, Provider: System.Data.SqlClient, Origin: Configuration).
+No pending explicit migrations.
+Applying automatic migration: 201412051941558_AutomaticMigration.
+ALTER TABLE [dbo].[RestaurantReviews] ADD [dblJUNK] [float] NOT NULL DEFAULT 0
+INSERT [dbo].[__MigrationHistory]([MigrationId], [ContextKey], [Model], [ProductVersion])
+VALUES (N'201412051941558_AutomaticMigration', N'OdeToFood.Models.OdeToFoodDb',  0x1F8B080000...2DB1F0000 , N'6.1.2-beta2-31111')
+
+Running Seed method.
+=======================================
+I edited the third parameter that it put into the Migration history for brevity sake (...)
+Now there is a new field called Junk, and it was reseeded</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>EXPORT_Excel_CSV_TEXT</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>Export_Excell_icrosoft.ACE.OLEDB.12.0</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>EXPORT_Excel_CSV_TEXT</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>Export_Excell_icrosoft.ACE.OLEDB.12.0</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>https://stackoverflow.com/questions/26267224/the-ole-db-provider-microsoft-ace-oledb-12-0-for-linked-server-null
+
+ERROR: Cannot create an instance of OLE DB provider "Microsoft.ACE.OLEDB.12.0" for linked server "(null)".
+
+-- I'm running Office 365 (64bit). I have loaded the Microsoft Access Database Engine (64bit). 
+--This is in Visual Studio 2013 with SSDT as well as SQL Server 2012. 
+    
+--First, I ran...
+
+sp_configure 'show advanced options', 1;
+RECONFIGURE;
+GO
+sp_configure 'Ad Hoc Distributed Queries', 1;
+RECONFIGURE;
+GO    
+    
+--Followed by...with no love.
+
+EXEC sys.sp_addsrvrolemember @loginame = N'&lt;&lt;Domain\User&gt;&gt;', @rolename = N'sysadmin';
+GO
+
+EXEC master.dbo.sp_MSset_oledb_prop N'Microsoft.ACE.OLEDB.15.0', N'AllowInProcess', 1 
+GO 
+EXEC master.dbo.sp_MSset_oledb_prop N'Microsoft.ACE.OLEDB.15.0', N'DynamicParameters', 1 
+GO     
+    
+    
+    
+    SELECT * FROM OPENROWSET('Microsoft.ACE.OLEDB.15.0', 
+    'Excel 12.0;Database=C:\Users\UserName\Folder\SomeFile.xlsx;;HDR=NO;IMEX=1', [Table 1$])
+    
+--I have changed the code to read Microsoft.ACE.OLEDB.12.0 as I have seen that as well, still no love.    
+===========================================================================================================================
+--Here was one solution to the error
+https://www.aspsnippets.com/Articles/The-OLE-DB-provider-Microsoft.Ace.OLEDB.12.0-for-linked-server-null.aspx
+
+--Run the following Query in your SQL Server Management Studio close it and start again
+
+USE [master] 
+GO 
+EXEC master.dbo.sp_MSset_oledb_prop N'Microsoft.ACE.OLEDB.12.0', N'AllowInProcess', 1 
+GO 
+EXEC master.dbo.sp_MSset_oledb_prop N'Microsoft.ACE.OLEDB.12.0', N'DynamicParameters', 1 
+GO 
+
+==================================================================================================================
+--another solution	
+--If you are the admin on this Windows system, you can set also choose Local System account. 
+--This way you won't need to worry about changing the pwd. Works great! Thanks for the tip!! </Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>EXPORT_Excel_CSV_TEXT</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>ExportToExcel_withAScrip</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>EXPORT_Excel_CSV_TEXT</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>ExportToExcel_withAScrip</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>--Normally for exporting data from SQL Server to Excel one would use DTS (SQL 2k) or SSIS (SQL Server 2005).
+
+--For some reason if at all you want to do it via query read on:
+
+--Step 1: Execute the code snippet
+
+
+EXEC sp_configure 'show advanced options', 1;
+
+GO
+
+RECONFIGURE;
+
+GO
+
+EXEC sp_configure 'Ad Hoc Distributed Queries', 1;
+
+GO
+
+RECONFIGURE;
+
+GO
+
+--Step 2: Create the excel file and then add the headings in the .xls file.
+
+-– Create one Excel File in c:\Test.xls and rename the Sheet1 to Emp. The Sheet should contain 2 columns EmployeeID,Title
+
+--Step 3: Run the following query to export data from sql server to excel
+
+USE [AdventureWorks]
+
+INSERT INTO OPENROWSET ('Microsoft.Jet.OLEDB.4.0', 'Excel 8.0;Database=c:\Test.xls;','Select * from [Emp$]')
+
+SELECT EmployeeID, Title FROM HumanResources.Employee
+
+--Points which might interest you:
+
+--1. As long as the file is within your C: drive this sample would work. If at all your database is in a different machine from that .xls file you need to change Database=c:\Test.xls; to UNC path. For example, Database=\\Servername\shareName (And need to provide appropriate permission).
+
+--2. Instead of “Emp” replace it with your excel worksheet name.</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>IMPORT_Excel_CSV_TEXT</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>ERRORS</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>IMPORT_Excel_CSV_TEXT</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>ERRORS</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+Msg 7399, Level 16, State 1, Line 1
+The OLE DB provider "Microsoft.ACE.OLEDB.12.0" for linked server "(null)" reported an error. Access denied.
+Msg 7301, Level 16, State 2, Line 1
+Cannot obtain the required interface ("IID_IDBCreateCommand") from OLE DB provider "Microsoft.ACE.OLEDB.12.0" for linked server "(null)".
+
+Ref:
+https://www.aspsnippets.com/Articles/The-OLE-DB-provider-Microsoft.Ace.OLEDB.12.0-for-linked-server-null.aspx
+
+--I removed the underscore in the file name: 
+--	the “Access Denied” part of the error went away.
+--Now it says:
+Msg 7314, Level 16, State 1, Line 1
+The OLE DB provider "Microsoft.ACE.OLEDB.12.0" for linked server "(null)" does not contain the table "NaturalHazards$". The table either does not exist or the current user does not have permissions on that table.
+
+DID NOT GET IT TO WORK
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+SELECT * FROM OPENROWSET('Microsoft.ACE.OLEDB.12.0','Excel 12.0;Database=C:\DATA\TESTv4.xlsx;HDR=YES',NaturalHazards$) 
+--TRIED BOTH 12 AND 15
+
+OLE DB provider "Microsoft.ACE.OLEDB.15.0" for linked server "(null)" returned message "Unspecified error".
+Msg 7303, Level 16, State 1, Line 10
+Cannot initialize the data source object of OLE DB provider "Microsoft.ACE.OLEDB.15.0" for linked server "(null)".
+
+OLE DB provider "Microsoft.ACE.OLEDB.12.0" for linked server "(null)" returned message "Unspecified error".
+Msg 7303, Level 16, State 1, Line 10
+Cannot initialize the data source object of OLE DB provider "Microsoft.ACE.OLEDB.12.0" for linked server "(null)".
+
+DID NOT GET IT TO WORK
+///////////////////////////////////////////////////////////////////
+
+OLE DB provider "Microsoft.ACE.OLEDB.12.0" for linked server "(null)" returned message "Unspecified error".
+Msg 7303, Level 16, State 1, Line 10
+Cannot initialize the data source object of OLE DB provider "Microsoft.ACE.OLEDB.12.0" for linked server "(null)".
+
+ref: https://visakhm.blogspot.ae/2013/12/how-to-solve-microsoftaceoledb120-error.html
+
+EXEC master.dbo.sp_MSset_oledb_prop N'Microsoft.ACE.OLEDB.12.0' 
+    , N'AllowInProcess', 1 
+GO
+
+
+EXEC master.dbo.sp_MSset_oledb_prop N'Microsoft.ACE.OLEDB.12.0'
+    , N'DynamicParameters', 1
+GO</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>Key_Shortcuts</Category>
+        <Language>TEXT</Language>
+        <Public>false</Public>
+        <Name>C#_Shortcuts</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>Key_Shortcuts</Category>
+          <Language>TEXT</Language>
+          <Public>false</Public>
+          <Name>C#_Shortcuts</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>Cntrl-k, Cntrl-x   =&gt; snippets
+
+
+
+Command name	Shortcut keys	Description
+Edit.Find						CTRL + F			Displays the Find dialog box.
+Edit.FindinFiles				CTRL + SHIFT + F	Displays the Find in Files dialog box.
+Edit.FindNext					F3					Finds the next occurrence of the previous search text.
+Edit.FindNextSelected			CTRL + F3			Finds the next occurrence of the currently selected text in the document.
+Edit.FindPrevious				SHIFT + F3			Finds the previous occurrence of the search text.
+Edit.FindPreviousSelected		CTRL + SHIFT + F3	Finds the previous occurrence of the currently selected text, or the word at the caret.
+Edit.GoToFindCombo				CTRL + D			Places the caret in the Find/Command line on the Standard toolbar.
+Edit.HiddenText					ALT + F3, H			Selects or clears the Search Hidden Text option for Find dialog box.
+Edit.IncrementalSearch			CTRL + I			Starts incremental search. If incremental search is started but you have not typed any characters, recalls the previous pattern. If text has been found, searches for the next occurrence.
+Edit.MatchCase					ALT + F3, C			Selects or clears the Match Case option for find and replace operations.
+Edit.RegularExpression			ALT + F3, R			Selects or clears the Regular expression option so that special characters can be used in find and replace operations.
+Edit.Replace					CTRL + H			Displays the Replace dialog box.
+Edit.ReplaceinFiles				CTRL + SHIFT + H	Displays the Replace in Files dialog box.
+Edit.ReverseIncrementalSearch	CTRL + SHIFT + I	Changes the direction of incremental search to begin at the bottom of the file and progress towards the top.
+Edit.StopSearch					ALT + F3, S			Halts the current Find in Files operation.
+Edit.Up							ALT + F3, B			Selects or clears the Search Up option for find and replace operations.
+Edit.WholeWord					ALT + F3, W			Selects or clears the Match whole word option for find and replace operations.
+Edit.Wildcard					ALT + F3, P			Selects or clears the Wildcard option for find and replace operations.
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>MISC</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>SERVER_query_from_another_server</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>MISC</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>SERVER_query_from_another_server</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+
+
+
+-- https://stackoverflow.com/questions/1144051/selecting-data-from-two-different-servers-in-sql-server
+
+SELECT
+        *
+FROM
+        [SERVER2NAME].[THEDB].[THEOWNER].[THETABLE]
+        
+--==========================================
+Querying across 2 different databases is a distributed query. Here is a list of some techniques plus the pros and cons:
+
+Linked servers: 
+	Provide access to a wider variety of data sources than SQL Server replication provides
+Linked servers: 
+	Connect with data sources that replication does not support or which require ad hoc access
+Linked servers: 
+	Perform better than OPENDATASOURCE or OPENROWSET
+OPENDATASOURCE and OPENROWSET functions: 
+	Convenient for retrieving data from data sources on an ad hoc basis. OPENROWSET has BULK facilities as well that may/may not require a format file which might be fiddley
+OPENQUERY: 
+	Does not support variables
+--All are T-SQL solutions. Relatively easy to implement and set up
+--All are dependent on connection between source and destionation which might affect performance and scalability
+
+--=============================================================
+SELECT * FROM OPENROWSET('SQLNCLI', 'Server=YOUR SERVER;Trusted_Connection=yes;','SELECT * FROM Table1') AS a
+UNION
+SELECT * FROM OPENROWSET('SQLNCLI', 'Server=ANOTHER SERVER;Trusted_Connection=yes;','SELECT * FROM Table1') AS a
+
+
+--===================================================================
+
+-- using SQL Server Authentication with data provider SQLOLEDB . 
+--I am just posting here a code snippet for one table is in the current sever database where the code is running and another in other server '192.166.41.123'
+
+SELECT TOP 2 *
+FROM 
+		dbo.tblHamdoonSoft tbl1
+		INNER JOIN 
+		OPENDATASOURCE (
+				'SQLOLEDB'
+				,'Data Source=192.166.41.123;User ID=sa;Password=hamdoonsoft'
+				).[TestDatabase].[dbo].[tblHamdoonSoft1] tbl2
+		ON tbl1.id = tbl2.id</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>MVC_General</Category>
+        <Language>ASP</Language>
+        <Public>false</Public>
+        <Name>1_HelloWorld___HomeController_and_Viewer_MEDIUM</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>MVC_General</Category>
+          <Language>ASP</Language>
+          <Public>false</Public>
+          <Name>1_HelloWorld___HomeController_and_Viewer_MEDIUM</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>..........................controller: HomeController.cs.....................................................................
+//using System;
+//using System.Collections.Generic;
+//using System.Linq;
+//using System.Web;
+using System.Web.Mvc;
+
+namespace HelloWorld.Controllers
+	{
+	public class HomeController : Controller
+		{
+		//
+		// GET: /Home/
+
+		public ActionResult Index()
+			{
+
+
+			//Use ViewData collection to send data from the Controller to the View
+			ViewData["message1"] = "Hello, World (v1 from ViewData)"; //ViewData is a collection, and "message" is the key, "Hello, World" is the value
+
+
+						//New type in Framework 4, a dynamic object. Type dot (.) and make up a property on the fly (e.g. 'Message')
+			ViewBag.Message2 = "Hello, World (v2 from ViewBag)";
+
+
+			return View();
+			}
+
+		}
+	}
+
+
+
+........................view: Index.cshtml.......................................................................
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+&lt;!-- ==========================================================================================================================   --&gt;
+&lt;!-- HTML version: &lt;h2&gt;Index&lt;/h2&gt; --&gt;
+&lt;!-- instead use Razor snippet, with the at sign we are now using razor syntax, which lets us do C# code --&gt;
+&lt;!-- ViewData: have to know the 'key'--&gt;
+&lt;h1&gt;@ViewData["message1"]&lt;/h1&gt;	
+
+
+&lt;h2&gt; @ViewBag.Message2&lt;/h2&gt;			&lt;!-- ViewBag does not have intellisense--&gt;
+
+
+&lt;!-- note if I used 'message' for one, and "Message" for the other, without distinguishing them with numbers, then they would both pull the first one in the view--&gt;
+&lt;!-- SO: a) they share properties (i.e. ViewData and ViewBag, and b) they are case insensitive--&gt;
+
+&lt;!-- So far I was able to communicate with the view without using a 'model' just this view, and the information in the Controller--&gt;
+
+&lt;!-- ==========================================================================================================================   --&gt;
+
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>MVC_General</Category>
+        <Language>ASP</Language>
+        <Public>false</Public>
+        <Name>1_HelloWorld___Index.cshtml</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>MVC_General</Category>
+          <Language>ASP</Language>
+          <Public>false</Public>
+          <Name>1_HelloWorld___Index.cshtml</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>@{
+    ViewBag.Title = "Index";
+}
+
+
+&lt;!-- ==========================================================================================================================   --&gt;
+&lt;!-- HTML version: &lt;h2&gt;Index&lt;/h2&gt; --&gt;
+&lt;!-- instead use Razor snippet, with the at sign we are now using razor syntax, which lets us do C# code --&gt;
+&lt;!-- ViewData: have to know the 'key'--&gt;
+&lt;h1&gt;@ViewData["message1"]&lt;/h1&gt;	
+
+
+&lt;h2&gt; @ViewBag.Message2&lt;/h2&gt;			&lt;!-- ViewBag does not have intellisense--&gt;
+
+
+&lt;!-- note if I used 'message' for one, and "Message" for the other, without distinguishing them with numbers, then they would both pull the first one in the view--&gt;
+&lt;!-- SO: a) they share properties (i.e. ViewData and ViewBag, and b) they are case insensitive--&gt;
+
+&lt;!-- So far I was able to communicate with the view without using a 'model' just this view, and the information in the Controller--&gt;
+
+&lt;!-- ==========================================================================================================================   --&gt;
+
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>MVC_Misc</Category>
+        <Language>ASP</Language>
+        <Public>false</Public>
+        <Name>HTMLHelper</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>MVC_Misc</Category>
+          <Language>ASP</Language>
+          <Public>false</Public>
+          <Name>HTMLHelper</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+
+&lt;!-- See the Html.Hidden snippet for some good notes 
+
+Every method in HtmlHelper class has a twin with For suffix.
+	Html.Hidden takes a string as an argument that you must provide 
+	but Html.HiddenFor takes an Expression 
+	that if you view is a strongly typed view you can benefit from this 
+	and feed that method a lambda expression like this:
+--&gt;
+o=&gt;o.SomeProperty 
+
+&lt;!-- nstead of "SomeProperty" in the case of using Html.Hidden method.
+
+The Html.Hidden create a hidden input But you have to specific the name and all the attribute 
+	that you want to give to that field and the value, 
+	while the Html.HiddenFor create a hidden input for the object tat you pass to it, 
+	they look like this:
+ --&gt;
+Html.Hidden("yourProprety",model.yourProprety);
+
+Html.HiddenFor(m =&gt; m.yourProperty)
+
+&lt;!--In this case the output is the same! --&gt;
+
+=======================================================
+
+Html.Hidden('name', 'value') 
+&lt;!-- creates a hidden tag with name = 'name' and value = 'value' --&gt;
+
+Html.HiddenFor(x =&gt; x.nameProp) 
+&lt;!-- creates a hidden tag with a name = 'nameProp' and value = x.nameProp.
+
+ So you can use Html.Hidden, but if you get the name wrong,
+ or if you change the property name in the model, 
+ the auto binding will fail when you submit the form. But by using a type checked expression, 
+ you'll get code completion, 
+ and when you change the property name, 
+ you will get a compile time error. 
+ And then you are guaranteed to have the correct name in the form.--&gt;
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>OPENDATASOURCE</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>SQLOLEDB_example_from_remoteServer_IP</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>OPENDATASOURCE</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>SQLOLEDB_example_from_remoteServer_IP</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>https://stackoverflow.com/questions/1144051/selecting-data-from-two-different-servers-in-sql-server
+-- using SQL Server Authentication with data provider SQLOLEDB . 
+--I am just posting here a code snippet for one table is in the current sever database where the code is running and another in other server '192.166.41.123'
+
+SELECT TOP 2 *
+FROM 
+		dbo.tblHamdoonSoft tbl1
+		INNER JOIN 
+		OPENDATASOURCE (
+				'SQLOLEDB'
+				,'Data Source=192.166.41.123;User ID=sa;Password=hamdoonsoft'
+				).[TestDatabase].[dbo].[tblHamdoonSoft1] tbl2
+		ON tbl1.id = tbl2.id</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>PIVOT</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>Example_Simple_2</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>PIVOT</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>Example_Simple_2</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>--0000_General_SNIPPET_032_UNPIVOT.sql
+
+use RiskMngt
+go
+
+IF OBJECT_ID('Reporting.junk') IS NOT NULL
+    DROP TABLE Reporting.Reporting.junk
+go
+
+CREATE TABLE reporting.junk
+(
+  CustomerID INT PRIMARY KEY, -- FK
+  Phone1 VARCHAR(32),
+  Phone2 VARCHAR(32),
+  Phone3 VARCHAR(32)
+);
+INSERT Reporting.junk
+  (CustomerID, Phone1, Phone2, Phone3)
+VALUES
+  (1,'705-491-1111', '705-491-1110', NULL),
+  (2,'613-492-2222', NULL, NULL),
+  (3,'416-493-3333', '416-493-3330', '416-493-3339');
+--=====================================================
+select * from Reporting.junk;
+
+--OUTPUT
+-----------
+--CustomerID	Phone1			Phone2			Phone3
+--1			705-491-1111	705-491-1110	NULL
+--2			613-492-2222	NULL			NULL
+--3			416-493-3333	416-493-3330	416-493-3339
+--======================================================
+
+
+  SELECT CustomerID, Phone
+FROM
+(
+  SELECT CustomerID, Phone1, Phone2, Phone3 
+  FROM Reporting.junk
+) AS cp
+UNPIVOT 
+(
+  Phone FOR Phones IN (Phone1, Phone2, Phone3)
+) AS up;
+
+--OUTPUT
+--------------------------------------
+CustomerID	Phone
+1	705-491-1111
+1	705-491-1110
+2	613-492-2222
+3	416-493-3333
+3	416-493-3330
+3	416-493-3339
+--------------------------------------</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>PIVOT</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>unPivot_and_get_ColumnNames_asWellAs_Values</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>PIVOT</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>unPivot_and_get_ColumnNames_asWellAs_Values</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>--0000_General_SNIPPET_032_UNPIVOT.sql
+
+
+--&lt;========================create the table for testing
+use RiskMngt
+go
+
+IF OBJECT_ID('Reporting.junk') IS NOT NULL
+    DROP TABLE Reporting.Reporting.junk
+go
+
+CREATE TABLE reporting.junk
+(
+  CustomerID INT PRIMARY KEY, -- FK
+  Phone1 VARCHAR(32),
+  Phone2 VARCHAR(32),
+  Phone3 VARCHAR(32)
+);
+INSERT Reporting.junk
+  (CustomerID, Phone1, Phone2, Phone3)
+VALUES
+  (1,'705-491-1111', '705-491-1110', NULL),
+  (2,'613-492-2222', NULL, NULL),
+  (3,'416-493-3333', '416-493-3330', '416-493-3339');
+--================================================
+select * from Reporting.junk;
+
+
+--OUTPUT
+-----------
+CustomerID	Phone1			Phone2			Phone3
+1			705-491-1111	705-491-1110	NULL
+2			613-492-2222	NULL			NULL
+3			416-493-3333	416-493-3330	416-493-3339
+
+--================================================
+
+
+  SELECT CustomerID, Phone, ROW_NUMBER() OVER(ORDER BY (SELECT 1)) AS rnJUNK
+FROM
+(
+  SELECT CustomerID, Phone1, Phone2, Phone3 
+  FROM Reporting.junk
+) AS cp
+UNPIVOT 
+(
+  Phone FOR Phones IN (Phone1, Phone2, Phone3)
+) AS up;
+
+--======================================================
+
+
+  SELECT CustomerID, Phone, ROW_NUMBER() OVER(ORDER BY (SELECT 1)) AS rnJUNK
+FROM
+(
+  SELECT CustomerID, Phone1 , Phone2, Phone3 
+  FROM (SELECT CustomerID, (Phone1 + '_Phone1') as Phone1, (Phone2 + '_Phone2') as Phone2,(Phone3 + '_Phone3') as Phone3  FROM Reporting.junk) as x
+) AS cp
+UNPIVOT 
+(
+  Phone FOR Phones IN (Phone1, Phone2, Phone3)
+) AS up;
+
+--======================================================  THIS IS THE ONE --&lt;=====================
+;WITH cte_UnPivot 
+as
+(
+	  SELECT CustomerID, Phone, ROW_NUMBER() OVER(ORDER BY (SELECT 1)) AS rnJUNK
+	FROM
+	(
+	  SELECT CustomerID, Phone1 , Phone2, Phone3 
+	  FROM (
+				SELECT 
+					CustomerID,
+					--USE CAST(xxx, nvarchar(255)) to avoid error: Column conflicts with the type of other columns in the unpivot list
+					cast((Phone1 + '_Phone1') as nvarchar(255) as Phone1, 
+					cast((Phone2 + '_Phone2') as nvarchar(255) as Phone2,
+					cast((Phone3 + '_Phone3') as nvarchar(255) as Phone3,  
+				FROM Reporting.junk) as x
+	) AS cp
+	UNPIVOT 
+	(
+	  Phone FOR Phones IN (Phone1, Phone2, Phone3)
+	) AS up
+)
+
+SELECT *
+	,(SELECT 'TheCalculation' =  SUBSTRING(  Phone, (CHARINDEX('_', Phone)   + 1 ), LEN(Phone)  ) ) AS [colSource] 
+	,(SELECT 'TheCalculation' =  SUBSTRING(  Phone, 1, (LEN(PHONE) -LEN(SUBSTRING(  Phone, (CHARINDEX('_', Phone)   - 1 ), LEN(Phone)  )) )))  AS [thePhone] 
+FROM cte_UnPivot
+
+--OUTPUT:
+CustomerID	Phone	rnJUNK	colSource	thePhone
+1	705-491-1111_Phone1	1	Phone1	705-491-111
+1	705-491-1110_Phone2	2	Phone2	705-491-111
+2	613-492-2222_Phone1	3	Phone1	613-492-222
+3	416-493-3333_Phone1	4	Phone1	416-493-333
+3	416-493-3330_Phone2	5	Phone2	416-493-333
+3	416-493-3339_Phone3	6	Phone3	416-493-333</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Computer_info</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>CIM_computer_Info</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Computer_info</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>CIM_computer_Info</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>From Directions Training:
+
+
+
+======================================================================
+#' final code
+function Get-MachineInfo {
+    [CmdletBinding()]
+    Param(
+        [Parameter(ValueFromPipeline=$True,
+                   Mandatory=$True)]
+        [Alias('CN','MachineName','Name')]
+        [string[]]$ComputerName,
+        
+        [string]$LogFailuresToPath,
+
+        [ValidateSet('Wsman','Dcom')]
+        [string]$Protocol = "Wsman",
+
+        [switch]$ProtocolFallback
+    )
+ 
+ BEGIN {}
+
+ PROCESS {
+    foreach ($computer in $computername) {
+ 
+        #' Establish session protocol
+        if ($protocol -eq 'Dcom') {
+            $option = New-CimSessionOption -Protocol Dcom
+        } else {
+            $option = New-CimSessionOption -Protocol Wsman
+        }
+ 
+        #' Connect session
+        $session = New-CimSession -ComputerName $computer `
+                                  -SessionOption $option
+  
+        #' Query data
+        $os_params = @{'ClassName'='Win32_OperatingSystem'
+                       'CimSession'=$session}
+        $os = Get-CimInstance @os_params
+
+        $cs_params = @{'ClassName'='Win32_ComputerSystem'
+                       'CimSession'=$session}
+        $cs = Get-CimInstance @cs_params
+
+        $sysdrive = $os.SystemDrive
+        $drive_params = @{'ClassName'='Win32_LogicalDisk'
+                          'Filter'="DeviceId='$sysdrive'"
+                          'CimSession'=$session}
+        $drive = Get-CimInstance @drive_params
+
+        $proc_params = @{'ClassName'='Win32_Processor'
+                         'CimSession'=$session}
+        $proc = Get-CimInstance @proc_params |
+                Select-Object -first 1
+
+  
+        #' Close session
+        $session | Remove-CimSession
+  
+        #' Output data
+        $props = @{'ComputerName'=$computer
+                   'OSVersion'=$os.version
+                   'SPVersion'=$os.servicepackmajorversion
+                   'OSBuild'=$os.buildnumber
+                   'Manufacturer'=$cs.manufacturer
+                   'Model'=$cs.model
+                   'Procs'=$cs.numberofprocessors
+                   'Cores'=$cs.numberoflogicalprocessors
+                   'RAM'=($cs.totalphysicalmemory / 1GB)
+                   'Arch'=$proc.addresswidth
+                   'SysDriveFreeSpace'=$drive.freespace}
+        $obj = New-Object -TypeName PSObject -Property $props
+        Write-Output $obj                           #' &lt;=== Put HashTable object for output
+ 
+    } #'foreach
+} #'PROCESS
+
+END {}
+
+} #'function
+
+
+====NOTES=====================================================================
+
+#' functional overview of tool - will not execute as-is
+        #' Query data
+        $os = Get-CimInstance -ClassName Win32_OperatingSystem `
+                              -CimSession $session
+  
+        #' Close session
+        $session | Remove-CimSession
+  
+        #' Output data
+        $os | Select-Object -Prop @{n='ComputerName';e={$computer}},
+                                Version,ServicePackMajorVersion
+
+
+#' params into hash table
+$params = @{'ClassName'='Win32_OperatingSystem'
+            'ComputerName'='CLIENT1'}
+
+
+#' switch params in hash table
+$params = @{'ClassName'='Win32_OperatingSystem'
+            'ComputerName'='CLIENT1'
+            'Verbose' = $True}
+
+
+
+#' splatting hash table of params
+Get-CimInstance @params
+
+
+
+#' revised snippet - will not execute as-is
+        #' Query data
+        $os_params = @{'ClassName'='Win32_OperatingSystem'
+                       'CimSession'=$session}
+        $os = Get-CimInstance @os_params
+
+        $cs_params = @{'ClassName'='Win32_ComputerSystem'
+                       'CimSession'=$session}
+        $cs = Get-CimInstance @cs_params
+
+        $sysdrive = $os.SystemDrive
+        $drive_params = @{'ClassName'='Win32_LogicalDisk'
+                          'Filter'="DeviceId='$sysdrive'"
+                          'CimSession'=$session}        $drive = Get-CimInstance @drive_params
+
+        $proc_params = @{'ClassName'='Win32_Processor'
+                         'CimSession'=$session}
+        $proc = Get-CimInstance @proc_params |
+                Select-Object -first 1
+
+
+
+#' constructing custom object
+        #' Output data
+        $props = @{'ComputerName'=$computer
+                   'OSVersion'=$os.version
+                   'SPVersion'=$os.servicepackmajorversion
+                   'OSBuild'=$os.buildnumber
+                   'Manufacturer'=$cs.manufacturer
+                   'Model'=$cs.model
+                   'Procs'=$cs.numberofprocessors
+                   'Cores'=$cs.numberoflogicalprocessors
+                   'RAM'=($cs.totalphysicalmemory / 1GB)
+                   'Arch'=$proc.addresswidth
+                   'SysDriveFreeSpace'=$drive.freespace}
+        $obj = New-Object -TypeName PSObject -Property $props
+        Write-Output $obj</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Format_Commands_to_change_output_vie</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>Casting_data_as_another_DotNet_type</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Format_Commands_to_change_output_vie</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>Casting_data_as_another_DotNet_type</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code> ===========================================================================
+#' EXAMPLE snippet 
+# convert from json
+$in = get-content c:\work\audit.json | convertfrom-json
+
+$in | get-member
+
+$in[0..2]
+
+$in[0..2] | Select Name,Displayname,
+@{Name="Status";Expression = { $_.Status -as System.ServiceProcess.ServiceControllerStatus]}},   '&lt;==================
+@{Name="Audit";Expression= { $_.Audit -as [datetime]}},                                          '&lt;==================
+@{Name="Computername";Expression = {$_.Machinename}}
+ ===========================================================================</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_JSON</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>snippets_from_Training</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_JSON</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>snippets_from_Training</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>#' json
+{
+    "Name":  "bits",
+    "DisplayName":  "Background Intelligent Transfer Service",
+    "Status":  4
+}
+
+
+
+#' more json
+[
+    {
+        "Name":  "BITS",
+        "DisplayName":  "Background Intelligent Transfer Service",
+        "Status":  4
+    },
+    {
+        "Name":  "Bluetooth Device Monitor",
+        "DisplayName":  "Bluetooth Device Monitor",
+        "Status":  4
+    },
+    {
+        "Name":  "Bluetooth OBEX Service",
+        "DisplayName":  "Bluetooth OBEX Service",
+        "Status":  4
+    },
+    {
+        "Name":  "BrokerInfrastructure",
+        "DisplayName":  "Background Tasks Infrastructure Service",
+        "Status":  4
+    },
+    {
+        "Name":  "Browser",
+        "DisplayName":  "Computer Browser",
+        "Status":  4
+    },
+    {
+        "Name":  "BthHFSrv",
+        "DisplayName":  "Bluetooth Handsfree Service",
+        "Status":  1
+    },
+    {
+        "Name":  "bthserv",
+        "DisplayName":  "Bluetooth Support Service",
+        "Status":  4
+    }
+]
+
+
+
+#' nested objects
+{
+    "Name":  "bits",
+    "DisplayName":  "Background Intelligent Transfer Service",
+    "Status":  4,
+    "RequiredServices":  [
+                     {
+                         "CanPauseAndContinue":  false,
+                         "CanShutdown":  false,
+                         "CanStop":  false,
+                         "DisplayName":  "Remote Procedure Call (RPC)",
+                         "DependentServices":  null,
+                         "MachineName":  ".",
+                         "ServiceName":  "RpcSs",
+                         "ServicesDependedOn":  "DcomLaunch RpcEptMapper",
+                         "ServiceHandle":  null,
+                         "Status":  4,
+                         "ServiceType":  32,
+                         "StartType":  2,
+                         "Site":  null,
+                         "Container":  null
+                     },
+                     {
+                         "CanPauseAndContinue":  false,
+                         "CanShutdown":  false,
+                         "CanStop":  true,
+                         "DisplayName":  "COM+ Event System",
+                         "DependentServices":  "igfxCUIService1.0.0.0 
+                          COMSysApp SENS BITS",
+                         "MachineName":  ".",
+                         "ServiceName":  "EventSystem",
+                         "ServicesDependedOn":  "rpcss",
+                         "ServiceHandle":  null,
+                         "Status":  4,
+                         "ServiceType":  32,
+                         "StartType":  2,
+                         "Site":  null,
+                         "Container":  null
+                     }
+                         ]
+}
+
+
+
+#' convert to json   &lt;==================================================== ConvertTo-Json
+get-ciminstance win32_computersystem | convertto-json
+
+
+
+#' now into a file &lt;====================================================== Output to a file
+get-ciminstance win32_computersystem | convertto-json | out-file wmics.json
+'OR
+get-ciminstance win32_computersystem | convertto-json | set-content .\wmics2.json 
+
+
+
+#' smaller data  (COMPRESSED)
+get-ciminstance win32_computersystem | convertto-json -compress
+
+
+
+#' filter first
+get-ciminstance win32_computersystem -computername $env:computername | 
+select PSComputername,Manufacturer,
+@{Name="MemoryGB";Expression={$_.totalPhysicalmemory/1GB -as [int]}},
+Number* | ConvertTo-Json
+
+
+
+#' creates
+{
+    "PSComputerName":  "CLIENT01",
+    "Manufacturer":  "LENOVO",
+    "MemoryGB":  8,
+    "NumberOfLogicalProcessors":  4,
+    "NumberOfProcessors":  1
+}
+
+'if you want to create a json file, perhaps to hold configuration data or something similar, 
+'	DON'T try to manually create the file. 
+'	Instead, “objectify” your data in PowerShell and then convert to JSON. 
+
+
+#' custom objects   '&lt;================================ Easiest way to build a JSON record(s)
+[pscustomobject]@{
+  Path = "C:\Scripts"
+  LastModified = "1/1/2017"
+  Count = 20
+  Types = @(".ps1","psm1","psd1","json","xml")
+} | ConvertTo-Json
+
+
+
+#' creates
+{
+    "Path":  "C:\\Scripts",
+    "LastModified":  "1/1/2017",
+    "Count":  20,
+    "Types":  [
+                  ".ps1",
+                  "psm1",
+                  "psd1",
+                  "json",
+                  "xml"
+              ]
+}
+
+
+
+#' metadata
+[pscustomobject]@{
+  Created = (Get-Date)
+  Comment = "config data for script tool"
+},
+[pscustomobject]@{
+  Path = "C:\Scripts"
+  LastModified = "1/1/2017"
+  Count = 20
+  Types = @(".ps1","psm1","psd1","json","xml")
+} | ConvertTo-Json 
+
+
+
+#' creates
+[
+    {
+        "Created":  {
+                        "value":  "\/Date(1483398036020)\/",
+                        "DisplayHint":  2,
+                        "DateTime":  "Monday, January 2, 2017 6:00:36 PM"
+                    },
+        "Comment":  "config data for script tool"
+    },
+    {
+        "Path":  "C:\\Scripts",
+        "LastModified":  "1/1/2017",
+        "Count":  20,
+        "Types":  [
+                      ".ps1",
+                      "psm1",
+                      "psd1",
+                      "json",
+                      "xml"
+                  ]
+    }
+]
+
+
+
+#' slight change
+[pscustomobject]@{
+  Created = (Get-Date).Tostring()   '&lt;============  To make it less complicated turn it into a string first
+  Comment = "config data for script tool"
+},
+
+
+
+#' now results
+{
+        "Created":  "1/2/2017 6:03:40 PM",
+        "Comment":  "config data for script tool"
+    }
+
+
+
+#' json snippet
+ {
+        "Name":  "wuauserv",
+        "DisplayName":  "Windows Update",
+        "Status":  1,
+        "MachineName":  "chi-dc04",
+        "Audit":  "12/01/16"
+    },
+
+
+
+#' convert from json
+$in = get-content c:\work\audit.json | convertfrom-json         #'  &lt;=============== ConvertFrom-Json.
+
+$in | get-member
+
+$in[0..2]
+
+$in[0..2] | Select Name,Displayname,
+@{Name="Status";Expression = { $_.Status -as
+System.ServiceProcess.ServiceControllerStatus]}},
+@{Name="Audit";Expression= { $_.Audit -as [datetime]}},
+@{Name="Computername";Expression = {$_.Machinename}}
+
+
+
+#' again
+get-content c:\work\audit.json | 
+convertfrom-json | Select Name,Displayname,
+@{Name="Status";Expression = { $_.Status -as [System.ServiceProcess.ServiceControllerStatus]}},
+@{Name="Audit";Expression= { $_.Audit -as [datetime]}},
+@{Name="Computername";Expression = {$_.Machinename}}
+
+
+
+#' fix
+get-content c:\work\audit.json | 
+convertfrom-json | 
+foreach { $_ | Select Name,Displayname,
+@{Name="Status";Expression = { $_.Status -as [System.ServiceProcess.ServiceControllerStatus]}},
+@{Name="Audit";Expression= { $_.Audit -as [datetime]}},
+@{Name="Computername";Expression = {$_.Machinename}}
+}
+
+
+
+
+
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Profile</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>Sample_Profile_0____Microsoft.PowerShellISE_profile.ps1</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Profile</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>Sample_Profile_0____Microsoft.PowerShellISE_profile.ps1</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>import-module PowerShellISEModule
+
+gig-newModuleDrives
+
+#'import-module MenuModule
+#'import-module SnippetModule
+#'import-module copymodule
+#'BackUp-Profile
+#'Add-MenuItems</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Profile</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>Sample_Profile_3__MenuModule.psm1</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Profile</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>Sample_Profile_3__MenuModule.psm1</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>#' MenuModule.psm1
+#' ed wilson
+
+Function Get-Fonts
+{
+#'modified function based upon comment by Tome Tanasovski made on blog
+#'
+ Param($fontSize = 16,  
+ $milliSecs = 500 
+) 
+$font = $psISE.Options.FontName 
+$size = $psISE.Options.FontSize 
+$lastfont = $psISE.Options.FontName
+[windows.media.fonts]::systemTypeFaces |
+Select-Object -Property fontFamily |
+ForEach-Object { 
+ if ($_.fontFamily.source -ne $psISE.Options.FontName) 
+  { 
+   $_.fontFamily.source 
+   $psISE.Options.FontName = $_.fontFamily.source 
+   $psISE.Options.FontSize = $fontSize 
+   Start-Sleep -Milliseconds $millisecs 
+  } #'end if
+} #'end foreach-object 
+$psise.options.FontName = $font 
+$psISE.Options.FontSize = $size 
+} #'end function get-fonts
+
+Function Get-PsIseColorValues
+{
+ #' wes-8-28-10
+ [windows.media.colors] | Get-Member -Static -MemberType property |  
+ ForEach-Object {  
+ $psISE.Options.OutputPaneTextBackgroundColor =
+   ([windows.media.colors]::$($_.name)).tostring()  
+ "$($_.name) `t $([windows.media.colors]::$($_.name))"}
+ } #'end function Get-PsISEColorValues
+ 
+ Function Set-PsISE
+ {
+  #' Set-PsISEcolorsAndFont.ps1
+ #' fonts
+ $psISE.Options.FontName = 'Kartika' 
+ $psISE.Options.FontSize = 16
+ # output pane
+ $psISE.Options.OutputPaneBackgroundColor = '#FFFFEFD5' 
+ $psISE.Options.OutputPaneTextBackgroundColor = '#FFFFEFD5' 
+ $psISE.Options.OutputPaneForegroundColor = '#FF000000' 
+ #' command pane
+ $psISE.Options.CommandPaneBackgroundColor = '#FFFAEBD7' 
+ #' script pane
+ $psISE.Options.ScriptPaneBackgroundColor = '#FFFAEBD7' 
+ #' tokens
+ $psISE.Options.TokenColors.item('Command') = '#FFA0522D' 
+ $psISE.Options.TokenColors.item('Operator') = '#FFA0522D' 
+ $psISE.Options.TokenColors.item('Unknown') = '#FFFFFFFF' 
+ $psISE.Options.TokenColors.item('Member') = '#FFFFFFFF' 
+ $psISE.Options.TokenColors.item('Position') = '#FFFFFFFF' 
+ $psISE.Options.TokenColors.item('GroupEnd') = '#FFFFFFFF' 
+ $psISE.Options.TokenColors.item('GroupStart') = '#FFFFFFFF' 
+ $psISE.Options.TokenColors.item('LineContinuation') = '#FFFFFFFF' 
+ $psISE.Options.TokenColors.item('NewLine') = '#FFFFFFFF' 
+ $psISE.Options.TokenColors.item('StatementSeparator') = '#FFFFFFFF' 
+ $psISE.Options.TokenColors.item('Comment') = '#FFAEAEAE' 
+ $psISE.Options.TokenColors.item('String') = '#A2BC13' 
+ $psISE.Options.TokenColors.item('Keyword') = '#FFFFDE00' 
+ $psISE.Options.TokenColors.item('Attribute') = '#FF84A7C1' 
+ $psISE.Options.TokenColors.item('Type') = '#FF84A7C1' 
+ $psISE.Options.TokenColors.item('Variable') = '#EE9A00' 
+ $psISE.Options.TokenColors.item('CommandParameter') = '#FFFFDE00' 
+ $psISE.Options.TokenColors.item('CommandArgument') = '#FFFFFFFF' 
+ $psISE.Options.TokenColors.item('Number') = '#FF4169E1' 
+ $psISE.Options.TokenColors.item('LoopLabel') = '#FF4169E1' 
+} #'end function Set-PsISE 
+
+Function Add-MenuItems
+{
+ #'add-menuitems.ps1
+#' wes-9-4-10
+#' this also adds support for Snippets
+$RestoreRoot = $psISE.CurrentPowerShellTab.AddOnsMenu.Submenus.Add( 
+   "Restore",$null,$null) 
+$RestoreRoot.Submenus.Add("RestoreALLDefaults",  
+ {$psISE.Options.RestoreDefaults()}, "Ctrl+Alt+R") | out-null
+$RestoreRoot.SubMenus.Add("RestoreTokenColorDefaults",  
+ {$psISE.Options.RestoreDefaultTokenColors()}, "Ctrl+Alt+T") | out-null
+
+$GetOptions = $psISE.CurrentPowerShellTab.AddOnsMenu.Submenus.Add( 
+   "GetOptions",$null,$null)  
+$GetOptions.SubMenus.Add("GetFonts", { Get-fonts -milliseconds 100 },$null) | out-null
+$GetOptions.SubMenus.Add("GetColors", { Get-PsIseColorValues },$null) | out-null
+#'these lines add snippet support
+$CodeSnippets = $psISE.CurrentPowerShellTab.AddOnsMenu.Submenus.Add( 
+"CodeSnippets",$null,$null)
+$CodeSnippets.Submenus.Add("BrowseSnippet",
+{Get-CodeSnippetV2 -initialDirectory $snipHome}, "Ctrl+Alt+B") | out-null
+$CodeSnippets.SubMenus.Add("AddSnippet",
+{Get-CodeSnippetV2 -initialDirectory $snipHome -add}, "Ctrl+Alt+A") |out-null
+#'end snippet support
+$psISE.CurrentPowerShellTab.AddOnsMenu.Submenus.Add("MyCustomISE", { Set-PsISE },$null) | out-null
+$psISE.CurrentPowerShellTab.AddOnsMenu.Submenus.Add("ClearMenu",  
+   { $psISE.CurrentPowerShellTab.AddOnsMenu.Submenus.Clear() }, $null) |out-null
+} #'end function Add-MenuItems</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Profile</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>Sample_Profile_3__MyProfile.ps1</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Profile</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>Sample_Profile_3__MyProfile.ps1</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+
+
+import-module PowerShellISEModule
+
+import-module MenuModule
+
+import-module SnippetModule
+
+import-module copymodule
+
+BackUp-Profile
+
+Add-MenuItems
+
+New-ModuleDrives</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Remoting_CIM</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>custom_Get-MachineInfo</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Remoting_CIM</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>custom_Get-MachineInfo</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>From Directions Training:
+
+
+assumes WSman if $Protocol is not supplied
+======================================================================
+#' final code
+function Get-MachineInfo {
+    [CmdletBinding()]
+    Param(
+        [Parameter(ValueFromPipeline=$True,
+                   Mandatory=$True)]
+        [Alias('CN','MachineName','Name')]
+        [string[]]$ComputerName,
+        
+        [string]$LogFailuresToPath,
+
+        [ValidateSet('Wsman','Dcom')]
+        [string]$Protocol = "Wsman",
+
+        [switch]$ProtocolFallback
+    )
+ 
+ BEGIN {}
+
+ PROCESS {
+    foreach ($computer in $computername) {
+ 
+        #' Establish session protocol
+        if ($protocol -eq 'Dcom') {
+            $option = New-CimSessionOption -Protocol Dcom
+        } else {
+            $option = New-CimSessionOption -Protocol Wsman
+        }
+ 
+        #' Connect session
+        $session = New-CimSession -ComputerName $computer `
+                                  -SessionOption $option
+  
+        #' Query data
+        $os_params = @{'ClassName'='Win32_OperatingSystem'
+                       'CimSession'=$session}
+        $os = Get-CimInstance @os_params
+
+        $cs_params = @{'ClassName'='Win32_ComputerSystem'
+                       'CimSession'=$session}
+        $cs = Get-CimInstance @cs_params
+
+        $sysdrive = $os.SystemDrive
+        $drive_params = @{'ClassName'='Win32_LogicalDisk'
+                          'Filter'="DeviceId='$sysdrive'"
+                          'CimSession'=$session}
+        $drive = Get-CimInstance @drive_params
+
+        $proc_params = @{'ClassName'='Win32_Processor'
+                         'CimSession'=$session}
+        $proc = Get-CimInstance @proc_params |
+                Select-Object -first 1
+
+  
+        #' Close session
+        $session | Remove-CimSession
+  
+        #' Output data
+        $props = @{'ComputerName'=$computer
+                   'OSVersion'=$os.version
+                   'SPVersion'=$os.servicepackmajorversion
+                   'OSBuild'=$os.buildnumber
+                   'Manufacturer'=$cs.manufacturer
+                   'Model'=$cs.model
+                   'Procs'=$cs.numberofprocessors
+                   'Cores'=$cs.numberoflogicalprocessors
+                   'RAM'=($cs.totalphysicalmemory / 1GB)
+                   'Arch'=$proc.addresswidth
+                   'SysDriveFreeSpace'=$drive.freespace}
+        $obj = New-Object -TypeName PSObject -Property $props
+        Write-Output $obj                           #' &lt;=== Put HashTable object for output
+ 
+    } #'foreach
+} #'PROCESS
+
+END {}
+
+} #'function
+
+
+====NOTES=====================================================================
+
+#' functional overview of tool - will not execute as-is
+        #' Query data
+        $os = Get-CimInstance -ClassName Win32_OperatingSystem `
+                              -CimSession $session
+  
+        #' Close session
+        $session | Remove-CimSession
+  
+        #' Output data
+        $os | Select-Object -Prop @{n='ComputerName';e={$computer}},
+                                Version,ServicePackMajorVersion
+
+
+#' params into hash table
+$params = @{'ClassName'='Win32_OperatingSystem'
+            'ComputerName'='CLIENT1'}
+
+
+#' switch params in hash table
+$params = @{'ClassName'='Win32_OperatingSystem'
+            'ComputerName'='CLIENT1'
+            'Verbose' = $True}
+
+
+
+#' splatting hash table of params
+Get-CimInstance @params
+
+
+
+#' revised snippet - will not execute as-is
+        #' Query data
+        $os_params = @{'ClassName'='Win32_OperatingSystem'
+                       'CimSession'=$session}
+        $os = Get-CimInstance @os_params
+
+        $cs_params = @{'ClassName'='Win32_ComputerSystem'
+                       'CimSession'=$session}
+        $cs = Get-CimInstance @cs_params
+
+        $sysdrive = $os.SystemDrive
+        $drive_params = @{'ClassName'='Win32_LogicalDisk'
+                          'Filter'="DeviceId='$sysdrive'"
+                          'CimSession'=$session}        $drive = Get-CimInstance @drive_params
+
+        $proc_params = @{'ClassName'='Win32_Processor'
+                         'CimSession'=$session}
+        $proc = Get-CimInstance @proc_params |
+                Select-Object -first 1
+
+
+
+#' constructing custom object
+        #' Output data
+        $props = @{'ComputerName'=$computer
+                   'OSVersion'=$os.version
+                   'SPVersion'=$os.servicepackmajorversion
+                   'OSBuild'=$os.buildnumber
+                   'Manufacturer'=$cs.manufacturer
+                   'Model'=$cs.model
+                   'Procs'=$cs.numberofprocessors
+                   'Cores'=$cs.numberoflogicalprocessors
+                   'RAM'=($cs.totalphysicalmemory / 1GB)
+                   'Arch'=$proc.addresswidth
+                   'SysDriveFreeSpace'=$drive.freespace}
+        $obj = New-Object -TypeName PSObject -Property $props
+        Write-Output $obj</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Setup_My_Profile_on_New_Machine</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>03_Populate_the_PowerShellISEModule.psm1</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Setup_My_Profile_on_New_Machine</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>03_Populate_the_PowerShellISEModule.psm1</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>'1] Then populate the C:\Users\ggarson\Documents\WindowsPowerShell\PowerShellISE_profile.ps1 file by copy/paste the script into that file
+'	from snippet:  04_Microsoft.PowerShellISE_profile.ps1
+
+'2] Then populate the C:\Users\ggarson\Documents\WindowsPowerShell\Modules\PowerShellISEModule\PowerShellISEModule.psm1 file by copy/paste the script into that file
+'	from snippet:  05_PowerShellISEModule.psm1
+
+'Once the profile is run,you can go to the modules folder by doing this:
+&gt;Set-Location myMods:
+
+'You can go to the scripts folder by doing this:
+&gt; Set-Location $myScripts</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Setup_My_Profile_on_New_Machine</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>04_Microsoft.PowerShellISE_profile.ps1</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Setup_My_Profile_on_New_Machine</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>04_Microsoft.PowerShellISE_profile.ps1</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>import-module PowerShellISEModule
+
+gig-newModuleDrives
+
+#'import-module MenuModule
+#'import-module SnippetModule
+#'import-module copymodule
+#'BackUp-Profile
+#'Add-MenuItems</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Validation</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>Example_likeTheSnippet</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Validation</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>Example_likeTheSnippet</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+Function Get-DiskCheck {
+
+[cmdletbinding(DefaultParameterSetName = "name")]
+
+Param(
+[Parameter(Position = 0, Mandatory, 
+HelpMessage = "Enter a computer name to check",
+ParameterSetName = "name",
+ValueFromPipeline)]
+[Alias("cn")]
+[ValidateNotNullorEmpty()]
+[string[]]$Computername,
+
+[Parameter(Mandatory,
+HelpMessage = "Enter the path to a text file of computer names",
+ParameterSetName = "file"
+)]
+[ValidateScript({
+if (Test-Path $_) {
+   $True
+}
+else {
+   Throw "Cannot validate path $_"
+}
+})]     
+[ValidatePattern("\.txt$")]
+[string]$Path,
+
+[ValidateRange(10,50)]
+[int]$Threshhold = 25,
+
+[ValidateSet("C:","D:","E:","F:")]
+[string]$Drive = "C:",
+
+[switch]$Test
+)
+
+Begin {
+    Write-Verbose "[BEGIN  ] Starting: $($MyInvocation.Mycommand)"  
+
+    $cimParam = @{
+        Classname = "Win32_LogicalDisk"
+        Filter = "DeviceID='$Drive'"
+        Computername = $Null
+        ErrorAction = "Stop"
+    }
+} #begin
+
+Process {
+
+    if ($PSCmdlet.ParameterSetName -eq 'name') {
+        $names = $Computername
+    }
+    else {
+        #get list of names and trim off any extra spaces
+        Write-Verbose "[PROCESS] Importing names from $path"
+        $names = Get-Content -Path $path | Where {$_ -match "\w+"} | foreach {$_.Trim()}
+
+    }
+
+    if ($test) {
+        Write-Verbose "[PROCESS] Testing connectivity"
+        #ignore errors for offline computers
+        $names = $names | Where {Test-WSMan $_ -ErrorAction SilentlyContinue}
+    }
+    
+    foreach ($computer in $names) {
+        $cimParam.Computername = $Computer
+        Write-Verbose "[PROCESS] Querying $($computer.toUpper())"
+        Try {
+            $data = Get-Ciminstance @cimParam
+
+            #write custom result to the pipeline
+            $data | Select PSComputername,
+            DeviceID,Size,Freespace,
+            @{Name="PctFree";Expression = {[math]::Round(($_.freespace/$_.size)*100,2)}},
+            @{Name="OK";Expression = {
+              [int]$p = ($_.freespace/$_.size)*100
+              if ($p -ge $Threshhold) {
+                $True
+              } else {
+                $false
+              }
+            }},@{Name="Date";Expression={(Get-Date)}}
+        }
+        Catch {
+            Write-Warning "[$($computer.toUpper())] Failed. $($_.Exception.message)"
+        }
+    } #foreach computer
+
+} #process
+
+End {
+    Write-Verbose "[END    ] Ending: $($MyInvocation.Mycommand)"
+} #end
+
+}
+
+'OUTPUT from help for this function:
+---------------------------------------
+#'&gt;help Get-DiskCheck -Full
+#'
+#'NAME
+#'    Get-DiskCheck
+#'    
+#'SYNTAX
+#'    Get-DiskCheck [-Computername] &lt;string[]&gt; [-Threshhold &lt;int&gt;] [-Drive &lt;string&gt; {C: | D: | E: | F:}] [-Test]  [&lt;CommonParameters&gt;]
+#'    
+#'    Get-DiskCheck -Path &lt;string&gt; [-Threshhold &lt;int&gt;] [-Drive &lt;string&gt; {C: | D: | E: | F:}] [-Test]  [&lt;CommonParameters&gt;]
+#'    
+#'    
+#'PARAMETERS
+#'    -Computername &lt;string[]&gt;
+#'        Enter a computer name to check
+#'        
+#'        Required?                    true
+#'        Position?                    0
+#'        Accept pipeline input?       true (ByValue)
+#'        Parameter set name           name
+#'        Aliases                      cn
+#'        Dynamic?                     false
+#'        
+#'    -Drive &lt;string&gt;
+#'        
+#'        Required?                    false
+#'        Position?                    Named
+#'        Accept pipeline input?       false
+#'        Parameter set name           (All)
+#'        Aliases                      None
+#'        Dynamic?                     false
+#'        
+#'    -Path &lt;string&gt;
+#'        Enter the path to a text file of computer names
+#'        
+#'        Required?                    true
+#'        Position?                    Named
+#'        Accept pipeline input?       false
+#'        Parameter set name           file
+#'        Aliases                      None
+#'        Dynamic?                     false
+#'        
+#'    -Test
+#'        
+#'        Required?                    false
+#'        Position?                    Named
+#'        Accept pipeline input?       false
+#'        Parameter set name           (All)
+#'        Aliases                      None
+#'        Dynamic?                     false
+#'        
+#'    -Threshhold &lt;int&gt;
+#'        
+#'        Required?                    false
+#'        Position?                    Named
+#'        Accept pipeline input?       false
+#'        Parameter set name           (All)
+#'        Aliases                      None
+#'        Dynamic?                     false
+#'        
+#'    &lt;CommonParameters&gt;
+#'        This cmdlet supports the common parameters: Verbose, Debug,
+#'        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+#'        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+#'        about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216). 
+#'    
+#'    
+#'INPUTS
+#'    System.String[]
+#'    
+#'    
+#'OUTPUTS
+#'    System.Object
+#'    
+#'ALIASES
+#'    None
+#'    
+#'
+#'REMARKS
+#'    None
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Validation</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>Validation _snippets</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Validation</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>Validation _snippets</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code># example (complete file is in sample code)
+[cmdletbinding(DefaultParameterSetName = "name")]
+
+Param(
+	[Parameter(Position = 0, Mandatory, 
+		HelpMessage = "Enter a computer name to check",
+		ParameterSetName = "name",
+		ValueFromPipeline)]
+		[Alias("cn")]
+		[ValidateNotNullorEmpty()]
+		[string[]]$Computername,
+	
+	[Parameter(Mandatory,
+		HelpMessage = "Enter the path to a text file of computer names",
+		ParameterSetName = "file"
+		)]
+		[ValidateScript({
+							if (Test-Path $_) {
+							   $True
+							}
+							else {
+							   Throw "Cannot validate path $_"
+							}
+						})]     
+		[ValidatePattern("\.txt$")]
+		[string]$Path,
+		
+		[ValidateRange(10,50)]
+		[int]$Threshhold = 25,
+		
+		[ValidateSet("C:","D:","E:","F:")]
+		[string]$Drive = "C:",
+		
+		[switch]$Test
+)</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>PYTHON_XML</Category>
+        <Language>PYTHON</Language>
+        <Public>false</Public>
+        <Name>MYSNIPPETS_mysnippetsJustCsharpVBnetJavascript.xml</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>PYTHON_XML</Category>
+          <Language>PYTHON</Language>
+          <Public>false</Public>
+          <Name>MYSNIPPETS_mysnippetsJustCsharpVBnetJavascript.xml</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>import xml.etree.ElementTree as ET
+
+tree = ET.parse("/home/whatever/data/xmlFiles/mysnippets.xml")
+root = tree.getroot()
+
+theCount_1 = 0
+
+for item_1 in root.findall("item"):             #  &lt;item&gt;
+    theCount_1 += 1
+    print(item_1.tag, theCount_1)
+    # if theCount_1 &gt; 5: break         #CONTROLS THE BIG LOOP
+    for item_2 in item_1:                       #  &lt;key&gt;, &lt;value&gt;
+
+        # if item_2.tag == 'key': print("-----", item_2.tag)      #only print the Key tags
+        for item_3 in item_2:                   #  &lt;key&gt; =&gt; snippetKey, &lt;value&gt; =&gt; snippetValue
+            if item_3.tag == 'SnippetKey':
+                # print("-----", "-----", item_3.tag)
+                listContents = list()
+                for item_4 in item_3:
+                    listContents.append(item_4.text)
+                # if listContents[1] != 'VB.NET':
+                if ( (listContents[1] != 'VB.NET') and (listContents[1] != 'C#') and (listContents[1] != 'JAVASCRIPT')) :
+                    print("Language: ", listContents[1], ", Name: ", listContents[3])
+                    root.remove(item_1)
+                    print(listContents[3], " was removed")
+tree.write("/home/whatever/data/xmlFiles/mysnippets.xml")
+
+
+
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>PYTHON_XML</Category>
+        <Language>PYTHON</Language>
+        <Public>false</Public>
+        <Name>MYSNIPPETS_mysnipptsMinusCsharpVBnetJavascript.xml</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>PYTHON_XML</Category>
+          <Language>PYTHON</Language>
+          <Public>false</Public>
+          <Name>MYSNIPPETS_mysnipptsMinusCsharpVBnetJavascript.xml</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>import xml.etree.ElementTree as ET
+
+tree = ET.parse("/home/whatever/data/xmlFiles/mysnippets.xml")
+root = tree.getroot()
+
+theCount_1 = 0
+
+for item_1 in root.findall("item"):             #  &lt;item&gt;
+    theCount_1 += 1
+    print(item_1.tag, theCount_1)
+    # if theCount_1 &gt; 5: break         #CONTROLS THE BIG LOOP
+    for item_2 in item_1:                       #  &lt;key&gt;, &lt;value&gt;
+
+        # if item_2.tag == 'key': print("-----", item_2.tag)      #only print the Key tags
+        for item_3 in item_2:                   #  &lt;key&gt; =&gt; snippetKey, &lt;value&gt; =&gt; snippetValue
+            if item_3.tag == 'SnippetKey':
+                # print("-----", "-----", item_3.tag)
+                listContents = list()
+                for item_4 in item_3:
+                    listContents.append(item_4.text)
+                # if listContents[1] != 'VB.NET':
+                if ( (listContents[1] == 'VB.NET') or (listContents[1] == 'C#') or (listContents[1] == 'JAVASCRIPT')) :
+                    print("Language: ", listContents[1], ", Name: ", listContents[3])
+                    root.remove(item_1)
+                    print(listContents[3], " was removed")
+tree.write("/home/whatever/data/xmlFiles/mysnippets.xml")
+
+
+
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>PYTHON_XML</Category>
+        <Language>PYTHON</Language>
+        <Public>false</Public>
+        <Name>MYSNIPPETS_read</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>PYTHON_XML</Category>
+          <Language>PYTHON</Language>
+          <Public>false</Public>
+          <Name>MYSNIPPETS_read</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>import xml.etree.ElementTree as ET
+
+tree = ET.parse("/home/whatever/data/xmlFiles/mysnippets.xml")
+root = tree.getroot()
+
+theCount_1 = 0
+theCount_2 = 0
+theCount_3 = 0
+theCount_4 = 0
+theCount_5 = 0
+nodesTocheck_1 = 1
+nodesTocheck_2 = 1
+nodesTocheck_3 = 1
+nodesTocheck_4 = 2
+nodesTocheck_5 = 2
+for item_1 in root.findall("item"):
+    while theCount_1 &lt;= nodesTocheck_1:
+        theCount_1 += 1
+        print(item_1.tag, theCount_1)
+        theCount_2 = 0
+        while theCount_2 &lt;= nodesTocheck_2:
+            for item_2 in item_1:
+                theCount_2 += 1
+                print("-----", item_2.tag)
+                theCount_3 = 0
+                while theCount_3 &lt;= nodesTocheck_3:
+                    for item_3 in item_2:
+                        theCount_3 += 1
+                        print("-----", "-----", item_3.tag)
+                        theCount_4 = 0
+                        while theCount_4 &lt;= nodesTocheck_4:
+                            for item_4 in item_3:
+                                theCount_4 += 1
+                                print("-----", "-----","-----", "-----",item_4.tag)
+                                print("                                ", item_4.attrib)
+                                print("==&gt;", item_4.text)
+                                if item_4.text == 'VB.NET':
+                                    print('ding, ding, ding')
+
+
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>PYTHON_XML</Category>
+        <Language>PYTHON</Language>
+        <Public>false</Public>
+        <Name>MYSNIPPETS_remove_VBdotNET</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>PYTHON_XML</Category>
+          <Language>PYTHON</Language>
+          <Public>false</Public>
+          <Name>MYSNIPPETS_remove_VBdotNET</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>import xml.etree.ElementTree as ET
+
+tree = ET.parse("/home/whatever/data/xmlFiles/mysnippets.xml")
+root = tree.getroot()
+
+theCount_1 = 0
+
+for item_1 in root.findall("item"):             #  &lt;item&gt;
+    theCount_1 += 1
+    print(item_1.tag, theCount_1)
+    # if theCount_1 &gt; 5: break         #CONTROLS THE BIG LOOP
+    for item_2 in item_1:                       #  &lt;key&gt;, &lt;value&gt;
+
+        # if item_2.tag == 'key': print("-----", item_2.tag)      #only print the Key tags
+        for item_3 in item_2:                   #  &lt;key&gt; =&gt; snippetKey, &lt;value&gt; =&gt; snippetValue
+            if item_3.tag == 'SnippetKey':
+                print("-----", "-----", item_3.tag)
+                listContents = list()
+                for item_4 in item_3:
+                    listContents.append(item_4.text)
+                if listContents[1] == 'VB.NET':
+                    print("             Name: ", listContents[3])
+                    root.remove(item_1)
+                    print(listContents[3], " was removed")
+tree.write("/home/whatever/data/xmlFiles/mysnippets.xml")</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>RowVersion_TimeStamp</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>Convert_Numeric_into_Rowversion</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>RowVersion_TimeStamp</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>Convert_Numeric_into_Rowversion</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>--From: http://stackoverflow.com/questions/6527915/convert-numeric-into-rowversion-timestamp
+
+--  When you convert data to binary (rowversion is essentially binary(8)), 
+--  you get its internal representation rather than the logical value. 
+--  You can verify the behavior with the following snippet:
+
+DECLARE @MyNumericValue NUMERIC(20,0) = 0
+SELECT @MyNumericValue, CONVERT(binary(8), @MyNumericValue)
+
+--  Or you can try
+
+DECLARE @MyBinary binary(8) = 0x00
+SELECT @MyBinary, CONVERT(numeric(20,0), @MyBinary)
+
+--  It won't convert at all. So, what is really going on with your script is:
+
+SET @MyNumericValue = 12345
+-- @MyRowVersionValue gets the internal representation of the numeric value 12345
+SET @MyRowVersionValue = CONVERT(rowversion, @MyNumericValue)
+-- +0 converts the binary value to int, then performs int-to-numeric conversion 
+PRINT CONVERT(NUMERIC(20,0), @MyRowVersionValue + 0)
+-- Real binary-to-numeric conversion.
+PRINT CONVERT(NUMERIC(20,0), @MyRowVersionValue)
+
+--  The real binary-to-numeric conversion is safe, but in your case, you may want to convert the rowversion to a bigint 
+--  (or forget about the numeric value and just store it as a binary string) rather than numeric,</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>SSRS</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>LIST_about_XMLNAMESPACES</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>SSRS</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>LIST_about_XMLNAMESPACES</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>/*
+The Namespace affects which reports are returned by the query
+
+*/
+
+--BETTER format
+--NOTE: This format, i.e. on a single line, and with capital 'SQL' in the second path seems to work better than when it is on multiple lines
+;WITH XMLNAMESPACES ( DEFAULT 'http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition', 'http://schemas.microsoft.com/SQLServer/reporting/reportdesigner' AS rd )
+
+
+--WORSE format
+--NOTE: this format does not give the DataType, and also doesn't always give all the reports:
+;WITH 
+ XMLNAMESPACES
+     (DEFAULT 'http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition'
+             ,'http://schemas.microsoft.com/sqlserver/reporting/reportdesigner'
+      AS rd)
+
+
+
+-- I know the following XMLNAMESPACES work:
+
+'http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition'
+'http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition'
+'http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition'
+
+--each namespace pulls different reports from the server
+
+--The report definition namespace is specified by the following URL: 
+https://schemas.microsoft.com/sqlserver/reporting/*year*/01/reportdefinition
+
+
+--To find the RDL schema Version for use in the XMLNAMESPACES section of the LIST snippets:
+--from: --https://docs.microsoft.com/en-us/sql/reporting-services/reports/find-the-report-definition-schema-version-ssrs?view=sql-server-ver15
+1] Open the report .rdl file in an application such as Notepad or XML Notepad, in which you can view the XML.
+2] On about the second line it will have the YYYY (year) for the 'reportdefinition'
+	That is what needs to be changed in the LIST snippets</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>Stored_Procedure</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>ALL_select_checkBox_in_SSRS__SSRS_Steps</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>Stored_Procedure</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>ALL_select_checkBox_in_SSRS__SSRS_Steps</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+
+/*
+Getting Multi-Value params to work with Stored Procedures
+========================================================
+
+1. The stored procedure for the report should declare any multi-value parameters as type nvarchar(max).
+
+2. In the Report Designer, your parameter should have the 'Allow multiple values' option ticked (obviously). 
+	Also, it helps to set the Data type to 'Text' even if its actually an integer or something, 
+	because we're going to have to treat it as text later on in the Stored Procedure.
+	
+3. In the DataSet that calls the stored procedure, go to the Parameters tab:
+
+4. For each parameter that needs to be a multi-value one, press the Fx button and change the default:	*/
+		=Parameters!BU.Value
+--to
+		=JOIN(Parameters!BU.Value,",")
+/*
+	This will just string the multi-values together into a comma separated string.
+	
+5. In the database, you need a function that can split comma-separated values back out into a table format. 
+	There are lots of variations of this sort of function around, see snippet for the SQL_FUNCTION
+	
+6. The query inside the stored procedure that uses the multi-value parameter should use it like this:	*/
+
+		WHERE 
+		(BU_Name IN (select Item from dbo.prj_0013_FN_401_unSplit(@BU,','))	) 
+/*
+	... that is, it uses prj_0013_FN_401_unSplit to split the passed values out into a table, 
+		and then selects from that table and uses 'in' to check for membership.
+		
+7. IF you want to select all by default, then for the Parameter =&gt; "default value", and list the SP that has all
+	the values for the drop-down
+		(x) Get Values from a query 
+		DataSet: name of the SP with all the drop-down Values
+		Value Field: The name of the field used in the label for the drop-down		</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>Table</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>Identity(1,1)_CopyDataToAnotherTable_retainIdentityDataInNewTable</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>Table</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>Identity(1,1)_CopyDataToAnotherTable_retainIdentityDataInNewTable</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+/*
+You can't alter the existing columns for identity.
+
+ 
+
+You have 2 options,
+
+1. Create a new table with identity &amp; drop the existing table
+
+2. Create a new column with identity &amp; drop the existing column
+
+ 
+
+But take spl care when these columns have any constraints / relations.
+
+*/
+            For already craeted table Names
+            Drop table Names
+            Create table Names
+            (
+                        ID int,
+                        Name varchar(50)
+            )
+ 
+            Insert Into Names Values(1,'SQL Server')
+            Insert Into Names Values(2,'ASP.NET')
+            Insert Into Names Values(4,'C#')
+/*
+
+Code Snippet
+--In this Approach you can retain the existing data values on the newly created identity column
+*/
+CREATE TABLE dbo.Tmp_Names
+            (
+            Id int NOT NULL IDENTITY (1, 1),
+            Name varchar(50) NULL
+            )  ON [PRIMARY]
+ 
+go
+SET IDENTITY_INSERT dbo.Tmp_Names ON
+ 
+go
+IF EXISTS(SELECT * FROM dbo.Names)
+            INSERT INTO dbo.Tmp_Names (Id, Name)
+                        SELECT Id, Name FROM dbo.Names TABLOCKX
+ 
+go
+SET IDENTITY_INSERT dbo.Tmp_Names OFF
+ 
+go
+DROP TABLE dbo.Names</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>TEST_DATA_simulation</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>Iterate_WHILE_BEGIN-END_doubleLoop</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>TEST_DATA_simulation</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>Iterate_WHILE_BEGIN-END_doubleLoop</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>--0000_General_SNIPPET_038_Iterate_DoubleLoop.sql
+
+DECLARE @iYYYY INT --iterator
+SET @iYYYY = 2017 --initialize
+DECLARE @iYYYY_max INT = 2019 --rowcount
+
+
+
+WHILE @iYYYY &lt;= @iYYYY_max
+	BEGIN
+
+		DECLARE @iMM INT --iterator
+		SET @iMM = 1 --initialize
+		DECLARE @iMM_max INT = 12 --rowcount
+
+		WHILE @iMM &lt;= @iMM_max
+			BEGIN
+
+				PRINT 'Monthy is: [' + CAST(@iMM AS varchar(5)) + '], Year is: [' + 	 CAST(@iYYYY AS varchar(5)) + ']' 
+				
+				SET @iMM = @iMM + 1
+			END
+
+		SET @iYYYY = @iYYYY + 1
+	END
+
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>VB_NET</Category>
+        <Language>ASP</Language>
+        <Public>false</Public>
+        <Name> ASPNet_ServeFileForDownload</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>VB_NET</Category>
+          <Language>ASP</Language>
+          <Public>false</Public>
+          <Name> ASPNet_ServeFileForDownload</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>&lt;-- http://dzone.com/snippets/aspnet-serve-file-download --&gt;
+Function I use to serve a file on the webserver to the client machine.
+
+
+' sends file to browser for download
+02.Private Sub SendFile(ByVal strPath As System.String, ByVal strSuggestedName As System.String)
+03. 
+04.Dim strServerPath As String
+05.Dim objSourceFileInfo As System.IO.FileInfo
+06. 
+07.' convert relative path to path on server machine
+08.strServerPath = Me.Server.MapPath(strPath)
+09. 
+10.' get fileinfo of source file
+11.objSourceFileInfo = New System.IO.FileInfo(strServerPath)
+12. 
+13.' if the file exists
+14.If objSourceFileInfo.Exists Then
+15. 
+16.With Me.Response
+17. 
+18.' tell the browser what content type to expect
+19..ContentType = "application/octet-stream"
+20. 
+21.' tell the browser to save rather than display inline
+22..AddHeader("Content-Disposition", "attachment; filename=" &amp; strSuggestedName)
+23. 
+24.' tell the browser how big the file is
+25..AddHeader("Content-Length", objSourceFileInfo.Length.ToString)
+26. 
+27.' send the file to the browser
+28..WriteFile(objSourceFileInfo.FullName)
+29. 
+30.' make sure response is sent
+31..Flush()
+32. 
+33.' end response
+34..End()
+35. 
+36.End With
+37. 
+38.' if the file does not exist
+39.Else
+40. 
+41.' show error page
+42.ThrowError("Application Error", "File Missing From Server")
+43. 
+44.End If
+45. 
+46.End Sub        </Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>VisualStudio</Category>
+        <Language>TEXT</Language>
+        <Public>false</Public>
+        <Name>snippet_Shortcuts_internal_to_VisualStudio</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>VisualStudio</Category>
+          <Language>TEXT</Language>
+          <Public>false</Public>
+          <Name>snippet_Shortcuts_internal_to_VisualStudio</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+ctor =&gt; constructor
+prop =&gt; property (e.g: public TYPE Type { get; set; } )</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>VS_snippet_shortcuts</Category>
+        <Language>TEXT</Language>
+        <Public>false</Public>
+        <Name>about_VS_snippet_shortcuts</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>VS_snippet_shortcuts</Category>
+          <Language>TEXT</Language>
+          <Public>false</Public>
+          <Name>about_VS_snippet_shortcuts</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>about_VS_snippet_shortcuts
+
+
+ctor	-	Class constructor</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>Windows_10</Category>
+        <Language>TEXT</Language>
+        <Public>false</Public>
+        <Name>DotNet3_for_SnippetManager</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>Windows_10</Category>
+          <Language>TEXT</Language>
+          <Public>false</Public>
+          <Name>DotNet3_for_SnippetManager</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>This Worked. You need the installer media for Windows 10.
+That is where the path to the file it needs is located.
+http://serverfault.com/questions/750562/net-framework-3-5-error-code-0x800f081f
+From an Admin launch of command prompt ( or powershell as administrator) run:
+
+&gt;Dism /online /enable-feature /featurename:NetFx3 /All /Source:D:\sources\sxs
+
+rebooted
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>Windows</Category>
+        <Language>TEXT</Language>
+        <Public>false</Public>
+        <Name>Open_a_URL_in_a_Specific_Browser</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>Windows</Category>
+          <Language>TEXT</Language>
+          <Public>false</Public>
+          <Name>Open_a_URL_in_a_Specific_Browser</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>NOTE: see URI scheme snippet for more details and examples
+
+
+http://stackoverflow.com/questions/5881383/can-i-force-a-link-to-open-in-a-specific-browser
+
+if you are targeting your company's network it's possible to do this using custom protocol.
+
+Your link then would look like: ie://opens_in_ie.com
+
+
+Open_a_URL_in_a_Specific_Browser
+
+https://msdn.microsoft.com/en-us/library/aa767914(VS.85).aspx
+
+invoke another application to handle a custom URI scheme
+To do so, register the existing application as a URI pluggable protocol handler and associate it with the custom URI scheme
+Once the application has successfully launched, it can use command-line parameters to retrieve the URI that launched it. 
+
+
+Registering the Application Handling the Custom URI Scheme
+===========================================================
+
+
+To register an application to handle a particular URI scheme, add a new key, 
+	along with the appropriate subkeys and values, 
+	to HKEY_CLASSES_ROOT. The root key must match the URI scheme that is being added. 
+
+For instance, to add an "alert:" scheme, add an alert key to HKEY_CLASSES_ROOT, as follows:
+------------------------------------
+HKEY_CLASSES_ROOT
+   alert
+      URL Protocol = ""
+------------------------------------
+The URL Protocol string value indicates that this key declares a custom pluggable protocol handler. 
+ Without this key, the handler application will not launch. The value should be an empty string.
+ 
+ Keys should also be added for "DefaultIcon" and "shell". 
+ 
+ The Default string value of the "DefaultIcon" key must be the file name to use as an icon for this new URI scheme.
+ The string takes the form "path, iconindex" with a maximum length of MAX_PATH. 
+ 
+ The name of the first key under the shell key should be an action verb, such as "open". Under this key, a "command" key 
+ 	or a "DDEEXEC" key indicate how the handler should be invoked.
+ 	
+ Finally, the "Default" string value should contain the display name of the new URI scheme. 	 
+ 
+ The following example shows how to register an application, alert.exe in this case, to handle the "alert" scheme.
+ 
+ ------------------------------------------------------------------------
+ HKEY_CLASSES_ROOT
+   alert
+      (Default) = "URL:Alert Protocol"
+      URL Protocol = ""
+      DefaultIcon
+         (Default) = "alert.exe,1"
+      shell
+         open
+            command
+               (Default) = "C:\Program Files\Alert\alert.exe" "%1"
+  ------------------------------------------------------------------------
+  
+  When a user clicks a link containing your custom URI scheme, 
+  	Windows Internet Explorer launches the pluggable protocol handler registered for that URI scheme. 
+  If the specified open command specified in the registry contains a %1 parameter, 
+  	Internet Explorer passes the URI to the registered pluggable protocol handler application.
+  	
+  By adding the above settings to the registry, 
+  	navigating to URIs such as alert:Hello%20World would cause an attempt to launch alert.exe with the complete URI on the command line. 
+  	Internet Explorer percent-decodes the URI, 
+  	but the Windows Run... command does not. 
+  If a URI contains percent-encoded spaces, it may be split across more than one argument on the command line.	
+  
+  For example, if the link above is followed through Internet Explorer, the command line would be:
+  
+  "C:\Program Files\Alert\alert.exe" "alert:Hello World"</Code>
       </SnippetValue>
     </value>
   </item>
