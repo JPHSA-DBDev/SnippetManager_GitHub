@@ -3,38 +3,1281 @@
   <item>
     <key>
       <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>TimeZone_DaylightSavingsTime_UTC_GMT</Category>
-        <Language>SQLSERVER2K SQL</Language>
+        <Category>ACCESS_2010</Category>
+        <Language>TEXT</Language>
         <Public>false</Public>
-        <Name>function_GetOffsetValue_SQL_server_2016</Name>
+        <Name>SwitchboardManager</Name>
         <Group>My Snippets</Group>
       </SnippetKey>
     </key>
     <value>
       <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
         <Key>
-          <Category>TimeZone_DaylightSavingsTime_UTC_GMT</Category>
-          <Language>SQLSERVER2K SQL</Language>
+          <Category>ACCESS_2010</Category>
+          <Language>TEXT</Language>
           <Public>false</Public>
-          <Name>function_GetOffsetValue_SQL_server_2016</Name>
+          <Name>SwitchboardManager</Name>
           <Group>My Snippets</Group>
         </Key>
         <Keywords />
         <Imports />
         <Code>
-https://stackoverflow.com/questions/33444328/t-sql-check-if-a-given-date-is-in-daylight-savings-or-not
 
-Create Function GetOffsetValue( @dateToCheck DateTime2, @timeZoneId VarChar( 60 ) ) Returns Int
-	As Begin
-	    Return DatePart( TzOffset, @dateToCheck At Time Zone @timeZoneId ) --In minutes. Divide by 60 if more convenient
-	End
+
+'Switchboard manager' can be added to Quick access toolbar. Switchboard manager is 'Commands Not in the ribbon' category.
+
+here is how you can add it.
+
+1. Open Access
+2. Click on File on left top corner of the screen.
+3. Click on 'Options' just about Exit on left side of the screen.
+4. once 'Acces options' dialog opens up
+5. select 'Quick Access Toolbar' on left side of the dialog
+6.  select ''Commands Not in the ribbon' on 'Choose Commands From" combobox on top of the dialog
+7. select 'Switchboard Manager' and click 'Add' button on center of the 'Access options' dialog
+8. click Okay on 'Access options'</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>BROWSERs</Category>
+        <Language>TEXT</Language>
+        <Public>false</Public>
+        <Name>UserAgent_in_IE</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>BROWSERs</Category>
+          <Language>TEXT</Language>
+          <Public>false</Public>
+          <Name>UserAgent_in_IE</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>this will tell you your user string:
+http://www.useragentstring.com/
+as well as this:
+https://www.whatismybrowser.com/detect/what-is-my-user-agent
+
+===================================================
+This is my Windows 7 string for IE:
+Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko
+Use this for Windows 10
+Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko
+====================================================
+https://www.howtogeek.com/113439/how-to-change-your-browsers-user-agent-without-installing-any-extensions/
+Microsoft Edge and Internet Explorer have user agent switchers in their developer tools, and they’re nearly identical. To open them, click the settings menu and select “F12 Developer Tools” or just press F12 on your keyboard.
+ 
+The developer tools will open in a separate pane at the bottom of the window. Click the “Emulation” tab and choose a user agent from the “User agent string” box. You can also select the “Custom” option in the User agent string list and type a custom user agent into the box. You can find extensive lists of user agents on various websites, such as this one.
+This setting is temporary. It only applies to the current tab, and only while the F12 Developer Tools pane is open.
+============================================
+// Match user agent string with operating systems 
+Windows 3.11 =&gt; Win16,
+Windows 95 =&gt; (Windows 95)|(Win95)|(Windows_95),
+Windows 98 =&gt; (Windows 98)|(Win98),
+Windows 2000 =&gt; (Windows NT 5.0)|(Windows 2000),
+Windows XP =&gt; (Windows NT 5.1)|(Windows XP),
+Windows Server 2003 =&gt; (Windows NT 5.2),
+Windows Vista =&gt; (Windows NT 6.0),
+Windows 7 =&gt; (Windows NT 6.1),
+Windows 8 =&gt; (Windows NT 6.2),
+Windows 10 =&gt; (Windows NT 10.0),
+Windows NT 4.0 =&gt; (Windows NT 4.0)|(WinNT4.0)|(WinNT)|(Windows NT),
+Windows ME =&gt; Windows ME,
+Open BSD =&gt; OpenBSD,
+Sun OS =&gt; SunOS,
+Linux =&gt; (Linux)|(X11),
+Mac OS =&gt; (Mac_PowerPC)|(Macintosh),
+QNX =&gt; QNX,
+BeOS =&gt; BeOS,
+OS/2 =&gt; OS/2,
+Search Bot=&gt;(nuhk)|(Googlebot)|(Yammybot)|(Openbot)|(Slurp)|(MSNBot)|(Ask Jeeves/Teoma)|(ia_archiver)
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>CrystalReports_v11</Category>
+        <Language>TEXT</Language>
+        <Public>false</Public>
+        <Name>Alternating_Row_Color_in_Details</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>CrystalReports_v11</Category>
+          <Language>TEXT</Language>
+          <Public>false</Public>
+          <Name>Alternating_Row_Color_in_Details</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>https://www.baass.com/blog/crystal-reporting-tips-alternate-line-shading
+
+Go to Report &gt; Section Expert (or right-click on the left, section area)
+Click on Details on the left and switch to the Color tab on the right
+Click on the formula button:
+
+Copy/type the following formula in:
+
+
+select RecordNumber mod 2
+case 0: crWhite
+case 1: color(222,222,222)
+
+Click Save and Close
+Click OK to close the Section Expert window
+
+
+========================================== for Groups
+
+select GroupNumber mod 2
+case 0: crWhite
+case 1: crYellow</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>EXCEL</Category>
+        <Language>TEXT</Language>
+        <Public>false</Public>
+        <Name>functions</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>EXCEL</Category>
+          <Language>TEXT</Language>
+          <Public>false</Public>
+          <Name>functions</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+
+Note: the SWITCH function is new in Excel 2016 via Office 365.
+=SWITCH(C5,1,"Poor",2,"OK",3,"Good","??")</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>Outlook</Category>
+        <Language>TEXT</Language>
+        <Public>false</Public>
+        <Name>about_Outlook</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>Outlook</Category>
+          <Language>TEXT</Language>
+          <Public>false</Public>
+          <Name>about_Outlook</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>about_Outlook
+
+
+command switches
+https://www.howto-outlook.com/howto/commandlineswitches.htm</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWER_BI</Category>
+        <Language>TEXT</Language>
+        <Public>false</Public>
+        <Name>Errors_Solutions</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWER_BI</Category>
+          <Language>TEXT</Language>
+          <Public>false</Public>
+          <Name>Errors_Solutions</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+1] -------------------------------------------------------
+error was something like this:
+Details: "An error happened while reading data from the provider: 
+	'Could not load file or assembly 
+		'System.EnterpriseServices, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a' 
+	or one of its dependencies. 
+	Either a required impersonation level was not provided, 
+		or the provided impersonation level is invalid. (Exception from HRESULT: 0x80070542)'"
+
+Executable:
+	C:\Program Files\Microsoft Power BI Desktop RS\bin\PBIDesktop.exe
+REF
+	https://community.powerbi.com/t5/Issues/SQL-connect-error/idi-p/219982
+Solution:
+	- Find the executable =&gt; right click =&gt;  choose properties &gt;&gt;&gt; 
+		Compatibility tab &gt;&gt;&gt; Change settings for all Users 
+	- Faced the same issue recently and "Run as Administrator" mode for PBI Desktop resolves the issue. 
+
+2] -------------------------------------------------------
+Error when trying to DirectQuery to SQL server:
+
+"Alternate credentials for Windows authentication is not supported in DirectQuery mode. 
+	Use your current windows credentials, 
+	supply a database credential or switch to import mode."
+
+Solution:
+ go to File-&gt;Options and settings-&gt;Data source settings, 
+ then edit your data source [Edit Permissions...]
+ and specify a valid Windows credential or database credential. 
+ 
+ After that, click "Refresh" button in the PBIX file.
+ </Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWER_BI</Category>
+        <Language>TEXT</Language>
+        <Public>false</Public>
+        <Name>from_SQl_Stored_Procedure</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWER_BI</Category>
+          <Language>TEXT</Language>
+          <Public>false</Public>
+          <Name>from_SQl_Stored_Procedure</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+https://community.powerbi.com/t5/Desktop/Use-SQL-Store-Procedure-in-Power-BI/td-p/20269
+-----------------------------------------------------------------------------------------
+
+Try again using Import mode or just use a SELECT statement directly.
+-----------------------------------------------------
+
+you can use openquery. Follwoing syntax will work with both import data and direct query
+ 
+
+SELECT *
+FROM OPENQUERY ([server name],
+'EXEC dbname.dbo.spname @parametername = ''R1''');
+
+
+-------------------------------------
+OPENQUERY OPTION and I am now getting the below message:
+ 
+Details: "Microsoft SQL: Server 'sv375002\lt1201' is not configured for DATA ACCESS."
+ 
+You would need to enable direct access on your SQL Server. You can check what it is currently set at by running this:
+
+select server_id, name, is_data_access_enabled from sys.servers
+
+But I would definitely check with your DB team (if you aren't) before switching anything.
+To enable you would execute EXEC sp_serveroption '&lt;Your ServerName&gt;', 'DATA ACCESS', TRUE
+
+--------------------------------------------------------------------------------------------
+
+ have discovered that you don't need to change any database settings or use OpenQuery. If you wrap your stored procedure in a variable you can import the data using a sproc (Doesn't work in Direct Query, only import)
+ 
+example:
+ 
+DECLARE @sqlCommand varchar(1000)
+SET @sqlCommand = 'dbo.Testproc'
+EXEC (@sqlCommand)
+
+--Example w/ Parms:
+
+DECLARE @sqlCommand varchar(1000)
+SET @sqlCommand = 'dbo.MyRNorm 100,25,11'
+EXEC (@sqlCommand)</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWER_BI</Category>
+        <Language>TEXT</Language>
+        <Public>false</Public>
+        <Name>Theme_seeWhat_is_beingUsed</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWER_BI</Category>
+          <Language>TEXT</Language>
+          <Public>false</Public>
+          <Name>Theme_seeWhat_is_beingUsed</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>when you import the theme file, 
+this file will be imported into pbix file.and this list of Built-in report themes are also be updated in September 2018.
+
+So you could try this way to see the theme being used:
+
+save the pbix file and then rename the .pbix file to a .zip file, 
+extract it to a local folder, 
+and then check the file path Report\StaticResources\SharedResources
+
+Importing Report Themes
+To import a custom Report Theme, select the Switch Theme button from the Home ribbon. Then select Import Theme from the drop-down menu.
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>ReSharper</Category>
+        <Language>TEXT</Language>
+        <Public>false</Public>
+        <Name>Method_Signature</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>ReSharper</Category>
+          <Language>TEXT</Language>
+          <Public>false</Public>
+          <Name>Method_Signature</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+
+C# 
+   
+To learn about available method signatures, place the caret between parentheses of a method call and press Ctrl+P.  
+
+To switch between signatures and their descriptions, press Ctrl+P or Ctrl+Shift+P. 
+ 
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>SQLCMD</Category>
+        <Language>TEXT</Language>
+        <Public>false</Public>
+        <Name>ReadMe_SQLCMD</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>SQLCMD</Category>
+          <Language>TEXT</Language>
+          <Public>false</Public>
+          <Name>ReadMe_SQLCMD</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>ReadMe_SQLCMD
+
+open cmd 
+C:\Users\ggarson&gt;
+
+C:\Users\ggarson&gt; sqlcmd -S SQL-SERVER\PRODUCTION
+1&gt; 
+
+///////////////////////////////////
+
+
+{this does a CHECKDB and outputs the results to a text file
+C:\Users\ggarson&gt; sqlcmd -S SQL-SERVER\PRODUCTION -Q"DBCC CHECKDB (master) WITH ALL_ERRORMSGS, NO_INFOMSGS" -oC:\errorlist.txt
+
+
+///////////////////////////////////
+
+sqlcmd {switches are case senstive}
+   -a packet_size
+   -A (dedicated administrator connection)
+   -b (terminate batch job if there is an error)
+   -c batch_terminator
+   -C (trust the server certificate)
+   -d db_name	{this is the default to use for our commands}
+   -e (echo input)
+   -E (use trusted connection)
+   -f codepage | i:codepage[,o:codepage] | o:codepage[,i:codepage]
+   -h rows_per_header
+   -H workstation_name	{name of the machine that has the instance of SQL Server on it}
+   -i input_file
+   -I (enable quoted identifiers)
+   -k[1 | 2] (remove or replace control characters)
+   -K application_intent
+   -l login_timeout
+   -L[c] (list servers, optional clean output)
+   -m error_level
+   -M multisubnet_failover
+   -N (encrypt connection)
+   -o output_file
+   -p[1] (print statistics, optional colon format)
+   -P password
+   -q "cmdline query"
+   -Q "cmdline query" (and exit)
+   -r[0 | 1] (msgs to stderr)
+   -R (use client regional settings)
+   -s col_separator
+   -S [protocol:]server[\instance_name][,port]	{this is the particular instance on the Hostname machine, e.g. dot (.) for local, 
+   			you don't need this switch for a default instance}
+   -t query_timeout
+   -u (unicode output file)
+   -U login_id
+   -v var = "value"
+   -V error_severity_level
+   -w column_width
+   -W (remove trailing spaces)
+   -x (disable variable substitution)
+   -X[1] (disable commands, startup script, environment variables and optional exit)
+   -y variable_length_type_display_width
+   -Y fixed_length_type_display_width
+   -z new_password 
+   -Z new_password (and exit)
+
+   -? (usage)
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>SSRS</Category>
+        <Language>TEXT</Language>
+        <Public>false</Public>
+        <Name>CHART_convert_mmm_To_Months_on_X_axis</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>SSRS</Category>
+          <Language>TEXT</Language>
+          <Public>false</Public>
+          <Name>CHART_convert_mmm_To_Months_on_X_axis</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>CHART_convert_mmm_To_Months_on_X_axis
+
+ISSUE:
+The X axis is coming in as strings like this: jan, feb, ..., dec
+I need them to show up in order, but they would be in alphabetic order
+
+
+1] Create Calculated field, to use as the "Category Groups" for the chart
+	Dataset =&gt; right click =&gt; calculated field properties =&gt; Fields
+		{at the bottom add a field 'm' and then for it's formula put this
+		
+Switch(Fields!RptMonth.Value = "Jan", "01/01/00”,
+            Fields!RptMonth.Value = "Feb", "02/01/00”, 
+            Fields!RptMonth.Value = "Mar", "03/01/00”, 
+            Fields!RptMonth.Value = "Apr", "04/01/00”, 
+            Fields!RptMonth.Value = "May", "05/01/00”, 
+            Fields!RptMonth.Value = "Jun", "06/01/00”, 
+            Fields!RptMonth.Value = "Jul", "07/01/00”, 
+            Fields!RptMonth.Value = "Aug", "08/01/00”, 
+            Fields!RptMonth.Value = "Sep", "09/01/00”, 
+            Fields!RptMonth.Value = "Oct", "10/01/00”, 
+            Fields!RptMonth.Value = "Nov", "11/01/00”, 
+            Fields!RptMonth.Value = "Dec", "12/01/00”)
+            
+2] x-axis =&gt; right click =&gt; Horizontal Axis Properties
 	
---Examples:
+	Axis Options {tab}
+		Axis Type: (x) Scaler (Numbers/Dates)
+		
+		Interval: 1
+		Interval Type: Months
+	Number {tab}
+		Category: Custom, Custom Format:MMM</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>SSRS</Category>
+        <Language>TEXT</Language>
+        <Public>false</Public>
+        <Name>CHART_Legend_Expresion_using_anotherField</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>SSRS</Category>
+          <Language>TEXT</Language>
+          <Public>false</Public>
+          <Name>CHART_Legend_Expresion_using_anotherField</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>=Cstr(First(Fields!Year01.Value))
 
-Select dbo.GetOffsetValue( Convert( DateTime2, '2019-01-01 13:00:00' ), 'Pacific Standard Time' ) --  -480
-Select dbo.GetOffsetValue( Convert( DateTime2, '2019-10-01 13:00:00' ), 'Pacific Standard Time' ) --  -420
 
---You can then check whether the value is -480 minutes (DST Off) or -420 minutes (DST On) and you can also use it for other purposes.</Code>
+------------------------------------------------------------------------------------------------------------------------------
+Legend Fill Color - stacked Column
+
+In your scenario, you are creating a stacked column chart, and you have specified Category Group and Series Group field for the chart.
+
+ If you want to customize each series stack color based on your
+Needs, you can open the Series Properties,
+
+Right Click the SIGMA values for the Chart Data Properties (on the right side of the chart) =&gt; Series Properties =&gt; Fill {left pane} 
+
+specify Fill color value based on the Series Groups field values. For example, in my test, Series Groups field is [SalesTerritoryRegion], we can specify the stack which displays “Germany” region as red color, and other stacks display color automatically like below:
+
+
+Of course, you can specify fill color for more stacks with IIF() or Switch() function.
+
+= Switch(Fields!YaxisLabels.Value = "Electric", "MedBlue",
+            Fields!YaxisLabels.Value = "Paper", "Green", 
+            Fields!YaxisLabels.Value = "Walk-in", "Red", 
+            Fields!YaxisLabels.Value = "Other", "Brown")
+
+Or you can return one extra column which represents colors in dataset data, then specify the stacks color using this column field directly without specifying expression.
+
+= Switch(Fields!YaxisLabels.Value = "Electric", "#5F9BD3",
+            Fields!YaxisLabels.Value = "Paper", "#00B350", 
+            Fields!YaxisLabels.Value = "Walk-in", "Red", 
+            Fields!YaxisLabels.Value = "Other", "#E77D32")
+------------------------------------------------------------------------------------------------------------------------------</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>SSRS</Category>
+        <Language>TEXT</Language>
+        <Public>false</Public>
+        <Name>ConditionalFormating_Font_Fill_Background_etc</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>SSRS</Category>
+          <Language>TEXT</Language>
+          <Public>false</Public>
+          <Name>ConditionalFormating_Font_Fill_Background_etc</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+Switch(Fields!Reason.Value = 1, "A", Fields!Reason.Value = 2, "H", Fields!Reason.Value = 3, "B",
+Fields!Reason.Value = 4, "C", Fields!Reason.Value = 5, "D", Fields!Reason.Value = 6, "E", True, "")
+
+Switch(Fields!TT_5_indicator.Value = 0, "White", Fields!TT_5_indicator.Value = 1, "Green", Fields!TT_5_indicator.Value = 2, "Yellow",Fields!TT_5_indicator.Value = 3, "Red")
+
+
+Select the field value on the design surface, such that the whole cell is selected (NOT when just the field name is dark-blue selected)
+=&gt; Right click =&gt; Text Box Properties =&gt; then select 
+a) Fill{left tab} =&gt; Expression {under 'Fill Color'}
+OR
+b) Font{left tab} =&gt; Color {Fx under the size text box}
+//////////////Simple /////////////////////////////////////
+
+Fill
+=IIf(((TRIM(Fields!EmployeeStatus.Value)="Complete") and (TRIM(Fields!CompanyPolicy.Value)="Required") OR (TRIM(Fields!CompanyPolicy.Value)="Optional")),"White","Yellow")
+
+Font color
+=IIf(((TRIM(Fields!EmployeeStatus.Value)="Complete") and (TRIM(Fields!CompanyPolicy.Value)="Required") OR (TRIM(Fields!CompanyPolicy.Value)="Optional")),"Black","Red")
+
+Bold
+=IIf(((TRIM(Fields!EmployeeStatus.Value)="Complete") and (TRIM(Fields!CompanyPolicy.Value)="Required") OR (TRIM(Fields!CompanyPolicy.Value)="Optional")),"Default","Bold")
+
+
+////////////three levels, sub-IIF statement //////////////
+
+=IIf(((TRIM(Fields!Status.Value)="Approved_By_Accounting")),"White",IIf(((TRIM(Fields!Status.Value)="Approved_By_Supervisor")),"Yellow","Orange"))
+
+
+//////////////alternative Simple /////////////////////////////////////
+
+Fill
+=IIf(((TRIM(Fields!EmployeeStatus_Training.Value)="Incomplete") and (TRIM(Fields!CompanyPolicy_Training.Value)="Required") OR (TRIM(Fields!CompanyPolicy_Training.Value)="Mandatory_All_Employees")),"Yellow","White")
+
+Font color
+=IIf(((TRIM(Fields!EmployeeStatus_Training.Value)="Incomplete") and (TRIM(Fields!CompanyPolicy_Training.Value)="Required") OR (TRIM(Fields!CompanyPolicy_Training.Value)="Mandatory_All_Employees")),"Red","Black")
+
+
+//////////////- Ok, Expired, Will Expire /////////////////////////////////////
+
+FONT:
+=IIf(  TRIM(Fields!Gen__Liab__Status.Value)="Will EXPIRE" ,"Red","Black")
+
+FILL:
+=IIf(((TRIM(Fields!Gen__Liab__Status.Value)="EXPIRED") OR (TRIM(Fields!Gen__Liab__Status.Value)="Will EXPIRE") ),"Yellow","White")
+
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+using colors:
+=IIf(  (Sum(Fields!KPI_sp_1.Value, "Main") &lt; Sum(Fields!KPI_sp_1_GOAL.Value, "Main")) ,"#f7d5ff","#dcffe3")
+
+0 to goal is one color, above goal up to 1.00 is one color, over 1 is Yellow
+=IIf(  (Sum(Fields!KPI_sp_1.Value, "Main") &lt; Sum(Fields!KPI_sp_1_GOAL.Value, "Main")) ,"#f7d5ff",IIf( (Sum(Fields!KPI_sp_1.Value, "Main")&gt;1), "Yellow","#dcffe3")  )
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+WHITE if null, Green if below the GrandTotal, Red if above the GrandTotal
+=IIf( IsNothing(Fields!AVG_TT_byDecisionLO.Value),"White",IIf(   Fields!AVG_TT_byDecisionLO.Value &gt; Fields!AVG_TT__forGRANDtotals.Value,"Red","Green"))</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>SSRS</Category>
+        <Language>TEXT</Language>
+        <Public>false</Public>
+        <Name>Highlight_BackGround_Font_SWITCH</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>SSRS</Category>
+          <Language>TEXT</Language>
+          <Public>false</Public>
+          <Name>Highlight_BackGround_Font_SWITCH</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>FILL
+===========
+
+=Switch(
+     Fields!Wave_Shantini.Value = 0, "Red",
+     Fields!Wave_Shantini.Value = 1, "Orange",
+     Fields!Wave_Shantini.Value = 2, "Yellow",
+     Fields!Wave_Shantini.Value = 3, "Green",
+     Fields!Wave_Shantini.Value = 4, "Blue",
+     Fields!Wave_Shantini.Value = 5, "Purple"
+	) 
+
+Font Color
+==========
+
+=Switch(
+     Fields!Wave_Shantini.Value = 0, "White",
+     Fields!Wave_Shantini.Value = 1, "Black",
+     Fields!Wave_Shantini.Value = 2, "Black",
+     Fields!Wave_Shantini.Value = 3, "White",
+     Fields!Wave_Shantini.Value = 4, "White",
+     Fields!Wave_Shantini.Value = 5, "White"
+	) </Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>SSRS</Category>
+        <Language>TEXT</Language>
+        <Public>false</Public>
+        <Name>HyperLink_To_The_Report_in_TABLE_of_CONTENTS</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>SSRS</Category>
+          <Language>TEXT</Language>
+          <Public>false</Public>
+          <Name>HyperLink_To_The_Report_in_TABLE_of_CONTENTS</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>HyperLink_To_The_Report_in_TABLE_of_CONTENTS
+
+NOTE: 
+1] The stuff on this page is for the expression
+2] On the General Tab of the Placeholder: (x) HTML - Interpret HTML tags as styles
+3] Action tab of the Placeholder: (x) None
+4] On the Action Tab of the Text Box: 
+	(x) Go to URL
+	in the SELECT URL: text box put the field which has the URI
+	
+#########################################################################--- BROWSER and URI for files
+Both work in IE, but neither works in Chrome
+
+file://cbtbrfs02/Credit/Credit%20Risk/_Modules/DataGovernance_DoNotEdit/test.sql
+
+file:\\cbtbrfs02\Credit\Credit%20Risk\_Modules\DataGovernance_DoNotEdit\test.sql
+	
+#########################################################################################################
+
+&lt;a href="""  + Fields!Report_Hyperlink.Value+ "" "&gt;
+External Link
+&lt;/a&gt;
+
+
+---------------------------------------------
+
+="&lt;a href="""  + Fields!Report_Hyperlink.Value+ """&gt; CLICK &lt;/a&gt;"
+
+--Show the hyperlink if it is there, otherwise just a dot
+=IIf( Len(Fields!Report_Hyperlink.Value)&gt; 0, "&lt;a href="""  + Fields!Report_Hyperlink.Value + """&gt; CLICK &lt;/a&gt;", ".")
+
+
+=IIf( Len(Fields!Report_Hyperlink.Value)&gt; 0, "&lt;a href="""  + Fields!Report_Hyperlink.Value + """ target= """  + "blank" + """&gt; CLICK &lt;/a&gt;", ".")
+
+="&lt;a href="""  + Fields!Report_Hyperlink.Value + """ target= """  + "blank" + """&gt; " + Fields!SSRS_BirdCrumbPath.Value + " &lt;/a&gt;"
+
+
+
+---------------------------------------------TARGET = BLANK is not working yet
+
+="&lt;a href="""  + Fields!Report_Hyperlink.Value + """&gt; External Link &lt;/a&gt;"
+
+=IIf( Len(Fields!Report_Hyperlink.Value)&gt; 0, "&lt;a href="""  + Fields!Report_Hyperlink.Value + """&gt; CLICK &lt;/a&gt;", ".")
+
+=Switch(Fields!State.Value = "OR","Oregon",Fields!State.Value = "WA","Washington")
+=Switch(Fields!FirstName.Value = "Sue","Susan",Fields!FirstName.Value = "Bob","Robert")
+
+
+=IIf( Len(Fields!Report_Hyperlink.Value)&gt; 0, "&lt;a href="""  + Fields!Report_Hyperlink.Value + """&gt; CLICK &lt;/a&gt;", ".")
+
+=IIf( Len(Fields!Report_Hyperlink.Value)&gt; 0, "&lt;a href="""  + Fields!Report_Hyperlink.Value + """ target= """  + "blank" + """&gt; CLICK &lt;/a&gt;", ".")
+
+=IIf( 
+      (Len(Fields!Report_Hyperlink.Value)&gt; 0) AND (Len(Fields!SSRS_BirdCrumbPath.Value)&gt; 0) 
+      , 
+      "&lt;a href="""  + Fields!Report_Hyperlink.Value + """ target= """  + "blank" + """&gt; " + Fields!SSRS_BirdCrumbPath.Value + " &lt;/a&gt;"
+      , 
+      "."
+    )
+
+
+=IIf( 
+      (Len(Fields!Report_Hyperlink.Value)&gt; 0) AND (Len(Fields!SSRS_BirdCrumbPath.Value)&gt; 0) 
+      , 
+      "&lt;a href="""  + Fields!Report_Hyperlink.Value + """ target= """  + "blank" + """&gt; " + Fields!SSRS_BirdCrumbPath.Value + " &lt;/a&gt;"
+      , 
+      IIf( 
+           (Len(Fields!Report_Hyperlink.Value)&gt; 0) AND (Len(Fields!SSRS_BirdCrumbPath.Value) = 0) 
+      	   , 
+           "&lt;a href="""  + Fields!Report_Hyperlink.Value + """ target= """  + "blank" + """&gt; CLICK &lt;/a&gt;"
+	   ,
+      	   IIf( 
+           	(Len(Fields!Report_Hyperlink.Value) = 0) AND (Len(Fields!SSRS_BirdCrumbPath.Value) &gt; 0) 
+      	   	, 
+           	Fields!SSRS_BirdCrumbPath.Value
+	   	,
+		"."
+	      )
+	 )
+    )
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>SSRS</Category>
+        <Language>TEXT</Language>
+        <Public>false</Public>
+        <Name>SWITCH_Format</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>SSRS</Category>
+          <Language>TEXT</Language>
+          <Public>false</Public>
+          <Name>SWITCH_Format</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>FILL
+===========
+
+=Switch(
+     Fields!Wave_Shantini.Value = 0, "Red",
+     Fields!Wave_Shantini.Value = 1, "Orange",
+     Fields!Wave_Shantini.Value = 2, "Yellow",
+     Fields!Wave_Shantini.Value = 3, "Green",
+     Fields!Wave_Shantini.Value = 4, "Blue",
+     Fields!Wave_Shantini.Value = 5, "Purple"
+	) 
+
+Font Color
+==========
+
+=Switch(
+     Fields!Wave_Shantini.Value = 0, "White",
+     Fields!Wave_Shantini.Value = 1, "Black",
+     Fields!Wave_Shantini.Value = 2, "Black",
+     Fields!Wave_Shantini.Value = 3, "White",
+     Fields!Wave_Shantini.Value = 4, "White",
+     Fields!Wave_Shantini.Value = 5, "White"
+	) 
+	
+--============================================================
+to get an ELSE, just set it equal to itself when it not either of the first two choices
+
+	=Switch(
+     Fields!RptMonth.Value = "01/01/2040", "Variance MoM",
+     Fields!RptMonth.Value = "02/01/2040", "Variance YoY",
+     Fields!RptMonth.Value = Fields!RptMonth.Value, Fields!RptMonth.Value
+	) 
+	
+-------------
+
+=Switch(
+     Fields!Yaxis1Labels.Value = "Payment", "#5F9BD3",
+     Fields!Yaxis1Labels.Value = "Warranty", "#ED7D31",
+     Fields!Yaxis1Labels.Value = "Bankruptcy", "#A6A6A6",
+     Fields!Yaxis1Labels.Value = "GAP Refund", "#C20000",
+     Fields!Yaxis1Labels.Value = "GAP Claim", "#FFBF00",
+     Fields!Yaxis1Labels.Value = "Third Party", "#91D449",
+     Fields!Yaxis1Labels.Value = "Ins Claim", "#883A06",
+     Fields!Yaxis1Labels.Value = "Other", "#000000"
+	) 
+	
+--------------ELSE using dates
+
+	=Switch(
+     Fields!RptMonth.Value = "01/01/2040", "Variance MoM",
+     Fields!RptMonth.Value = "02/01/2040", "Variance YoY",
+     Fields!RptMonth.Value = Fields!RptMonth.Value, Fields!RptMonth.Value
+	) 
+	
+------------------------ Order for months
+=Switch(
+     Fields!RptMonth.Value = "Jan", 1,
+     Fields!RptMonth.Value = "Feb", 2,
+     Fields!RptMonth.Value = "Mar", 3,
+     Fields!RptMonth.Value = "Apr", 4,
+     Fields!RptMonth.Value = "May", 5,
+     Fields!RptMonth.Value = "Jun", 6,
+     Fields!RptMonth.Value = "Jul", 7,
+     Fields!RptMonth.Value = "Aug", 8,
+     Fields!RptMonth.Value = "Sep", 9,
+     Fields!RptMonth.Value = "Oct", 10,
+     Fields!RptMonth.Value = "Nov", 11,
+     Fields!RptMonth.Value = "Dec", 12
+	)	</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>VS_2015_CommandLine</Category>
+        <Language>TEXT</Language>
+        <Public>false</Public>
+        <Name>about_VS_2015_CommandLine</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>VS_2015_CommandLine</Category>
+          <Language>TEXT</Language>
+          <Public>false</Public>
+          <Name>about_VS_2015_CommandLine</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>about_VS_2015_CommandLine
+
+================
+Since beta4, there have been some renames:
+
+k -&gt; dnx
+kpm -&gt; dnu
+kvm -&gt; dnvm
+====================
+
+https://chad.tolkien.id.au/asp-net-vnext-ground-up-1-simplest-possible-thing/
+
+
+There are three main commands to be aware of:
+
+K - used to bootstrap up the KRE - gets your app up and running.
+KVM - K Version Manager, for managing individual versions of the runtime.
+KPM - K Package Manager, for managing packages that your application depends upon.
+
+
+
+To get started using K, we need to first get the version manager.
+execute the following from an admin cmd {cmd.exe} prompt:
+
+
+&gt; @powershell -NoProfile -ExecutionPolicy unrestricted -Command "iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/aspnet/Home/master/kvminstall.ps1'))"
+
+
+Once kvm is installed we can use this to install the K runtime itself.
+a) restart VS 2015
+b) then run from the Package Manager Console
+
+&gt; kvm install latest -p 
+
+
+The -p switch will persist this version of the runtime to your path.</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>VS_Code</Category>
+        <Language>TEXT</Language>
+        <Public>false</Public>
+        <Name>Preference_Multiple_Consoles</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>VS_Code</Category>
+          <Language>TEXT</Language>
+          <Public>false</Public>
+          <Name>Preference_Multiple_Consoles</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>https://4sysops.com/archives/vscode-as-a-console-for-powershell-core-6-part-1-multiple-shells/
+
+
+Use the Shell Launcher addin to easily launch multiple shell configurations in the terminal.
+https://marketplace.visualstudio.com/items?itemName=Tyriar.shell-launcher
+
+To install Shell Launcher, click the extension icon in the left navigation bar and then type "shell launcher."
+
+
+Next, open the user settings again to add the lines below:
+
+=============================================================================
+"shellLauncher.shells.windows": [
+    {
+        "shell": "C:\\Windows\\system32\\cmd.exe",
+        "label": "cmd"
+    },
+    {
+        "shell": "C:\\Windows\\system32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "label": "PowerShell 5.1"
+    },
+    {
+        "shell": "C:\\Program Files\\PowerShell\\6.0.1\\pwsh.exe",
+        "label": "PowerShell 6.0"       
+    },
+    {
+        "shell": "C:\\Program Files\\Git\\bin\\bash.exe",
+        "label": "Git bash"
+    },
+ 
+],
+=============================================================================
+You now have to click the Reload button.
+
+Note that the exact locations may vary depending on your operating system and shell version. 
+If you want, you can remove the line we added above to set PowerShell 6 as the default shell. 
+That way, PowerShell 5.1 will be your default shell (not really the recommended option).
+
+To launch one of the new integrated consoles, 
+	open the Command Palette in the View menu or press Ctrl+Shift+P. 
+Then start typing "shell launcher" and select the extension. 
+You should now see the new shells.
+
+Select the shell you want to work with and hit Enter.
+
+Once you start a new shell this way, it will stay open until you close VSCode. 
+You can switch between shells in the Terminal tab as shown in the screenshot below.
+
+You can also work with multiple consoles of the same shell by clicking the + icon.
+
+You might feel always going through the Command Palette is too longwinded 
+	to start a new shell in the Terminal tab. If so, you can assign a keyboard shortcut to Shell Launcher. 
+Navigate to the Keyboard Shortcuts (File &gt; Preferences) and start typing "shell launcher."
+Then double-click the extension and assign your shortcut (for instance, Ctrl+Shift+T).</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>Windows_10</Category>
+        <Language>TEXT</Language>
+        <Public>false</Public>
+        <Name>disable_WebSearch_for_Cortana</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>Windows_10</Category>
+          <Language>TEXT</Language>
+          <Public>false</Public>
+          <Name>disable_WebSearch_for_Cortana</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>http://www.ghacks.net/2015/06/23/how-to-disable-web-search-in-windows-10s-start-menu/
+
+-To open the Group Policy Editor, tap on the Windows-key, type gpedit.msc and hit enter. 
+	Note that the editor is (likely) only included in Pro and Enterprise versions and not in Windows 10 Home.
+	If you run home, check out the other methods listed below instead.
+- Browse to the following path using the left sidebar: 
+	Local Computer Policy &gt; Computer Configuration &gt; Administrative Templates &gt; Windows Components &gt; Search
+- Locate "Do not allow web search" and double-click it. Switch the preference to enabled.
+- Locate "Don't search the web or display web results in Search and double-click it. 
+	Switch the preference to enabled.
+- Locate "Don't search the web or display web results in Search over metered connections" and double-click it. 
+	Switch the preference to enabled.</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>Windows_10</Category>
+        <Language>TEXT</Language>
+        <Public>false</Public>
+        <Name>Disable_Windows_Defender</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>Windows_10</Category>
+          <Language>TEXT</Language>
+          <Public>false</Public>
+          <Name>Disable_Windows_Defender</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>Click on the Search Windows icon next to the Start Menu icon and type defender.
+When the Windows Defender windows pops up, click on Settings.
+
+
+You should now see the following Windows Defender settings window.
+Switch off the “Real-time protection option” option by clicking on the on-off toggle.
+Switch off the “Cloud-based Protection” option by clicking on the on-off toggle.
+Close the settings window.
+The windows Defender app window should now appear in red.
+
+
+Now it is time to turn Windows Defender back on.
+Once again open Windows Defender, and click on the settings button.
+This time switch both real-time and cloud-based protection to on.
+The windows Defender app window should now appear in green.</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>Windows_10</Category>
+        <Language>TEXT</Language>
+        <Public>false</Public>
+        <Name>Unpin_Apps_from_START</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>Windows_10</Category>
+          <Language>TEXT</Language>
+          <Public>false</Public>
+          <Name>Unpin_Apps_from_START</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>#'https://www.tenforums.com/customization/21002-how-automatically-cmd-powershell-script-unpin-all-apps-start.html
+
+function Pin-App { param(
+[string]$appname,
+[switch]$unpin
+)
+try{
+if ($unpin.IsPresent){
+((New-Object -Com Shell.Application).NameSpace('shell:::{4234d49b-0245-4df3-b780-3893943456e1}').Items() | ?{$_.Name -eq $appname}).Verbs() | ?{$_.Name.replace('&amp;','') -match 'From "Start" UnPin|Unpin from Start'} | %{$_.DoIt()}
+return "App '$appname' unpinned from Start"
+}else{
+((New-Object -Com Shell.Application).NameSpace('shell:::{4234d49b-0245-4df3-b780-3893943456e1}').Items() | ?{$_.Name -eq $appname}).Verbs() | ?{$_.Name.replace('&amp;','') -match 'To "Start" Pin|Pin to Start'} | %{$_.DoIt()}
+return "App '$appname' pinned to Start"
+}
+}catch{
+Write-Error "Error Pinning/Unpinning App! (App-Name correct?)"
+}
+}
+
+Pin-App "Mail" -unpin
+Pin-App "Store" -unpin
+Pin-App "Calendar" -unpin
+Pin-App "Microsoft Edge" -unpin
+Pin-App "Photos" -unpin
+Pin-App "Cortana" -unpin
+Pin-App "Weather" -unpin
+Pin-App "Phone Companion" -unpin
+Pin-App "Music" -unpin
+Pin-App "xbox" -unpin
+Pin-App "movies &amp; tv" -unpin
+Pin-App "microsoft solitaire collection" -unpin
+Pin-App "money" -unpin
+Pin-App "get office" -unpin
+Pin-App "onenote" -unpin
+Pin-App "news" -unpin
+Pin-App "Mail" -unpin
+Pin-App "Store" -unpin
+Pin-App "Calendar" -unpin
+Pin-App "Microsoft Edge" -unpin
+Pin-App "Photos" -unpin
+Pin-App "Cortana" -unpin
+Pin-App "Weather" -unpin
+Pin-App "Phone Companion" -unpin
+Pin-App "Music" -unpin
+Pin-App "xbox" -unpin
+Pin-App "movies &amp; tv" -unpin
+Pin-App "microsoft solitaire collection" -unpin
+Pin-App "money" -unpin
+Pin-App "get office" -unpin
+Pin-App "onenote" -unpin
+Pin-App "news" -unpin
+
+Pin-App "Groove Music" -unpin
+Pin-App "Calculator" -unpin
+Pin-App "Sway" -unpin
+Pin-App "Pandora" -unpin
+Pin-App "Skype Preview" -unpin</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>Windows_7</Category>
+        <Language>TEXT</Language>
+        <Public>false</Public>
+        <Name>ODBC_UDL_to_see_installed_Providers</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>Windows_7</Category>
+          <Language>TEXT</Language>
+          <Public>false</Public>
+          <Name>ODBC_UDL_to_see_installed_Providers</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+
+
+https://blogs.msdn.microsoft.com/farukcelik/2007/12/31/basics-first-udl-test/
+
+32bit providers on a 32 bit machine
+====================================
+1) Create a new empty text file like “test.txt” (For example, right mouse click on an empty place on your desktop, select “New” and “Text Document”)
+
+2) Rename the file as “test.udl“
+
+  As soon as you renamed the file, text file icon  should change to a UDL icon 
+
+3) Double click on test.udl file and you’ll receive a window titled “Data Link Properties“
+
+You’ll get all the installed OLE DB Providers on the box when you’ve switched to the Provider tab. 
+	If the OLE DB Provider for the database/datasource you’re interested in is in the list, 
+	select the OLE DB Provider and click on “Next“and you’ll switch to “Connection” tab and will be ready to play with the OLE DB Provider. 
+	The rest depends on the OLE DB Provider you selected.
+	
+32bit providers on a 64bit machine
+==================================
+But one day, you followed the same procedure on a 64 bit machine and couldn’t see the OLE DB Providers though you’re sure that it’s been installed. 
+There must be something wrong then ?
+
+The reason behind for this is simple. When you double clicked on a UDL file on a 64 bit machine, 
+it’ll enumerate only the 64 bit OLE DB Providers and most probably you’ve installed a 32 bit OLE DB Provider.
+
+So then, there should be a way of making UDL Test using the 32 bit OLE DB Providers on a 64 bit machine.
+
+Actually when you’ve created a UDL file on a 64 bit machine and double clicked on it,
+
+“C:\Program Files\Common Files\System\Ole DB\oledb32.dll”,OpenDSLFile  C:\test.udl
+
+command will be called through C:\windows\system32\rundll32.exe
+
+Both binaries (oledb32.dll and rundll32.exe) used here are 64 bit and 64 bit oledb32.dll does not deal with 32 bit OLE DB Providers.
+
+Since we already have 32 bit versions of those oledb32.dll and rundll32.exe in other folders on our 64 bit machines, 
+we need to use them. Therefore, instead of double clicking on the UDL file, we’ll need to  execute the command below from a command line or Start/Run :
+
+C:\Windows\syswow64\rundll32.exe “C:\Program Files (x86)\Common Files\System\Ole DB\oledb32.dll”,OpenDSLFile C:\test.udl</Code>
       </SnippetValue>
     </value>
   </item>
