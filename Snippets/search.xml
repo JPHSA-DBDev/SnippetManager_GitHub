@@ -3,53 +3,390 @@
   <item>
     <key>
       <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>Functions</Category>
+        <Category>SSRS</Category>
         <Language>SQLSERVER2K SQL</Language>
         <Public>false</Public>
-        <Name>IFF_true_false</Name>
+        <Name>01_SSRS_Logging___SP__Search_by_Page</Name>
         <Group>My Snippets</Group>
       </SnippetKey>
     </key>
     <value>
       <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
         <Key>
-          <Category>Functions</Category>
+          <Category>SSRS</Category>
           <Language>SQLSERVER2K SQL</Language>
           <Public>false</Public>
-          <Name>IFF_true_false</Name>
+          <Name>01_SSRS_Logging___SP__Search_by_Page</Name>
           <Group>My Snippets</Group>
         </Key>
         <Keywords />
         <Imports />
-        <Code>DECLARE @a int = 45, @b int = 40;
-SELECT IIF ( @a &gt; @b, 'TRUE', 'FALSE' ) AS Result;</Code>
+        <Code>-- prj_0017_SP_202_Usage_SearchByPage.sql
+
+
+use ReportServer
+go
+
+
+alter Procedure prj_0017_SP_202_Usage_SearchByPage(
+	@BeginDate as date,
+	@EndDate as date,
+	@SearchString as NVARCHAR(25)
+	)
+
+	as
+	
+-- START DEBUGGING SECTION -------------------	
+	
+
+	PRINT 'Input @BeginDate: ' + LEFT(CONVERT(VARCHAR, @BeginDate, 120), 10) 
+	PRINT 'Input @EndDate: ' + LEFT(CONVERT(VARCHAR, @EndDate, 120), 10)
+	PRINT '1] Input @SearchString: [' + @SearchString + ']'
+	
+	-- Get rid of any spaces the user may have left in there:
+	select @SearchString = LTRIM(RTRIM(@SearchString))
+	PRINT '2] Input @SearchString: [' + @SearchString + ']'
+-- END DEBUGGING SECTION -------------------	
+
+
+
+IF LEN(@SearchString) &gt; 0 
+		BEGIN
+
+		--========================================================================
+
+			SELECT 
+				[UserName]
+				,[ItemPath]
+				,[Format]
+				,[Parameters]
+				,[ItemAction]
+				,[TimeStart]
+				,[Status]
+				,[RowCount]
+				,[Name] as [NameOfReport]
+				,[CreationDate]
+				,[ModifiedDate]
+
+			FROM [ReportServer].[dbo].[vw_ExecutionLog3_Modified_1]
+			WHERE 
+			  (		
+					(
+							([ItemPath] like '%' +  @SearchString + '%') 	
+					)	
+					AND
+					(
+						([TimeStart] &gt;= @BeginDate)
+						AND
+						([TimeStart] &lt;=  DATEADD(dd, 1, @EndDate))
+					)									
+					
+			   ) 
+			order by timestart desc
+			
+			print 'LEN(@SearchString) &gt; 0'
+		--========================================================================
+		END
+ELSE
+		BEGIN
+
+		--========================================================================
+
+			SELECT 
+				[UserName]
+				,[ItemPath]
+				,[Format]
+				,[Parameters]
+				,[ItemAction]
+				,[TimeStart]
+				,[Status]
+				,[RowCount]
+				,[Name] as [NameOfReport]
+				,[CreationDate]
+				,[ModifiedDate]
+
+			FROM [ReportServer].[dbo].[vw_ExecutionLog3_Modified_1]
+			WHERE 
+			  (		
+					(
+						([TimeStart] &gt;= @BeginDate)
+						AND
+						([TimeStart] &lt;=  DATEADD(dd, 1, @EndDate))
+					)									
+					
+			   ) 
+			order by timestart desc 
+			
+			
+			print 'NOT: LEN(@SearchString) &gt; 0'
+		--========================================================================
+		END		
+GO
+</Code>
       </SnippetValue>
     </value>
   </item>
   <item>
     <key>
       <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>LOOPS_and_LOGIC_statements</Category>
+        <Category>SSRS</Category>
         <Language>SQLSERVER2K SQL</Language>
         <Public>false</Public>
-        <Name>IIF</Name>
+        <Name>01_SSRS_Logging___SP__Search_by_User</Name>
         <Group>My Snippets</Group>
       </SnippetKey>
     </key>
     <value>
       <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
         <Key>
-          <Category>LOOPS_and_LOGIC_statements</Category>
+          <Category>SSRS</Category>
           <Language>SQLSERVER2K SQL</Language>
           <Public>false</Public>
-          <Name>IIF</Name>
+          <Name>01_SSRS_Logging___SP__Search_by_User</Name>
           <Group>My Snippets</Group>
         </Key>
         <Keywords />
         <Imports />
-        <Code>--Returns one of two values, depending on whether the Boolean expression evaluates to true or false in SQL Server.
+        <Code>01_SSRS_Logging___SP__Search_by_User
 
-IIF ( boolean_expression, true_value, false_value )</Code>
+////////////////TEST
+
+-- prj_8014_SP_901_Usage_SearchByUser_TEST.sql
+
+
+use ReportServer$PRODUCTION
+go
+
+
+
+EXEC prj_0017_SP_201_Usage_SearchByUser
+	@BeginDate = '9/28/2012'
+	,@EndDate = '9/28/2012'
+	,@SearchString = ' '
+
+
+
+/////////////////////////////////////////////////////////////////////////////////
+
+
+-- prj_0017_SP_201_Usage_SearchByUser.sql
+
+
+use ReportServer
+go
+
+
+create Procedure prj_0017_SP_201_Usage_SearchByUser(
+	@BeginDate as date,
+	@EndDate as date,
+	@SearchString as NVARCHAR(25)
+	)
+
+	as
+	
+-- START DEBUGGING SECTION -------------------	
+	
+
+	PRINT 'Input @BeginDate: ' + LEFT(CONVERT(VARCHAR, @BeginDate, 120), 10) 
+	PRINT 'Input @EndDate: ' + LEFT(CONVERT(VARCHAR, @EndDate, 120), 10)
+	PRINT '1] Input @SearchString: [' + @SearchString + ']'
+	
+	-- Get rid of any spaces the user may have left in there:
+	select @SearchString = LTRIM(RTRIM(@SearchString))
+	PRINT '2] Input @SearchString: [' + @SearchString + ']'
+-- END DEBUGGING SECTION -------------------	
+
+
+
+IF LEN(@SearchString) &gt; 0 
+		BEGIN
+
+		--========================================================================
+
+			SELECT 
+				[UserName]
+				,[ItemPath]
+				,[Format]
+				,[Parameters]
+				,[ItemAction]
+				,[TimeStart]
+				,[Status]
+				,[RowCount]
+				,[Name] as [NameOfReport]
+				,[CreationDate]
+				,[ModifiedDate]
+
+			FROM [ReportServer].[dbo].[vw_ExecutionLog3_Modified_1]
+			WHERE 
+			  (		
+					(
+							([UserName] like '%' +  @SearchString + '%') 	
+					)	
+					AND
+					(
+						([TimeStart] &gt;= @BeginDate)
+						AND
+						([TimeStart] &lt;=  DATEADD(dd, 1, @EndDate))
+					)									
+					
+			   ) 
+			order by timestart desc
+			
+			print 'LEN(@SearchString) &gt; 0'
+		--========================================================================
+		END
+ELSE
+		BEGIN
+
+		--========================================================================
+
+			SELECT 
+				[UserName]
+				,[ItemPath]
+				,[Format]
+				,[Parameters]
+				,[ItemAction]
+				,[TimeStart]
+				,[Status]
+				,[RowCount]
+				,[Name] as [NameOfReport]
+				,[CreationDate]
+				,[ModifiedDate]
+
+			FROM [ReportServer].[dbo].[vw_ExecutionLog3_Modified_1]
+			WHERE 
+			  (		
+					(
+						([TimeStart] &gt;= @BeginDate)
+						AND
+						([TimeStart] &lt;=  DATEADD(dd, 1, @EndDate))
+					)									
+					
+			   ) 
+			order by timestart desc 
+			
+			
+			print 'NOT: LEN(@SearchString) &gt; 0'
+		--========================================================================
+		END		
+GO
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>SSRS</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>01_SSRS_Logging___VIEW</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>SSRS</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>01_SSRS_Logging___VIEW</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>01_SSRS_Logging___VIEW
+
+-- prj_8017_vw_501_ExecutionLog3_Modified_1.sql
+/*
+FROM: http://www.mssqltips.com/sqlservertip/2722/sql-server-report-server-2008-r2-execution-log-reports/
+
+*/
+use ReportServer
+go
+
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE VIEW [dbo].[vw_ExecutionLog3_Modified_1]
+AS
+
+SELECT 
+EL.InstanceName, 
+COALESCE(C.Path, 'Unknown') AS ItemPath, 
+EL.UserName,
+EL.ExecutionId, 
+CASE(EL.RequestType)
+  WHEN 0 THEN 'Interactive'
+  WHEN 1 THEN 'Subscription'
+  WHEN 2 THEN 'Refresh Cache'
+  ELSE 'Unknown'
+END AS RequestType, 
+-- SubscriptionId, 
+EL.Format, 
+Parameters, 
+CASE(EL.ReportAction) 
+  WHEN 1 THEN 'Render'
+  WHEN 2 THEN 'BookmarkNavigation'
+  WHEN 3 THEN 'DocumentMapNavigation'
+  WHEN 4 THEN 'DrillThrough'
+  WHEN 5 THEN 'FindString'
+  WHEN 6 THEN 'GetDocumentMap'
+  WHEN 7 THEN 'Toggle'
+  WHEN 8 THEN 'Sort'
+  WHEN 9 THEN 'Execute'
+  ELSE 'Unknown'
+END AS ItemAction,
+EL.TimeStart, 
+YEAR(EL.TimeStart) AS Start_Year,
+MONTH(EL.TimeStart) AS Start_Month,
+DATENAME(MONTH,EL.TimeStart) AS Start_Month_Name,
+DATENAME(DW,EL.TimeStart) AS Start_Day_Of_Week,
+DATEPART(WEEKDAY,EL.TimeStart) AS Start_Day_Number_of_Week,
+EL.TimeEnd, 
+EL.TimeDataRetrieval, 
+EL.TimeProcessing, 
+EL.TimeRendering,
+CASE(EL.Source)
+  WHEN 1 THEN 'Live'
+  WHEN 2 THEN 'Cache'
+  WHEN 3 THEN 'Snapshot' 
+  WHEN 4 THEN 'History' 
+  WHEN 5 THEN 'AdHoc'
+  WHEN 6 THEN 'Session'
+  WHEN 7 THEN 'Rdce'
+  ELSE 'Unknown'
+END AS Source,
+EL.Status,
+EL.ByteCount,
+EL.[RowCount],
+EL.AdditionalInfo,
+C.Name,
+C.CreatedByID,
+C.ModifiedByID,
+C.Description,
+C.CreationDate,
+C.ModifiedDate,
+CASE 
+  WHEN C.TYPE=1 THEN 'Folder'
+  WHEN C.TYPE=2 THEN 'Report'  
+  WHEN C.TYPE=3 THEN 'XML' 
+  WHEN C.TYPE=4 THEN 'Linked Report'
+  WHEN C.TYPE=5 THEN 'Data Source'
+  WHEN C.TYPE=6 THEN 'Model'
+  WHEN C.TYPE=8 THEN 'Shared Dataset'
+  WHEN C.TYPE=9 THEN 'Report Part'
+END AS Type_Description  
+FROM 
+  ExecutionLogStorage AS EL
+  LEFT OUTER JOIN Catalog AS C ON (EL.ReportID = C.ItemID)
+
+--ORDER BY TimeStart DESC
+GO</Code>
       </SnippetValue>
     </value>
   </item>
