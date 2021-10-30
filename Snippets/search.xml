@@ -1,2 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<dictionary />
+<dictionary>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Functions</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>Other_Functions</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Functions</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>Other_Functions</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>https://docs.microsoft.com/en-us/dax/other-functions-dax
+
+DATATABLE
+ERROR
+EXCEPT
+GENERATESERIES
+GROUPBY
+		'Create Table: Territories
+		'from list of Territories in DimDealer
+		
+		Territories = GROUPBY(DimDealer,DimDealer[xTerritory])
+
+INTERSECT
+ISEMPTY
+NATURALINNERJOIN
+NATURALLEFTOUTERJOIN
+SUMMARIZECOLUMNS
+Table Constructor (DAX)
+TREATAS
+UNION
+VAR (DAX)
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+</dictionary>
