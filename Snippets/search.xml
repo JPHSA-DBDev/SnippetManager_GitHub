@@ -3,45 +3,368 @@
   <item>
     <key>
       <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>DAX_Functions</Category>
-        <Language>VB</Language>
+        <Category>Functions</Category>
+        <Language>SQLSERVER2K SQL</Language>
         <Public>false</Public>
-        <Name>Other_Functions</Name>
+        <Name>fn_0_or_1_ItIsAChronicCondition</Name>
         <Group>My Snippets</Group>
       </SnippetKey>
     </key>
     <value>
       <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
         <Key>
-          <Category>DAX_Functions</Category>
-          <Language>VB</Language>
+          <Category>Functions</Category>
+          <Language>SQLSERVER2K SQL</Language>
           <Public>false</Public>
-          <Name>Other_Functions</Name>
+          <Name>fn_0_or_1_ItIsAChronicCondition</Name>
           <Group>My Snippets</Group>
         </Key>
         <Keywords />
         <Imports />
-        <Code>https://docs.microsoft.com/en-us/dax/other-functions-dax
+        <Code>-- fn_01_ItIsAChronicCondition.sql
+-- To Use the function:
+--  SELECT CCNCclaims.dbo.fn_0_or_1_ItIsAChronicCondition('1','49300','9') AS ONE
+-- PARMS: @ListSource_Code  = The source of the code: e.g. '1' from the QI list
+--															'2' from Linda/Uninsured
+--		  @ICD_Code_Cleaned  = The ICD code without apostrophes, or periods
+--		  @ICD_Version   = the version, e.g. '9' or '10'
 
-DATATABLE
-ERROR
-EXCEPT
-GENERATESERIES
-GROUPBY
-		'Create Table: Territories
-		'from list of Territories in DimDealer
+USE CCNCclaims
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+ALTER FUNCTION [dbo].[fn_0_or_1_ItIsAChronicCondition] 
+				( @ListSource_Code VARCHAR(2), @ICD_Code_Cleaned VARCHAR(5), @ICD_Version  VARCHAR(5) ) 
+	RETURNS BIT
+	AS
+	BEGIN
+		DECLARE @i_Count INT
+		DECLARE @b_ChronicCondition bit
 		
-		Territories = GROUPBY(DimDealer,DimDealer[xTerritory])
+		SET @i_Count= (
+						SELECT COUNT(*) 
+						FROM [CCNCclaims].[dbo].[L1_ChronicConditionCodes_t]
+ 						WHERE (
+ 								CCNCclaims.dbo.fn_TRIM([CCNCclaims].[dbo].[L1_ChronicConditionCodes_t].[ListSource_Code]) = CCNCclaims.dbo.fn_TRIM(@ListSource_Code)
+ 								AND
+ 								CCNCclaims.dbo.fn_TRIM([CCNCclaims].[dbo].[L1_ChronicConditionCodes_t].[ICD_Code_Cleaned]) = CCNCclaims.dbo.fn_TRIM(@ICD_Code_Cleaned)
+ 								AND
+ 								CCNCclaims.dbo.fn_TRIM([CCNCclaims].[dbo].[L1_ChronicConditionCodes_t].[ICD_Version]) = CCNCclaims.dbo.fn_TRIM(@ICD_Version)
+ 								)
+ 						  )
 
-INTERSECT
-ISEMPTY
-NATURALINNERJOIN
-NATURALLEFTOUTERJOIN
-SUMMARIZECOLUMNS
-Table Constructor (DAX)
-TREATAS
-UNION
-VAR (DAX)
+		IF @i_Count=0   SET @b_ChronicCondition = 0
+		IF @i_Count&gt;0   SET @b_ChronicCondition = 1
+
+		RETURN @b_ChronicCondition
+		
+		END
+
+
+
+
+
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>Functions</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>fn_xxxxx_ItIsAChronicCondition</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>Functions</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>fn_xxxxx_ItIsAChronicCondition</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>-- fn_XXXXX_ItIsAChronicCondition.sql
+-- To Use the function:
+--  SELECT CCNCclaims.dbo.fn_xxxxx_ItIsAChronicCondition('1','49300','9') AS ONE
+-- PARMS: @ListSource_Code  = The source of the code: e.g. '1' from the QI list
+--															'2' from Linda/Uninsured
+--		  @ICD_Code_Cleaned  = The ICD code without apostrophes, or periods
+--		  @ICD_Version   = the version, e.g. '9' or '10'
+
+USE CCNCclaims
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+ALTER FUNCTION [dbo].[fn_xxxxx_ItIsAChronicCondition] 
+				( @ListSource_Code VARCHAR(2), @ICD_Code_Cleaned VARCHAR(5), @ICD_Version  VARCHAR(5) ) 
+	RETURNS VARCHAR(5)
+	AS
+	BEGIN
+		DECLARE @i_Count INT
+		DECLARE @b_ChronicCondition bit
+		DECLARE @XXXXX_ChronicCondition VARCHAR(5)
+				
+		SET @i_Count= (
+						SELECT COUNT(*) 
+						FROM [CCNCclaims].[dbo].[L1_ChronicConditionCodes_t]
+ 						WHERE (
+ 								CCNCclaims.dbo.fn_TRIM([CCNCclaims].[dbo].[L1_ChronicConditionCodes_t].[ListSource_Code]) = CCNCclaims.dbo.fn_TRIM(@ListSource_Code)
+ 								AND
+ 								CCNCclaims.dbo.fn_TRIM([CCNCclaims].[dbo].[L1_ChronicConditionCodes_t].[ICD_Code_Cleaned]) = CCNCclaims.dbo.fn_TRIM(@ICD_Code_Cleaned)
+ 								AND
+ 								CCNCclaims.dbo.fn_TRIM([CCNCclaims].[dbo].[L1_ChronicConditionCodes_t].[ICD_Version]) = CCNCclaims.dbo.fn_TRIM(@ICD_Version)
+ 								)
+ 						  )
+
+		--IF @i_Count=0   SET @b_ChronicCondition = 0
+		--IF @i_Count&gt;0   SET @b_ChronicCondition = 1
+
+		IF @i_Count=0   SET @XXXXX_ChronicCondition = ''
+		IF @i_Count&gt;0   SET @XXXXX_ChronicCondition = 'XXXXX'
+
+
+		--RETURN @b_ChronicCondition
+		RETURN @XXXXX_ChronicCondition
+
+		
+		END
+
+
+
+
+
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>MISC</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>apostrophe</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>MISC</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>apostrophe</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>--to set the string equal to "Driver's License", use a double apostrophe
+
+--SSRS puts a double apostrophe where it finds a single apostrophe
+-- So then in the SP you have to replace the double qoute with a single qoute
+DECLARE @LICENSE_TYPE nvarchar(100)		-- FROM: prj_0006_SP_0012_LIST_LicenseTypes 
+SET @LICENSE_TYPE =  'Driver''s License Standard'  
+
+PRINT '1) before @LICENSE_TYPE: [' + coalesce(@LICENSE_TYPE, '{NULL}')	 + ']' 
+SET @LICENSE_TYPE = Replace(@LICENSE_TYPE, '', ')			--QUOTENAME(@LICENSE_TYPE, '')  --QUOTENAME(@LICENSE_TYPE, ''''')	
+PRINT '2) after @LICENSE_TYPE: [' + coalesce(@LICENSE_TYPE, '{NULL}')	 + ']'
+
+
+
+
+
+--==============================================================================================
+--1] added a replace function like this in TSQL?:  
+
+REPLACE(@SearchString, '''', '')
+
+-- it changed double apostrophe to single apostrophe and then the data was returned properly.
+
+---------
+
+--built-in SQL functions (like replace) is that they too require you to double up your single quotes.
+--So to replace ' with '' in code you'd do this:
+
+Replace(@strip, '''', '''''')
+
+--SSRS
+--==============================================================================================
+
+--2] change the expression for the function in SSRS:
+
+--http://www.dbafire.com/2016/02/16/ssrs-report-is-double-escaping-parameters-apostrophies/
+--	Feed it a string like
+--	‘Our DBA’s forever’ and when it passed that as a parameter it would end up like this:
+--	‘Our DBA””s forever’
+--	Somehow SSRS itself was taking the string being passed through and deciding that it should add not one, but three extra apostrophes.
+
+
+-- By default you will see this in the Parameters section of the dataset:
+--Double-Click on the DataSet, that has the parameter in question (in the DataSets folder, of the Report Data panel)
+--	=&gt; properties =&gt; Parameters {in left panel} =&gt; {then click the expression button to the right of the parameter) 
+-- and you should see something like this: 
+
+=Parameters!SearchString.Value
+
+--change it to the following expression:
+
+=Join(Parameters!SearchString.Value, ",")
+
+-----------------------
+
+/*
+ Say you're querying the database from a .NET application, then you'd use the SqlParameter class 
+ to feed the SqlCommand parameters for the query and all of this single quote business 
+ will be taken care of automatically. 
+ This is usually the preferred method as SQL parameters will also help prevent SQL injection attacks.</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>R</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>Input_from_SQL_and_Output_to_SQL</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>R</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>Input_from_SQL_and_Output_to_SQL</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>Input_from_SQL_and_Output_to_SQL 
+
+https://docs.microsoft.com/en-us/sql/advanced-analytics/tutorials/rtsql-working-with-inputs-and-outputs?view=sql-server-2017
+//////////////////////////////////////////////////////////////////////
+--Remember these requirements!
+--================================
+
+--1] Variable names must follow the rules for valid SQL identifiers.
+--2] The order of the parameters is important. 
+--	You must specify the required parameters @input_data_1 and @output_data_1 first, 
+--	in order to use the optional parameters @input_data_1_name and @output_data_1_name.
+--3] Only one input dataset can be passed as a parameter, 
+--		and you can return only one dataset. 
+--	However, you can call other datasets from inside your R code 
+--		and you can return outputs of other types in addition to the dataset. 
+--	You can also add the OUTPUT keyword to any parameter to have it returned with the results. 
+
+--4] The WITH RESULT SETS statement defines the schema for the data, 
+--		for the benefit of SQL Server.	
+--	You need to provide SQL compatible data types for each column you return from R. 
+--	You can use the schema definition to provide new column names too; 
+--	you need not use the column names from the R data.frame. 
+--	In some cases, this clause is optional; try omitting it and see what happen  
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+--When you want to run R code in SQL Server, you must wrap R script in a stored procedure. 
+--You can write one, or pass R script to sp_execute_external_script. 
+--This system stored procedure is used to start the R runtime in the context of SQL Server, 
+--	which passes data to R, manages R user sessions securely, and returns any results to the clien
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+--Create some simple test data
+-------------------------------
+CREATE TABLE RTestData ([col1] int not null) ON [PRIMARY]
+INSERT INTO RTestData   VALUES (1);
+INSERT INTO RTestData   VALUES (10);
+INSERT INTO RTestData   VALUES (100) ;
+GO
+
+
+--Query the data
+--------------
+SELECT * FROM RTestData
+
+--Get the same data using R script
+------------------------------------
+
+EXECUTE sp_execute_external_script
+      @language = N'R'
+    , @script = N' OutputDataSet &lt;- InputDataSet;'
+    , @input_data_1 = N' SELECT *  FROM RTestData;'
+    WITH RESULT SETS (([NewColName] int NOT NULL));
+    
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+--The preceding example used the default input and output variable names, 
+--	InputDataSet and OutputDataSet. 
+--To define the input data associated with InputDatSet, 
+--	you use the @input_data_1 variable.    
+
+--In this example, 
+--	the names of the output and input variables for the stored procedure have been changed to 
+--	SQL_Out and SQL_I
+//////////////////////////////////////////////////////////////////////
+R is case-sensitive! -- Will get errors if case is not the same
+-- EXECUTE statement failed because its WITH RESULT SETS clause specified 1 result set(s), 
+--			but the statement only sent 0 result set(s) at run time
+
+
+ -- We're showing you this error because you can expect to see it often when testing new R code. 
+ -- It means that the R script ran successfully, 
+	--but SQL Server received no data, or received wrong or unexpected da
+//////////////////////////////////////////////////////////////////////
+
+EXECUTE sp_execute_external_script
+  @language = N'R'
+  , @script = N' SQL_Out &lt;- SQL_In;'
+  , @input_data_1 = N' SELECT 12 as Col;'
+  , @input_data_1_name  = N'SQL_In'
+  , @output_data_1_name =  N'SQL_Out'
+  WITH RESULT SETS (([NewColName] int NOT NULL));
+  
+
+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||Another example
+
+USE AdventureWorksDW2016_EXT
+GO
+
+--Develop the select statement in SQL -----------------------------------------------
+SELECT ReportingDate
+		, CAST(ModelRegion as varchar(50)) as ProductSeries
+		, Amount
+FROM [AdventureWorksDW2016_EXT].[dbo].[vTimeSeries]
+WHERE [ModelRegion] = 'M200 Europe'
+ORDER BY ReportingDate ASC
+
+--Then use the select statement as input to the R-----------------------------------
+EXECUTE sp_execute_external_script
+       @language = N'R'
+      , @script = N' str(InputDataSet);
+      OutputDataSet &lt;- InputDataSet;'
+      , @input_data_1 = N'
+							   SELECT ReportingDate
+									 , CAST(ModelRegion as varchar(50)) as ProductSeries
+									 , Amount
+							   FROM [AdventureWorksDW2016_EXT].[dbo].[vTimeSeries]
+							   WHERE [ModelRegion] = ''M200 Europe''					--&lt;== string with double single apostrophes
+							   ORDER BY ReportingDate ASC ;'
+--WITH RESULT SETS undefined;															--&lt;=== without specifying the output columns
+ WITH RESULT SETS (([dateCol] date, [strCol] varchar(50), [numCol] numeric(18,2)  ));	--&lt;===  specifying the output columns	
 </Code>
       </SnippetValue>
     </value>
