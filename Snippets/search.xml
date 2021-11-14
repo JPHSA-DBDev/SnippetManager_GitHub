@@ -1,2 +1,652 @@
 <?xml version="1.0" encoding="utf-8"?>
-<dictionary />
+<dictionary>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Calculated_Columns</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>about_DAX_Calculated_Columns</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Calculated_Columns</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>about_DAX_Calculated_Columns</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>about_DAX_Calculated_Columns
+
+'when you look at Measures in the DATA view you don't see it's column or individual values, rather you have to put it into a Table Visual to see it's value
+'when you look at a Calculated Column in the DATA view you see a column, and values in every row.
+
+the ICON of a calculated column is a little SIGMA inside a square
+
+'Calculated Columns: "Expands" a table by adding columns defined ba a defined ???
+'					They can only look in the row that they are in. 
+'						DAX for a calculated column does not see relationships (i.e. to other tables), but you can use relationship FUNCTIONS to see other tables
+'							
+'			b/c Calculated columns are actual values that are stored in the dataset, then can be used in Slicers/Filters
+'			AND when a DAX calculation takes a long time, it might be advantagous to put them into a Calculated column that can be created ahead of time (e.g. SSRS scheduler)
+
+'vs.
+'Measures : "Summarizes" all the data into a single value
+'			works with whole columns of data and condense them into a single value
+'			Computed at run time, stored temporarily
+'			Limited by a Filter Context, which are ALL the filters applied by the user
+
+
+			
+----------------------------------------------------------------------------------
+'SO if you created two columns in a Visual (e.g. Table) and one was based on a Calculated Column using data from a Related table, 
+'	and the other was based on a Measure using data from a Related table, then the Calculated-based Rank would remain unchanged as you
+'	apply filters to the related Table, but the Measure-based Rank would change as you applied filters to the related Table.
+
+'e.g. for a Calculated Column
+Ranking =        RANKX(ALL(Products), SUMX(RELATEDTABLE(SalesOrderDetail), SalesOrderDetail[GrossSales]))
+
+'e.g. for a MEASURE Column
+RankingMeasure = RANKX(ALL(Products), SUMX(RELATEDTABLE(SalesOrderDetail), SalesOrderDetail[GrossSales]))		
+---------------------------------------------------------------------------------
+			
+'Column calculations are computed at time of refresh, and then stored with the table
+
+'They are limited to the row context: They can only look in the row that they are in.
+
+---SIMPLE
+'.e.g. 
+Gross Sales = [Price] * [Quantity] * (1-[Discount])
+
+---RELATED TABLE
+'e.g. calculated value based on column in another table related by [ProductID]
+'			uses color from a related table
+Color = RELATED(Products[Color]) 'used to pull to a many table from a one table in a 'Many-to-one' relationship
+
+---INTERATOR 'Takes 2 parameters: related table name, and an expression
+'e.g. want Total Sales by product between 2 related tables, related by [ProductID] 
+'		want the calculation done in the ONE end of the 1-to-Many relationship
+SUMX : sums values from a related table  - This is the interator function
+RELATEDTABLE: the related table for SUMX
+TotalSales = SUMX(RELATEDTABLE(SalesOrderDetail),SalesOrderDetail[LineTotal])</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Evaluation_Contexts</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>Nested_Evaluation_Context</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Evaluation_Contexts</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>Nested_Evaluation_Context</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>Nested_Evaluation_Context
+
+
+e.g. for each product (in TABLE_1), go through each row in another table (TABLE_2)
+'NOTE for e.g.: Iterators are Limited by a Filter Context, which are ALL the filters applied by the user
+
+= RANKX (												'&lt;== Interator Creates a Row Context
+			ALL( Products ),							'&lt;== Parm1: Table, ALL Returns all the rows in a table regardless of the filters
+			SUMX (										'&lt;== Iterator: use an iterator b/c data is in another table
+					RELATEDTABLE ( InternetSales ) ,	'&lt;== Pulls sales b based on the 'inner row' context? Outputs Temporary Table
+					'InternetSales'[SalesAmount]
+				 )
+		)
+		
+
+----------------------------------------------------------------------------------
+'SO if you created two columns in a Visual (e.g. Table) and one was based on a Calculated Column using data from a Related table, 
+'	and the other was based on a Measure using data from a Related table, then the Calculated-based Rank would remain unchanged as you
+'	apply filters to the related Table, but the Measure-based Rank would change as you applied filters to the related Table.
+
+'e.g. for a Calculated Column
+Ranking =        RANKX(ALL(Products), SUMX(RELATEDTABLE(SalesOrderDetail), SalesOrderDetail[GrossSales]))
+
+'e.g. for a MEASURE Column
+RankingMeasure = RANKX(ALL(Products), SUMX(RELATEDTABLE(SalesOrderDetail), SalesOrderDetail[GrossSales]))		
+---------------------------------------------------------------------------------	</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Functions</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>about_ITERATOR_and_AGGREGATOR_functions</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Functions</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>about_ITERATOR_and_AGGREGATOR_functions</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>https://elias-nordlinder.medium.com/dax-series-4-iterators-and-aggregators-dba4314c0292
+
+
+NOTE:
+'the only differences between the Iterators, such as SUMX, and the aggregator, 
+' such as SUM, is the table parameter as the first parameter in the iterator (‘Sales’).
+'When the Expression only is a column, such as ‘Sales’[Quantity] the two can be used interchangeable
+
+'As long as you want to write an expression that is not a single column, you must use an iterator.
+===================================================================================================
+'Iteration functions 
+--------------------
+' take in (at least) two parameters to work, which means that they do not work by only sending in a column. 
+' The first parameter 
+		'that iterators works on are the table that they need to “scan”.
+' The second parameter
+	'They need the virtual table that the expression, which is the second parameter, should iterate over.
+	'The second parameter is often an expression that the iterator will evaluate for each row in the table.
+
+'	move row-by-row through the table
+'	does a calculation, or retrieves some data	
+'	Then aggregates it when it is all done
+
+e.g.
+	 X = SUMX(
+				Sales,
+				Sales[Order Quantity]
+			  )
+'the iterator SUMX require the table, Sales, and the Expression, 
+'	which in this case is just the column, to compute the order quantity.
+
+
+
+'They work like calculated columns 
+'	so Interation functions, which are aggregation functions, are similar to calculated columns
+
+SUMX
+COUNTX
+AVERAGEX
+MINX
+MAXX
+RANKX
+
+===================================================================================================
+'Aggregator Functions
+---------------------
+'Aggregators are functions that aggregate values of a column in a table and return a single value.
+e.g.
+	Y = SUM(Sales[Order Quantity])
+
+
+'They could work while only taking in one parameter, i.e. a column
+
+SUM' Total Quantity = SUM ( ‘Sales’[Quantity] )
+MAX' Max Sales = MAX ( ‘Sales’[Quantity] )
+MIN' Min Sales = MIN ( ‘Sales’[Quantity] )
+AVERAGE' Average Sales = AVERAGE ( ‘Sales’[Quantity] )
+
+
+=========================================================================MORE details about ITERATORS
+
+'The second parameter can be a single column like " Sales[Order Quantity] ", 
+'	but it can also be a specific expression like the example below.
+Total Sales = 
+SUMX (
+    Sales,
+    Sales[Order Quantity] * Sales[Unit Price] * (1 - Sales[Discount Applied] )
+    )</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Functions</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>Statistical_Functions</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Functions</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>Statistical_Functions</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>https://docs.microsoft.com/en-us/dax/statistical-functions-dax
+
+' Filters do not propogate in a Row Context, i.e. in Calculated Columns
+----------------------------------------------------------------------------------
+'SO if you created two columns in a Visual (e.g. Table) and one was based on a Calculated Column using data from a Related table, 
+'	and the other was based on a Measure using data from a Related table, then the Calculated-based Rank would remain unchanged as you
+'	apply filters to the related Table, but the Measure-based Rank would change as you applied filters to the related Table.
+
+'e.g. for a Calculated Column
+Ranking =        RANKX(ALL(Products), SUMX(RELATEDTABLE(SalesOrderDetail), SalesOrderDetail[GrossSales]))
+
+'e.g. for a MEASURE Column
+RankingMeasure = RANKX(ALL(Products), SUMX(RELATEDTABLE(SalesOrderDetail), SalesOrderDetail[GrossSales]))		
+---------------------------------------------------------------------------------
+
+ADDCOLUMNS
+APPROXIMATEDISTINCTCOUNT
+AVERAGE
+AVERAGEA
+
+AVERAGEX
+ 		'e.g.
+ 		AverageGrossSales = AVERAGEX(SalesOrderDetail, SalesOrderDetail[OrderQty] * SalesOrderDetail[UnitPrice] * (1 - SalesOrderDetail[UnitPriceDiscount]))
+ 		
+BETA.DIST
+BETA.INV
+CHISQ.INV
+CHISQ.INV.RT
+CONFIDENCE.NORM
+CONFIDENCE.T
+
+COUNT():
+	'The COUNT function counts the number of cells in a column that contains 
+	'values of the whole number or integer or string datatype excluding the 
+	'blank cell. It even counts the cell with repeated values.
+	' only count non-empty cells  and are not sensitive to repetitive values 
+	'in cells.
+	Apps = COUNT(FactApplication[Client_App_ID])
+	
+	'EXAMPLE: show 0 if there are none, 1 if there are some
+	' add a zero to convert the blanks to zero, then use "&gt;" to create boolean, then INT to convert back to 0/1
+	INT((COUNT(FactApplication[Client_App_ID]) + 0) &gt; 0)
+
+COUNTA():
+	'COUNTA function can also count the boolean values (True or False) 
+	'whereas count function returns an error .
+	' only count non-empty cells  and are not sensitive to repetitive values 
+	'in cells.
+
+COUNTX():
+	'Syntax: COUNTX(&lt;table&gt;,&lt;expression&gt;)
+	'COUNTX function counts the number of rows which are non-empty when 
+	'evaluating an expression over a table.
+	'This function cannot be used for boolean values.
+
+COUNTAX():
+	'Syntax: COUNTAX(&lt;table&gt;,&lt;expression&gt;)
+	'similar to COUNTX function with the only difference being that COUNTAX function can operate on boolean values.	
+
+COUNTBLANKS():
+	'Syntax: COUNTBLANK(&lt;column&gt;)
+	' calculate the number of blanks present in a column.
+	 NumbOfRowNumbersWithBlanks = COUNTBLANK('tableName'[columnName])
+	
+COUNTROWS():
+	'Syntax : COUNTROWS(&lt;table&gt;)
+	'NOTE: can use FILTERs in place of &lt;table&gt;
+	'counts the number of rows in the specified table, or in a table defined by an expression .
+
+
+CROSSJOIN
+	'e.g. Cross Join 3 tables
+	RowHeader_Territory_Segment = CROSSJOIN(RowHeaders,Segments,Territories)
+DATATABLE function
+DISTINCTCOUNT():
+	'Syntax: DISTINCTCOUNT(&lt;column&gt;)
+	' returns the number of unique values present in a column.
+	'It counts NULL as a unique value
+
+DISTINCTCOUNTNOBLANK
+	' returns the number of unique values present in a column.
+	'It DOES NOT counts NULL as a unique value
+	
+	CALCULATE( 
+				DISTINCTCOUNT(DimDealer[DealerCode]),
+				FILTER(DimDealer,DimDealer[DealerActive] = True())
+			  )
+	
+	
+EXPON.DIST
+GENERATE
+GENERATEALL
+GEOMEAN
+GEOMEANX
+MAX
+	'This takes the Max from a column, but does not let you filter by some category
+MAXA
+MAXX
+	'This takes the Max from an expression, where the expression is what let's us 'filter' 
+	'	down to just some rows
+	
+	Last Purchase Date for each Customer = 
+	    //'return the MAX value from the set of returned rows
+	    MAXX(
+	            RELATEDTABLE(Internet Sales),     //'Work on the related set of rows from the table, related by the relationship (i.e. the customer)
+	            Internet Sales[Order Date]       // 'for each row returned, return this field
+	        )	
+MEDIAN
+MEDIANX
+MIN
+MINA
+MINX
+NORM.DIST
+NORM.INV
+NORM.S.DIST
+NORM.S.INV (DAX)
+PERCENTILE.EXC
+PERCENTILE.INC
+PERCENTILEX.EXC
+PERCENTILEX.INC
+POISSON.DIST
+RANK.EQ
+RANKX
+	RANKX(&lt;table&gt;, &lt;expression&gt;[, &lt;value&gt;[, &lt;order&gt;[, &lt;ties&gt;]]])  
+	'e.g. create a MEASURE: for each product (in TABLE_1: Products), go through each row in another table (TABLE_2: SalesOrderDetail)
+	
+	Ranking = RANKX(
+					ALL(Products), 
+					SUMX(
+							RELATEDTABLE(SalesOrderDetail), 
+							SalesOrderDetail[GrossSales])
+						)
+					)
+	'NOTE: if you used  SUMX(SalesOrderDetail, SalesOrderDetail[GrossSales]) 
+	'	then it would sum up all the rows, rather than just the related rows
+	'NOTE: if we did not use ALL (for [Products] table) then it would only rank for the filtered rows of [Products], and not give us an overall Rank
+
+
+ROW
+SAMPLE
+SELECTCOLUMNS
+SIN
+SINH
+SQRTPI
+STDEV.P
+STDEV.S
+STDEVX.P
+STDEVX.S
+SUMMARIZE
+	'SYNTAX
+	SUMMARIZE (&lt;table&gt;, &lt;groupBy_columnName&gt;[, &lt;groupBy_columnName&gt;]…[, &lt;name&gt;, &lt;expression&gt;]…)
+	'Returns a summary table for the requested totals over a set of groups.
+	&lt;expression&gt;	'Any DAX expression that returns a single scalar value, where the expression is to be evaluated multiple times (for each row/context).
+T.DIST
+T.DIST.2T
+T.DIST.RT
+T.INV
+T.INV.2t
+TAN
+TANH
+TOPN
+VAR.P
+VAR.S
+VARX.P
+VARX.S
+XIRR
+XNPV
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Functions</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>Table_Functions</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Functions</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>Table_Functions</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>'Table_Functions
+
+'One key limitation of a table function is that its output can’t be used in a visual in your report. 
+'	If you think about it, 
+'	each cell on a pivot table can only fit one number, not an entire table of numbers.
+
+ 'returns a table of data
+------------------------------------------------ 
+ 'In DAX, a table function is used in a few ways:
+
+'1]	As input to another DAX function where the function argument requires a table. 
+'		For example, the FILTER function iterates over a table of data 
+'		and tests each value for a condition 
+'		(actually any X function like SUMX or AVERAGEX is an iterator and would require a table as the first argument.)
+'2] As a calculated table definition in Power BI Desktop
+'3] As a query written against your data model using DAX Studio or SQL Server Management Studio.
+------------------------------------------------
+
+'Tables can become scalars: 
+'	A neat feature of DAX is that any table function that resolves to a single row and column (i.e., one value) is automatically converted to a scalar value if possible. 
+'	That means that you can use a table function as an input to another function, 
+'	but do so cautiously to avoid the dreaded “Table of Multiple Values…” error.
+
+----------------------------------------------------------------------------------
+'SO if you created two columns in a Visual (e.g. Table) and one was based on a Calculated Column using data from a Related table, 
+'	and the other was based on a Measure using data from a Related table, then the Calculated-based Rank would remain unchanged as you
+'	apply filters to the related Table, but the Measure-based Rank would change as you applied filters to the related Table.
+
+'e.g. for a Calculated Column
+Ranking =        RANKX(ALL(Products), SUMX(RELATEDTABLE(SalesOrderDetail), SalesOrderDetail[GrossSales]))
+
+'e.g. for a MEASURE Column
+RankingMeasure = RANKX(ALL(Products), SUMX(RELATEDTABLE(SalesOrderDetail), SalesOrderDetail[GrossSales]))		
+---------------------------------------------------------------------------------
+
+
+
+FILTER
+	Returns a TABLE
+	'get just the rows from DateTable that match criteria 
+	FilterExampleTable = FILTER(DateTable, (DateTable[IsPreviousWeek]= 1) )
+	
+VALUES
+	'Returns a one column table, or a a table that contains the distinct values in a column	
+	VALUESexampleTable = VALUES(RowHeaders[RowHeader])
+	
+ALL
+
+	'Using a table argument, ALL returns all the rows of the table including any duplicated rows.
+	'Using a single column argument, ALL returns all the unique values of the column.
+	'Using two or more columns arguments, ALL returns all the unique combinations of values in multiple columns.
+	'In every case, ALL includes in the result the additional blank row generated for invalid relationships.
+
+	ALLexampleTable = ALL(RowHeaders)				'&lt;== Returns all rows, of all columns
+	ALLexampleTable = ALL(RowHeaders[RowHeader])	'&lt;== returns unique rows, of one column
+		</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Measures</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>about_DAX_Measures</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Measures</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>about_DAX_Measures</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>about_DAX_Measures
+
+Measure names must be unique within a .pbix file
+You could store the all in one table and then just reference them wherever you need to use them.
+BEST PRACTICE: when referencing a column in a DAX calculatiton, always preface it with the Table name, 
+	so that you can easily use the measure where ever you want and you will know what it is referring to.
+
+'when you look at Measures in the DATA view you don't see it's column or individual values, rather you have to put it into a Table Visual to see it's value
+'when you look at a Calculated Column in the DATA view you see a column, and values in every row.
+
+the ICON of a MEASURE column is a little CALCULATOR inside a square 
+
+'Calculated Columns: "Expands" a table by adding columns defined ba a defined ???
+'					They can only look in the row that they are in.
+'vs.
+'Measures : "Summarizes" all the data into a single value
+'			works with whole columns of data and condense them into a single value
+'			Computed at run time, stored temporarily
+'			Limited by a Filter Context, which are ALL the filters applied by the user
+
+----------------------------------------------------------------------------------
+'SO if you created two columns in a Visual (e.g. Table) and one was based on a Calculated Column using data from a Related table, 
+'	and the other was based on a Measure using data from a Related table, then the Calculated-based Rank would remain unchanged as you
+'	apply filters to the related Table, but the Measure-based Rank would change as you applied filters to the related Table.
+
+'e.g. for a Calculated Column
+Ranking =        RANKX(ALL(Products), SUMX(RELATEDTABLE(SalesOrderDetail), SalesOrderDetail[GrossSales]))
+
+'e.g. for a MEASURE Column
+RankingMeasure = RANKX(ALL(Products), SUMX(RELATEDTABLE(SalesOrderDetail), SalesOrderDetail[GrossSales]))		
+---------------------------------------------------------------------------------
+'e.g.
+Total Gross Sales := SUM( Sales[Gross Sales] )  'where Sales[Gross Sales] is Table[field])
+
+'To make sure you are applying the measure to the right table, right click on the table {in Data View}
+
+'You can create Measures in tables with no data
+
+'When you create a 'MEASURE' in the 'Fields' panel of a Table, 
+'	and you look at the table in Data View, 
+'	you do NOT see a column for the measure
+'HOWEVER, you can drag n drop the MEASURE from the 'Fields' panel, into the 'Values' field of a Matrix visualization (for example)
+'	and it will show up as a column in the Matrix Visualization
+
+'You can NOT use a MEASURE in a SLICER
+
+CALCULATE 'is good for writing Measures
+
+'You can move a Measure:
+Visualization View =&gt; Select the Measure {located in some table} =&gt; Modeling {top menu}
+	=&gt; Home Table:xxxTable {drop down}  =&gt; {pick some other table}
+---------------------------------------------------------------------------------
+'A measure can only use in it's formula: (a) other measures or (b) functions of regular columns (e.g. SUM(someColumn), but it can not use a simple column.	
+'Example:
+Net Sales = sum(Sales[SalesAmount])-sum(Sales[TotalCost])-sum(Sales[ReturnAmount])-sum(Sales[DiscountAmount])
+'Whereas here is a calculated column
+Net Sales Calc = Sales[SalesAmount]-Sales[TotalCost]-Sales[ReturnAmount]-Sales[DiscountAmount]
+'If you use the Meausure's formulate (i.e. with the Aggregate functions) in a Calculated column then every row has the same value:
+Net Sales Calc using Aggregates = sum(Sales[SalesAmount])-sum(Sales[TotalCost])-sum(Sales[ReturnAmount])-sum(Sales[DiscountAmount])</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Misc</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>create_ROW_NUMBER</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Misc</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>create_ROW_NUMBER</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>'https://radacad.com/generating-row-number-in-power-bi-visualization-using-dax
+Example in a table:[Product] with a column that has a unique field: [ProductKey]
+1] use a Calculted column 
+2] DAX formula:
+	RowNumber = RANKX(ALL('TableName'),[UniqueFieldName])	
+	RowNumber = RANKX(ALL('Product'),[ProductKey])
+	
+'Need to use ALL so that when the there is a filter, it will take into account the whole table
+
+
+'Or can use multiple columns that have unique combinations
+Row Number = RANKX(
+					ALL(DimProduct[EnglishProductName],DimProduct[Color])
+					,[Internet Sales]
+					)</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Misc</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>crreate_ROW_NUMBER_with_Nulls_for_EVEN_rows</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Misc</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>crreate_ROW_NUMBER_with_Nulls_for_EVEN_rows</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>/* 'use SWITCH to check the result from the MOD of the RANKX
+	' where the RankX gets the Row Number
+	' then the Mod checks to see if it is even
+	'	when it results in zero (0) then it outputs the RowNumber
+	' 	otherwise it ouputs a BLANK() i.e. NULL
+*/
+
+RowNumber_WithBlanks = SWITCH (
+	MOD(RANKX(ALL('Product'),[ProductKey]),2),
+	0, RANKX(ALL('Product'),[ProductKey]),
+	BLANK()
+	)</Code>
+      </SnippetValue>
+    </value>
+  </item>
+</dictionary>
