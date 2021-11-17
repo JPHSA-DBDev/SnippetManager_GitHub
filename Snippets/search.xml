@@ -3,410 +3,669 @@
   <item>
     <key>
       <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>DAX_Calculated_Columns</Category>
-        <Language>VB</Language>
+        <Category>CHROME_IRON</Category>
+        <Language>TEXT</Language>
         <Public>false</Public>
-        <Name>about_DAX_Calculated_Columns</Name>
+        <Name>OneWord_intranetSite_ratherThanSearchEngine</Name>
         <Group>My Snippets</Group>
       </SnippetKey>
     </key>
     <value>
       <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
         <Key>
-          <Category>DAX_Calculated_Columns</Category>
-          <Language>VB</Language>
+          <Category>CHROME_IRON</Category>
+          <Language>TEXT</Language>
           <Public>false</Public>
-          <Name>about_DAX_Calculated_Columns</Name>
+          <Name>OneWord_intranetSite_ratherThanSearchEngine</Name>
           <Group>My Snippets</Group>
         </Key>
         <Keywords />
         <Imports />
-        <Code>about_DAX_Calculated_Columns
-
-'when you look at Measures in the DATA view you don't see it's column or individual values, rather you have to put it into a Table Visual to see it's value
-'when you look at a Calculated Column in the DATA view you see a column, and values in every row.
-
-the ICON of a calculated column is a little SIGMA inside a square
-
-'Calculated Columns: "Expands" a table by adding columns defined ba a defined ???
-'					They can only look in the row that they are in. 
-'						DAX for a calculated column does not see relationships (i.e. to other tables), but you can use relationship FUNCTIONS to see other tables
-'							
-'			b/c Calculated columns are actual values that are stored in the dataset, then can be used in Slicers/Filters
-'			AND when a DAX calculation takes a long time, it might be advantagous to put them into a Calculated column that can be created ahead of time (e.g. SSRS scheduler)
-
-'vs.
-'Measures : "Summarizes" all the data into a single value
-'			works with whole columns of data and condense them into a single value
-'			Computed at run time, stored temporarily
-'			Limited by a Filter Context, which are ALL the filters applied by the user
+        <Code>one word url redirection is still an issue in Chrome.
 
 
-			
-----------------------------------------------------------------------------------
-'SO if you created two columns in a Visual (e.g. Table) and one was based on a Calculated Column using data from a Related table, 
-'	and the other was based on a Measure using data from a Related table, then the Calculated-based Rank would remain unchanged as you
-'	apply filters to the related Table, but the Measure-based Rank would change as you applied filters to the related Table.
+(1) Enterprise policy can disable search entirely, so the Chrome address bar never searches.  This also prevents searching for less ambiguous inputs, though.
+(2) Users can clue Chrome in that a never-seen-before hostname is a hostname by e.g. appending a "/" to the end (or prepending a scheme, but that's more annoying to type).
+(3) The designed way Chrome is intended to work in this case is that when a user inputs something that is a potential intranet 
+	hostname, Chrome does a background HTTP HEAD request to that hostname, and if it gets a valid reply, 
+	it displays an infobar atop the search result page, 
+	asking "Did you mean to go to http://&lt;hostname&gt;/?  
+	If a user clicks that link, not only does it navigate to this hostname now, 
+	it also remembers that hostname in the future to avoid searching again.  
+	Similarly, doing any other successful typed navigation to that host (e.g. "hostname/" as suggested in (2)) 
+	will also cause Chrome to never search for that host again.
 
-'e.g. for a Calculated Column
-Ranking =        RANKX(ALL(Products), SUMX(RELATEDTABLE(SalesOrderDetail), SalesOrderDetail[GrossSales]))
 
-'e.g. for a MEASURE Column
-RankingMeasure = RANKX(ALL(Products), SUMX(RELATEDTABLE(SalesOrderDetail), SalesOrderDetail[GrossSales]))		
----------------------------------------------------------------------------------
-			
-'Column calculations are computed at time of refresh, and then stored with the table
 
-'They are limited to the row context: They can only look in the row that they are in.
+This is for IE 9
+============================================================================================================
+http://support.microsoft.com/kb/2411821
 
----SIMPLE
-'.e.g. 
-Gross Sales = [Price] * [Quantity] * (1-[Discount])
+Method 1: Using Tools menu in Internet Explorer:
 
----RELATED TABLE
-'e.g. calculated value based on column in another table related by [ProductID]
-'			uses color from a related table
-Color = RELATED(Products[Color]) 'used to pull to a many table from a one table in a 'Many-to-one' relationship
+Click Internet Options, click the Advanced tab, check the option Go to an intranet site for a single word entry in the Address bar.
 
----INTERATOR 'Takes 2 parameters: related table name, and an expression
-'e.g. want Total Sales by product between 2 related tables, related by [ProductID] 
-'		want the calculation done in the ONE end of the 1-to-Many relationship
-SUMX : sums values from a related table  - This is the interator function
-RELATEDTABLE: the related table for SUMX
-TotalSales = SUMX(RELATEDTABLE(SalesOrderDetail),SalesOrderDetail[LineTotal])</Code>
+Method 2: Using Group Policy: 
+
+Local or Domain Administrators can configure this setting by using Group Policy. 
+Click Start, click Run, type gpedit.msc, and then click OK.
+Expand User Configuration, expand Administrative Templates, expand Windows Components, expand Internet Explorer.
+Then expand Internet Settings, expand Advanced Settings, expand Browsing, Set Go to an intranet site for a single word entry in the Address bar according to your desired settings. You have to update policies or restart the computer to apply changes. 
+Method 3: Using registry key:
+
+Important :This section, method, or task contains steps that tell you how to modify the registry. However, serious problems might occur if you modify the registry incorrectly. Therefore, make sure that you follow these steps carefully. For added protection, back up the registry before you modify it. Then, you can restore the registry if a problem occurs. For more information about how to back up and restore the registry, click the following article number to view the article in the Microsoft Knowledge Base: 
+
+322756  How to back up and restore the registry in Windows
+
+Click Start, click Run, type regedit, and then click OK.
+Locate and then click the following registry subkey: 
+HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Main
+On the Edit menu, point to New, click DWORD Value, and then add the following registry value:
+Value Name:  GotoIntranetSiteForSingleWordEntry
+Value Type:  REG_DWORD
+Value Data:  1
+============================================================================================================
+from: https://code.google.com/p/chromium/issues/detail?id=30636
+Redirect to this PHP Script
+
+&gt;&gt;&gt;&gt;&gt;WORKAROUND FOR THIS BUG&lt;&lt;&lt;&lt;&lt;
+
+I have created a workaround for this bug by utilizing Chrome's search engine settings. Instead having your browser sending search queries typed in the address bar to Google, you can set it to go to my PHP script, which will basically make Chrome act the way it ought to
+
+For this workaround to function, my script has to be hosted on a web server. I am hosting the script on my own server for public use, but if you already have your own web server, I recommend hosting it yourself. That way, you don't have to rely on me to keep my server online, you can choose your search engine, and you will have faster load times. The script is attached if you decide to host it. But if you don't have a web server, the version I am hosting should be fine.
+
+Anyway, to enable this workaround, right-click the omnibox and click "Edit search engines...". Scroll to the bottom of all the search engines to add a new one. Set the name and keyword to whatever you want, then set the URL box to "http://haydencity.tk/localtldsworkaround.php?q=%s&amp;tlds=[YOUR TLDS HERE]" (if you are self-hosting the PHP script, replace "haydencity.tk/localtldsworkaround.php" with the URL to your copy of the script obviously).
+
+Replace "[YOUR TLDS HERE]" with a list of all the custom local TLDs you use, separated by "%7C". So for example, if my network used the TLDs "local", "dev", and "wiki", then my URL would be "http://haydencity.tk/localtldsworkaround.php?q=%s&amp;tlds=local%7Cdev%7Cwiki" (if you want, you can also use regex patterns to define TLDs; just be sure to properly URL-encode everything).
+
+Once you have the URL finished, hit Enter. The search engine you just typed in will likely disappear, so scroll up to find it in the list (protip: it's alphabetical). Once you find it, hover your mouse over the URL and click "Make default", and that should cover it. URLs with custom TLDs should work now, and normal search queries should go to Google still. Huzzah!
+
+P.S. If you want to use a different search engine than Google for normal search queries, you will have to host the script on your own web server. Open the script in a text editor and there will be instructions on how to change the search engine.
+
+============================================================================================================
+&lt;?php
+
+/**
+* Edit the value of $mytlds to include all of the TLDs you want the script to recognize, separated
+* by pipe characters (|). You can also use other regex patterns if you need to. You can also
+* override any value written here by appending "&amp;tlds=[your value here]" to the URL of this script
+* (N.B. pipe characters should be encoded as %7c).
+*/
+$mytlds = "local|dev";
+
+/**
+* Change the value of $mysearchengine to your preferred search engine's URL, with %s in the place
+* of the search query (the default value is the URL for Google.
+*/
+$mysearchengine = "https://www.google.com/search?q=%s";
+
+
+
+
+
+
+
+if (isset($_GET['tlds'])) {
+    $mytlds = $_GET['tlds'];
+}
+
+if (!isset($_GET['q'])) {
+    die("&lt;h1&gt;No query received!&lt;/h1&gt;&lt;p&gt;Append &lt;kbd&gt;?q=[your query here]&lt;/kbd&gt; to this page's URL.&lt;/p&gt;");
+}
+$query = $_GET['q'];
+
+$urlpattern = '/^(https?:\/\/)?([\da-zA-Z\.-]+)(\.[\da-zA-Z\.]*)*\.(' . $mytlds . ')(:[0-9]{1,5})?([\/\w \.-]*)*\/?$/';
+
+$res = preg_match($urlpattern, $query);
+
+if ($res === 1) {
+    
+    $targeturl = $query;
+    
+    if (preg_match('/^https?:\/\//', $query) === 0) {
+        $targeturl = "http://" . $query;
+    }
+    
+} else if ($res === 0) {
+    $targeturl = "";
+    $engineexp = explode("%s", $mysearchengine);
+    for ($i = 0; $i &lt; count($engineexp)-1; $i++) {
+        $targeturl .= $engineexp[$i] . rawurlencode($query);
+    }
+    $targeturl .= $engineexp[count($engineexp)-1];
+    
+} else {
+    die("The local DNS workaround script has encountered an error.");
+}
+
+header("Location: $targeturl");
+die($targeturl);
+
+?&gt;
+============================================================================================================</Code>
       </SnippetValue>
     </value>
   </item>
   <item>
     <key>
       <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>DAX_Evaluation_Contexts</Category>
+        <Category>DAX_Filtering</Category>
         <Language>VB</Language>
         <Public>false</Public>
-        <Name>Nested_Evaluation_Context</Name>
+        <Name>TREATAS_examples</Name>
         <Group>My Snippets</Group>
       </SnippetKey>
     </key>
     <value>
       <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
         <Key>
-          <Category>DAX_Evaluation_Contexts</Category>
+          <Category>DAX_Filtering</Category>
           <Language>VB</Language>
           <Public>false</Public>
-          <Name>Nested_Evaluation_Context</Name>
+          <Name>TREATAS_examples</Name>
           <Group>My Snippets</Group>
         </Key>
         <Keywords />
         <Imports />
-        <Code>Nested_Evaluation_Context
+        <Code>'to use a filter on one table, like the filter used on another table there are Alternatives to TREATAS 
+'suchas : relatiohships, Intersect, TREATAS, Contains
 
+'One reason you might not be able to create a needed relationship is that it would result in
+'	multiple paths between two tables, and thus crreate ambigouity.
+'SO we use a 'virtual relationship' (e.g. TREATAS) to allow us to do the calculation, speed does suffer in this case.
+-------------------------------------------------------------------------------------------
+'In the following example, the model contains two unrelated product tables. 
+'	If a user applies a filter to DimProduct1[ProductCategory] 
+'	selecting Bikes, Seats, Tires, the same filter, Bikes, Seats, Tires is applied to DimProduct2[ProductCategory].
 
-e.g. for each product (in TABLE_1), go through each row in another table (TABLE_2)
-'NOTE for e.g.: Iterators are Limited by a Filter Context, which are ALL the filters applied by the user
+CALCULATE(
+			SUM(Sales[Amount]), 
+			TREATAS(VALUES(DimProduct1[ProductCategory]), DimProduct2[ProductCategory])
+		 )
+		 
+		 
+-------------------------------------------------------------------------------------------
 
-= RANKX (												'&lt;== Interator Creates a Row Context
-			ALL( Products ),							'&lt;== Parm1: Table, ALL Returns all the rows in a table regardless of the filters
-			SUMX (										'&lt;== Iterator: use an iterator b/c data is in another table
-					RELATEDTABLE ( InternetSales ) ,	'&lt;== Pulls sales b based on the 'inner row' context? Outputs Temporary Table
-					'InternetSales'[SalesAmount]
-				 )
-		)
-		
+'  TREATAS can be used as an alternative syntax to apply 
+'  a filter in CALCULATE/CALCULATETABLE
+DEFINE
+    MEASURE Sales[Sales Trendy Colors] =
+        CALCULATE (
+            [Sales Amount],
+            'Product'[Color] IN { "Red", "White", "Blue" }
+        )
+    MEASURE Sales[Sales Trendy Colors 2] =
+        CALCULATE (
+            [Sales Amount],
+            TREATAS ( { "Red", "White", "Blue" }, 'Product'[Color] )
+        )
+EVALUATE
+SUMMARIZECOLUMNS (
+    'Product'[Brand],
+    "Sales Trendy Colors", [Sales Trendy Colors],
+    "Sales Trendy Colors 2", [Sales Trendy Colors 2]
+)
 
-----------------------------------------------------------------------------------
-'SO if you created two columns in a Visual (e.g. Table) and one was based on a Calculated Column using data from a Related table, 
-'	and the other was based on a Measure using data from a Related table, then the Calculated-based Rank would remain unchanged as you
-'	apply filters to the related Table, but the Measure-based Rank would change as you applied filters to the related Table.
+-------------------------------------------------------------------------------------------
+'  TREATAS changes the data lineage of a table and it is
+'  used to convert values to the desired filtering column.
+DEFINE
+    MEASURE Sales[NumOfCustomersInStoreCity] =
+        VAR StoreCities = VALUES ( Store[City] )
+        RETURN
+            CALCULATE (
+                COUNTROWS ( Customer ),
+                TREATAS ( StoreCities, Customer[City] )
+            )
+    MEASURE Sales[NumOfCustomersInStoreCountry] =
+        VAR StoreCountries = VALUES ( Store[CountryRegion] )
+        RETURN
+            CALCULATE (
+                COUNTROWS ( Customer ),
+                TREATAS ( StoreCountries, Customer[CountryRegion] )
+            )
+EVALUATE
+SELECTCOLUMNS (
+    VALUES ( Store[Continent] ),
+    "Continent", Store[Continent],
+    "NumOfStores", CALCULATE ( COUNTROWS ( Store ) ),
+    "NumOfCustomersInStoreCity", [NumOfCustomersInStoreCity],
+    "NumOfCustomersInStoreCountry", [NumOfCustomersInStoreCountry]
+)
 
-'e.g. for a Calculated Column
-Ranking =        RANKX(ALL(Products), SUMX(RELATEDTABLE(SalesOrderDetail), SalesOrderDetail[GrossSales]))
+-------------------------------------------------------------------------------------------
 
-'e.g. for a MEASURE Column
-RankingMeasure = RANKX(ALL(Products), SUMX(RELATEDTABLE(SalesOrderDetail), SalesOrderDetail[GrossSales]))		
----------------------------------------------------------------------------------	</Code>
+'  TREATAS can be used with tables with multiple columns,
+'  in that case you need to provide the new lineage for each 
+'  column of the table.
+DEFINE
+    MEASURE Sales[NumOfCustomersInStoreCity] =
+        VAR StoreCities = SUMMARIZE ( Store, Store[CountryRegion], Store[City] )
+        RETURN
+            CALCULATE (
+                COUNTROWS ( Customer ),
+                TREATAS ( StoreCities, Customer[CountryRegion], Customer[City] )
+            )
+    MEASURE Sales[NumOfCustomersInStoreCountry] =
+        VAR StoreCountries = VALUES ( Store[CountryRegion] )
+        RETURN
+            CALCULATE (
+                COUNTROWS ( Customer ),
+                TREATAS ( StoreCountries, Customer[CountryRegion] )
+            )
+EVALUATE
+SELECTCOLUMNS (
+    VALUES ( Store[Continent] ),
+    "Continent", Store[Continent],
+    "NumOfStores", CALCULATE ( COUNTROWS ( Store ) ),
+    "NumOfCustomersInStoreCity", [NumOfCustomersInStoreCity],
+    "NumOfCustomersInStoreCountry", [NumOfCustomersInStoreCountry]
+)
+
+================================================================================
+
+DAX STUDIO EXAMPLE:
+===================
+'for 2 tables: Date and Advertising, with no existing relationship between them
+'Advertising: granularity, or rows, is Month and year
+'Date: granularity, or rows, are Dates, with Month and Year columns
+
+'for this measure:
+
+Total Advertising = 
+CALCULATE (
+    SUM ( Advertising[AdvertisingAmount] ),
+    TREATAS (
+        SUMMARIZE ( 'Date', 'Date'[Year], 'Date'[MonthNumber] ),
+        Advertising[Year],
+        Advertising[Month Number]
+    )
+)
+
+'MICROSOFT DOCUMENTATION says: 
+'		The number of columns specified must match the number of columns in the table expression and be in the same order.
+'So, the SUMMARIZE phrase lists the two columns:  'Date'[Year], 'Date'[MonthNumber]
+'	those 2 columns correspond to Advertising[Year] and Advertising[Month Number] reespectively
+
+1] 'the TREATAS clause
+--------------------------
+EVALUATE 
+TREATAS (
+        SUMMARIZE ( 'Date', 'Date'[Year], 'Date'[MonthNumber] ),			'--&lt;== use this filter 
+        Advertising[Year],													'--&lt;== apply it to these columns
+        Advertising[Month Number]											'--&lt;== apply it to these columns
+    )
+
+OUTPUT
+=====================
+YEAR    Month Number
+2014	1
+2014	2
+2014	3
+2014	4
+2014	5
+2014	6
+2014	7
+2014	8
+2014	9
+2014	10
+2014	11
+2014	12
+    
+2] 'Use the TREATAS clause, as a FILTER, in a CALCULATE statement and applied to the Advertising table
+
+EVALUATE 
+{
+	 CALCULATE (
+	    SUM ( Advertising[AdvertisingAmount] ),
+	    TREATAS (
+	        SUMMARIZE ( 'Date', 'Date'[Year], 'Date'[MonthNumber] ),
+	        Advertising[Year],
+	        Advertising[Month Number]
+	    )
+	)
+}
+    
+OUTPUT  {with no external filter context}
+=====================    
+220 		'{a scalar}</Code>
       </SnippetValue>
     </value>
   </item>
   <item>
     <key>
       <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>DAX_Functions</Category>
-        <Language>VB</Language>
+        <Category>DEPENDENCIES</Category>
+        <Language>SQLSERVER2K SQL</Language>
         <Public>false</Public>
-        <Name>about_ITERATOR_and_AGGREGATOR_functions</Name>
+        <Name>Cross-database dependencies</Name>
         <Group>My Snippets</Group>
       </SnippetKey>
     </key>
     <value>
       <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
         <Key>
-          <Category>DAX_Functions</Category>
-          <Language>VB</Language>
+          <Category>DEPENDENCIES</Category>
+          <Language>SQLSERVER2K SQL</Language>
           <Public>false</Public>
-          <Name>about_ITERATOR_and_AGGREGATOR_functions</Name>
+          <Name>Cross-database dependencies</Name>
           <Group>My Snippets</Group>
         </Key>
         <Keywords />
         <Imports />
-        <Code>https://elias-nordlinder.medium.com/dax-series-4-iterators-and-aggregators-dba4314c0292
+        <Code>--What objects in other Databases reference objects in edwCrescent:
 
+use edwCrescent
+go
 
-NOTE:
-'the only differences between the Iterators, such as SUMX, and the aggregator, 
-' such as SUM, is the table parameter as the first parameter in the iterator (‘Sales’).
-'When the Expression only is a column, such as ‘Sales’[Quantity] the two can be used interchangeable
-
-'As long as you want to write an expression that is not a single column, you must use an iterator.
-===================================================================================================
-'Iteration functions 
---------------------
-' take in (at least) two parameters to work, which means that they do not work by only sending in a column. 
-' The first parameter 
-		'that iterators works on are the table that they need to “scan”.
-' The second parameter
-	'They need the virtual table that the expression, which is the second parameter, should iterate over.
-	'The second parameter is often an expression that the iterator will evaluate for each row in the table.
-
-'	move row-by-row through the table
-'	does a calculation, or retrieves some data	
-'	Then aggregates it when it is all done
-
-e.g.
-	 X = SUMX(
-				Sales,
-				Sales[Order Quantity]
-			  )
-'the iterator SUMX require the table, Sales, and the Expression, 
-'	which in this case is just the column, to compute the order quantity.
-
-
-
-'They work like calculated columns 
-'	so Interation functions, which are aggregation functions, are similar to calculated columns
-
-SUMX
-COUNTX
-AVERAGEX
-MINX
-MAXX
-RANKX
-
-===================================================================================================
-'Aggregator Functions
----------------------
-'Aggregators are functions that aggregate values of a column in a table and return a single value.
-e.g.
-	Y = SUM(Sales[Order Quantity])
-
-
-'They could work while only taking in one parameter, i.e. a column
-
-SUM' Total Quantity = SUM ( ‘Sales’[Quantity] )
-MAX' Max Sales = MAX ( ‘Sales’[Quantity] )
-MIN' Min Sales = MIN ( ‘Sales’[Quantity] )
-AVERAGE' Average Sales = AVERAGE ( ‘Sales’[Quantity] )
-
-
-=========================================================================MORE details about ITERATORS
-
-'The second parameter can be a single column like " Sales[Order Quantity] ", 
-'	but it can also be a specific expression like the example below.
-Total Sales = 
-SUMX (
-    Sales,
-    Sales[Order Quantity] * Sales[Unit Price] * (1 - Sales[Discount Applied] )
-    )</Code>
+SELECT  OBJECT_NAME (referencing_id) AS referencing_object, referenced_database_name, 
+     referenced_schema_name, referenced_entity_name
+FROM sys.sql_expression_dependencies
+WHERE referenced_database_name IS NOT NULL
+      AND is_ambiguous = 0;   
+      
+--Note: This may also include other three-part name references if the is_ambiguous filter is omitted. See Books Online (BOL) for more information about this column and its meaning.      
+      
+--OUTPUT
+--======
+--referencing_object						referenced_database_name	referenced_schema_name	referenced_entity_name
+--====================================================================================================================
+--FundedApplications						edwCrescent					dbo						FactContractMeasures
+--FundedApplications						edwCrescent					dbo						FactContractValues
+--XREF_LOSS_MULTIPLIER_20140509			RiskMngt					dbo						XREF_LOSS_MULTIPLIER_20140509
+--XREF_RECOVERY_RATES_20150511			RiskMngt					dbo						XREF_RECOVERY_RATES_20150511
+--XREF_RECOVERY_RATES_20161121			RiskMngt					dbo						XREF_RECOVERY_RATES_20161121
+--XREF_RECOVERIES_BY_ACCT_2014_2016		RiskMngt					dbo						XREF_RECOVERIES_BY_ACCT_2014_2016
+--COMMENT_PENDINGDLR_FIVE					stageDW						stage					PendingDealerComment5
+--COMMENT_PENDINGDLR_TEN					stageDW						stage					PendingDealerComment10
+--USURY_TABLE								RiskMngt					dbo					`	USURY_TABLE
+--EXCEPTIONS_LOAN_DETAIL					RiskMngt					exception				LoanDetails
+--Pilot_LTV_DP_Expansion					CMSI						origenate				CREDIT_REQ_DECISIONS_EVALUATOR
+--Pilot_LTV_DP_Expansion					CMSI						origenate				CREDIT_REQUEST
+--Pilot_LTV_DP_Expansion					RiskMngt					dbo						CurrentMonthlyRunning
+--Pilot_LTV_DP_Expansion					edwCrescent					dbo						factMonthlyAccount
+--XREF_LCP_LCE_LOANS						RiskMngt					exception				XREF_LCE_LCP_LOANS
+--MASTER_EXCEPTION_TABLE					RiskMngt					exception				masterTableN      </Code>
       </SnippetValue>
     </value>
   </item>
   <item>
     <key>
       <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>DAX_Functions</Category>
-        <Language>VB</Language>
+        <Category>DEPENDENCIES</Category>
+        <Language>SQLSERVER2K SQL</Language>
         <Public>false</Public>
-        <Name>Statistical_Functions</Name>
+        <Name>objects referencing linked servers</Name>
         <Group>My Snippets</Group>
       </SnippetKey>
     </key>
     <value>
       <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
         <Key>
-          <Category>DAX_Functions</Category>
-          <Language>VB</Language>
+          <Category>DEPENDENCIES</Category>
+          <Language>SQLSERVER2K SQL</Language>
           <Public>false</Public>
-          <Name>Statistical_Functions</Name>
+          <Name>objects referencing linked servers</Name>
           <Group>My Snippets</Group>
         </Key>
         <Keywords />
         <Imports />
-        <Code>https://docs.microsoft.com/en-us/dax/statistical-functions-dax
+        <Code>SELECT OBJECT_NAME (referencing_id) AS referencing_object, referenced_server_name, 
+       referenced_database_name, referenced_schema_name, referenced_entity_name
+FROM sys.sql_expression_dependencies
+WHERE referenced_server_name IS NOT NULL
+      AND is_ambiguous = 0;</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>Google_Search</Category>
+        <Language>TEXT</Language>
+        <Public>false</Public>
+        <Name>google_search_operators</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>Google_Search</Category>
+          <Language>TEXT</Language>
+          <Public>false</Public>
+          <Name>google_search_operators</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>https://ahrefs.com/blog/google-advanced-search-operators/
 
-' Filters do not propogate in a Row Context, i.e. in Calculated Columns
-----------------------------------------------------------------------------------
-'SO if you created two columns in a Visual (e.g. Table) and one was based on a Calculated Column using data from a Related table, 
-'	and the other was based on a Measure using data from a Related table, then the Calculated-based Rank would remain unchanged as you
-'	apply filters to the related Table, but the Measure-based Rank would change as you applied filters to the related Table.
+-
 
-'e.g. for a Calculated Column
-Ranking =        RANKX(ALL(Products), SUMX(RELATEDTABLE(SalesOrderDetail), SalesOrderDetail[GrossSales]))
+Exclude a term or phrase. In our example, any pages returned will be related to jobs but not Apple (the company).
+Example: jobs  apple
 
-'e.g. for a MEASURE Column
-RankingMeasure = RANKX(ALL(Products), SUMX(RELATEDTABLE(SalesOrderDetail), SalesOrderDetail[GrossSales]))		
----------------------------------------------------------------------------------
+#
 
-ADDCOLUMNS
-APPROXIMATEDISTINCTCOUNT
-AVERAGE
-AVERAGEA
+Searches #hashtags. Introduced for Google+; now deprecated.
+Example: #apple
 
-AVERAGEX
- 		'e.g.
- 		AverageGrossSales = AVERAGEX(SalesOrderDetail, SalesOrderDetail[OrderQty] * SalesOrderDetail[UnitPrice] * (1 - SalesOrderDetail[UnitPriceDiscount]))
- 		
-BETA.DIST
-BETA.INV
-CHISQ.INV
-CHISQ.INV.RT
-CONFIDENCE.NORM
-CONFIDENCE.T
+#..#
 
-COUNT():
-	'The COUNT function counts the number of cells in a column that contains 
-	'values of the whole number or integer or string datatype excluding the 
-	'blank cell. It even counts the cell with repeated values.
-	' only count non-empty cells  and are not sensitive to repetitive values 
-	'in cells.
-	Apps = COUNT(FactApplication[Client_App_ID])
-	
-	'EXAMPLE: show 0 if there are none, 1 if there are some
-	' add a zero to convert the blanks to zero, then use "&gt;" to create boolean, then INT to convert back to 0/1
-	INT((COUNT(FactApplication[Client_App_ID]) + 0) &gt; 0)
+Search for a range of numbers. In the example below, searches related to “WWDC videos” are returned for the years 2010–2014, but not for 2015 and beyond.
+Example: wwdc video 2010..2014
 
-COUNTA():
-	'COUNTA function can also count the boolean values (True or False) 
-	'whereas count function returns an error .
-	' only count non-empty cells  and are not sensitive to repetitive values 
-	'in cells.
+$
 
-COUNTX():
-	'Syntax: COUNTX(&lt;table&gt;,&lt;expression&gt;)
-	'COUNTX function counts the number of rows which are non-empty when 
-	'evaluating an expression over a table.
-	'This function cannot be used for boolean values.
+Search for prices. Also works for Euro (€), but not GBP (£) 🙁
+Example: ipad $329
 
-COUNTAX():
-	'Syntax: COUNTAX(&lt;table&gt;,&lt;expression&gt;)
-	'similar to COUNTX function with the only difference being that COUNTAX function can operate on boolean values.	
+( )
 
-COUNTBLANKS():
-	'Syntax: COUNTBLANK(&lt;column&gt;)
-	' calculate the number of blanks present in a column.
-	 NumbOfRowNumbersWithBlanks = COUNTBLANK('tableName'[columnName])
-	
-COUNTROWS():
-	'Syntax : COUNTROWS(&lt;table&gt;)
-	'NOTE: can use FILTERs in place of &lt;table&gt;
-	'counts the number of rows in the specified table, or in a table defined by an expression .
+Group multiple terms or search operators to control how the search is executed.
+Example: (ipad OR iphone) apple
 
+*
 
-CROSSJOIN
-	'e.g. Cross Join 3 tables
-	RowHeader_Territory_Segment = CROSSJOIN(RowHeaders,Segments,Territories)
-DATATABLE function
-DISTINCTCOUNT():
-	'Syntax: DISTINCTCOUNT(&lt;column&gt;)
-	' returns the number of unique values present in a column.
-	'It counts NULL as a unique value
+Acts as a wildcard and will match any word or phrase.
+Example: steve * apple 
 
-DISTINCTCOUNTNOBLANK
-	' returns the number of unique values present in a column.
-	'It DOES NOT counts NULL as a unique value
-	
-	CALCULATE( 
-				DISTINCTCOUNT(DimDealer[DealerCode]),
-				FILTER(DimDealer,DimDealer[DealerActive] = True())
-			  )
-	
-	
-EXPON.DIST
-GENERATE
-GENERATEALL
-GEOMEAN
-GEOMEANX
-MAX
-	'This takes the Max from a column, but does not let you filter by some category
-MAXA
-MAXX
-	'This takes the Max from an expression, where the expression is what let's us 'filter' 
-	'	down to just some rows
-	
-	Last Purchase Date for each Customer = 
-	    //'return the MAX value from the set of returned rows
-	    MAXX(
-	            RELATEDTABLE(Internet Sales),     //'Work on the related set of rows from the table, related by the relationship (i.e. the customer)
-	            Internet Sales[Order Date]       // 'for each row returned, return this field
-	        )	
-MEDIAN
-MEDIANX
-MIN
-MINA
-MINX
-NORM.DIST
-NORM.INV
-NORM.S.DIST
-NORM.S.INV (DAX)
-PERCENTILE.EXC
-PERCENTILE.INC
-PERCENTILEX.EXC
-PERCENTILEX.INC
-POISSON.DIST
-RANK.EQ
-RANKX
-	RANKX(&lt;table&gt;, &lt;expression&gt;[, &lt;value&gt;[, &lt;order&gt;[, &lt;ties&gt;]]])  
-	'e.g. create a MEASURE: for each product (in TABLE_1: Products), go through each row in another table (TABLE_2: SalesOrderDetail)
-	
-	Ranking = RANKX(
-					ALL(Products), 
-					SUMX(
-							RELATEDTABLE(SalesOrderDetail), 
-							SalesOrderDetail[GrossSales])
-						)
-					)
-	'NOTE: if you used  SUMX(SalesOrderDetail, SalesOrderDetail[GrossSales]) 
-	'	then it would sum up all the rows, rather than just the related rows
-	'NOTE: if we did not use ALL (for [Products] table) then it would only rank for the filtered rows of [Products], and not give us an overall Rank
+_
 
+Not exactly a search operator, but acts as a wildcard for Google Autocomplete.
+Example: apple CEO _ jobs
+Here are the ones that are hit and miss, according to my testing:
 
-ROW
-SAMPLE
-SELECTCOLUMNS
-SIN
-SINH
-SQRTPI
-STDEV.P
-STDEV.S
-STDEVX.P
-STDEVX.S
-SUMMARIZE
-	'SYNTAX
-	SUMMARIZE (&lt;table&gt;, &lt;groupBy_columnName&gt;[, &lt;groupBy_columnName&gt;]…[, &lt;name&gt;, &lt;expression&gt;]…)
-	'Returns a summary table for the requested totals over a set of groups.
-	&lt;expression&gt;	'Any DAX expression that returns a single scalar value, where the expression is to be evaluated multiple times (for each row/context).
-T.DIST
-T.DIST.2T
-T.DIST.RT
-T.INV
-T.INV.2t
-TAN
-TANH
-TOPN
-VAR.P
-VAR.S
-VARX.P
-VARX.S
-XIRR
-XNPV
+~
+
+Include synonyms. Doesn’t work, because Google now includes synonyms by default. (Hint: Use double quotes to exclude synonyms.)
+Example: ~apple
+
+“search term”
+
+Force an exact-match search. Use this to refine results for ambiguous searches, or to exclude synonyms when searching for single words.
+Example: “steve jobs”
+
++
+
+Force an exact-match search on a single word or phrase.
+Example: jobs +apple
+SIDENOTE.
+ You can do the same thing by using double quotes around your search.
+
+allinanchor:
+
+Similar to “inanchor,” but only results containing all of the specified words in the inbound anchor text will be returned.
+Example: allinanchor:apple iphone
+
+allinpostauthor:
+
+Similar to “inpostauthor,” but removes the need for quotes (if you want to search for a specific author, including surname.)
+Example: allinpostauthor:steve jobs
+
+allintext:
+
+Similar to “intext,” but only results containing all of the specified words somewhere on the page will be returned.
+Example: allintext:apple iphone
+
+allintitle:
+
+Similar to “intitle,” but only results containing all of the specified words in the title tag will be returned.
+Example: allintitle:apple iphone
+
+allinurl:
+
+Similar to “inurl,” but only results containing all of the specified words in the URL will be returned.
+Example: allinurl:apple iphone
+
+AND
+
+Search for X and Y. This will return only results related to both X and Y. Note: It doesn’t really make much difference for regular searches, as Google defaults to “AND” anyway. But it’s very useful when paired with other operators.
+Example: jobs AND gates
+
+AROUND(X)
+
+Proximity search. Find pages containing two words or phrases within X words of each other. For this example, the words “apple” and “iphone” must be present in the content and no further than four words apart.
+Example: apple AROUND(4) iphone
+
+blogurl:
+
+Find blog URLs under a specific domain. This was used in Google blog search, but I’ve found it does return some results in regular search.
+Example: blogurl:microsoft.com
+SIDENOTE.
+ Google blog search discontinued in 2011
+
+cache:
+
+Returns the most recent cached version of a web page (providing the page is indexed, of course).
+Example: cache:apple.com
+
+daterange:
+
+Find results from a certain date range. Uses the Julian date format, for some reason.
+Example: daterange:11278–13278
+SIDENOTE.
+ Not officially deprecated, but doesn’t seem to work.
+
+define:
+
+A dictionary built into Google, basically. This will display the meaning of a word in a card-like result in the SERPs.
+Example: define:entrepreneur
+
+filetype:
+
+Restrict results to those of a certain filetype. E.g., PDF, DOCX, TXT, PPT, etc. Note: The “ext:” operator can also be used—the results are identical.
+Example: apple filetype:pdf / apple ext:pdf
+
+In
+
+Convert one unit to another. Works with currencies, weights, temperatures, etc.
+Example: $329 in GBP
+
+inanchor:
+
+Find pages that are being linked to with specific anchor text. For this example, any results with inbound links containing either “apple” or “iphone” in the anchor text will be returned.
+Example: inanchor:apple iphone
+
+info:
+
+Find information about a specific page, including the most recent cache, similar pages, etc. (Deprecated in 2017). Note: The id: operator can also be used—the results are identical.
+SIDENOTE.
+ Although the original functionality of this operator is deprecated, it is still useful for finding the canonical, indexed version of a URL. Thanks to @glenngabe for pointing this one one!
+Example: info:apple.com / id:apple.com
+
+inpostauthor:
+
+Find blog posts written by a specific author. This only worked in Google Blog search, not regular Google search.
+Example: inpostauthor:”steve jobs”
+SIDENOTE.
+ Google blog search was discontinued in 2011.
+
+inposttitle:
+
+Find blog posts with specific words in the title. No longer works, as this operator was unique to the discontinued Google blog search.
+Example: intitle:apple iphone
+
+intext:
+
+Find pages containing a certain word (or words) somewhere in the content. For this example, any results containing the word “apple” in the page content will be returned.
+Example: intext:apple
+
+intitle:
+
+Find pages with a certain word (or words) in the title. In our example, any results containing the word “apple” in the title tag will be returned.
+Example: intitle:apple
+
+inurl:
+
+Find pages with a certain word (or words) in the URL. For this example, any results containing the word “apple” in the URL will be returned.
+Example: inurl:apple
+
+link:
+
+Find pages linking to a specific domain or URL. Google killed this operator in 2017, but it does still show some results—they likely aren’t particularly accurate though. (Deprecated in 2017)
+Example: link:apple.com
+
+loc:placename
+
+Find results from a given area.
+Example: loc:”san francisco” apple
+SIDENOTE.
+ Not officially deprecated, but results are inconsistent.
+
+location:
+
+Find news from a certain location in Google News.
+Example: loc:”san francisco” apple
+SIDENOTE.
+ Not officially deprecated, but results are inconsistent.
+Here are the Google search operators that have been discontinued and no longer work. 🙁
+
+map:
+
+Force Google to show map results for a locational search.
+Example: map:silicon valley
+
+movie:
+
+Find information about a specific movie. Also finds movie showtimes if the movie is currently showing near you.
+Example: movie:steve jobs
+
+OR
+
+Search for X or Y. This will return results related to X or Y, or both. Note: The pipe (|) operator can also be used in place of “OR.”
+Examples: jobs OR gates / jobs | gates
+
+phonebook:
+
+Find someone’s phone number. (Deprecated in 2010)
+Example: phonebook:tim cook
+
+related:
+
+Find sites related to a given domain.
+Example: related:apple.com
+
+site:
+
+Limit results to those from a specific website.
+Example: site:apple.com
+
+source:
+
+Find news results from a certain source in Google News.
+Example: apple source:the_verge
+
+stocks:
+
+See stock information (i.e., price, etc.) for a specific ticker.
+Example: stocks:aapl
+
+weather:
+
+Find the weather for a specific location. This is displayed in a weather snippet, but it also returns results from other “weather” websites.
+Example: weather:san francisco
 </Code>
       </SnippetValue>
     </value>
@@ -414,238 +673,563 @@ XNPV
   <item>
     <key>
       <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>DAX_Functions</Category>
-        <Language>VB</Language>
+        <Category>IMPORT_Excel_CSV_TEXT</Category>
+        <Language>SQLSERVER2K SQL</Language>
         <Public>false</Public>
-        <Name>Table_Functions</Name>
+        <Name>OPENROWSET_to_read_EXCEL_data</Name>
         <Group>My Snippets</Group>
       </SnippetKey>
     </key>
     <value>
       <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
         <Key>
-          <Category>DAX_Functions</Category>
-          <Language>VB</Language>
+          <Category>IMPORT_Excel_CSV_TEXT</Category>
+          <Language>SQLSERVER2K SQL</Language>
           <Public>false</Public>
-          <Name>Table_Functions</Name>
+          <Name>OPENROWSET_to_read_EXCEL_data</Name>
           <Group>My Snippets</Group>
         </Key>
         <Keywords />
         <Imports />
-        <Code>'Table_Functions
+        <Code>https://blog.learningtree.com/using-openrowset-to-read-excel-worksheets-from-sql-server-part-2-linked-sql-queries/
+Using OPENROWSET
+==================
+--In my opinion, it is wiser to use OPENROWSET to link to data in Excel workbooks 
+--	rather than define a linked server. 
+--It is common to grab data from many different workbooks, 
+--	and the OPENROWSET function enables you to query different workbooks 
+--	without having to define many multiple linked servers. 
+--Just as with linked server definitions, 
+--	you must use the 32-bit version if you are using 32-bit SQL Server, 
+--	and as before you will not be able to query xlsx files. 
+--If you are using 64-bit SQL Server, 
+--	then either the 32- or the 64-bit technique are available to you.
 
-'One key limitation of a table function is that its output can’t be used in a visual in your report. 
-'	If you think about it, 
-'	each cell on a pivot table can only fit one number, not an entire table of numbers.
+Configure ad-hoc distributed queries
+====================================
+--You will not be able to use OPENROWSET until you have configured your server 
+--	to allow ad-hoc distributed queries. 
+--You can check the current configuration setting by running the following query 
+--	in the Management Studio. 
+--Notice that when using sp_configure, 
+--	it is not necessary to type out the entire configuration setting name; 
+--	you must only type out enough so that the name is unambiguously distinguished 
+--	from other configuration setting names.
 
- 'returns a table of data
------------------------------------------------- 
- 'In DAX, a table function is used in a few ways:
+EXEC sp_configure 'Ad hoc dis'
 
-'1]	As input to another DAX function where the function argument requires a table. 
-'		For example, the FILTER function iterates over a table of data 
-'		and tests each value for a condition 
-'		(actually any X function like SUMX or AVERAGEX is an iterator and would require a table as the first argument.)
-'2] As a calculated table definition in Power BI Desktop
-'3] As a query written against your data model using DAX Studio or SQL Server Management Studio.
-------------------------------------------------
+--If you get an error message, 
+--	it may be that your server is not configured to show the advanced configuration options. 
+--You can turn on advanced options as follows:
 
-'Tables can become scalars: 
-'	A neat feature of DAX is that any table function that resolves to a single row and column (i.e., one value) is automatically converted to a scalar value if possible. 
-'	That means that you can use a table function as an input to another function, 
-'	but do so cautiously to avoid the dreaded “Table of Multiple Values…” error.
+EXEC sp_configure 'Show Advanced', 1
 
-----------------------------------------------------------------------------------
-'SO if you created two columns in a Visual (e.g. Table) and one was based on a Calculated Column using data from a Related table, 
-'	and the other was based on a Measure using data from a Related table, then the Calculated-based Rank would remain unchanged as you
-'	apply filters to the related Table, but the Measure-based Rank would change as you applied filters to the related Table.
+RECONFIGURE
 
-'e.g. for a Calculated Column
-Ranking =        RANKX(ALL(Products), SUMX(RELATEDTABLE(SalesOrderDetail), SalesOrderDetail[GrossSales]))
+--You should now be able to check the current setting of Ad Hoc Distributed Queries. 
+--If it is 0, you must turn it on.
 
-'e.g. for a MEASURE Column
-RankingMeasure = RANKX(ALL(Products), SUMX(RELATEDTABLE(SalesOrderDetail), SalesOrderDetail[GrossSales]))		
----------------------------------------------------------------------------------
+EXEC sp_configure 'Ad hoc dis', 1
 
+RECONFIGURE
 
+--Check the value once again to ensure the value is now 1.
 
-FILTER
-	Returns a TABLE
-	'get just the rows from DateTable that match criteria 
-	FilterExampleTable = FILTER(DateTable, (DateTable[IsPreviousWeek]= 1) )
-	
-VALUES
-	'Returns a one column table, or a a table that contains the distinct values in a column	
-	VALUESexampleTable = VALUES(RowHeaders[RowHeader])
-	
-ALL
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\query from NameRange
 
-	'Using a table argument, ALL returns all the rows of the table including any duplicated rows.
-	'Using a single column argument, ALL returns all the unique values of the column.
-	'Using two or more columns arguments, ALL returns all the unique combinations of values in multiple columns.
-	'In every case, ALL includes in the result the additional blank row generated for invalid relationships.
+===&gt;&gt;&gt; my Idea from SSIS to read only certain cell range
+===&gt;&gt;&gt; sheetName$B7:H15
+--Try with a $ sign for Table, and 
 
-	ALLexampleTable = ALL(RowHeaders)				'&lt;== Returns all rows, of all columns
-	ALLexampleTable = ALL(RowHeaders[RowHeader])	'&lt;== returns unique rows, of one column
-		</Code>
+--The 32-bit Version
+SELECT * FROM OPENROWSET(
+'Microsoft.Jet.OLEDB.4.0'
+,'Excel 8.0;Database=C:\Temp\OrderValues.xls;HDR=YES'
+,results) 
+-- “results” is a named range in excel
+
+--The 64-bit Version
+SELECT * FROM OPENROWSET(
+'Microsoft.ACE.OLEDB.12.0'
+,'Excel 12.0;Database=C:\Temp\OrderValues.xlsx;HDR=YES'
+,results) 
+-- “results” is a named range in excel
+
+/////////////////////////////////////////////////////////////SELECT INTO from NameRange
+--Try with a $ sign for Table, and 
+SELECT * INTO #testTable
+
+FROM OPENROWSET(
+
+'Microsoft.ACE.OLEDB.12.0'
+
+,'Excel 2.0;Database=C:\Temp\OrderValues.xlsx;HDR=YES'
+
+,results)</Code>
       </SnippetValue>
     </value>
   </item>
   <item>
     <key>
       <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>DAX_Measures</Category>
-        <Language>VB</Language>
+        <Category>POWER_BI</Category>
+        <Language>TEXT</Language>
         <Public>false</Public>
-        <Name>about_DAX_Measures</Name>
+        <Name>Bi-Directional_Relationship_Ambiguity</Name>
         <Group>My Snippets</Group>
       </SnippetKey>
     </key>
     <value>
       <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
         <Key>
-          <Category>DAX_Measures</Category>
-          <Language>VB</Language>
+          <Category>POWER_BI</Category>
+          <Language>TEXT</Language>
           <Public>false</Public>
-          <Name>about_DAX_Measures</Name>
+          <Name>Bi-Directional_Relationship_Ambiguity</Name>
           <Group>My Snippets</Group>
         </Key>
         <Keywords />
         <Imports />
-        <Code>about_DAX_Measures
+        <Code>Bi-Directional_Relationship_Ambiguity
 
-Measure names must be unique within a .pbix file
-You could store the all in one table and then just reference them wherever you need to use them.
-BEST PRACTICE: when referencing a column in a DAX calculatiton, always preface it with the Table name, 
-	so that you can easily use the measure where ever you want and you will know what it is referring to.
+aka: bidirectional cross-filter relationships
 
-'when you look at Measures in the DATA view you don't see it's column or individual values, rather you have to put it into a Table Visual to see it's value
-'when you look at a Calculated Column in the DATA view you see a column, and values in every row.
+https://www.youtube.com/watch?v=x3m7qzsVJqQ
 
-the ICON of a MEASURE column is a little CALCULATOR inside a square 
-
-'Calculated Columns: "Expands" a table by adding columns defined ba a defined ???
-'					They can only look in the row that they are in.
-'vs.
-'Measures : "Summarizes" all the data into a single value
-'			works with whole columns of data and condense them into a single value
-'			Computed at run time, stored temporarily
-'			Limited by a Filter Context, which are ALL the filters applied by the user
-
-----------------------------------------------------------------------------------
-'SO if you created two columns in a Visual (e.g. Table) and one was based on a Calculated Column using data from a Related table, 
-'	and the other was based on a Measure using data from a Related table, then the Calculated-based Rank would remain unchanged as you
-'	apply filters to the related Table, but the Measure-based Rank would change as you applied filters to the related Table.
-
-'e.g. for a Calculated Column
-Ranking =        RANKX(ALL(Products), SUMX(RELATEDTABLE(SalesOrderDetail), SalesOrderDetail[GrossSales]))
-
-'e.g. for a MEASURE Column
-RankingMeasure = RANKX(ALL(Products), SUMX(RELATEDTABLE(SalesOrderDetail), SalesOrderDetail[GrossSales]))		
----------------------------------------------------------------------------------
-'e.g.
-Total Gross Sales := SUM( Sales[Gross Sales] )  'where Sales[Gross Sales] is Table[field])
-
-'To make sure you are applying the measure to the right table, right click on the table {in Data View}
-
-'You can create Measures in tables with no data
-
-'When you create a 'MEASURE' in the 'Fields' panel of a Table, 
-'	and you look at the table in Data View, 
-'	you do NOT see a column for the measure
-'HOWEVER, you can drag n drop the MEASURE from the 'Fields' panel, into the 'Values' field of a Matrix visualization (for example)
-'	and it will show up as a column in the Matrix Visualization
-
-'You can NOT use a MEASURE in a SLICER
-
-CALCULATE 'is good for writing Measures
-
-'You can move a Measure:
-Visualization View =&gt; Select the Measure {located in some table} =&gt; Modeling {top menu}
-	=&gt; Home Table:xxxTable {drop down}  =&gt; {pick some other table}
----------------------------------------------------------------------------------
-'A measure can only use in it's formula: (a) other measures or (b) functions of regular columns (e.g. SUM(someColumn), but it can not use a simple column.	
-'Example:
-Net Sales = sum(Sales[SalesAmount])-sum(Sales[TotalCost])-sum(Sales[ReturnAmount])-sum(Sales[DiscountAmount])
-'Whereas here is a calculated column
-Net Sales Calc = Sales[SalesAmount]-Sales[TotalCost]-Sales[ReturnAmount]-Sales[DiscountAmount]
-'If you use the Meausure's formulate (i.e. with the Aggregate functions) in a Calculated column then every row has the same value:
-Net Sales Calc using Aggregates = sum(Sales[SalesAmount])-sum(Sales[TotalCost])-sum(Sales[ReturnAmount])-sum(Sales[DiscountAmount])</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>DAX_Misc</Category>
-        <Language>VB</Language>
-        <Public>false</Public>
-        <Name>create_ROW_NUMBER</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>DAX_Misc</Category>
-          <Language>VB</Language>
-          <Public>false</Public>
-          <Name>create_ROW_NUMBER</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>'https://radacad.com/generating-row-number-in-power-bi-visualization-using-dax
-Example in a table:[Product] with a column that has a unique field: [ProductKey]
-1] use a Calculted column 
-2] DAX formula:
-	RowNumber = RANKX(ALL('TableName'),[UniqueFieldName])	
-	RowNumber = RANKX(ALL('Product'),[ProductKey])
+People used Bidirectional Relationship to keep two slicers in Sync
+BUT
+Creating even one bi-directional relationship breaks the model by making it 'ambigous' 
+	which means that the numbers computed by the model are unpredictable
 	
-'Need to use ALL so that when the there is a filter, it will take into account the whole table
+There are a few scenarios where the power of bidirectional cross-filter really shines. 
+	However, these need to be leveraged carefully making sure that the model does not become ambiguous because of the bidirectional relationship. 
+	Implementing bidirectional cross-filter for the purpose of syncing slicers is definitely a bad idea.	
+	
 
-
-'Or can use multiple columns that have unique combinations
-Row Number = RANKX(
-					ALL(DimProduct[EnglishProductName],DimProduct[Color])
-					,[Internet Sales]
-					)</Code>
+------------------------------------------------------------------------------------
+https://www.sqlbi.com/articles/bidirectional-relationships-and-ambiguity-in-dax/
+ A model is ambiguous when there are multiple paths between tables. In an ambiguous model, 
+ 	the engine has multiple options when transferring a filter from one table to another. 
+ 	Therefore, it either finds a preferred way to transfer the filter, or it raises an error. 
+ In an example: We created an ambiguous model, and yet the engine has not complained about it. 
+ 	The reason is that by analyzing the two paths, 
+ 	the engine has decided that one path is to be preferred against the other. </Code>
       </SnippetValue>
     </value>
   </item>
   <item>
     <key>
       <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>DAX_Misc</Category>
-        <Language>VB</Language>
+        <Category>POWER_BI</Category>
+        <Language>TEXT</Language>
         <Public>false</Public>
-        <Name>crreate_ROW_NUMBER_with_Nulls_for_EVEN_rows</Name>
+        <Name>Calculated_Column_vs_Calculated_Measure</Name>
         <Group>My Snippets</Group>
       </SnippetKey>
     </key>
     <value>
       <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
         <Key>
-          <Category>DAX_Misc</Category>
-          <Language>VB</Language>
+          <Category>POWER_BI</Category>
+          <Language>TEXT</Language>
           <Public>false</Public>
-          <Name>crreate_ROW_NUMBER_with_Nulls_for_EVEN_rows</Name>
+          <Name>Calculated_Column_vs_Calculated_Measure</Name>
           <Group>My Snippets</Group>
         </Key>
         <Keywords />
         <Imports />
-        <Code>/* 'use SWITCH to check the result from the MOD of the RANKX
-	' where the RankX gets the Row Number
-	' then the Mod checks to see if it is even
-	'	when it results in zero (0) then it outputs the RowNumber
-	' 	otherwise it ouputs a BLANK() i.e. NULL
-*/
+        <Code>Calculated_Column_vs_Calculated_Measure
 
-RowNumber_WithBlanks = SWITCH (
-	MOD(RANKX(ALL('Product'),[ProductKey]),2),
-	0, RANKX(ALL('Product'),[ProductKey]),
-	BLANK()
-	)</Code>
+
+THIS IS A GENERALIZATION BY THE GUY FROM PRAGMATIC WORKS. 
+
+Calculated Measures:
+	Metrics
+	Aggregates
+	
+Calculated Columns
+	Descriptive
+	Categorical
+	
+
+
+
+
+use DAX to create Calculated_Measure
+
+on 7/13/2021: the Modeling Tab of the Ribbon has 4 things in the 'Calculations' section of the ribbon
+	NOTE: this is via the Viaual's view
+	New Measure		=&gt; new DAX measure 
+	Quick Measure	=&gt; new DAX measure, using prebuilt calculations
+	New Column
+	New Table
+	
+Alternate way to crate a Calculated Measure
+---------------------------------------------
+Right click on the table in the fields list of the visual =&gt; New Measure
+{this makes the empty formula bar show up above the Visual Design surface}
+{That is where you can write your DAX}
+
+
+ROW CONTEXT
+================
+https://www.sqlbi.com/articles/row-context-and-filter-context-in-dax/
+
+A column reference is a somewhat ambiguous definition 
+	because you reference the value of a column in a specific row 
+	and the full column itself, both with the same syntax.
+	
+When you use a column reference to retrieve the value of a column in a given row, 
+	you need a way to tell DAX which row to use, out of the table, to compute the value.	
+	
+You have a row context whenever you iterate a table, 
+	either explicitly (using an iterator) 
+	or implicitly (in a calculated column):	
+	
+		When you write an expression in a calculated column, 
+			the expression is evaluated for each row of the table, 
+			creating a row context for each row.
+			
+		When you use an iterator like FILTER, 
+			SUMX, AVERAGEX, ADDCOLUMNS,
+			or any one of the DAX functions that iterate over a table expression.		
+			
+---------------------------------------------------------------------------------------------------------------			
+Every iterator introduces a new row context, and iterators can be nested. For example, you can write:
+
+		AverageDiscountedSalesPerCustomer :=
+		AVERAGEX (
+		    Customer,
+		    SUMX (
+		        RELATEDTABLE ( Sales ),
+		        Sales[SalesAmount] * Customer[DiscountPct]
+		    )
+		)			
+		
+In the innermost expression, 
+	you reference both Sales[SalesAmount] and Customer[DiscountPct], i.e. two columns coming from different tables. 
+You can safely do this because there are two row contexts: 
+	the first one introduced by AVERAGEX over Customer 
+	and 
+	the second one introduced by SUMX over Sales. 
+Moreover, it is worth noting that the row context is also used by RELATEDTABLE to determine the set of rows to return. 
+In fact, RELATEDTABLE ( Sales ) returns the sales of the current customer, 
+	by “current” we mean the customer currently iterated by AVERAGEX 
+	or, 
+	for a more clear definition: 
+	the current customer in the row context introduced by AVERAGEX over Customer.		
+---------------------------------------------------------------------------------------------------------------		</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWER_BI</Category>
+        <Language>TEXT</Language>
+        <Public>false</Public>
+        <Name>Cascading_DropDown_Slicer</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWER_BI</Category>
+          <Language>TEXT</Language>
+          <Public>false</Public>
+          <Name>Cascading_DropDown_Slicer</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>DAX Fridays! #138: INT, NOT EMPTY | Cascading slicers  (3 eays)
+https://www.youtube.com/watch?v=cYV-IkxvWfY
+
+
+Syncing slicers in Power BI
+https://www.sqlbi.com/tv/syncing-slicers-in-power-bi/
+
+DO NOT use Bi-directional Relationships b/c this will create Ambigous results in the model
+
+PROBLEM:
+When you select a category, you want only the pertinent sub-categories to be selected in the second slicer
+
+
+0] Create a measure (see below for examples)
+1] Start with a category selected in the first slicer, then select the second slicer (i.e. Color) to make it active
+2] Drag the measure to the text box in the "FILTERS" pane that initially says "Add Data Fields here"
+3] set [Show Items when the value:]  Is  , then set the value to 1
+4] click [Apply Filter]
+
+
+It is a best practice to use Measures to filter slicers
+
+Example: better create a measure to see if there are rows in the sales table for a given Color, 
+	when a name is choosen, i.e. is the Sales Table empty OR not empty for a given Color
+
+FORMULA:
+----------
+Slicer Sales = NOT ISEMPTY (Sales)  
+
+With Boolean you can not choose:  "Show Items when the value:"   {in the FILTER pane}   
+
+BUT this is not good enough b/c it returns a BOOLEAN, 
+	and filters do not work with measures that return BOOLEAN values, 
+	but they do work with Integers, so CAST to INT
+
+THIS IS THE GOOD EXAMPLE:
+--------------------------------------------
+Slicer Sales = INT ( NOT ISEMPTY (Sales)  )     
+
+NOW the slicer lets you choose a value from the drop-down of "Show Items when the value:" (in the Filter Pane)
+
+Another example of a measure for this type of use:
+This equals 1 if there are SALES or if there are PURCHASES
+-----------------------------------------------------------------
+Slicer_ProductsWithPurchasesOrSales = INT( NOT ISEMPTY(SALES) || NOT ISEMPTY( Purchases) )
+
+So you are building MEASURES that are filters for SLICERS
+Start the name of the MEASURE with the prefix:   SLICER_
+
+Then put all the slicer Measures into a table Named [Slicers]
+You can then hide the table before going into production
+
+
+You can use a Measure for various subtle issues:
+Example:
+	Use a measure to show just the top 5 items for a given selection
+	
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>PYTHON_Class_Object</Category>
+        <Language>PYTHON</Language>
+        <Public>false</Public>
+        <Name>OOP_09_Composition_replaceSimplePropertiesWithObjectProperties</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>PYTHON_Class_Object</Category>
+          <Language>PYTHON</Language>
+          <Public>false</Public>
+          <Name>OOP_09_Composition_replaceSimplePropertiesWithObjectProperties</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>#OOP_09_Composition_replaceSimplePropertiesWithObjectProperties
+
+# This pattern allows simple string parameters, to be replaced by Objects as parameters.
+# HOWEVER, it does nor require that the inputs for the new class signuature be of a particular class.
+# example: while the authorfname and authorlname replaced with 'author' input parm, it is not required to
+#           use the new opbject as the input, you could still input a string to the Book object's constructor
+#           nothing in this design would prevent you from using a string rather than a tuple as input
+#   `           until you went to 'print' the author, and invoke the '__str__' method
+
+
+class Book:
+    # def __init__(self, title, price, authorfname, authorlname): #Original: each property is just a variable
+    # I DON"T LIKE the fact that the datatype is ambigous for the parms in init
+    #   This means that 'author' could be a string, or an 'author' object
+    def __init__(self, title, price, author=None )   :   #1] Create the Author class, and then use that as an input parm
+        self.title = title
+        self.price = price
+
+        #replace these simple properites, with an internal object
+        #--------------------------------------------------------
+        # self.authorfname = authorfname
+        # self.authorlname = authorlname
+        #--------------------------------
+        self.author = author
+
+        self.chapters = []
+
+    # def addchapter(self, name, pages):   # 2] create Chapter class to replace the name and pages parms
+    # def addchapter(self, name, pages):
+    #     self.chapters.append((name, pages))
+
+    # 3] Create the Chapter class below, and this method to append chapter objects
+    def addchapter(self, chapter):
+        self.chapters.append(chapter)    #adds a tuple to the collection: chapters
+
+    # 4] Method to track pages in each chapter
+    def getbookpagecount(self):
+        result = 0
+        for ch in self.chapters:
+            result += ch.pagecount
+        return result
+
+class Author:
+    def __init__(self, fname, lname):
+        self.fname = fname
+        self.lname = lname
+
+    def __str__(self):
+        return f"{self.fname} {self.lname}"
+
+
+class Chapter:
+    def __init__(self, name, pagecount):
+        self.name = name
+        self.pagecount = pagecount
+
+ #============================================================================================implement objects
+
+auth = Author("Leo", "Tolstoy")
+b1 = Book("War and Peace", 39.95, auth)
+
+b1.addchapter(Chapter("Chapter 1", 104))
+b1.addchapter(Chapter("Chapter 2", 89))
+b1.addchapter(Chapter("Chapter 3", 124))
+
+print(b1.title)
+print(b1.author)
+print(b1.getbookpagecount())
+
+# b1 = Book("War and Peace", 39.0, "Leo", "Tolstoy")
+#
+# b1.addchapter("Chapter 1", 125)
+# b1.addchapter("Chapter 2", 97)
+# b1.addchapter("Chapter 3", 143)
+#
+# print(b1.title)
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>PYTHON_logic_loops_Conditionals</Category>
+        <Language>PYTHON</Language>
+        <Public>false</Public>
+        <Name>TRY-ELSE_loop</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>PYTHON_logic_loops_Conditionals</Category>
+          <Language>PYTHON</Language>
+          <Public>false</Public>
+          <Name>TRY-ELSE_loop</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+==================================================================EXAMPLE: targeted
+
+try:
+    f = open(filename, "rt")
+except OSError:
+    print("File could not be opened for read")
+else:
+    # Now we're sure the file is open
+    num_lines = sum(1 for line in f)
+    print("Number of lines", num_lines)
+    f.close()
+ 
+
+==================================================================AMBIGUOUS
+# This is an AMBIGUOUS TRY-BLOCK
+# This is simpler, and avoids the use of the ELSE statement, 
+#   i.e. if do_something() does not throw an error than we do_something_else()
+# The problem with this strategy is that we don't know which statement raised the error
+try:
+    # This code might raise an exception
+    do_something()
+    do_something_else()
+except ValueError as e:
+    # ValueError caught and handled
+    handle_value_error(e)
+
+==================================================================TARGETED
+#TARGETED TRY-BLOCK
+
+try:
+    # This code might raise an exception
+    do_something()
+except ValueError as e:
+    # ValueError caught and handled
+    handle_value_error(e)
+else:
+    # No exception was raised
+    # We know that do_something() succeeded, so
+    do_something_else()
+==================================================================using FINALLY
+
+try:
+    # statements that can raise exceptions
+    potentially_raising_operation() 
+except:
+     # executed to handle exceptions
+    handle_raised_exception()
+else:
+    # executed if there is no exception
+    dependent_on_success()
+finally:
+    # executed regardless
+    always_before_moving_on()</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>SSIS_CAST</Category>
+        <Language>TEXT</Language>
+        <Public>false</Public>
+        <Name>String_to_Date</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>SSIS_CAST</Category>
+          <Language>TEXT</Language>
+          <Public>false</Public>
+          <Name>String_to_Date</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>from: http://toddmcdermid.blogspot.com/2008/11/converting-strings-to-dates-in-derived.html
+
+
+
+"When a string is cast to a DT_DATE, or vice versa, 
+	the locale of the transformation is used. 
+	However, the date is in the ISO format of YYYY-MM-DD, 
+	regardless of whether the locale preference uses the ISO format."
+	
+OR
+
+"When a string is cast to a DT_DATE, or vice versa, the locale of the transformation is used.  
+	However, conversions from string to date 
+	will correctly use the ISO format of YYYY-MM-DD regardless of the locale."	
+	
+So:
+
+You can rely on the vagaries (uncertainty) of your development machines and servers' locales, 
+	or you can do the smart thing by making everything clear, 
+	and specifically, deliberately, reformat your strings into ISO format before you cast to a date type.	
+	
+Oh, and to be clear, the Derived Column component is the place to do this reformatting - 
+	NOT the Convert Data component!  
+	Although the Convert Data component works just fine and performs better, 
+	it doesn't give you any of the flexibility of the Derived Column transformation for dealing with the crazy formats you can get dates in - 
+	it expects an unambiguous format, and if it doesn't get one, it will guess.	</Code>
       </SnippetValue>
     </value>
   </item>
