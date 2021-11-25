@@ -1,2 +1,658 @@
 <?xml version="1.0" encoding="utf-8"?>
-<dictionary />
+<dictionary>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Functions</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>Other_Functions</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Functions</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>Other_Functions</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>https://docs.microsoft.com/en-us/dax/other-functions-dax
+
+DATATABLE
+ERROR
+EXCEPT
+GENERATESERIES
+GROUPBY
+		'Create Table: Territories
+		'from list of Territories in DimDealer
+		
+		Territories = GROUPBY(DimDealer,DimDealer[xTerritory])
+
+INTERSECT
+ISEMPTY
+NATURALINNERJOIN
+NATURALLEFTOUTERJOIN
+SUMMARIZECOLUMNS
+Table Constructor (DAX)
+TREATAS
+UNION
+VAR (DAX)
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_TABLE</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>Create_Static_Table_from_DAX</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_TABLE</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>Create_Static_Table_from_DAX</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>Create_Static_Table_from_DAX
+https://www.youtube.com/watch?v=4uVgoVCmdnc
+
+'You can start from DAX STUDIO
+
+'create a query that outputs 1 row
+
+EVALUATE
+		ROW("Price range", "Low",
+			  "Min Price", 0,
+			  "Max Price", 100)
+			  
+
+1] Hard Code it and use UNION to append the rows
+==================================================
+
+'Modify it to create 3 rows			  
+			  
+EVALUATE
+	UNION (
+			ROW("Price range", "Low",
+				  "Min Price", 0,
+				  "Max Price", 100),
+			ROW("Price range", "Medium",
+				  "Min Price", 100,
+				  "Max Price", 1000),
+			ROW("Price range", "High",
+				  "Min Price", 1000,
+				  "Max Price", 9999)	
+		  )	  
+		  
+'To move the query to Power BI, copy all of the query, except the EVALUATE phrase		  
+		  
+'back in Power Power BI: Report View =&gt; Modeling =&gt; New Table		  		  
+
+Price Range = 
+	UNION (
+			ROW("Price range", "Low",
+				  "Min Price", 0,
+				  "Max Price", 100),
+			ROW("Price range", "Medium",
+				  "Min Price", 100,
+				  "Max Price", 1000),
+			ROW("Price range", "High",
+				  "Min Price", 1000,
+				  "Max Price", 9999)	
+		  )	
+		  
+'BUT this table is not a static table, and is not available in Query Editor		  
+
+2] Hard Code, using Row Notation, this is an old function, 
+'	and the definition of the content cannot be computed
+'	you can create a data table with static values, BUT you can not write expressions.
+'	i.e. you can hard code values, but not put DAX into the code to dynamically populate the values
+================================================
+EVALUATE
+	DATATABLE(
+				"Price Range", STRING,
+				"Min Price", CURRENCY,
+				"Max Price", CURRENCY,
+				{
+					{"LOW", 0, 100},
+					{"Mediu", 100, 1000},			
+					{"High", 1000, 9999}
+				}
+			  )
+			  
+3] Anonymous Table creator
+====================================================
+
+3a} 'This creates a single column with 3 rows:
+
+EVALUATE
+		{"LOW", 0, 100}
+			  
+3b) 'This creates a single row, with 3 columns:
+
+EVALUATE
+		{
+			("LOW", 0, 100)
+		}
+
+3c) 'This creates 3 columns, with 3 rows, BUT the column names are: Value1, Value2, and Value3
+
+EVALUATE
+		{
+					("LOW", 0, 100),
+					("Mediu", 100, 1000),			
+					("High", 1000, 9999)
+		}
+		
+3d) 'This outputs a table with: 3 columns, 3 rows, and column headers:
+
+EVALUATE
+		SELECTCOLUMNS(
+						{
+									("LOW", 0, 100),
+									("Medium", 100, 1000),			
+									("High", 1000, 9999)
+						},
+						"Price Range", [Value1],
+						"Min Price", [Value2],						
+						"Max Price", [Value3]
+					  )
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_SSRS</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>SECURITY_for_Reports_set_security_by_folder</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_SSRS</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>SECURITY_for_Reports_set_security_by_folder</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>&lt;#
+.SYNOPSIS
+    Set user permissions in SQL Reporting Services using Web Service
+ 
+.DESCRIPTION
+    Set user permissions in SQL Reporting Services using Web Service
+ 
+.EXAMPLE
+    Add-SSRSItemSecurity -webServiceUrl "http://[ServerName]/ReportServer/ReportService2005.asmx?WSDL" -itemPath "MyReportFolder" -groupUserName RPAULO\User1 -role Browser
+ 
+.EXAMPLE
+    Add-SSRSItemSecurity -url "http://[ServerName]/ReportServer/ReportService2005.asmx?WSDL" -itemPath "MyReportFolder" -u RPAULO\User1 -r "Content Manager"
+ 
+#&gt;
+function Add-SSRSItemSecurity
+(
+    [Parameter(Position=0,Mandatory=$true)]
+    [Alias("url")]
+    [string]$webServiceUrl,
+ 
+    [Parameter(Position=1,Mandatory=$true)]
+    [Alias("path")]
+    [string]$itemPath,
+     
+    [Parameter(Position=2,Mandatory=$true)]
+    [Alias("u")]
+    [string]$groupUserName,
+     
+    [Parameter(Position=3,Mandatory=$true)]
+    [Alias("r")]
+    [string]$role,
+     
+    [Parameter(Position=4)]
+    [bool]$inherit=$true
+)
+ 
+{
+     
+    #Fix item path if not starting with /
+    if(!$itemPath.StartsWith("/")) { $itemPath = "/" + $itemPath}
+     
+    #Create Proxy
+    Write-Host "[Add-SSRSItemSecurity()] Creating Proxy, connecting to : $webServiceUrl"
+    $ssrsProxy = New-WebServiceProxy -Uri $webServiceUrl -UseDefaultCredential
+     
+    $type = $ssrsProxy.GetType().Namespace;
+    $policyType = "{0}.Policy" -f $type;
+    $roleType = "{0}.Role" -f $type;
+     
+    Write-Host "[Add-SSRSItemSecurity()] Retrieving all existing policies."
+    $policies = $ssrsProxy.GetPolicies($itemPath, [ref]$inherit);
+     
+    $a = 1;
+    foreach($policy in $policies)
+    {
+ 
+        foreach($r in $policy.Roles)
+        {
+            $msg = "[Add-SSRSItemSecurity()]  Existing Policy # {0} Group Name: {1}, Role: {2}" -f $a, $policy.GroupUserName, $r.Name
+            Write-Host $msg
+        }
+        $a+=1;
+    }
+ 
+    $msg = "[Add-SSRSItemSecurity()] Total Existing Policies: " + $policies.Length;
+    Write-Host $msg
+     
+    $Policy = $policies | 
+    Where-Object { $_.GroupUserName -eq $groupUserName } | 
+    Select-Object -First 1
+     
+    if (-not $Policy) {
+        $Policy = New-Object ($policyType)
+        $Policy.GroupUserName = $GroupUserName
+        $Policy.Roles = @()
+        $Policies += $Policy
+        $msg = "[Add-SSRSItemSecurity()] Adding new policy: '{0}'" -f $GroupUserName
+        Write-Host $msg
+    }
+ 
+    $r = $Policy.Roles |
+        Where-Object { $_.Name -eq $role } |
+        Select-Object -First 1
+    if (-not $r) {
+        $r = New-Object ($roleType)
+        $r.Name = $role
+        $Policy.Roles += $r
+        $msg = "[Add-SSRSItemSecurity()] Adding new role: '{0}'" -f $role
+        Write-Host $msg
+    }
+     
+    #Set the policies
+    $ssrsProxy.SetPolicies($itemPath,$policies);
+ 
+}
+
+#' To set the HOME folder Policies
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/" -groupUserName BCC\g_SSRS_CanSeeAllReports -role Browser
+
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/" -groupUserName BCC\g_SSRS_Developers -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/" -groupUserName BCC\g_SSRS_Developers -role 'Content Manager'
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/" -groupUserName BCC\g_SSRS_Developers -role 'My Reports'
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/" -groupUserName BCC\g_SSRS_Developers -role Publisher
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/" -groupUserName BCC\g_SSRS_Developers -role 'Report Builder'
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/" -groupUserName 'NT AUTHORITY\Authenticated Users' -role Browser
+
+
+#' To set the 'Eclipse_Admin' folder Policies
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/Eclipse_Admin" -groupUserName BCC\g_ECLIPSE_Admin -role Browser
+#' MANUALLY: remove the Browse permission, for 'NT AUTHORITY\Authenticated Users',  for the 'Eclipse_Admin' folder
+
+
+#' To set the 'Eclipse_Admin' folder Policies
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/Financial" -groupUserName 'BCC\g_eclipse_ACCT_AP' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/Financial" -groupUserName 'BCC\g_eclipse_ACCT_CA' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/Financial" -groupUserName 'BCC\g_eclipse_ACCT_CTL' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/Financial" -groupUserName 'BCC\g_eclipse_ACCT_LEAD' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/Financial" -groupUserName 'BCC\g_eclipse_OP_PM' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/Financial" -groupUserName 'BCC\g_SSRS_BusinessGroupAdmins' -role Browser
+#' MANUALLY: remove the Browse permission, for 'NT AUTHORITY\Authenticated Users', for this folder
+
+
+#' To set the 'Financial_Trucks' folder Policies
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/Financial_Trucks" -groupUserName 'BCC\g_eclipse_OP_PM' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/Financial_Trucks" -groupUserName 'BCC\g_SSRS_BusinessGroupAdmins' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/Financial_Trucks" -groupUserName 'BCC\g_SSRS_Trucking_Reports' -role Browser
+#' MANUALLY: remove the Browse permission, for 'NT AUTHORITY\Authenticated Users', for this folder
+
+
+#' To set the 'HR' folder Policies
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/HR" -groupUserName 'BCC\g_eclipse_ACCT_PAYRL' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/HR" -groupUserName 'BCC\g_eclipse_HR' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/HR" -groupUserName 'BCC\g_eclipse_HR_ADMIN' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/HR" -groupUserName 'BCC\g_eclipse_HR_PAY' -role Browser
+#' MANUALLY: remove the Browse permission, for 'NT AUTHORITY\Authenticated Users', for this folder
+
+
+#' To set the 'HR_ACCT' folder Policies
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/HR_ACCT" -groupUserName 'BCC\g_eclipse_ACCT_PAYRL' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/HR_ACCT" -groupUserName 'BCC\g_eclipse_HR' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/HR_ACCT" -groupUserName 'BCC\g_eclipse_HR_ADMIN' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/HR_ACCT" -groupUserName 'BCC\g_eclipse_HR_PAY' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/HR_ACCT" -groupUserName 'BCC\g_eclipse_ACCT_AP' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/HR_ACCT" -groupUserName 'BCC\g_eclipse_ACCT_CA' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/HR_ACCT" -groupUserName 'BCC\g_eclipse_ACCT_CTL' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/HR_ACCT" -groupUserName 'BCC\g_eclipse_ACCT_LEAD' -role Browser
+#' MANUALLY: remove the Browse permission, for 'NT AUTHORITY\Authenticated Users', for this folder
+
+
+#' To set the 'IT' folder Policies
+#' MANUALLY: remove the Browse permission, for 'NT AUTHORITY\Authenticated Users', for this folder
+
+
+
+#' To set the 'Job Cost' folder Policies
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/Job Cost" -groupUserName 'BCC\g_eclipse_ACCT_PAYRL' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/Job Cost" -groupUserName 'BCC\g_eclipse_ACCT_AP' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/Job Cost" -groupUserName 'BCC\g_eclipse_ACCT_CA' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/Job Cost" -groupUserName 'BCC\g_eclipse_ACCT_CTL' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/Job Cost" -groupUserName 'BCC\g_eclipse_ACCT_LEAD' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/Job Cost" -groupUserName 'BCC\g_eclipse_OP_PM' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/Job Cost" -groupUserName 'BCC\g_SSRS_BusinessGroupAdmins' -role Browser
+#' MANUALLY: remove the Browse permission, for 'NT AUTHORITY\Authenticated Users', for this folder
+
+
+#' To set the 'Payroll Reports' folder Policies
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/Payroll Reports" -groupUserName 'BCC\g_eclipse_ACCT_PAYRL' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/Payroll Reports" -groupUserName 'BCC\g_eclipse_HR' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/Payroll Reports" -groupUserName 'BCC\g_eclipse_HR_ADMIN' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/Payroll Reports" -groupUserName 'BCC\g_eclipse_HR_PAY' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/Payroll Reports" -groupUserName 'BCC\g_eclipse_ACCT_AP' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/Payroll Reports" -groupUserName 'BCC\g_eclipse_ACCT_CA' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/Payroll Reports" -groupUserName 'BCC\g_eclipse_ACCT_CTL' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/Payroll Reports" -groupUserName 'BCC\g_eclipse_ACCT_LEAD' -role Browser
+Add-SSRSItemSecurity -webServiceUrl "http://localhost/ReportServer/ReportService2005.asmx?WSDL" -itemPath "/Payroll Reports" -groupUserName 'BCC\g_SSRS_BusinessGroupAdmins' -role Browser
+#' MANUALLY: remove the Browse permission, for 'NT AUTHORITY\Authenticated Users', for this folder
+
+
+#' To set the 'Payroll Reports/Payroll_Reports_HR_ACCT' folder Policies
+#' MANUALLY: remove the Browse permission, for 'BCC\g_SSRS_BusinessGroupAdmins', for this folder
+#' Then create the LINKED Reports in the folder above it:
+#'               401K Census
+#'               Certified Payroll
+#'               Child Support
+#'               Employee Union Status
+#'               Employees that Received Advancements
+#'               Hourly Employee Verification
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>VBA_ACCESS</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>Access_SQL_ConversionAndFunctions</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>VBA_ACCESS</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>Access_SQL_ConversionAndFunctions</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>'Access and  T-SQL differences and conversion
+
+
+
+'Converting NULL values
+'
+'Access:        NZ(Value, ValueToReturnIfNull)
+'T-SQL:         COALESCE(Value, ValueToReturnIfNull) -- or --  ISNULL(Value, ValueToReturnIfNull)
+'
+'Checking for NULLs
+'
+'Access:      WHERE Value IS NULL   -- or --  WHERE ISNULL(Value)   (note the difference from T-SQL's ISNULL)
+'T -SQL:      WHERE Value Is Null
+'
+'String Segments
+'
+'Access:       MID(StringVal, StartPos, [length] )   (length is optional)
+'T-SQL:        SUBSTRING(StringVal, StartPos, length )    (length is required!)
+'
+'Finding a String within a String
+'
+'Access:     SELECT INSTR(start, StringToSearch, StringToFind)
+'T-SQL:       SELECT CHARINDEX(start, StringToSearch, StringToFind)
+'
+'Reverse a String
+'
+'Access:     SELECT STRREVERSE(StringVal)
+'T-SQL:       SELECT REVERSE(StringVal)
+'
+'Convert a String to Uppercase or Lowercase
+'
+'Access:      SELECT UCASE(StringVal),  LCASE(StringVal)
+'T-SQL:       SELECT UPPER(StringVal), LOWER(StringVal)
+'
+'Formatting Dates, Booleans, Numerics as Strings
+'
+'Access:     SELECT Format(Value, FormatSpecification)  (note: this always returns a string value)
+'T-SQL:      Do not do this in T-SQL; format data at your front-end application or report
+'
+'String Literals
+'
+'Access:      SELECT "This is a string"
+'T-SQL:       SELECT 'This is a string'
+'
+'LIKE pattern matching
+'
+'matching multiple characters:
+'
+'Access:      WHERE Column Like "*string*"
+'T-SQL:       WHERE Column LIKE '%string%'
+'
+'matching a single character:
+'
+'Access:     WHERE Column Like "?string?"
+'T-SQL:       WHERE Column LIKE '_string_'
+'
+'not matching a character or range:
+'
+'Access:   WHERE Column Like "[!a-z]"
+'T-SQL:     WHERE Column LIKE '[^a-z]'
+'
+'Triming White Space
+'
+'Access:       Trim (Val)
+'T -SQL:       RTrim (LTrim(Val))
+'
+'Converting DataTypes
+'
+'Access:       CINT(value),  CDBL(value), CDEC(value),  CSTR(value), CDATE(value), CBOOL(value)
+'T-SQL:        CONVERT(DATATYPE, value) -- or -- CAST(value AS datatype)
+'
+'Conditional Expressions
+'
+'Access:       IIF(Condition, ReturnIfTrue, ReturnIfValue)
+'T-SQL:        CASE WHEN Condition THEN ReturnIfTrue ELSE ReturnIfFalse END
+'
+'Working with Date Literals
+'
+'Access:      WHERE SomeDate = #1/1/2005#
+'T-SQL:       WHERE SomeDate = '1/1/2005'    (this is an implicit conversion from a string to a date)
+'
+'Creating New Dates
+'
+'Access:     DATESERIAL(year,month,date)
+'T-SQL:       Use the Date() function  here  -- there is no quick easy way to do this in T-SQL
+'
+'Creating New Times
+'
+'Access:     TIMESERIAL(Hour, minute, second)
+'T-SQL:       Use the Time() function here  -- there is no quick easy way to do this in T-SQL
+'
+'Getting Today 's Date and Time
+'
+'Access:     SELECT now()
+'T-SQL:      SELECT getdate()
+'
+'Getting Today 's Date only (i.e., at midnight)
+'
+'Access:     SELECT date()
+'T-SQL:      Use the DateOnly() function here  :  SELECT dbo.DateOnly(getdate())
+'
+'Getting Today 's Time Only (at the "base" date, or date with a numeric value of 0)
+'
+'Access:    SELECT Time()    (this returns the time at 12/30/1899)
+'T-SQL:      Use the TimeOnly() function here  :  SELECT dbo.TimeOnly(getdate())  (returns the time at 1/1/1900)
+'
+'Boolean (True/False) Values
+'
+'Access:      WHERE Active = True  -- and --  WHERE Active = False
+'                    (Active is a Boolean datatype)
+'
+'T-SQL:       WHERE Active=1   -- and --   WHERE Active=0
+'                    (Active is a Bit datatype)
+'
+'Returning or Setting Boolean Values
+'
+'Access:    SELECT BooleanExpression
+'T-SQL:      CAST(CASE WHEN BooleanExpression THEN 1 ELSE 0 END) AS BIT
+'
+'FULL OUTER JOINS
+'
+'(Note: try to avoid these as a general practice)
+'
+'Access:      SELECT ... FROM tableA LEFT OUTER JOIN tableB ON ...
+'                     Union all
+'                    SELECT ... FROM tableB LEFT OUTER JOIN tableA ON ... WHERE tableA .PK IS NULL
+'
+'T-SQL:       SELECT ... FROM tableA FULL OUTER JOIN tableB ON ....
+'
+'RIGHT OUTER JOINS
+'
+'Because we all know that using the query designer in Access sometimes results in these, but we should never use them in manually written and maintained SQL:
+'
+'Access:      SELECT ... FROM tableA RIGHT OUTER JOIN tableB ON ....
+'T-SQL:        SELECT ... FROM tableB LEFT OUTER JOIN tableA ON ....
+'
+'Parameters
+'
+'Access:      SELECT [Any column name not defined]
+'T-SQL:       SELECT @ParamName
+'
+'Modulo Operator
+'
+'Access:     SELECT value1 MOD value2
+'T-SQL:      SELECT value1 % value2
+'
+'Dividing Integers to calculate a Percentage or other result with decimal places
+'
+'Access:    SELECT Int1 / Int2    (this returns a Double value implicitly)
+'T-SQL:      SELECT Int1 * 1.0 / Int2   (the multiplication by 1.0 results in a numeric(8,6) being returned)
+'
+'String Concatenation Operator
+'
+'Access:      Val1 &amp; Val2  (both will be implicitly converted to strings if they are not already)
+'T-SQL:       Val1 + Val2 ( note that explicit conversion to a "string" datatypes is necessary in T-SQL)
+'
+'Referencing an Expression in a SELECT
+'
+'Here, we define A+B as a new column X, and we want to reference X in the SELECT:
+'
+'Access:      SELECT A+B as X, X+C as D FROM ...
+'T-SQL:        SELECT X, X+C as D FROM (SELECT A+B as X, C FROM ... ) tmp
+'
+'Getting a Character from an ASCII code
+'
+'Access:      SELECT CHR(AsciiCode)
+'T-SQL:        SELECT CHAR(AsciiCode)
+'
+'Getting an ASCII code from a Character
+'
+'Access:      SELECT ASC(Character)
+'T-SQL:        SELECT ASCII(Character)
+'
+'Date Part Indicators (DateAdd, DateDiff, DatePart)
+'
+'MS Access and SQL Server both use the same basic date functions (DateAdd, DateDiff, DatePart) but the way you indicate which "date part" you are after differs between the two.
+'
+'MS Access uses a string expression to indicate the "dart part" in DateAdd, DatePart and DateDiff expressions; SQL Server uses symbols.  Thus, you need to put quotes around the part name in MS Access since it is just a string expression, but you should NOT use quotes in SQL Server -- just enter the value directly.
+'
+'The Date Part indicators are listed below:
+'
+'Date Part   SQL Server  MS Access
+'Year    year, yy, yyyy  "yyyy"
+'Quarter     quarter, qq, q  "q"
+'Month   month, mm, m    "m"
+'Day of Year     dayofyear, dy, y    "y"
+'Day     day, dd, d  "d"
+'Week    week, wk, ww    "ww"
+'Day of Week     weekday, dw     "w"
+'Hour    hour, hh    "h"
+'Minute      minute, mi, n   "n"
+'Second      second, ss, s   "s"
+'Millisecond     millisecond, ms     -
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_JOIN___Intercect_UNION_CrossJOIN</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>about_DAX_JOIN___Intercect_UNION_CrossJOIN</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_JOIN___Intercect_UNION_CrossJOIN</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>about_DAX_JOIN___Intercect_UNION_CrossJOIN</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>about_DAX_JOIN_Intercect_UNION_CrossJOIN</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_JOIN___Intercect_UNION_CrossJOIN</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>UNION</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_JOIN___Intercect_UNION_CrossJOIN</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>UNION</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code />
+      </SnippetValue>
+    </value>
+  </item>
+</dictionary>
