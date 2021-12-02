@@ -3,883 +3,192 @@
   <item>
     <key>
       <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>BOOTSTRAP</Category>
-        <Language>ASP</Language>
+        <Category>DAX_Functions</Category>
+        <Language>VB</Language>
         <Public>false</Public>
-        <Name>example_button_opens_ModalWindow</Name>
+        <Name>Statistical_Functions</Name>
         <Group>My Snippets</Group>
       </SnippetKey>
     </key>
     <value>
       <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
         <Key>
-          <Category>BOOTSTRAP</Category>
-          <Language>ASP</Language>
+          <Category>DAX_Functions</Category>
+          <Language>VB</Language>
           <Public>false</Public>
-          <Name>example_button_opens_ModalWindow</Name>
+          <Name>Statistical_Functions</Name>
           <Group>My Snippets</Group>
         </Key>
         <Keywords />
         <Imports />
-        <Code>&lt;!-- example_button_opens_ModalWindow
+        <Code>https://docs.microsoft.com/en-us/dax/statistical-functions-dax
 
-http://getbootstrap.com/javascript/#modals
+' Filters do not propogate in a Row Context, i.e. in Calculated Columns
+----------------------------------------------------------------------------------
+'SO if you created two columns in a Visual (e.g. Table) and one was based on a Calculated Column using data from a Related table, 
+'	and the other was based on a Measure using data from a Related table, then the Calculated-based Rank would remain unchanged as you
+'	apply filters to the related Table, but the Measure-based Rank would change as you applied filters to the related Table.
 
-1] Required Libraries:
-    &lt;script src="../../Scripts/jquery-1.9.1.min.js"&gt;&lt;/script&gt;
-    &lt;script src="../../Scripts/bootstrap.min.js"&gt;&lt;/script&gt;
-2] 
+'e.g. for a Calculated Column
+Ranking =        RANKX(ALL(Products), SUMX(RELATEDTABLE(SalesOrderDetail), SalesOrderDetail[GrossSales]))
+
+'e.g. for a MEASURE Column
+RankingMeasure = RANKX(ALL(Products), SUMX(RELATEDTABLE(SalesOrderDetail), SalesOrderDetail[GrossSales]))		
+---------------------------------------------------------------------------------
+
+ADDCOLUMNS
+APPROXIMATEDISTINCTCOUNT
+AVERAGE
+AVERAGEA
+
+AVERAGEX
+ 		'e.g.
+ 		AverageGrossSales = AVERAGEX(SalesOrderDetail, SalesOrderDetail[OrderQty] * SalesOrderDetail[UnitPrice] * (1 - SalesOrderDetail[UnitPriceDiscount]))
+ 		
+BETA.DIST
+BETA.INV
+CHISQ.INV
+CHISQ.INV.RT
+CONFIDENCE.NORM
+CONFIDENCE.T
+
+COUNT():
+	'The COUNT function counts the number of cells in a column that contains 
+	'values of the whole number or integer or string datatype excluding the 
+	'blank cell. It even counts the cell with repeated values.
+	' only count non-empty cells  and are not sensitive to repetitive values 
+	'in cells.
+	Apps = COUNT(FactApplication[Client_App_ID])
 	
-3] 
-     
-4] 
+	'EXAMPLE: show 0 if there are none, 1 if there are some
+	' add a zero to convert the blanks to zero, then use "&gt;" to create boolean, then INT to convert back to 0/1
+	INT((COUNT(FactApplication[Client_App_ID]) + 0) &gt; 0)
 
- --&gt;
-==================================================================
+COUNTA():
+	'COUNTA function can also count the boolean values (True or False) 
+	'whereas count function returns an error .
+	' only count non-empty cells  and are not sensitive to repetitive values 
+	'in cells.
 
-&lt;!-- styling.css  --&gt;
+COUNTX():
+	'Syntax: COUNTX(&lt;table&gt;,&lt;expression&gt;)
+	'COUNTX function counts the number of rows which are non-empty when 
+	'evaluating an expression over a table.
+	'This function cannot be used for boolean values.
 
-body {
-    padding: 30px;
-}
+COUNTAX():
+	'Syntax: COUNTAX(&lt;table&gt;,&lt;expression&gt;)
+	'similar to COUNTX function with the only difference being that COUNTAX function can operate on boolean values.	
 
-
-==================================================================
-
-&lt;!DOCTYPE html&gt;
-&lt;html xmlns="http://www.w3.org/1999/xhtml"&gt;
-&lt;head&gt;
-    &lt;title&gt;&lt;/title&gt;
-    &lt;link href="../../Content/bootstrap.min.css" rel="stylesheet" /&gt;
-    &lt;link href="styling.css" rel="stylesheet" /&gt;
-    &lt;script src="../../Scripts/jquery-1.9.1.min.js"&gt;&lt;/script&gt;
-    &lt;script src="../../Scripts/bootstrap.min.js"&gt;&lt;/script&gt;
-&lt;/head&gt;
-&lt;body&gt;
-
-    &lt;!-- Button trigger modal --&gt;
-    &lt;a data-toggle="modal" href="#myModal" class="btn btn-primary btn-lg"&gt;Show Modal Form&lt;/a&gt;
-
-    &lt;!-- Modal --&gt;
-    &lt;div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"&gt;
-        &lt;div class="modal-dialog"&gt;
-            &lt;div class="modal-content"&gt;
-                &lt;div class="modal-header"&gt;
-                    &lt;button type="button" class="close" data-dismiss="modal" aria-hidden="true"&gt;&amp;times;&lt;/button&gt;	&lt;!-- Button that opens the Modal form --&gt;	
-                    &lt;h4 class="modal-title"&gt;A Modal Form&lt;/h4&gt;
-                &lt;/div&gt;
-                &lt;div class="modal-body"&gt;
-                
-                &lt;!-- START Form ----------------------------------------------------------------------------------&gt;
-                
-                    &lt;form class="form-horizontal"&gt;
-
-                        &lt;div class="form-group"&gt;
-                            &lt;label for="fullname" class="col-sm-2 control-label"&gt;Name&lt;/label&gt;
-                            &lt;div class="col-sm-10"&gt;
-                                &lt;input type="text" id="fullname" name="fullname" class="form-control" /&gt;
-                            &lt;/div&gt;
-                        &lt;/div&gt;
+COUNTBLANKS():
+	'Syntax: COUNTBLANK(&lt;column&gt;)
+	' calculate the number of blanks present in a column.
+	 NumbOfRowNumbersWithBlanks = COUNTBLANK('tableName'[columnName])
+	
+COUNTROWS():
+	'Syntax : COUNTROWS(&lt;table&gt;)
+	'NOTE: can use FILTERs in place of &lt;table&gt;
+	'counts the number of rows in the specified table, or in a table defined by an expression .
 
 
-                        &lt;div class="form-group"&gt;
-                            &lt;label for="comments" class="col-sm-2 control-label"&gt;Comments&lt;/label&gt;
-                            &lt;div class="col-sm-10"&gt;
-                                &lt;textarea name="comments" id="comments" class="form-control" rows="5" cols="40"&gt;&lt;/textarea&gt;
-                            &lt;/div&gt;
-                        &lt;/div&gt;
+CROSSJOIN
+	'e.g. Cross Join 3 tables
+	RowHeader_Territory_Segment = CROSSJOIN(RowHeaders,Segments,Territories)
+DATATABLE function
+DISTINCTCOUNT():
+	'Syntax: DISTINCTCOUNT(&lt;column&gt;)
+	' returns the number of unique values present in a column.
+	'It counts NULL as a unique value
 
-                        &lt;div class="form-group"&gt;
-                            &lt;label for="luckynumber" class="col-sm-2 control-label"&gt;Lucky Number&lt;/label&gt;
-                            &lt;div class="col-sm-10"&gt;
-                                &lt;select name="luckynumber" id="luckynumber" class="col-sm-10 form-control"&gt;
-                                    &lt;option&gt;double zero&lt;/option&gt;
-                                    &lt;option&gt;seven&lt;/option&gt;
-                                    &lt;option&gt;thirteen&lt;/option&gt;
-                                &lt;/select&gt;
-                            &lt;/div&gt;
-                        &lt;/div&gt;
-
-                        &lt;div class="form-group"&gt;
-                            &lt;div class="col-sm-offset-2 col-sm-10"&gt;
-                                &lt;div class="checkbox"&gt;
-                                    &lt;label&gt;
-                                        &lt;input type="checkbox" value="dog" /&gt;Own a dog&lt;/label&gt;&lt;!--&lt;br /&gt;--&gt;
-                                &lt;/div&gt;
-                                &lt;div class="checkbox"&gt;
-                                    &lt;label&gt;
-                                        &lt;input type="checkbox" value="cat" /&gt;Own a cat&lt;/label&gt;&lt;!--&lt;br /&gt;--&gt;
-                                &lt;/div&gt;
-                                &lt;div class="checkbox"&gt;
-                                    &lt;label&gt;
-                                        &lt;input type="checkbox" value="owned" /&gt;Owned by a cat&lt;/label&gt;
-                                &lt;/div&gt;
-                            &lt;/div&gt;
-                        &lt;/div&gt;
-
-                        &lt;div class="form-group"&gt;
-                            &lt;div class="col-sm-offset-2 col-sm-10"&gt;
-                                &lt;span&gt;&lt;b&gt;Your favorite weather?&lt;/b&gt;&lt;/span&gt;&lt;br /&gt;
-
-                                &lt;div class="radio"&gt;
-                                    &lt;label&gt;
-                                        &lt;input type="radio" name="count" value="hot" /&gt;
-                                        hot&lt;/label&gt;&lt;br /&gt;
-                                &lt;/div&gt;
-                                &lt;div class="radio"&gt;
-                                    &lt;label&gt;
-                                        &lt;input type="radio" name="count" value="cold" /&gt;
-                                        cold&lt;/label&gt;&lt;br /&gt;
-                                &lt;/div&gt;
-                                &lt;div class="radio"&gt;
-                                    &lt;label&gt;
-                                        &lt;input type="radio" name="count" value="rainy" /&gt;
-                                        rainy&lt;/label&gt;&lt;br /&gt;
-                                &lt;/div&gt;
-                            &lt;/div&gt;
-                        &lt;/div&gt;
-
-                    &lt;/form&gt;
-                    
-                &lt;!-- END Form ----------------------------------------------------------------------------------&gt;                    
-                    
-                    
-                &lt;/div&gt;
-                &lt;div class="modal-footer"&gt;
-                    &lt;button type="button" class="btn btn-default" data-dismiss="modal"&gt;Close&lt;/button&gt;
-                    &lt;button type="button" class="btn btn-primary"&gt;Save&lt;/button&gt;
-                &lt;/div&gt;
-            &lt;/div&gt;
-            &lt;!-- /.modal-content --&gt;
-        &lt;/div&gt;
-        &lt;!-- /.modal-dialog --&gt;
-    &lt;/div&gt;
-    &lt;!-- /.modal --&gt;
+DISTINCTCOUNTNOBLANK
+	' returns the number of unique values present in a column.
+	'It DOES NOT counts NULL as a unique value
+	
+	CALCULATE( 
+				DISTINCTCOUNT(DimDealer[DealerCode]),
+				FILTER(DimDealer,DimDealer[DealerActive] = True())
+			  )
+	
+	
+EXPON.DIST
+GENERATE
+GENERATEALL
+GEOMEAN
+GEOMEANX
+MAX
+	'This takes the Max from a column, but does not let you filter by some category
+MAXA
+MAXX
+	'This takes the Max from an expression, where the expression is what let's us 'filter' 
+	'	down to just some rows
+	
+	Last Purchase Date for each Customer = 
+	    //'return the MAX value from the set of returned rows
+	    MAXX(
+	            RELATEDTABLE(Internet Sales),     //'Work on the related set of rows from the table, related by the relationship (i.e. the customer)
+	            Internet Sales[Order Date]       // 'for each row returned, return this field
+	        )	
+MEDIAN
+MEDIANX
+MIN
+MINA
+MINX
+NORM.DIST
+NORM.INV
+NORM.S.DIST
+NORM.S.INV (DAX)
+PERCENTILE.EXC
+PERCENTILE.INC
+PERCENTILEX.EXC
+PERCENTILEX.INC
+POISSON.DIST
+RANK.EQ
+RANKX
+	RANKX(&lt;table&gt;, &lt;expression&gt;[, &lt;value&gt;[, &lt;order&gt;[, &lt;ties&gt;]]])  
+	'e.g. create a MEASURE: for each product (in TABLE_1: Products), go through each row in another table (TABLE_2: SalesOrderDetail)
+	
+	Ranking = RANKX(
+					ALL(Products), 
+					SUMX(
+							RELATEDTABLE(SalesOrderDetail), 
+							SalesOrderDetail[GrossSales])
+						)
+					)
+	'NOTE: if you used  SUMX(SalesOrderDetail, SalesOrderDetail[GrossSales]) 
+	'	then it would sum up all the rows, rather than just the related rows
+	'NOTE: if we did not use ALL (for [Products] table) then it would only rank for the filtered rows of [Products], and not give us an overall Rank
 
 
-&lt;/body&gt;
-&lt;/html&gt;
+ROW
+SAMPLE
+SELECTCOLUMNS
+SIN
+SINH
+SQRTPI
+STDEV.P
+STDEV.S
+STDEVX.P
+STDEVX.S
+SUMMARIZE
+	'SYNTAX
+	SUMMARIZE (&lt;table&gt;, &lt;groupBy_columnName&gt;[, &lt;groupBy_columnName&gt;]…[, &lt;name&gt;, &lt;expression&gt;]…)
+	'Returns a summary table for the requested totals over a set of groups.
+	&lt;expression&gt;	'Any DAX expression that returns a single scalar value, where the expression is to be evaluated multiple times (for each row/context).
+T.DIST
+T.DIST.2T
+T.DIST.RT
+T.INV
+T.INV.2t
+TAN
+TANH
+TOPN
+VAR.P
+VAR.S
+VARX.P
+VARX.S
+XIRR
+XNPV
 </Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>POWERSHELL_DISM</Category>
-        <Language>VBSCRIPT</Language>
-        <Public>false</Public>
-        <Name>about_POWERSHELL_DISM</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>POWERSHELL_DISM</Category>
-          <Language>VBSCRIPT</Language>
-          <Public>false</Public>
-          <Name>about_POWERSHELL_DISM</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>about_POWERSHELL_DISM
-
-
-'DISM comes with Windows 10, in the c:\windows\system32 folder, 
-'	but you can run DISM in the command prompt from any location. 
-'You have to be running from a Command Prompt as administrator to use use DISM.
-
-Online vs Offline
--------------------
-'You can use DISM offline on a WIM or VHD file, 
-'	or online on a running operating system. 
-'Offline servicing allows you to modify or service a Windows® image entirely offline, 
-'	without booting it first. ... You can also use DISM to service an image online
-</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>POWERSHELL_DISM</Category>
-        <Language>VBSCRIPT</Language>
-        <Public>false</Public>
-        <Name>Commands</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>POWERSHELL_DISM</Category>
-          <Language>VBSCRIPT</Language>
-          <Public>false</Public>
-          <Name>Commands</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>'https://docs.microsoft.com/en-us/powershell/module/dism/?view=win10-ps
-
-Add-AppxProvisionedPackage		Adds an app package (.appx) that will install for each new user to a Windows image.
-Add-WindowsCapability			Installs a Windows capability package on the specified operating system image.
-Add-WindowsDriver				Adds a driver to an offline Windows image.
-Add-WindowsImage				Adds an additional image to an existing image (.wim) file.
-Add-WindowsPackage				Adds a single .cab or .msu file to a Windows image.
-Clear-WindowsCorruptMountPoint	Deletes all of the resources associated with a mounted image that has been corrupted.
-Disable-WindowsOptionalFeature	Disables a feature in a Windows image.
-Dismount-WindowsImage			Dismounts a Windows image from the directory it is mapped to.
-Enable-WindowsOptionalFeature	Enables a feature in a Windows image.
-Expand-WindowsCustomDataImage	Expands a custom data image.
-Expand-WindowsImage				Applies an image to a specified location.
-Export-WindowsDriver			Exports all third-party drivers from a Windows image to a destination folder.
-Export-WindowsImage				Exports a copy of the specified image to another image file.
-Get-AppxProvisionedPackage		Gets information about app packages (.appx) in an image that will be installed for each new user.
-Get-WIMBootEntry				Displays the Windows image file boot (WIMBoot) configuration entries for a specified disk volume.
-Get-WindowsCapability			Gets Windows capabilities for an image or a running operating system.
-Get-WindowsDriver				Displays information about drivers in a Windows image.
-Get-WindowsEdition				Gets edition information about a Windows image.
-Get-WindowsImage				Gets information about a Windows image in a WIM or VHD file.
-Get-WindowsImageContent			Displays a list of the files and folders in a specified image.
-Get-WindowsOptionalFeature		Gets information about optional features in a Windows image.
-Get-WindowsPackage				Gets information about packages in a Windows image.
-Mount-WindowsImage				Mounts a Windows image in a WIM or VHD file to a directory on the local computer.
-New-WindowsCustomImage			Captures an image of customized or serviced Windows components on a Windows Image File Boot (WIMBoot) configured device.
-New-WindowsImage				Captures an image of a drive to a new WIM file.
-Optimize-WindowsImage			Configures a Windows image with specified optimizations.
-Remove-AppxProvisionedPackage	Removes an app package (.appx) from a Windows image.
-Remove-WindowsCapability		Uninstalls a Windows capability package from an image.
-Remove-WindowsDriver			Removes a driver from an offline Windows image.
-Remove-WindowsImage				Deletes the specified volume image from a WIM file that has multiple volume images.
-Remove-WindowsPackage			Removes a package from a Windows image.
-Repair-WindowsImage				Repairs a Windows image in a WIM or VHD file.
-Save-WindowsImage				Applies changes made to a mounted image to its WIM or VHD file.
-Set-AppXProvisionedDataFile	Adds custom data into the specified app (.appx) package that has been provisioned in a Windows image.
-Set-WindowsEdition				Changes a Windows image to a higher edition.
-Set-WindowsProductKey			Sets the product key for the Windows image.
-Split-WindowsImage				Splits an existing .wim file into multiple read-only split .wim files.
-Update-WIMBootEntry				Updates the Windows image file boot (WIMBoot) configuration entry, associated with either the specified data source ID, the renamed image file path or the moved image file path.
-Use-WindowsUnattend				Applies an unattended answer file to a Windows image.
-</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>POWERSHELL_DISM</Category>
-        <Language>VBSCRIPT</Language>
-        <Public>false</Public>
-        <Name>DefaultAppAssociations </Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>POWERSHELL_DISM</Category>
-          <Language>VBSCRIPT</Language>
-          <Public>false</Public>
-          <Name>DefaultAppAssociations </Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>
-'The following default application association servicing options are available for a running operating system.
-
-DISM.exe /Online [/Export-DefaultAppAssociations | /Get-DefaultAppAssociations | Import-DefaultAppAssociations | Remove-DefaultAppAssociations]
-
-
-'Option							Description
------------------				----------------------------------------------------------------------------------
-/Get-Help						When used immediately after a default application association servicing command-line option, information about the option and the arguments is displayed. Additional topics might become available when an image is specified.
-	
-/?								Examples:	
-								Dism /image:C:\test\offline /Import-DefaultAppAssociations /?	
-								Dism /online /Get-DefaultAppAssociations /?
-					
-'Exports the default application associations from a running operating system to an .xml file.
-/Export-DefaultAppAssociations:&lt;path_to_export_file&gt;
-	
-								Example:	
-								Dism.exe /Online /Export-DefaultAppAssociations:C:\AppAssoc.xml
-
-'Displays the list of default application associations that have been set in the specified Windows image. 
-'You can use this option to verify that default application associations were successfully imported to the image.	
-/Get-DefaultAppAssociations
-
-								Examples:	
-								Dism.exe /Image:C:\test\offline /Get-DefaultAppAssociations	
-								Dism.exe /Online /Get-DefaultAppAssociations
-
-'Imports a set of default application associations to a specified Windows image from an .xml file. 
-'The default application associations will be applied for each user during their first logon.	
-/Import-DefaultAppAssociations:&lt;path_to_xml_file&gt;
-	
-								Examples:	
-								Dism.exe /Image:C:\test\offline /Import-DefaultAppAssociations:C:\AppAssoc.xml	
-								Dism.exe /Online /Import-DefaultAppAssociations:C:\AppAssoc.xml
-							
-'Removes the default application associations from the specified Windows image.	
-/Remove-DefaultAppAssociations
-
-								Examples:	
-								Dism.exe /Image:C:\test\offline /Remove-DefaultAppAssociations	
-								Dism.exe /Online /Remove-DefaultAppAssociations
-</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>POWERSHELL_DISM</Category>
-        <Language>VBSCRIPT</Language>
-        <Public>false</Public>
-        <Name>DefaultAppAssociations_USAGE</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>POWERSHELL_DISM</Category>
-          <Language>VBSCRIPT</Language>
-          <Public>false</Public>
-          <Name>DefaultAppAssociations_USAGE</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>#'SetPDFDefault_AdobeAcrobatDC.ps1
-
-#' Create a copy of the original Default Associations:
-dism /online /Export-DefaultAppAssociations:"C:\Junk\MyDefaultAppAssociations_ORIG.xml"
-
-
-#' Change the association for .pdf files, and Create a copy of the PDF Default Associations:
-dism /online /Export-DefaultAppAssociations:"C:\Junk\MyDefaultAppAssociations_PDF_modified.xml"
-
-
-#' Import the modified Associations
-dism /online /Import-DefaultAppAssociations:"%UserProfile%\Desktop\MyDefaultAppAssociations.xml"
-
-
-
- &lt;Association Identifier=".pdf" ProgId="AcroExch.Document" ApplicationName="Adobe Acrobat 9.0" /&gt;</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>POWERSHELL_DISM</Category>
-        <Language>VBSCRIPT</Language>
-        <Public>false</Public>
-        <Name>DISM.exe__mapTo__DISM_cmdlet</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>POWERSHELL_DISM</Category>
-          <Language>VBSCRIPT</Language>
-          <Public>false</Public>
-          <Name>DISM.exe__mapTo__DISM_cmdlet</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>'https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/use-dism-in-windows-powershell-s14
-
-Dism.exe command				DISM cmdlet
-Dism.exe /Add-Capability		Add-WindowsCapability
-Dism.exe /Append-Image			Add-WindowsImage
-Dism.exe /Apply-Image			Expand-WindowsImage
-Dism.exe /Capture-Image			New-WindowsImage
-Dism.exe /Cleanup-MountPoints	Clear-WindowsCorruptMountPoint
-Dism.exe /Commit-Image			Save-WindowsImage
-Dism.exe /Export-Image			Export-WindowsImage
-Dism.exe /Get-Capabilities		Get-WindowsCapability
-Dism.exe /Get-ImageInfo			Get-WindowsImage
-Dism.exe /Get-MountedImageInfo	Get-WindowsImage -Mounted
-Dism.exe /Get-WimBootEntry		Get-WIMBootEntry
-Dism.exe /List-Image			Get-WindowsImageContent
-Dism.exe /Mount-Image			Mount-WindowsImage
-Dism.exe /Split-Image			Split-WindowsImage
-Dism.exe /Remove-Capability		Remove-WindowsCapability
-Dism.exe /Remove-Image			Remove-WindowsImage
-Dism.exe /Remount-Image			Mount-WindowsImage -Remount
-Dism.exe /Unmount-Image			Dismount-WindowsImage
-Dism.exe /Update-WimBootEntry	Update-WIMBootEntry
-Dism.exe /Image:&lt;...&gt; /Add-Driver						Add-WindowsDriver
-Dism.exe /Image:&lt;...&gt; /Add-Package						Add-WindowsPackage
-Dism.exe /Image:&lt;...&gt; /Add-ProvisionedAppxPackage		Add-AppxProvisionedPackage
-Dism.exe /Image:&lt;...&gt; /Cleanup-Image /CheckHealth		Repair-WindowsImage -CheckHealth
-Dism.exe /Image:&lt;...&gt; /Cleanup-Image /ScanHealth		Repair-WindowsImage -ScanHealth
-Dism.exe /Image:&lt;...&gt; /Cleanup-Image /RestoreHealth		Repair-WindowsImage -RestoreHealth
-Dism.exe /Image:&lt;...&gt; /Disable-Feature					Disable-WindowsOptionalFeature
-Dism.exe /Image:&lt;...&gt; /Enable-Feature					Enable-WindowsOptionalFeature
-Dism.exe /Image:&lt;...&gt; /Export-Driver					Export-WindowsDriver
-Dism.exe /Image:&lt;...&gt; /Get-CurrentEdition				Get-WindowsEdition -Current
-Dism.exe /Image:&lt;...&gt; /Get-Driverinfo					Get-WindowsDriver -Driver
-Dism.exe /Image:&lt;...&gt; /Get-Drivers						Get-WindowsDriver
-Dism.exe /Image:&lt;...&gt; /Get-Featureinfo					Get-WindowsOptionalFeature -FeatureName
-Dism.exe /Image:&lt;...&gt; /Get-Features						Get-WindowsOptionalFeature
-Dism.exe /Image:&lt;...&gt; /Get-Packageinfo					Get-WindowsPackage -PackagePath
-Dism.exe /Image:&lt;...&gt; /Get-Packages						Get-WindowsPackage
-Dism.exe /Image:&lt;...&gt; /Get-ProvisionedAppxPackages		Get-AppxProvisionedPackage
-Dism.exe /Image:&lt;...&gt; /Get-TargetEditions				Get-WindowsEdition -Target
-Dism.exe /Image:&lt;...&gt; /Optimize-Image					Optimize-WindowsImage
-Dism.exe /Image:&lt;...&gt; /Remove-Driver					Remove-WindowsDriver
-Dism.exe /Image:&lt;...&gt; /Remove-Package					Remove-WindowsPackage
-Dism.exe /Image:&lt;...&gt; /Remove-ProvisionedAppxPackage	Remove-AppxProvisionedPackage
-Dism.exe /Image:&lt;...&gt; /Set-Edition						Set-WindowsEdition
-Dism.exe /Image:&lt;...&gt; /Set-ProductKey					Set-WindowsProductKey
-Dism.exe /Image:&lt;...&gt; /Set-ProvisionedAppxDataFile		Set-AppXProvisionedDataFile
-</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>POWERSHELL_Files_Folders_Directories</Category>
-        <Language>VBSCRIPT</Language>
-        <Public>false</Public>
-        <Name>Windows_10_Mount_Dismount_ISO_VHD</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>POWERSHELL_Files_Folders_Directories</Category>
-          <Language>VBSCRIPT</Language>
-          <Public>false</Public>
-          <Name>Windows_10_Mount_Dismount_ISO_VHD</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>&gt; Mount-DiskImage -ImagePath "E:\ISO-Files\My US Visit Fall 2010 Pictures.iso"
-
-&gt; Dismount-DiskImage -ImagePath "E:\ISO-Files\My US Visit Fall 2010 Pictures.iso"</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>POWERSHELL_Server</Category>
-        <Language>VBSCRIPT</Language>
-        <Public>false</Public>
-        <Name>Convert_Eval_to_Stanard_Server</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>POWERSHELL_Server</Category>
-          <Language>VBSCRIPT</Language>
-          <Public>false</Public>
-          <Name>Convert_Eval_to_Stanard_Server</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>https://4sysops.com/archives/convert-windows-server-2019-evaluation-to-the-retail-edition/
-
-First, check the version that's running with this comman
-&gt;DISM /online /Get-CurrentEdition
-Now we can get the list of editions you can convert your current Eval edition to:
-&gt;DISM /online /Get-TargetEditions
-
-?To upgrade to the edition you want, you can run a PowerShell command to perform the actual edition 
-
-upgrade. You'll need, however, a valid serial number to do this.
-&gt;DISM /online /Set-Edition: /ProductKey:XXXXX-XXXXX-XXXXX-XXXXX-XXXXX 
-
-/AcceptEula
-
-So to upgrade from Eval to Standard, use this command:
-&gt; DISM /Online /Set-Edition:ServerStandard /ProductKey:xxxxx-xxxxx-xxxxx-xxxxx-xxxxx 
-
-/AcceptEula
-
-You'll get a prompt to reboot the server during which the server will change its edition.
-
-=========================================================
-Extend Eval period up to 3 years, 180 days at atime
-https://sid-500.com/2017/08/08/windows-server-2016-evaluation-how-to-extend-the-trial-period/
-&gt;slmgr -rearm</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>POWERSHELL_User_Profile</Category>
-        <Language>VBSCRIPT</Language>
-        <Public>false</Public>
-        <Name>IE_ratherThan_Edge_MakeDefaultForNewUserProfiles_inWin10.ps1</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>POWERSHELL_User_Profile</Category>
-          <Language>VBSCRIPT</Language>
-          <Public>false</Public>
-          <Name>IE_ratherThan_Edge_MakeDefaultForNewUserProfiles_inWin10.ps1</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>#'  IE_ratherThan_Edge_MakeDefaultForNewUserProfiles_inWin10.ps1
-#' From: https://community.spiceworks.com/topic/1812853-export-xml-with-dism-then-import-with-powershell
-#'========================================================
-#' This is good for Win10 Build 1709
-
-#'Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope LocalMachine
-
-$file_OriginalWithEdge = "C:\Windows\System32\OEMDefaultAssociations.xml" 
-$file_CopyToKeepInCase = "C:\Windows\System32\OEMDefaultAssociations_ORIG_Edge_BEFORE_replacingWithIE.xml"
-$file_Modified_BrowserIE = "C:\Windows\System32\OEMDefaultAssociations_Modified_with_IEratherThanEdge.xml" 
-
-#' 1] Copy and rename the file
-Copy-Item $file_OriginalWithEdge -Destination $file_CopyToKeepInCase
-
-
-$stringForEdge_1 = '&lt;Association Identifier=".htm" ProgId="AppX4hxtad77fbk3jkkeerkrm0ze94wjf3s9" ApplicationName="Microsoft Edge" ApplyOnUpgrade="true" OverwriteIfProgIdIs="AppX6k1pws1pa7jjhchyzw9jce3e6hg6vn8d" /&gt;'
-$stringForIE_1 = '&lt;Association Identifier=".htm" ProgId="htmlfile" ApplicationName="Internet Explorer" ApplyOnUpgrade="true" OverwriteIfProgIdIs="AppX4hxtad77fbk3jkkeerkrm0ze94wjf3s9" /&gt;'
-
-$stringForEdge_2 = '&lt;Association Identifier=".html" ProgId="AppX4hxtad77fbk3jkkeerkrm0ze94wjf3s9" ApplicationName="Microsoft Edge" ApplyOnUpgrade="true" OverwriteIfProgIdIs="AppX6k1pws1pa7jjhchyzw9jce3e6hg6vn8d" /&gt;'
-$stringForIE_2 = '&lt;Association Identifier=".html" ProgId="htmlfile" ApplicationName="Internet Explorer" ApplyOnUpgrade="true" OverwriteIfProgIdIs="AppX4hxtad77fbk3jkkeerkrm0ze94wjf3s9" /&gt;'
-
-$stringForEdge_3 = '&lt;Association Identifier="http" ProgId="AppXq0fevzme2pys62n3e0fbqa7peapykr8v" ApplicationName="Microsoft Edge" ApplyOnUpgrade="true" OverwriteIfProgIdIs="AppXehk712w0hx4w5b8k25kg808a9h84jamg" /&gt;'
-$stringForIE_3 = '&lt;Association Identifier="http" ProgId="IE.HTTP" ApplicationName="Internet Explorer" ApplyOnUpgrade="true" OverwriteIfProgIdIs="AppXq0fevzme2pys62n3e0fbqa7peapykr8v" /&gt;'
-
-$stringForEdge_4 = '&lt;Association Identifier="https" ProgId="AppX90nv6nhay5n6a98fnetv7tpk64pp35es" ApplicationName="Microsoft Edge" ApplyOnUpgrade="true" OverwriteIfProgIdIs="AppXz8ws88f5y0y5nyrw1b3pj7xtm779tj2t" /&gt;'
-$stringForIE_4 = '&lt;Association Identifier="https" ProgId="IE.HTTPS" ApplicationName="Internet Explorer" ApplyOnUpgrade="true" OverwriteIfProgIdIs="AppX90nv6nhay5n6a98fnetv7tpk64pp35es" /&gt;'
-
-
-
-#' 2] Replace the string
-$content = [System.IO.File]::ReadAllText($file_OriginalWithEdge).Replace($stringForEdge_1,$stringForIE_1).Replace($stringForEdge_2,$stringForIE_2).Replace($stringForEdge_3,$stringForIE_3).Replace($stringForEdge_4,$stringForIE_4)
-[System.IO.File]::WriteAllText($file_Modified_BrowserIE, $content)
-
-#' 3] Delete the original File
-Remove-Item -LiteralPath $file_OriginalWithEdge
-
-#' 4] Copy the modified file to the name of the original file
-Copy-Item $file_Modified_BrowserIE -Destination $file_OriginalWithEdge
-
-
-</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>Windows_10</Category>
-        <Language>TEXT</Language>
-        <Public>false</Public>
-        <Name>DotNet3_for_SnippetManager</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>Windows_10</Category>
-          <Language>TEXT</Language>
-          <Public>false</Public>
-          <Name>DotNet3_for_SnippetManager</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>This Worked. You need the installer media for Windows 10.
-That is where the path to the file it needs is located.
-http://serverfault.com/questions/750562/net-framework-3-5-error-code-0x800f081f
-From an Admin launch of command prompt ( or powershell as administrator) run:
-
-&gt;Dism /online /enable-feature /featurename:NetFx3 /All /Source:D:\sources\sxs
-
-rebooted
-</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>Windows_10</Category>
-        <Language>TEXT</Language>
-        <Public>false</Public>
-        <Name>Stop_Resetting_Default_Apps</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>Windows_10</Category>
-          <Language>TEXT</Language>
-          <Public>false</Public>
-          <Name>Stop_Resetting_Default_Apps</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>Stop_Resetting_Default_Apps
-----------------------------
-
-
-https://4sysops.com/archives/default-file-associations-in-windows-10/
-
-
-To deploy the default file associations, 
-	you first have to configure the settings on a reference machine 
-	and then export the configuration in an XML file that you can deploy in your network.
-
-1] You can configure the settings in the Control Panel under Programs &gt; Default Programs &gt; Set Default Program.
-
-2] Once you do that, you have to open a command prompt 
-	with the user account from above 
-	and use the DISM tool to export the current settings to an .XML file, as shown below.
-	
-
-&gt;Dism.exe /online /Export-DefaultAppAssociations:C:\DATA\DefaultApplications\DefaultApps.xml
-
-{See below for example of the file for Windows 10 Build 1709}
-
-
-Now you have a .XML file with all the file associations from that user. 
-	People often ask me if it is possible to deploy just one file association 
-	or if they must use the entire file, which also contains all the default settings. 
-	The answer is, yes, you can import just the association you need.
-
-3] Deploying default file associations using Group Policy
-
-You can also deploy the default file associations using Group Policy: 
-	Computer Configuration &gt; Administrative Templates &gt; Windows Components &gt; File Explorer
-		
-	
-Set the Group Policy	
-https://docs.microsoft.com/en-us/internet-explorer/ie11-deploy-guide/set-the-default-browser-using-group-policy
-=============================================================================================================
-
-1] Open your Group Policy editor and go to the following policy 
-
-	Administrative Templates\Windows Components\File Explorer\Set a default associations configuration file setting
-	
-	a] 	Enabled
-	
-	b]	Default Associations Configuration File
-	
-		C:\DATA\DefaultApplications\DefaultApps.xml
-		
-
-
-Export or Import Default Application Associations
-https://technet.microsoft.com/en-us/library/hh825038.aspx
-=============================================================	
-
-EXPORT
-(e.g. Dism /Online /Export-DefaultAppAssociations:\\Server\Share\AppAssoc.xml)
-
-For error: 0x80004002
-https://social.technet.microsoft.com/Forums/ie/en-US/0d3d994a-fd12-4b27-a684-a60c665e29db/help-failing-to-export-default-file-associations-on-server-2012r2?forum=mdt
-1] try modifying command
-Dism /Online /get-DefaultAppAssociations &gt;C:\TEMP\DefaultApps.txt
-2] run command as local administrator
-
-
-IMPORT
-(mount image)
-Dism /Mount-Image /ImageFile:C:\test\images\install.wim /Name:"Windows" /MountDir:C:\test\offline
-(Import the .xml file that has the default application association settings to the Windows image. For example, at the command prompt type the following command:)
-
-
-=================================================================
-
-&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;DefaultAssociations&gt;
-  &lt;Association Identifier=".3g2" ProgId="WMP11.AssocFile.3G2" ApplicationName="Windows Media Player" /&gt;
-  &lt;Association Identifier=".3gp" ProgId="WMP11.AssocFile.3GP" ApplicationName="Windows Media Player" /&gt;
-  &lt;Association Identifier=".3gp2" ProgId="WMP11.AssocFile.3G2" ApplicationName="Windows Media Player" /&gt;
-  &lt;Association Identifier=".3gpp" ProgId="WMP11.AssocFile.3GP" ApplicationName="Windows Media Player" /&gt;
-  &lt;Association Identifier=".aac" ProgId="WMP11.AssocFile.ADTS" ApplicationName="Windows Media Player" /&gt;
-  &lt;Association Identifier=".ac3" ProgId="AppXqj98qxeaynz6dv4459ayz6bnqxbyaqcs" ApplicationName="Groove Music" /&gt;
-  &lt;Association Identifier=".adt" ProgId="AppXqj98qxeaynz6dv4459ayz6bnqxbyaqcs" ApplicationName="Groove Music" /&gt;
-  &lt;Association Identifier=".adts" ProgId="WMP11.AssocFile.ADTS" ApplicationName="Windows Media Player" /&gt;
-  &lt;Association Identifier=".aif" ProgId="WMP11.AssocFile.AIFF" ApplicationName="Windows Media Player" /&gt;
-  &lt;Association Identifier=".aifc" ProgId="WMP11.AssocFile.AIFF" ApplicationName="Windows Media Player" /&gt;
-  &lt;Association Identifier=".aiff" ProgId="WMP11.AssocFile.AIFF" ApplicationName="Windows Media Player" /&gt;
-  &lt;Association Identifier=".amr" ProgId="AppXqj98qxeaynz6dv4459ayz6bnqxbyaqcs" ApplicationName="Groove Music" /&gt;
-  &lt;Association Identifier=".ani" ProgId="IrfanView.ani" ApplicationName="IrfanView 64-bit" /&gt;
-  &lt;Association Identifier=".arw" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" /&gt;
-  &lt;Association Identifier=".asf" ProgId="WMP11.AssocFile.ASF" ApplicationName="Windows Media Player" /&gt;
-  &lt;Association Identifier=".asx" ProgId="WMP11.AssocFile.ASX" ApplicationName="Windows Media Player" /&gt;
-  &lt;Association Identifier=".au" ProgId="WMP11.AssocFile.AU" ApplicationName="Windows Media Player" /&gt;
-  &lt;Association Identifier=".avi" ProgId="WMP11.AssocFile.AVI" ApplicationName="Windows Media Player" /&gt;
-  &lt;Association Identifier=".bmp" ProgId="IrfanView.bmp" ApplicationName="IrfanView 64-bit" /&gt;
-  &lt;Association Identifier=".cda" ProgId="WMP11.AssocFile.CDA" ApplicationName="Windows Media Player" /&gt;
-  &lt;Association Identifier=".cr2" ProgId="IrfanView.cr2" ApplicationName="IrfanView 64-bit" /&gt;
-  &lt;Association Identifier=".crw" ProgId="IrfanView.crw" ApplicationName="IrfanView 64-bit" /&gt;
-  &lt;Association Identifier=".dcx" ProgId="IrfanView.dcx" ApplicationName="IrfanView 64-bit" /&gt;
-  &lt;Association Identifier=".dib" ProgId="IrfanView.bmp" ApplicationName="IrfanView 64-bit" /&gt;
-  &lt;Association Identifier=".ec3" ProgId="AppXqj98qxeaynz6dv4459ayz6bnqxbyaqcs" ApplicationName="Groove Music" /&gt;
-  &lt;Association Identifier=".emf" ProgId="IrfanView.emf" ApplicationName="IrfanView 64-bit" /&gt;
-  &lt;Association Identifier=".eps" ProgId="IrfanView.eps" ApplicationName="IrfanView 64-bit" /&gt;
-  &lt;Association Identifier=".epub" ProgId="AppXvepbp3z66accmsd0x877zbbxjctkpr6t" ApplicationName="Microsoft Edge" /&gt;
-  &lt;Association Identifier=".erf" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" /&gt;
-  &lt;Association Identifier=".flac" ProgId="WMP11.AssocFile.FLAC" ApplicationName="Windows Media Player" /&gt;
-  &lt;Association Identifier=".gif" ProgId="IrfanView.gif" ApplicationName="IrfanView 64-bit" /&gt;
-  &lt;Association Identifier=".htm" ProgId="ChromeHTML.BFATTW3WY5HWWRDPZHSSXN7MKY" ApplicationName="Google Chrome" /&gt;
-  &lt;Association Identifier=".html" ProgId="ChromeHTML.BFATTW3WY5HWWRDPZHSSXN7MKY" ApplicationName="Google Chrome" /&gt;
-  &lt;Association Identifier=".ico" ProgId="IrfanView.ico" ApplicationName="IrfanView 64-bit" /&gt;
-  &lt;Association Identifier=".jfif" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" /&gt;
-  &lt;Association Identifier=".jpc" ProgId="IrfanView.jp2" ApplicationName="IrfanView 64-bit" /&gt;
-  &lt;Association Identifier=".jpe" ProgId="IrfanView.jpg" ApplicationName="IrfanView 64-bit" /&gt;
-  &lt;Association Identifier=".jpeg" ProgId="IrfanView.jpg" ApplicationName="IrfanView 64-bit" /&gt;
-  &lt;Association Identifier=".jpg" ProgId="IrfanView.jpg" ApplicationName="IrfanView 64-bit" /&gt;
-  &lt;Association Identifier=".jxr" ProgId="IrfanView.hdp" ApplicationName="IrfanView 64-bit" /&gt;
-  &lt;Association Identifier=".kdc" ProgId="IrfanView.kdc" ApplicationName="IrfanView 64-bit" /&gt;
-  &lt;Association Identifier=".lbm" ProgId="IrfanView.iff" ApplicationName="IrfanView 64-bit" /&gt;
-  &lt;Association Identifier=".m1v" ProgId="WMP11.AssocFile.MPEG" ApplicationName="Windows Media Player" /&gt;
-  &lt;Association Identifier=".m2t" ProgId="WMP11.AssocFile.M2TS" ApplicationName="Windows Media Player" /&gt;
-  &lt;Association Identifier=".m2ts" ProgId="WMP11.AssocFile.M2TS" ApplicationName="Windows Media Player" /&gt;
-  &lt;Association Identifier=".m3u" ProgId="WMP11.AssocFile.m3u" ApplicationName="Windows Media Player" /&gt;
-  &lt;Association Identifier=".m4a" ProgId="WMP11.AssocFile.M4A" ApplicationName="Windows Media Player" /&gt;
-  &lt;Association Identifier=".m4r" ProgId="AppXqj98qxeaynz6dv4459ayz6bnqxbyaqcs" ApplicationName="Groove Music" /&gt;
-  &lt;Association Identifier=".m4v" ProgId="WMP11.AssocFile.MP4" ApplicationName="Windows Media Player" /&gt;
-  &lt;Association Identifier=".mid" ProgId="WMP11.AssocFile.MIDI" ApplicationName="Windows Media Player" /&gt;
-  &lt;Association Identifier=".midi" ProgId="WMP11.AssocFile.MIDI" ApplicationName="Windows Media Player" /&gt;
-  &lt;Association Identifier=".MK3D" ProgId="WMP11.AssocFile.MK3D" ApplicationName="Windows Media Player" /&gt;
-  &lt;Association Identifier=".mka" ProgId="WMP11.AssocFile.MKA" ApplicationName="Windows Media Player" /&gt;
-  &lt;Association Identifier=".mkv" ProgId="WMP11.AssocFile.MKV" ApplicationName="Windows Media Player" /&gt;
-  &lt;Association Identifier=".mod" ProgId="AppX6eg8h5sxqq90pv53845wmnbewywdqq5h" ApplicationName="Movies &amp;amp; TV" /&gt;
-  &lt;Association Identifier=".mov" ProgId="WMP11.AssocFile.MOV" ApplicationName="Windows Media Player" /&gt;
-  &lt;Association Identifier=".MP2" ProgId="WMP11.AssocFile.MP3" ApplicationName="Windows Media Player" /&gt;
-  &lt;Association Identifier=".mp2v" ProgId="WMP11.AssocFile.MPEG" ApplicationName="Windows Media Player" /&gt;
-  &lt;Association Identifier=".mp3" ProgId="WMP11.AssocFile.MP3" ApplicationName="Windows Media Player" /&gt;
-  &lt;Association Identifier=".mp4" ProgId="WMP11.AssocFile.MP4" ApplicationName="Windows Media Player" /&gt;
-  &lt;Association Identifier=".mp4v" ProgId="WMP11.AssocFile.MP4" ApplicationName="Windows Media Player" /&gt;
-  &lt;Association Identifier=".mpa" ProgId="WMP11.AssocFile.MPEG" ApplicationName="Windows Media Player" /&gt;
-  &lt;Association Identifier=".MPE" ProgId="WMP11.AssocFile.MPEG" ApplicationName="Windows Media Player" /&gt;
-  &lt;Association Identifier=".mpeg" ProgId="WMP11.AssocFile.MPEG" ApplicationName="Windows Media Player" /&gt;
-  &lt;Association Identifier=".mpg" ProgId="WMP11.AssocFile.MPEG" ApplicationName="Windows Media Player" /&gt;
-  &lt;Association Identifier=".mpv2" ProgId="WMP11.AssocFile.MPEG" ApplicationName="Windows Media Player" /&gt;
-  &lt;Association Identifier=".mrw" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" /&gt;
-  &lt;Association Identifier=".mts" ProgId="WMP11.AssocFile.M2TS" ApplicationName="Windows Media Player" /&gt;
-  &lt;Association Identifier=".nef" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" /&gt;
-  &lt;Association Identifier=".nrw" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" /&gt;
-  &lt;Association Identifier=".orf" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" /&gt;
-  &lt;Association Identifier=".oxps" ProgId="Windows.XPSReachViewer" ApplicationName="XPS Viewer" /&gt;
-  &lt;Association Identifier=".pcx" ProgId="IrfanView.pcx" ApplicationName="IrfanView 64-bit" /&gt;
-  &lt;Association Identifier=".pdf" ProgId="AcroExch.Document" ApplicationName="Adobe Acrobat 9.0" /&gt;
-  &lt;Association Identifier=".pef" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" /&gt;
-  &lt;Association Identifier=".pgm" ProgId="IrfanView.pgm" ApplicationName="IrfanView 64-bit" /&gt;
-  &lt;Association Identifier=".png" ProgId="IrfanView.png" ApplicationName="IrfanView 64-bit" /&gt;
-  &lt;Association Identifier=".ppm" ProgId="IrfanView.ppm" ApplicationName="IrfanView 64-bit" /&gt;
-  &lt;Association Identifier=".psd" ProgId="IrfanView.psd" ApplicationName="IrfanView 64-bit" /&gt;
-  &lt;Association Identifier=".raf" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" /&gt;
-  &lt;Association Identifier=".raw" ProgId="IrfanView.raw" ApplicationName="IrfanView 64-bit" /&gt;
-  &lt;Association Identifier=".rgb" ProgId="IrfanView.sgi" ApplicationName="IrfanView 64-bit" /&gt;
-  &lt;Association Identifier=".rle" ProgId="IrfanView.rle" ApplicationName="IrfanView 64-bit" /&gt;
-  &lt;Association Identifier=".rmi" ProgId="WMP11.AssocFile.MIDI" ApplicationName="Windows Media Player" /&gt;
-  &lt;Association Identifier=".rw2" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" /&gt;
-  &lt;Association Identifier=".rwl" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" /&gt;
-  &lt;Association Identifier=".snd" ProgId="WMP11.AssocFile.AU" ApplicationName="Windows Media Player" /&gt;
-  &lt;Association Identifier=".sr2" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" /&gt;
-  &lt;Association Identifier=".srw" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" /&gt;
-  &lt;Association Identifier=".tif" ProgId="IrfanView.tif" ApplicationName="IrfanView 64-bit" /&gt;
-  &lt;Association Identifier=".tod" ProgId="AppX6eg8h5sxqq90pv53845wmnbewywdqq5h" ApplicationName="Movies &amp;amp; TV" /&gt;
-  &lt;Association Identifier=".TS" ProgId="WMP11.AssocFile.TTS" ApplicationName="Windows Media Player" /&gt;
-  &lt;Association Identifier=".TTS" ProgId="WMP11.AssocFile.TTS" ApplicationName="Windows Media Player" /&gt;
-  &lt;Association Identifier=".txt" ProgId="txtfile" ApplicationName="Notepad" /&gt;
-  &lt;Association Identifier=".url" ProgId="IE.AssocFile.URL" ApplicationName="Internet Browser" /&gt;
-  &lt;Association Identifier=".wav" ProgId="WMP11.AssocFile.WAV" ApplicationName="Windows Media Player" /&gt;
-  &lt;Association Identifier=".wax" ProgId="WMP11.AssocFile.WAX" ApplicationName="Windows Media Player" /&gt;
-  &lt;Association Identifier=".wdp" ProgId="IrfanView.hdp" ApplicationName="IrfanView 64-bit" /&gt;
-  &lt;Association Identifier=".website" ProgId="IE.AssocFile.WEBSITE" ApplicationName="Internet Explorer" /&gt;
-  &lt;Association Identifier=".wfw" ProgId="Applications\notepad.exe" ApplicationName="Notepad" /&gt;
-  &lt;Association Identifier=".wm" ProgId="WMP11.AssocFile.ASF" ApplicationName="Windows Media Player" /&gt;
-  &lt;Association Identifier=".wma" ProgId="WMP11.AssocFile.WMA" ApplicationName="Windows Media Player" /&gt;
-  &lt;Association Identifier=".wmf" ProgId="IrfanView.wmf" ApplicationName="IrfanView 64-bit" /&gt;
-  &lt;Association Identifier=".wmv" ProgId="WMP11.AssocFile.WMV" ApplicationName="Windows Media Player" /&gt;
-  &lt;Association Identifier=".wmx" ProgId="WMP11.AssocFile.ASX" ApplicationName="Windows Media Player" /&gt;
-  &lt;Association Identifier=".WPL" ProgId="WMP11.AssocFile.WPL" ApplicationName="Windows Media Player" /&gt;
-  &lt;Association Identifier=".wvx" ProgId="WMP11.AssocFile.WVX" ApplicationName="Windows Media Player" /&gt;
-  &lt;Association Identifier=".xbm" ProgId="IrfanView.xbm" ApplicationName="IrfanView 64-bit" /&gt;
-  &lt;Association Identifier=".xpm" ProgId="IrfanView.xpm" ApplicationName="IrfanView 64-bit" /&gt;
-  &lt;Association Identifier=".xps" ProgId="Windows.XPSReachViewer" ApplicationName="XPS Viewer" /&gt;
-  &lt;Association Identifier=".xvid" ProgId="AppX6eg8h5sxqq90pv53845wmnbewywdqq5h" ApplicationName="Movies &amp;amp; TV" /&gt;
-  &lt;Association Identifier=".zpl" ProgId="AppXqj98qxeaynz6dv4459ayz6bnqxbyaqcs" ApplicationName="Groove Music" /&gt;
-  &lt;Association Identifier="bingmaps" ProgId="AppXp9gkwccvk6fa6yyfq3tmsk8ws2nprk1p" ApplicationName="Maps" /&gt;
-  &lt;Association Identifier="http" ProgId="ChromeHTML.BFATTW3WY5HWWRDPZHSSXN7MKY" ApplicationName="Google Chrome" /&gt;
-  &lt;Association Identifier="https" ProgId="ChromeHTML.BFATTW3WY5HWWRDPZHSSXN7MKY" ApplicationName="Google Chrome" /&gt;
-  &lt;Association Identifier="mailto" ProgId="Outlook.URL.mailto.15" ApplicationName="Outlook 2016" /&gt;
-  &lt;Association Identifier="mswindowsmusic" ProgId="AppXtggqqtcfspt6ks3fjzyfppwc05yxwtwy" ApplicationName="Groove Music" /&gt;
-  &lt;Association Identifier="mswindowsvideo" ProgId="AppX6w6n4f8xch1s3vzwf3af6bfe88qhxbza" ApplicationName="Movies &amp;amp; TV" /&gt;
-&lt;/DefaultAssociations&gt;</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>WORD</Category>
-        <Language>TEXT</Language>
-        <Public>false</Public>
-        <Name>StrikeThrough_keyboard_shortcut</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>WORD</Category>
-          <Language>TEXT</Language>
-          <Public>false</Public>
-          <Name>StrikeThrough_keyboard_shortcut</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>https://word.tips.net/T000418_Strikethrough_Shortcut_Key.html
-
-1] Press Ctrl+D or choose Font from the Format menu. 
-	Word displays the Font tab of the Font dialog box. 
-	
-2] Hold down Alt+Ctrl and, at the same time, press the plus sign on the numeric keypad. 
-	The mouse pointer turns into a clover symbol.
-
-3] Click on the Strikethrough check box in the Font dialog box. 
-	(As you move the mouse pointer to get ready to click, the mouse pointer may change back to an arrow instead of a clover; this is OK.) 
-	When you click, Word displays the Customize Keyboard dialog box with the insertion point blinking in the Press New Shortcut Key box. 
-
-4] Type whatever shortcut key you want to use for the strikethrough format. Just hold down whatever combination of the Alt, Ctrl, 
-	and Shift keys you want, and then press the desired key to go with that combination. 
-	If the combination is already taken, that information shows just below the Customize Keyboard dialog box, 
-	and you can then change to a different shortcut key. 
-	I USED: CNTRL-SHIFT-S
-	(A good combination to consider is Alt+Shift+S or Ctrl+Alt+S, neither of which are used in a default installation of Word.)
-	
-5]	Click the Assign button. The shortcut key is now assigned to apply strikethrough formatting.
-6]	Click Close to dismiss the Customize Keyboard dialog box.
-7]	Click Cancel to dismiss the Font dialog box.</Code>
       </SnippetValue>
     </value>
   </item>
