@@ -3,2020 +3,799 @@
   <item>
     <key>
       <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>DAX_Calculated_Columns</Category>
-        <Language>VB</Language>
-        <Public>false</Public>
-        <Name>about_DAX_Calculated_Columns</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>DAX_Calculated_Columns</Category>
-          <Language>VB</Language>
-          <Public>false</Public>
-          <Name>about_DAX_Calculated_Columns</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>about_DAX_Calculated_Columns
-
-'when you look at Measures in the DATA view you don't see it's column or individual values, rather you have to put it into a Table Visual to see it's value
-'when you look at a Calculated Column in the DATA view you see a column, and values in every row.
-
-the ICON of a calculated column is a little SIGMA inside a square
-
-'Calculated Columns: "Expands" a table by adding columns defined ba a defined ???
-'					They can only look in the row that they are in. 
-'						DAX for a calculated column does not see relationships (i.e. to other tables), but you can use relationship FUNCTIONS to see other tables
-'							
-'			b/c Calculated columns are actual values that are stored in the dataset, then can be used in Slicers/Filters
-'			AND when a DAX calculation takes a long time, it might be advantagous to put them into a Calculated column that can be created ahead of time (e.g. SSRS scheduler)
-
-'vs.
-'Measures : "Summarizes" all the data into a single value
-'			works with whole columns of data and condense them into a single value
-'			Computed at run time, stored temporarily
-'			Limited by a Filter Context, which are ALL the filters applied by the user
-
-
-			
-----------------------------------------------------------------------------------
-'SO if you created two columns in a Visual (e.g. Table) and one was based on a Calculated Column using data from a Related table, 
-'	and the other was based on a Measure using data from a Related table, then the Calculated-based Rank would remain unchanged as you
-'	apply filters to the related Table, but the Measure-based Rank would change as you applied filters to the related Table.
-
-'e.g. for a Calculated Column
-Ranking =        RANKX(ALL(Products), SUMX(RELATEDTABLE(SalesOrderDetail), SalesOrderDetail[GrossSales]))
-
-'e.g. for a MEASURE Column
-RankingMeasure = RANKX(ALL(Products), SUMX(RELATEDTABLE(SalesOrderDetail), SalesOrderDetail[GrossSales]))		
----------------------------------------------------------------------------------
-			
-'Column calculations are computed at time of refresh, and then stored with the table
-
-'They are limited to the row context: They can only look in the row that they are in.
-
----SIMPLE
-'.e.g. 
-Gross Sales = [Price] * [Quantity] * (1-[Discount])
-
----RELATED TABLE
-'e.g. calculated value based on column in another table related by [ProductID]
-'			uses color from a related table
-Color = RELATED(Products[Color]) 'used to pull to a many table from a one table in a 'Many-to-one' relationship
-
----INTERATOR 'Takes 2 parameters: related table name, and an expression
-'e.g. want Total Sales by product between 2 related tables, related by [ProductID] 
-'		want the calculation done in the ONE end of the 1-to-Many relationship
-SUMX : sums values from a related table  - This is the interator function
-RELATEDTABLE: the related table for SUMX
-TotalSales = SUMX(RELATEDTABLE(SalesOrderDetail),SalesOrderDetail[LineTotal])</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>DAX_Filtering</Category>
-        <Language>VB</Language>
-        <Public>false</Public>
-        <Name>ALLSELECTED_examples</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>DAX_Filtering</Category>
-          <Language>VB</Language>
-          <Public>false</Public>
-          <Name>ALLSELECTED_examples</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>
-
-'suppose there is a slicer with 4 categories: Accessories, Bikes, Clothing and Components
-' and
-' a slicer for 7 colors
-
-
-
-0] 'This measure would show the total, under the given row context
-
-Total Sales = SUM(Sales[SalesAmount])
-
------------------------------------------------ALLSELECTED(&lt;columnName1&gt;, &lt;columnName2&gt; ...)
-
-1] 'This would show the total, in a given row, for all the visible rows for Category (i.e. all rows selected in slicers)
-
-AllSel on Category Column = 
-CALCULATE(
-    [Total Sales],
-    ALLSELECTED(Products[Category])
-)
-
-2] 'This would show the total, in a given row, for all the visible rows for Category and Color slicer
-
-AllSel on Category &amp; Color Column = 
-CALCULATE(
-    [Total Sales],
-    ALLSELECTED(Products[Category]),
-    ALLSELECTED(Products[Color])
-)
-
------------------------------------------------ALLSELECTED(&lt;table&gt;)
-'will show the total for all selected values, for any column in the table
-
-AllSel on Products Table = 
-CALCULATE(
-    [Total Sales],
-    ALLSELECTED(Products)
-)
-
-----------------------------------------------ALLSELECTED()
-'This will use all the columns in slicers, or visuals that are visible. like the grand total
-
-AllSel Blank = 
-CALCULATE(
-    [Total Sales],
-    ALLSELECTED()
-)</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>DAX_Filtering</Category>
-        <Language>VB</Language>
-        <Public>false</Public>
-        <Name>ISFILTERED_createMeasureToShowWhetherTableRowsAreFiltered</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>DAX_Filtering</Category>
-          <Language>VB</Language>
-          <Public>false</Public>
-          <Name>ISFILTERED_createMeasureToShowWhetherTableRowsAreFiltered</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>ISFILTERED_createMeasureToShowWhetherTableRowsAreFiltered
-
-'Suppose you have a table with 2 columns: Color and Average Price
-'Create a Measure:
-IsColorFiltered = ISFILTERED(Products[Color])
-'Then add that to the table, it will show "True" for all the rows, corresponding to each color
-' and it will show false for the Total Row (at the bottom) b/c that is not filtered
-
-'If you apply a slicer filter, then the data rows, and the Total Row will show "True" in the [IsColorFiltered] column</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>DAX_Functions_ITERATORS</Category>
-        <Language>VB</Language>
-        <Public>false</Public>
-        <Name>CONCATENATEX_dynamic_label_of_Slicer_Choices</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>DAX_Functions_ITERATORS</Category>
-          <Language>VB</Language>
-          <Public>false</Public>
-          <Name>CONCATENATEX_dynamic_label_of_Slicer_Choices</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>To create a Label that dynamically shows which choices are made in a slicer
-
-1] 'Suppose you have a slicer: Product Category Slicer and it is filtered (i.e. checked) Coffee, Coffee Beans &amp; Drinking Chocalate
-
-2] 'Create a measure that uses CONCATENATEX to capture the selections from the slicer:
-
-Selected Product Category (CONCATENATEX) = 
-											"Showing Sales For: " &amp;
-											CONCATENATEX(
-														    VALUES(
-														        'Product Lookup'[product_category]
-														    	  )
-														   ,'Product Lookup'[product_category]
-														   , ", "
-														   , 'Product Lookup'[product_category],
-														    ASC
-														)
-3]' This use this MEASURE for a Card Visual
-
-NOTE: Card Visual properties
-DATA LABEL ' this sets the color and size of the output text
-CATEGORY LABEL 'disable, to hide superflous text</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>DAX_Functions_ITERATORS</Category>
-        <Language>VB</Language>
-        <Public>false</Public>
-        <Name>RANKX</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>DAX_Functions_ITERATORS</Category>
-          <Language>VB</Language>
-          <Public>false</Public>
-          <Name>RANKX</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>'Returns the ranking of a number in a list of numbers for each row in the table argument
-
-RANKX(
-		&lt;table&gt;
-		, &lt;expression&gt;
-		[, &lt;value&gt;
-		[, &lt;order&gt;
-		[, &lt;ties&gt;]]]
-	)  
-
-table
-'Any DAX expression that returns a table of data over which the expression is evaluated.
-
-expression
-'Any DAX expression that returns a single scalar value. The expression is evaluated for each row of table, 
-'	to generate all possible values for ranking. See the remarks section to understand 
-'	the function behavior when expression evaluates to BLANK.
-
-value
-'(Optional) Any DAX expression that returns a single scalar value whose rank is to be found.
-'			by default, the value in the current row is used. 
-'See the remarks section to understand the function's behavior when value is not found in the expression.
-
-'When the value parameter is omitted, the value of expression at the current row is used instead.
-
-order
-'(Optional) A value that specifies how to rank value, low to high or high to low:
-	ASC
-	DESC
-
-ties
-'(Optional) An enumeration that defines how to determine ranking when there are ties.
-
-	Skip	'DEFAULT: The next rank value, after a tie, is the rank value of the tie plus the count of tied values. 
-	'For example if five (5) values are tied with a rank of 11 then the next value will receive a rank of 16 (11 + 5).
-
-	'This is the default value when ties parameter is omitted.
-	Dense	'The next rank value, after a tie, is the next rank value. 
-	'	For example if five (5) values are tied with a rank of 11 then the next value will receive a rank of 12.
-	
-NOTE:
-'If your "Total" row is showing a rank of 1, use IF &amp; HASONEVALUE with RANKX to exclude it from the rank	
-==============================EXAMPLES======================================================================
-
-Rank of Customer Sales (RANKX) = 
-									IF(
-									    HASONEVALUE(							//'without this the Total row would be 1
-									        'Product Lookup'[product_category]
-									    ),
-									    RANKX(
-									        ALL(
-									            'Product Lookup'[product_category]
-									        ),
-									        [Customer Sales]
-									    )
-									)
-============================================================================================================================================
-' in a Matrix visual:
-'Suppose there are 2 categorical columns: YEAR, and Product, 
-'				   1 Value: [Sales Total]
-'To rank the Sales Total both categorical columsn this would be ok:
-
- 'Given this measure (which is blank when there is not sales)
- Total Sales = SUM(Sales[SalesAmount])
-
-
-RankX_EXCLUDE_BLANKS_Sales_WithinEachYear = 
-		IF(
-		   NOT ( ISBLANK( [Total Sales]) ),
-		    RANKX(
-		            FILTER(ALL(Products[Product]), [Total Sales] &lt;&gt; 0),
-		            [Total Sales], ,
-		            DESC,
-		            Dense
-		            )
-		)
-
-'But if we want to rank the Product Sales within each year then you need to do this:
-'The problem with this is that it includes all the rows with a NULL or Zero value for [Total Sales]
-RankX_Sales_WithinEachYear = RANKX(
-					                    ALL(Products[Product]),
-					                    [Total Sales], ,
-					                    DESC,
-					                    Dense
-									)	
-========================================================================================================Show x ranked values
-0]' A table with a list of ranks to consider (e.g. table: TopNFilter with these 2 colums)
-	TopNValue	TopNName
-	3			Top 3
-	5			Top 5
-	...			...
-	100			All
-
-00]' A slicer that lists the values in the table, a user picks a value then the measures go to work 
-
-1]' Ranking Measure
-
-	Ranking by Quarterly Average = 
-						CALCULATE( 
-									RANKX ( 
-											ALLSELECTED( customer ) 
-											, [Quarterly Average Revenue] 
-										   ) ,
-									ALL ( DateTable[Year] ) 
-								  )
-2]' Then the measure that pulls out the top X ranked values, otherwise Blank:
-	TopNFiltered Revenue = IF ( 
-								[Ranking by Quarterly Average] &lt;= MAX(TopNFilter[TopNValue]) 
-								, [Final Measure for Revenue] 
-								, BLANK() 
-							  ) 
-								
-									</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>DAX_Functions</Category>
-        <Language>VB</Language>
-        <Public>false</Public>
-        <Name>CALCULATE_AllSelected</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>DAX_Functions</Category>
-          <Language>VB</Language>
-          <Public>false</Public>
-          <Name>CALCULATE_AllSelected</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>https://www.sqlbi.com/articles/the-definitive-guide-to-allselected/
-https://www.goodly.co.in/dax-allselected/dax-allselected-shadow-filter-context/
-
-
-ALLSELECTED
-
-'gig: In practical terms it lets the calculation proceed in a visual (e.g. a table) using all the filter contexts (i.e. in all the slicers)
-
-'Is most usefull when you want to restore the filter context outside the current visual
-
-'The easiest way to use ALLSELECTED is to never use it in a piece of DAX code that can be called by an Iterator
-'	Iterators create additional Shadow Filter contexts
-'	NOTE: When a MEASURE is executed inside a Table or Matrix Visual, it actually executes inside of an "ADDCOLUMN"  or "SUMMARIZECOLUMNs"
-'		that is created by the visual, i.e. the Visual uses  "ADDCOLUMN"  or "SUMMARIZECOLUMNs", so the visual is creating the
-'		Shadow Filter Context that ALLSELECTED is taking advantage of.
-
-'ALLSELECTED works fine when it is used in a measure that is used as a top level measure in a report. You should never
-'	start an iteration that calls inside 
-
-'Removes context filters from columns and rows in the current query, while retaining all other context filters or explicit filters.
-'The ALLSELECTED function gets the context that represents all rows and columns in the query, while keeping explicit filters and contexts other than row and column filters. 
-'	This function can be used to obtain visual totals in queries.
-
-'SYNTAX
-ALLSELECTED(
-			[&lt;tableName&gt; | &lt;columnName&gt;
-			[, &lt;columnName&gt;
-			[, &lt;columnName&gt;[,…]]]]
-			 )
-			 
-tableName	
-'	The name of an existing table, using standard DAX syntax.
-'	This parameter cannot be an expression. This parameter is optional.
-
-'	Applies the last available shadow filter context on any column that has one, in the target table
-'	If no shadow filter context exists the normal, current, filter context is used.
-
-columnName	
-'	The name of an existing column using standard DAX syntax, usually fully qualified. 
-'	It cannot be an expression. This parameter is optional.	
-
-'	Applies the last available shadow filter context on the target column
-'	If no shadow filter context exists, all column values are returned.
-
-() 'i.e. neithr Table nor column name is provided
-'	This is the same as specifying all columns in the table and applies the last available shadow filter context on the columns
-'	If no shadow filter context exists, all column values are returned.
-
-
-NOTES
-'If there is one argument, the argument is either tableName or columnName. 
-'	If there is more than one argument, they must be columns from the same table.
-
-'This function is different from ALL() because it retains all filters explicitly set within the query, and it retains all context filters other than row and column filters.
-
-
-
-=============================================================================================
-'Example of a Numerator over Denominator, where the denominator is all the Brands that are selected in the slicer
-
-
-'This MEASURE should be discarding the slicer context, and just taking into account the row context (i.e. the brand)
-Sales Amount = 
-        SUMX(
-            'Online Sales',
-            Online Sales[Sales Quantity] * Online Sales[Unit Price] - Online Sales[Discount Amount]
-        )
-
-
-Total Sales Percent of Whole = 
-    DIVIDE(
-        [Sales Amount],							//' This measure just takes into account the row (i.e. Brand) that is in, in the table.
-        CALCULATE(
-            [Sales Amount],
-            ALLSELECTED(Products[Brand Name])	//' This is all the brands selected by the slicer
-        )
-    )
-    
----------------------------------------------------------------------------------------------</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>DAX_Functions</Category>
-        <Language>VB</Language>
-        <Public>false</Public>
-        <Name>CALCULATE_modifiers</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>DAX_Functions</Category>
-          <Language>VB</Language>
-          <Public>false</Public>
-          <Name>CALCULATE_modifiers</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>
-MODIFIERS:'modifiers are evaluated before the &lt;filter1&gt;  parameter(s)
---------------------------
-	REMOVEFILTERS 'from a table, or a column
-	'Remove all filters, or filters from one or more columns of a table, or from all columns of a single table.
-	'Just like ALL, except it can only be used in CALCUATE, and not as a Table Expression
-	ALL, ALLEXCEPT, ALLNOBLANKROW, ALLSELECTED, 
-	'Remove filters from one or more columns, or from all columns of a single table.
-	KEEPFILTERS 'for an expression, that can be a logical statement, table, or table expression
-	'Add filter without removing existing filters on the same columns.
-	'e.g.
-	 
-			Measure1 = 
-				CALCULATE ( 
-							[Sales Amount], 
-							KEEPFILTERS( Product[Color] IN {"Green","Red"} )
-						   )
-	
-	
-	
-	USERELATIONSHIP
-	'Engage an inactive relationship between related columns, in which case the active relationship will automatically become inactive.
-	CROSSFILTER
-	'Modify filter direction (from both to single, or from single to both) or disable a relationship.
-	
-	
-
-
-'The expression used as the first parameter is essentially the same as a measure.
-'the 'filters' over-ride existing filters that are already being applied.
-
-
-============================================================================= remove all external filters on field: Calendar Year
-'Modifies the filters: to use all Years, regardless of external filters
-EVALUATE
-{
-	CALCULATE( 
-	[Sales Amount]
-	,ALL(Calendar[Calendary Year])
-	)	
-}
-
-'OR using REMOVEFILTERS
-
-EVALUATE
-{
-	CALCULATE( 
-	[Sales Amount]
-	,REMOVEFILTERS(Calendar[Calendary Year])
-	)	
-}
-============================================================================= VALUES respects the outer filters
-'using VALUES would give the calculation, where any filters from the slicers is passed through to the Measure
-
-EVALUATE
-{
-	CALCULATE( 
-	[Sales Amount]
-	,VALUES(Calendar[Calendary Year])
-	)	
-}
-============================================================================= Simulate the Inner Calculate, in a specific row of a visual
-EVALUATE
-{
-	CALCULATE(
-			CALCULATE( 
-					[Sales Amount]
-					,ALL(Calendar[Calendary Year])
-					)
-			,Calendar[Calendary Year] = 2014			//'simulate how the inner CALCULATE would act for a row where Year = 2014
-			)
-	
-}
-=============================================================================KEEPFILTERS 
-//'KEEPFILTERS keeps the external filters, and adds the filter that is in the KEEPFILTERS statement
-
-//'This is looking for situations where the dealer name is both "Dealer-9940" &amp; "Dealer-9941" which results in zero records
-EVALUATE
-{
-    CALCULATE(
-        CALCULATE(
-            [Total Sales],
-            KEEPFILTERS(Dealers[Dealer Name] = "Dealer-9940")
-            ),
-        Dealers[Dealer Name] = "Dealer-9941"
-        )
-}    </Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>DAX_Functions</Category>
-        <Language>VB</Language>
-        <Public>false</Public>
-        <Name>CALCULATE_with_filters_and_context</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>DAX_Functions</Category>
-          <Language>VB</Language>
-          <Public>false</Public>
-          <Name>CALCULATE_with_filters_and_context</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>'CALCULATE_with_filters_and_context
-
-'CALCULATE's reason for being is to modify the evaluation context, which is either the filter context or the row context
-
-'CALCULATE creates a new filter context by merging it's filter PARMs with any existing outer filter context
-
-'Filters are evaluated in the outer filter context and then combined together using a logical AND
-'If a column is specified in multiple filters, the resulting values are the intersection of the total set of values. In 
-'	other words, a logical AND is used
-
-
-============================ 'w/ a Table and 2 filter Parms
-Test Measure = 
-				CALCULATE(
-				        [Total Sales],								//'&lt;==== The table
-				        FILTER(										//'&lt;==== a Filter
-				                CreditCards,
-				                CreditCards[Card Name] = "Visa"
-				        )
-				        ,FILTER(									//'&lt;==== a Filter
-				            Dealers,
-				            [Commission Percentage] * 9.0
-				        )
-				)
-				
-=================================================================================================	BOOLEAN FILTERS, since March 2021	
-============NOTE:  the multiple columns belong to the SAME table		
-'As of March 2021: https://www.sqlbi.com/articles/specifying-multiple-filter-conditions-in-calculate/
-'This syntax now works. NOTE:  the multiple columns belong to the SAME table
-
-Red or Contoso Sales :=
-CALCULATE (
-    [Sales Amount],
-    'Product'[Color] = "Red" || 'Product'[Brand] = "Contoso"
-)
- 
-'PRIOR to march 2021 only supported conditions specifying a single column reference, b/c under the hood this was converted to a FILTER statement
-
-LEGACY ' This is the way it worked PRIOR to March 2021
-------
-'When you wrote this:
-
-Red :=
-CALCULATE (
-    [Sales Amount],
-    'Product'[Color] = "Red"
-)
-
-'Under the hood it was converted to this:
-
-Red Sales :=
-CALCULATE (
-    [Sales Amount],
-    FILTER (
-        ALL ( 'Product'[Color] ),				    	//' Note use of ALL											
-        'Product'[Color] = "Red"
-    )
-)
-
-'AND that conversion did NOT work for Multiple columns
-
-'Referencing multiple columns in the same predicate was not possible. 
-'	In those cases, a multicolumn filter required the complete syntax, as in the following example:
-
-Red or Contoso Sales :=
-CALCULATE (
-    [Sales Amount],
-    FILTER (
-        ALL ( 'Product'[Color], 'Product'[Brand] ),						    	//' Note use of ALL
-        'Product'[Color] = "Red" || 'Product'[Brand] = "Contoso"
-    )
-)
-
-==================================================================================================This IGNORES Slicers &amp; external context
-'Valid since March 2021
-'This ignores outer filters, inother words the filter expression overrides the external filters (e.g. Slicers)
-'As of March 2021 this  is now a valid DAX expression: NOTE does NOT have KEEPFILTERS
-
-Big Sales Amount Overrides Filter :=
-CALCULATE (
-    [Sales Amount],
-    Sales[Quantity] * Sales[Net Price] &gt; 1000
-)
-
-'Internally, this code is executed as the following expression:
-
-Big Sales Amount Overrides Filter :=
-CALCULATE (
-    [Sales Amount],
-    FILTER (
-        ALL ( Sales[Quantity], Sales[Net Price] ),					    	//' Note use of ALL
-        Sales[Quantity] * Sales[Net Price] &gt; 1000
-    )
-)
-
-'The filter overrides any existing filter on Sales[Quantity] and Sales[Net Price]. 
-'For example, a slicer with a filter on Sales[Quantity] would be ignored by the Big Sales Amount Overrides Filter measure. 
-'	In order to keep the existing filter on a slicer, 
-'	you can use KEEPFILTERS as in the Big Sales Amount measure shown at the beginning of the article:
- ================================================================================================= using 2 columns in a filter expression
- ============NOTE:  the multiple columns belong to the SAME table
-'This is the new best practice 
-Big Sales Amount :=
-CALCULATE (
-    [Sales Amount],
-    KEEPFILTERS ( Sales[Quantity] * Sales[Net Price] &gt; 1000 )
-)
-
-'This is sub-optimal, and should NOT be used.
-Big Sales Amount :=
-CALCULATE (
-    [Sales Amount],
-    FILTER (
-        Sales,
-        Sales[Quantity] * Sales[Net Price] &gt; 1000
-    )
-)
-
- =================================================================================================Ex. Override external vs Allow External filters
- ============NOTE:  the multiple columns belong to the SAME table
- //' If a column value is specified in a filter, it replaces the selection of the current context for that column (unless KEEPFILTERS is used)
- DEFINE
- 	//'KEEPFILTERS =&gt; retain external context
-    MEASURE Sales[Big Sales Amount] =
-        CALCULATE (
-            [Sales Amount],
-            KEEPFILTERS ( Sales[Quantity] * Sales[Net Price] &gt; 1000 )
-        )
-    //' there is no KEEPFILTERS, so it overrides external    
-    MEASURE Sales[Big Sales Amount Overrides Filter] =					 
-        CALCULATE (
-            [Sales Amount],
-            Sales[Quantity] * Sales[Net Price] &gt; 1000
-        )
-EVALUATE
-SUMMARIZECOLUMNS (
-    Sales[Quantity],
-    "Sales Amount", [Sales Amount],
-    "Big Sales Amount", [Big Sales Amount],
-    "Big Sales Amount Overrides Filter", [Big Sales Amount Overrides Filter]
-)
- ================================================================================================= STILL INVALID - Columns from different Tables
- 'The columns specified in one same predicate MUST belong to the same table. 
- '	The following expression is therefore still invalid in DAX:
- 
- Sales Multiple or Red :=
-								CALCULATE (
-								    [Sales Amount],
-								    Sales[Quantity] &gt; 1 || 'Product'[Color] = "Red"
-								)
- 
-----------------------------------------Instead use CROSSJOIN ------------------------------------- This is VALID
- Sales[Sales Multiple or Red] =
-						        CALCULATE (
-						            [Sales Amount],
-						            FILTER (
-						                CROSSJOIN ( ALL ( Sales[Quantity] ), ALL ( 'Product'[Color] ) ),		   //' Note use of ALL
-						                Sales[Quantity] &gt; 1 || 'Product'[Color] = "Red"
-						            )
-						        )
- ================================================================================================= 	Filters are evaluated from the last to the first					 
- 'NESTED calculate
- 'These three EVALUATE statements are the equivalent
- EVALUATE
-{
-	CALCULATE(
-			[Sales Amount]
-			,Products[Brand Name] = "Contoso"
-			,Customers[Country]="Canada" || Customers[Country] = "China"
-			,'Calendar'[Calendar Month] = 200701
-			)
-
-}
-
-EVALUATE
-{
-	CALCULATE(
-		CALCULATE(
-			[Sales Amount]
-			)
-			,Products[Brand Name] = "Contoso"
-			,Customers[Country]="Canada" || Customers[Country] = "China"
-			,'Calendar'[Calendar Month] = 200701
-			)
-
-}
-
-
-EVALUATE
-{
-	CALCULATE(
-			CALCULATE(
-						CALCULATE(
-							[Sales Amount]
-							)
-					,Products[Brand Name] = "Contoso"
-					)
-			,Customers[Country]="Canada" || Customers[Country] = "China"
-			,'Calendar'[Calendar Month] = 200701
-			)
-
-}
- ================================================================================================= 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
-</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>DAX_HowTo</Category>
-        <Language>VB</Language>
-        <Public>false</Public>
-        <Name>PARAMETER_What_If_Slicer_and_to_use_as_PARM_in_Measure</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>DAX_HowTo</Category>
-          <Language>VB</Language>
-          <Public>false</Public>
-          <Name>PARAMETER_What_If_Slicer_and_to_use_as_PARM_in_Measure</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>PARAMETER_What_If_Slicer_and_to_use_as_PARM_in_Measure
-
-see snippets in 
-
-	POWER_BI section under TEXT language
-
-named:
-
-	PARAMETER_in_Visual_View
-	
-	PARAMETER_use_in_a_MEASURE</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>DAX_HowTo</Category>
-        <Language>VB</Language>
-        <Public>false</Public>
-        <Name>Slicer_Parameter_for_time_Period_of_MovingAverage</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>DAX_HowTo</Category>
-          <Language>VB</Language>
-          <Public>false</Public>
-          <Name>Slicer_Parameter_for_time_Period_of_MovingAverage</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>
-
-A] This does not use a WHAT-IF parameter from wizard, rather it is a manual version
-B] This works for a MEASURE, i.e. the parameter is used/read by the MEASURE
-	BUT it does NOT work for a calculated table, b/c a calculated table is created before the slicer is used.
-
-1]' A calculated table with the values to use for the parameter.
-'Generates a series (rows of 1 column) from 7 to 63 in increments of 7.
-'NOTE the name of the generated field is "Value"
-
-	Average Days = GENERATESERIES(7,63,7)
-
-2]' A Measure to get/read the "Average Days" value from the row context, that is equivalent to the value in the table in step 1, i.e. it will pick up the row context as the 
-'	'selected value' and echo it back, if it can't find it, in the table, then the default/alternate will be 30
-
-	Average Days Value = 											//'&lt;====== HERE is the PARAMTER/MEASURE
-						SELECTEDVALUE(
-						    'Average Days'[Average Days],
-						    30
-						)
-3]' A measure that will consume this parameter (e.g. a Moving average, where the length of time for the moving average is the Parameter)
-
-3a]' Just for reference, but NOT needed in general; The MEASURE used in the 3b, as the MEASURE whose moving average we want
-	
-	Profit =  [Customer Sales] - [Cost]
-3b]' The Measure that actually consumes the Parameter
-
-	Moving Average Profit (AVERAGEX) = 
-							VAR LastTransactionDate = MAX('Calendar'[Transaction_Date])
-							VAR AverageDay = [Average Days Value]						//'&lt;====== HERE is the PARAMTER/MEASURE being consumed
-							VAR PeriodInVisual = 
-							FILTER(
-							    ALL(
-							        'Calendar'[Transaction_Date]
-							    ),
-							    AND(
-							        'Calendar'[Transaction_Date] &gt; LastTransactionDate - AverageDay,
-							        'Calendar'[Transaction_Date] &lt;= LastTransactionDate
-							    )
-							)
-							VAR OutPut =
-							CALCULATE(
-							    AVERAGEX(
-							        'Calendar',
-							        [PROFIT]
-							    ),
-							    PeriodInVisual
-							)
-	RETURN
-	OutPut
-	
-4]' Then use the MEASURE from 3b in a Visual. Until you add a slicer to control the Parameter it will use the default value (e.g. 30)
-
-5]' Add a slicer that gets its values from the column of the calculated table in #1 (above)
-'	Try it as a list to pick from, but don't allow multiple values to be selected from the list</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>DAX_HowTo</Category>
-        <Language>VB</Language>
-        <Public>false</Public>
-        <Name>SLICER_to_filter_a_Table_Visual_using_a_0_1_Measure</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>DAX_HowTo</Category>
-          <Language>VB</Language>
-          <Public>false</Public>
-          <Name>SLICER_to_filter_a_Table_Visual_using_a_0_1_Measure</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>from:
-Search in Power BI Table Visual Using a Slicer For Contains Character Criteria
-https://www.youtube.com/watch?v=LYXOR4RXggs
-
-Problem:
-============
-I have a calculated table that I want to filter with a slicer called 'Neglected_Dealer_Days'
-I want to filter out rows that have a value in the field: Neglected_Dealers[Days Since Last Contacted]
-	that are less than x days.
-
-Since it is a calculated table I can not use a What-IF style Parameter, b/c the calculated table is already 'calculated'
-	before I change the value of the slicer.
-	
-
-Solution
-===========
-
-1] 'Create a second Calculated table with a list of values for the drop-down called: Neglected_Dealers_Days
-'Then create a calculated column in that table called: Neglected_Dealers_Days[Neglected_Dealers_Days]
-'The DAX for that field is:
-
-		 Neglected_Dealers_Days = GENERATESERIES(0,450,15)
-
-2] 'Create a MEASURE, in that table, that outputs either a 0 or 1 called: Exists
-
-		Exists = IF(		
-		                SELECTEDVALUE(Neglected_Dealers[Days Since Last Contacted]) &gt;= SELECTEDVALUE(Neglected_Dealers_Days[DaysForSlicer])		
-		                , 1		
-		                , 0		
-		            )
-
-3]' Add a Visual level filter to the calculated table called 'Neglected_Dealers' for the Measure named 'Exists'
-	Show items when the value
-	is greater than or equal to 1	            
-
-'Now when the user picks a number of days from the slicer, the rows that have (Neglected_Dealers[Days Since Last Contacted]) greater than
-'	the day selected in the slicer will stay, and those with less will be filtered out.		            
-		            </Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>DAX_Measures</Category>
-        <Language>VB</Language>
-        <Public>false</Public>
-        <Name>about_DAX_Measures</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>DAX_Measures</Category>
-          <Language>VB</Language>
-          <Public>false</Public>
-          <Name>about_DAX_Measures</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>about_DAX_Measures
-
-'NOTE: When a MEASURE is referenced in a DAX expression, it is always surrounded by a CALCULATE statement
-
-Measure names must be unique within a .pbix file
-You could store the all in one table and then just reference them wherever you need to use them.
-BEST PRACTICE: when referencing a column in a DAX calculatiton, always preface it with the Table name, 
-	so that you can easily use the measure where ever you want and you will know what it is referring to.
-	
-'Referencing a MEASURE in a row Context (e.g. a Calculated column) generates a row context transition b/c of the automatic
-'	CALCULATE statement that wraps every measure. 	
-
-'when you look at Measures in the DATA view you don't see it's column or individual values, rather you have to put it into a Table Visual to see it's value
-'when you look at a Calculated Column in the DATA view you see a column, and values in every row.
-
-the ICON of a MEASURE column is a little CALCULATOR inside a square 
-
-'Calculated Columns: "Expands" a table by adding columns defined ba a defined ???
-'					They can only look in the row that they are in.
-'vs.
-'Measures : "Summarizes" all the data into a single value
-'			works with whole columns of data and condense them into a single value
-'			Computed at run time, stored temporarily
-'			Limited by a Filter Context, which are ALL the filters applied by the user
-
-----------------------------------------------------------------------------------
-'SO if you created two columns in a Visual (e.g. Table) and one was based on a Calculated Column using data from a Related table, 
-'	and the other was based on a Measure using data from a Related table, then the Calculated-based Rank would remain unchanged as you
-'	apply filters to the related Table, but the Measure-based Rank would change as you applied filters to the related Table.
-
-'e.g. for a Calculated Column
-Ranking =        RANKX(ALL(Products), SUMX(RELATEDTABLE(SalesOrderDetail), SalesOrderDetail[GrossSales]))
-
-'e.g. for a MEASURE Column
-RankingMeasure = RANKX(ALL(Products), SUMX(RELATEDTABLE(SalesOrderDetail), SalesOrderDetail[GrossSales]))		
----------------------------------------------------------------------------------
-'e.g.
-Total Gross Sales := SUM( Sales[Gross Sales] )  'where Sales[Gross Sales] is Table[field])
-
-'To make sure you are applying the measure to the right table, right click on the table {in Data View}
-
-'You can create Measures in tables with no data
-
-'When you create a 'MEASURE' in the 'Fields' panel of a Table, 
-'	and you look at the table in Data View, 
-'	you do NOT see a column for the measure
-'HOWEVER, you can drag n drop the MEASURE from the 'Fields' panel, into the 'Values' field of a Matrix visualization (for example)
-'	and it will show up as a column in the Matrix Visualization
-
-'You can NOT use a MEASURE in a SLICER
-
-CALCULATE 'is good for writing Measures
-
-'You can move a Measure:
-Visualization View =&gt; Select the Measure {located in some table} =&gt; Modeling {top menu}
-	=&gt; Home Table:xxxTable {drop down}  =&gt; {pick some other table}
----------------------------------------------------------------------------------
-'A measure can only use in it's formula: (a) other measures or (b) functions of regular columns (e.g. SUM(someColumn), but it can not use a simple column.	
-'Example:
-Net Sales = sum(Sales[SalesAmount])-sum(Sales[TotalCost])-sum(Sales[ReturnAmount])-sum(Sales[DiscountAmount])
-'Whereas here is a calculated column
-Net Sales Calc = Sales[SalesAmount]-Sales[TotalCost]-Sales[ReturnAmount]-Sales[DiscountAmount]
-'If you use the Meausure's formulate (i.e. with the Aggregate functions) in a Calculated column then every row has the same value:
-Net Sales Calc using Aggregates = sum(Sales[SalesAmount])-sum(Sales[TotalCost])-sum(Sales[ReturnAmount])-sum(Sales[DiscountAmount])</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>DAX_Measures</Category>
-        <Language>VB</Language>
-        <Public>false</Public>
-        <Name>mimic_slicer_FilterContext_in_DAX_STUDIO</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>DAX_Measures</Category>
-          <Language>VB</Language>
-          <Public>false</Public>
-          <Name>mimic_slicer_FilterContext_in_DAX_STUDIO</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>
- 
- 
- EVALUATE
-{
-	CALCULATE(
-			[Sales Amount]													//'&lt;======= the Measure
-			,Products[Brand Name] = "Contoso"								//'&lt;======= the Slicer value
-			,Customers[Country]="Canada" || Customers[Country] = "China"	//'&lt;======= the Slicer value		
-			,Calendar[Calendar Month] = 200701								//'&lt;======= the row Context
-			)
-
-}</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>PIVOT</Category>
+        <Category>DATES</Category>
         <Language>SQLSERVER2K SQL</Language>
         <Public>false</Public>
-        <Name>UnPivo_Multiple_Columns_myExample</Name>
+        <Name>DECLARE_pick_a_date__FromCourtney</Name>
         <Group>My Snippets</Group>
       </SnippetKey>
     </key>
     <value>
       <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
         <Key>
-          <Category>PIVOT</Category>
+          <Category>DATES</Category>
           <Language>SQLSERVER2K SQL</Language>
           <Public>false</Public>
-          <Name>UnPivo_Multiple_Columns_myExample</Name>
+          <Name>DECLARE_pick_a_date__FromCourtney</Name>
           <Group>My Snippets</Group>
         </Key>
         <Keywords />
         <Imports />
-        <Code>/*
+        <Code>--this uses TRY_CONVERT to get YYYYMM from: @theDatePickedByUserFromCalendar
 
-example from: -P_0051_TASK_037_LIST_03_CurrentPortfolioStatisticsPanel_v7.sql
+use RiskMngt
+go
 
-1]  set of fields
-2]  The UNPIVOT, with the the field names used:
-					-- top section is column #1 'By Dealer', bottom section is column #2 "CBT" 
-					-- the suffix number is used to order the items in Column #1, and Column #2
-3] Then the section to identify the UNITS for each field (i.e. row) of the columns
-
-
+--P_0051_TASK_045_SP_01_DealerMonthlyAppsAndLoansList_v5.sql
+/*
+	************************************************************************************
+	SSRS Report: REP_xx_P_0045_0xx_
+	NOTE: 
+	Uses: 
+	Created: 12/7/2021
+	By:		Dave Hoadley 
+	SSRS: 	glenn garson
+	************************************************************************************
 */
 
-SELECT DISTINCT
-	 funded.DealerCode
-   --, funded.Shaw_Account
-   --, funded.M01_ID
-   --, funded.CLIENT_APP_ID
-   -----------------------------------------by Dealer
-   , funded.Outstandings_Count_byDealer * 1.00  AS   Outstandings_Count_byDealer
-   , funded.Outstandings_Dollars_byDealer * 1.00  AS   Outstandings_Dollars_byDealer
-   , funded.Avg_LoanBalance_Dollars_byDealerAccount * 1.00  AS   Avg_LoanBalance_Dollars_byDealerAccount
-   , funded.Avg_LTV_Booked_byDealer * 1.00  AS   Avg_LTV_Booked_byDealer
-   , funded.Avg_PTI_Booked_byDealer * 1.00  AS   Avg_PTI_Booked_byDealer
-   , funded.Avg_FICO_byDealer * 1.00  AS   Avg_FICO_byDealer
-   , funded.Avg_TERM_byDealer * 1.00  AS   Avg_TERM_byDealer
-   , funded.Avg_Flat_Dollars_byDealerAccount * 1.00  AS   Avg_Flat_Dollars_byDealerAccount
-   , funded.Avg_yield_PCNT_byDealerAccount * 1.00  AS   Avg_yield_PCNT_byDealerAccount
-   -----------------------------------------CBT
-   , funded.Outstandings_Count_CBT
-   , funded.Outstandings_Dollars_CBT
-   , funded.Avg_LoanBalance_Dollars_CBTAccount
-   , funded.Avg_LTV_Booked_CBT
-   , funded.Avg_PTI_Booked_CBT
-   , funded.Avg_FICO_CBT
-   , funded.Avg_TERM_CBT
-   , funded.Avg_Flat_Dollars_CBTAccount
-   , funded.Avg_yield_PCNT_CBTAccount
-   ----------------------------------- by Dealer
-   , COALESCE(apps.Straight_Approvals_PCNT_byDealer,0.00) AS Straight_Approvals_PCNT_byDealer
-   , COALESCE(apps.Declined_PCNT_byDealer,0.00) AS Declined_PCNT_byDealer
-   , COALESCE(apps.Counter_Offered_PCNT_byDealer,0.00) AS Counter_Offered_PCNT_byDealer
-   , COALESCE(apps.Auto_Declined_PCNT_byDealer,0.00) AS Auto_Declined_PCNT_byDealer
-   , COALESCE(apps.Auto_CounterOffered_PCNT_byDealer,0.00) AS Auto_CounterOffered_PCNT_byDealer
-   , COALESCE(apps.Auto_Approved_PCNT_byDealer,0.00) AS Auto_Approved_PCNT_byDealer
-   ----------------------------------- CBT
-   , COALESCE(apps.Straight_Approvals_PCNT_CBT,0.00) AS Straight_Approvals_PCNT_CBT
-   , COALESCE(apps.Declined_PCNT_CBT,0.00) AS Declined_PCNT_CBT
-   , COALESCE(apps.Counter_Offered_PCNT_CBT,0.00) AS Counter_Offered_PCNT_CBT
-   , COALESCE(apps.Auto_Declined_PCNT_CBT,0.00) AS Auto_Declined_PCNT_CBT
-   , COALESCE(apps.Auto_CounterOffered_PCNT_CBT,0.00) AS Auto_CounterOffered_PCNT_CBT
-   , COALESCE(apps.Auto_Approved_PCNT_CBT,0.00) AS Auto_Approved_PCNT_CBT
-INTO #DealerAppsAndFunded
+----======================================================================DEBUG
+--DECLARE @theDatePickedByUserFromCalendar as DATE = '03-28-2020'
+--DECLARE @MDM nvarchar(100) = '0_ALL'	
+--DECLARE @MDR nvarchar(100) = '0_ALL'	
+--DECLARE @RSE nvarchar(100) = '0_ALL'	
+--DECLARE @MSE nvarchar(100) = '0_ALL'	
+--DECLARE @Territory nvarchar(100) = '0_ALL'	
+----======================================================================DEBUG
+
+   
+alter Procedure [Reporting].[P_0051_TASK_045_SP_01_DealerMonthlyAppsAndLoansList](@theDatePickedByUserFromCalendar AS DATE
+																					, @MDM nvarchar(100)
+																					, @MDR nvarchar(100)
+																					, @RSE nvarchar(100)
+																					, @MSE nvarchar(100)
+																					, @Territory nvarchar(100)
+																					)
+	as
+
+
+DECLARE @YYYYMM AS VARCHAR(06)
+
+SET @YYYYMM = TRY_CONVERT(VARCHAR(06), @theDatePickedByUserFromCalendar, 112);
+
+
+
+DROP TABLE IF EXISTS #RSE_assignments;	
+DROP TABLE IF EXISTS #MDM_assignments;	
+DROP TABLE IF EXISTS #DealerLoansAndApplications;	
+
+SELECT
+    CAST(ol.key1 AS BIGINT) internalClientId
+    , CONCAT(cu.userFirstName, ' ', cu.userLastName) RegionalSalesExecutive
+INTO #RSE_assignments
+FROM
+    DL4.dbo.ObjectLookup AS ol WITH (READUNCOMMITTED)
+    INNER JOIN
+    DL4.dbo.CustomAttributeValues AS cav WITH (READUNCOMMITTED)
+    ON
+        cav.objectId = ol.objectId
+
+    LEFT JOIN
+    DL4.dbo.ClientUser cu WITH (READUNCOMMITTED)
+    ON
+        cav.value = cu.internalUserId
+WHERE
+    ol.type = 'Client'
+    AND cav.name = 'xRegionalManager'
+--------------------------------------------------------
+
+SELECT
+    CAST(ol.key1 AS BIGINT) internalClientId
+    , CONCAT(cu.userFirstName, ' ', cu.userLastName) MarketDevelopmentManager
+INTO #MDM_assignments
+FROM
+    DL4.dbo.ObjectLookup AS ol WITH (READUNCOMMITTED)
+    JOIN
+    DL4.dbo.CustomAttributeValues AS cav WITH (READUNCOMMITTED)
+    ON
+        cav.objectId = ol.objectId
+
+    LEFT JOIN
+    DL4.dbo.ClientUser AS cu WITH (READUNCOMMITTED)
+    ON
+        cav.value = cu.internalUserId
+WHERE
+    ol.type = 'Client'
+    AND cav.name = 'XMarketDevelopmentManager'
+--------------------------------------------------------
+
+
+SELECT
+    dd.DealerCode
+    , COUNT(fa.Client_App_ID) AS "Applications"
+    , SUM(   CASE
+                    WHEN fa.FundedDateKey &lt;&gt; -1
+                        THEN 1
+                    ELSE 0
+                END
+            ) AS "Loans"
+INTO #DealerLoansAndApplications
+FROM
+    edwCrescent.dbo.DimDealer AS dd WITH (READUNCOMMITTED)
+    INNER JOIN
+    edwCrescent.dbo.FactApplication AS fa WITH (READUNCOMMITTED)
+    ON
+        fa.DealerKey = dd.DealerKey
+WHERE @YYYYMM = TRY_CONVERT(VARCHAR(06), fa.ApplicationDate, 112)
+GROUP BY dd.DealerCode
+
+
+SELECT
+    c.clientId AS DealerCode
+    , COALESCE(cteMV.Applications, 0) AS "Apps"
+    , COALESCE(cteMV.Loans, 0) AS "Loans"
+    , c.dealerType AS "DealerType"
+    , c.dbaName AS DealerDBA
+    , c.clientName AS DealerLegalName
+    , c.clientStreet AS "Address"
+    , c.clientCity AS "City"
+    , c.clientState AS "State"
+    , c.clientZipCode AS "Zip"
+    --, c.clientStatus AS Active
+    , CONCAT('(', LEFT(c.primaryPhone, 3), ') ', SUBSTRING(c.primaryPhone, 4, 3), '-', RIGHT(c.primaryPhone, 4)) AS "Phone"
+    , MDM.MarketDevelopmentManager AS "MDM"
+    , cu1.userFirstName + ' ' + cu1.userLastName AS "MDR"
+    , RSE.RegionalSalesExecutive AS "RSE"
+    , cu.userFirstName + ' ' + cu.userLastName AS "MSE"
+    , CASE
+          WHEN COALESCE(ccp.megaDealer, 0) = 0
+              THEN ''
+          ELSE so.label
+      END AS "Group"
+    , ccp.xTerritory AS "Territory"
+FROM
+    DL4.dbo.Client AS c ---- table with branches and dealers
+    INNER JOIN
+    DL4.dbo.ClientUser AS cu WITH (READUNCOMMITTED)
+    ON
+        cu.internalUserId = c.salesRepId
+
+    INNER JOIN
+    DL4.dbo.ClientUser AS cu1 WITH (READUNCOMMITTED)
+    ON
+        cu1.internalUserId = c.creditOfficerId
+
+    LEFT JOIN
+    #RSE_assignments RSE
+    ON
+        c.internalClientId = RSE.internalClientId
+
+    LEFT JOIN
+    #MDM_assignments MDM
+    ON
+        c.internalClientId = MDM.internalClientId
+
+    LEFT JOIN
+    DL4.dbo.ClientCustomProperty AS ccp WITH (READUNCOMMITTED)
+    ON
+        ccp.internalClientId = c.internalClientId
+
+    LEFT JOIN
+    DL4.dbo.SelectOption AS so WITH (READUNCOMMITTED)
+    ON
+        so.value = ccp.megaDealer
+        AND so.selection = 'megaDealer'
+
+    LEFT JOIN
+    #DealerLoansAndApplications AS cteMV
+    ON
+        cteMV.DealerCode = c.clientId
+WHERE
+    1 = 1
+    AND c.clientType = 3
+    AND c.clientId NOT IN
+        (
+            '12345', '1234', '1212', 'zzOK-00063'
+        )
+    AND c.clientStatus = 1
+	--==================================================
+	AND
+	(
+		(
+			(@MDM = '0_ALL')
+			AND
+			(MDM.MarketDevelopmentManager is not Null)
+		)
+		OR
+		( 
+			(upper(LTRIM(RTRIM(MDM.MarketDevelopmentManager))) = upper(LTRIM(RTRIM(@MDM))))
+		)
+	)
+	AND
+	(
+		(
+			(@MDR = '0_ALL')
+			AND
+			( (cu1.userFirstName + ' ' + cu1.userLastName) is not Null)
+		)
+		OR
+		( 
+			(upper(LTRIM(RTRIM(cu1.userFirstName + ' ' + cu1.userLastName))) = upper(LTRIM(RTRIM(@MDR))))
+		)
+	)	
+	AND
+	(
+		(
+			(@RSE = '0_ALL')
+			AND
+			( RSE.RegionalSalesExecutive is not Null)
+		)
+		OR
+		( 
+			(upper(LTRIM(RTRIM(RSE.RegionalSalesExecutive))) = upper(LTRIM(RTRIM(@RSE))))
+		)
+	)				
+	AND
+	(
+		(
+			(@MSE = '0_ALL')
+			AND
+			( cu.userFirstName + ' ' + cu.userLastName is not Null)
+		)
+		OR
+		( 
+			(upper(LTRIM(RTRIM(cu.userFirstName + ' ' + cu.userLastName))) = upper(LTRIM(RTRIM(@MSE))))
+		)
+	)
+	AND
+	(
+		(
+			(@Territory = '0_ALL')
+			AND
+			( ccp.xTerritory is not Null)
+		)
+		OR
+		( 
+			(upper(LTRIM(RTRIM(ccp.xTerritory))) = upper(LTRIM(RTRIM(@Territory))))
+		)
+	)			
+
+
+
+ORDER BY c.clientId
+
+
+
+
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>HISTOGRAM</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>my_Histogram_Example</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>HISTOGRAM</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>my_Histogram_Example</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>use RiskMngt
+go
+
+--0000_General_SNIPPET_0784__HISTOGRAM__APP_MAST_example.sql
+
+
+DECLARE @NoOfMonthsAgoToStart as INT = 24				--First day of month, 24 months ago
+DECLARE @START_DATE date = DATEADD(mm, DATEDIFF(mm, 0, GETDATE()) -  @NoOfMonthsAgoToStart, 0)
+--DECLARE @START_DATE date = '8-01-2018'
+DECLARE @END_DATE as DATE = CONVERT(DATE, DATEADD(WEEK, DATEDIFF(WEEK, 7, GETDATE()), 6))	--the last sunday prior to today.
+--DECLARE @END_DATE date = '12-31-2018'
+
+
+PRINT '1) Input @START_DATE: [' + + LEFT(CONVERT(VARCHAR, @START_DATE, 121), 10) + ']'
+PRINT '2) Input @END_DATE: [' + + LEFT(CONVERT(VARCHAR, @END_DATE, 121), 10) + ']'
+
+--===============================================================================================================================
+IF OBJECT_ID('tempdb..#tempListOfDates') IS NOT NULL DROP TABLE #tempListOfDates
+IF OBJECT_ID('tempdb..#values') IS NOT NULL DROP TABLE #values
+
+
+;WITH cte AS
+(
+  SELECT ROW_NUMBER() OVER (ORDER BY (SELECT 1)) - 1 AS [Incrementor]
+  FROM   [master].[sys].[columns] sc1
+  CROSS JOIN [master].[sys].[columns] sc2
+)
+
+--select * from cte
+,
+cte_theDates as
+(
+SELECT TOP(11111)
+	DATEADD(DAY, cte.[Incrementor], @START_DATE) as theDate
+	,CONVERT(DATE, DATEADD(WEEK, DATEDIFF(WEEK, 0, DATEADD(DAY, (cte.[Incrementor] - 1 ), @START_DATE)), 0)) as FirstDayOfTheWeek  --Monday
+FROM   cte
+WHERE  DATEADD(DAY, cte.[Incrementor], @START_DATE) &lt;= @END_DATE			--GETDATE();
+
+)
+
+--select top(1111) * from cte_theDates
+
+SELECT  DISTINCT
+	theDate
+	,FirstDayOfTheWeek
+INTO #tempListOfDates
+FROM cte_theDates
+
+ORDER BY theDate
+
+--SELECT TOP(11) * FROM #tempListOfDates ORDER BY theDate
+--===============================================================================================================================
+--===============================================================================================================================
+--===============================================================================================================================
+
+
+SELECT
+	am.[APPROVED_AMT] as value
+
+INTO #values
 FROM 
-	#Dealer_Funded_Portfolio_Stats funded
-	LEFT OUTER JOIN 
-	#DealerApplicationStatus apps
-	ON 
-		funded.DealerCode = apps.DEALER_CODE
-ORDER BY funded.DealerCode
+	#tempListOfDates tmp
+	INNER JOIN
+	[edwCrescent].[dbo].[APP_MAST] am with (READUNCOMMITTED)
+	ON tmp.theDate = CONVERT(DATE,am.[APPLICATION_DATE])
+WHERE 
+		CONVERT(DATE,am.[APPLICATION_DATE]) &gt;= @START_DATE
+		AND
+		CONVERT(DATE,am.[APPLICATION_DATE]) &lt;= @END_DATE
+ORDER BY FirstDayOfTheWeek
 
---============================================================================= BY DEALER  this is for a situation where the fields are being converted to TEXT
---=============================================================================
+SELECT top(11) *
+FROM #values
+--===============================================================================================================================
+--===============================================================================================================================
+--===============================================================================================================================
 
-	  SELECT 
-			DealerCode   --&lt;=== this is for the PowerBI slicer
-			, ROW_NUMBER() OVER(PARTITION BY DealerCode  ORDER BY (SELECT 1)) AS rnJUNK
-			, byDealer	  --&lt;== These are the UnPivot Columns
-			, CBT		  --&lt;== These are the UnPivot Columns
-	INTO #UnPivot_byDealer_and_CBT
-	FROM
-	(
-	  SELECT 
-			DealerCode    --&lt;=== this is for the PowerBI slicer
-			--== These are the UnPivot Columns
-			, Outstandings_Count_byDealer_01, Outstandings_Dollars_byDealer_02, Avg_LoanBalance_Dollars_byDealer_03, Avg_LTV_Booked_byDealer_04, Avg_PTI_Booked_byDealer_05, Avg_FICO_byDealer_06, Avg_TERM_byDealer_07, Avg_Flat_Dollars_byDealer_08, Avg_yield_PCNT_byDealer_09, Straight_Approvals_PCNT_byDealer_10, Declined_PCNT_byDealer_11, Counter_Offered_PCNT_byDealer_12, Auto_Declined_PCNT_byDealer_13, Auto_CounterOffered_PCNT_byDealer_14, Auto_Approved_PCNT_byDealer_15
-			,Outstandings_Count_CBT_01, Outstandings_Dollars_CBT_02, Avg_LoanBalance_Dollars_CBT_03, Avg_LTV_Booked_CBT_04, Avg_PTI_Booked_CBT_05, Avg_FICO_CBT_06, Avg_TERM_CBT_07, Avg_Flat_Dollars_CBT_08, Avg_yield_PCNT_CBT_09, Straight_Approvals_PCNT_CBT_10, Declined_PCNT_CBT_11, Counter_Offered_PCNT_CBT_12, Auto_Declined_PCNT_CBT_13, Auto_CounterOffered_PCNT_CBT_14, Auto_Approved_PCNT_CBT_15
-	  FROM (
-				SELECT --TOP(11)
-					DealerCode,
-					--USE CAST(xxx, nvarchar(255)) to avoid error: Column conflicts with the type of other columns in the unpivot list
-					-- top section is column #1 'By Dealer', bottom section is column #2 "CBT" 
-					-- the suffix number is used to order the items in Column #1, and Column #2
-					CAST(cast(Outstandings_Count_byDealer as nvarchar(15)) +  '_Outstandings_Count' AS NVARCHAR(50) ) as Outstandings_Count_byDealer_01,
-					CAST(cast(Outstandings_Dollars_byDealer as nvarchar(15)) +  '_Outstandings_Dollars' AS NVARCHAR(50) ) as Outstandings_Dollars_byDealer_02,
-					CAST(cast(Avg_LoanBalance_Dollars_byDealerAccount as nvarchar(15)) +  '_Avg_LoanBalance_Dollars' AS NVARCHAR(50) ) as Avg_LoanBalance_Dollars_byDealer_03,
-					CAST(cast(Avg_LTV_Booked_byDealer as nvarchar(15)) +  '_Avg_LTV_Booked' AS NVARCHAR(50) ) as Avg_LTV_Booked_byDealer_04,
-					CAST(cast(Avg_PTI_Booked_byDealer as nvarchar(15)) +  '_Avg_PTI_Booked' AS NVARCHAR(50) ) as Avg_PTI_Booked_byDealer_05,
-					CAST(cast(Avg_FICO_byDealer as nvarchar(15)) +  '_Avg_FICO' AS NVARCHAR(50) ) as Avg_FICO_byDealer_06,
-					CAST(cast(Avg_TERM_byDealer as nvarchar(15)) +  '_Avg_TERM' AS NVARCHAR(50) ) as Avg_TERM_byDealer_07,
-					CAST(cast(Avg_Flat_Dollars_byDealerAccount as nvarchar(15)) +  '_Avg_Flat_Dollars' AS NVARCHAR(50) ) as Avg_Flat_Dollars_byDealer_08,
-					CAST(cast(Avg_yield_PCNT_byDealerAccount as nvarchar(15)) +  '_Avg_yield_PCNT' AS NVARCHAR(50) ) as Avg_yield_PCNT_byDealer_09,
-					CAST(cast(Straight_Approvals_PCNT_byDealer as nvarchar(15)) +  '_Straight_Approvals_PCNT' AS NVARCHAR(50) ) as Straight_Approvals_PCNT_byDealer_10,
-					CAST(cast(Declined_PCNT_byDealer as nvarchar(15)) +  '_Declined_PCNT' AS NVARCHAR(50) ) as Declined_PCNT_byDealer_11,
-					CAST(cast(Counter_Offered_PCNT_byDealer as nvarchar(15)) +  '_Counter_Offered_PCNT' AS NVARCHAR(50) ) as Counter_Offered_PCNT_byDealer_12,
-					CAST(cast(Auto_Declined_PCNT_byDealer as nvarchar(15)) +  '_Auto_Declined_PCNT' AS NVARCHAR(50) ) as Auto_Declined_PCNT_byDealer_13,
-					CAST(cast(Auto_CounterOffered_PCNT_byDealer as nvarchar(15)) +  '_Auto_CounterOffered_PCNT' AS NVARCHAR(50) ) as Auto_CounterOffered_PCNT_byDealer_14,
-					CAST(cast(Auto_Approved_PCNT_byDealer as nvarchar(15)) +  '_Auto_Approved_PCNT' AS NVARCHAR(50) ) as Auto_Approved_PCNT_byDealer_15,
-					----------------------
-					CAST(cast(Outstandings_Count_CBT as nvarchar(15)) +  '_Outstandings_Count' AS NVARCHAR(50) ) as Outstandings_Count_CBT_01,
-					CAST(cast(Outstandings_Dollars_CBT as nvarchar(15)) +  '_Outstandings_Dollars' AS NVARCHAR(50) ) as Outstandings_Dollars_CBT_02,
-					CAST(cast(Avg_LoanBalance_Dollars_CBTAccount as nvarchar(15)) +  '_Avg_LoanBalance_Dollars' AS NVARCHAR(50) ) as Avg_LoanBalance_Dollars_CBT_03,
-					CAST(cast(Avg_LTV_Booked_CBT as nvarchar(15)) +  '_Avg_LTV_Booked' AS NVARCHAR(50) ) as Avg_LTV_Booked_CBT_04,
-					CAST(cast(Avg_PTI_Booked_CBT as nvarchar(15)) +  '_Avg_PTI_Booked' AS NVARCHAR(50) ) as Avg_PTI_Booked_CBT_05,
-					CAST(cast(Avg_FICO_CBT as nvarchar(15)) +  '_Avg_FICO' AS NVARCHAR(50) ) as Avg_FICO_CBT_06,
-					CAST(cast(Avg_TERM_CBT as nvarchar(15)) +  '_Avg_TERM' AS NVARCHAR(50) ) as Avg_TERM_CBT_07,
-					CAST(cast(Avg_Flat_Dollars_CBTAccount as nvarchar(15)) +  '_Avg_Flat_Dollars' AS NVARCHAR(50) ) as Avg_Flat_Dollars_CBT_08,
-					CAST(cast(Avg_yield_PCNT_CBTAccount as nvarchar(15)) +  '_Avg_yield_PCNT' AS NVARCHAR(50) ) as Avg_yield_PCNT_CBT_09,
-					CAST(cast(Straight_Approvals_PCNT_CBT as nvarchar(15)) +  '_Straight_Approvals_PCNT' AS NVARCHAR(50) ) as Straight_Approvals_PCNT_CBT_10,
-					CAST(cast(Declined_PCNT_CBT as nvarchar(15)) +  '_Declined_PCNT' AS NVARCHAR(50) ) as Declined_PCNT_CBT_11,
-					CAST(cast(Counter_Offered_PCNT_CBT as nvarchar(15)) +  '_Counter_Offered_PCNT' AS NVARCHAR(50) ) as Counter_Offered_PCNT_CBT_12,
-					CAST(cast(Auto_Declined_PCNT_CBT as nvarchar(15)) +  '_Auto_Declined_PCNT' AS NVARCHAR(50) ) as Auto_Declined_PCNT_CBT_13,
-					CAST(cast(Auto_CounterOffered_PCNT_CBT as nvarchar(15)) +  '_Auto_CounterOffered_PCNT' AS NVARCHAR(50) ) as Auto_CounterOffered_PCNT_CBT_14,
-					CAST(cast(Auto_Approved_PCNT_CBT as nvarchar(15)) +  '_Auto_Approved_PCNT' AS NVARCHAR(50) ) as Auto_Approved_PCNT_CBT_15
+DECLARE @interval numeric(38, 18), --- How "wide" each range is
+        @min      numeric(38, 18), --- The lowest value in the table
+        @max      numeric(38, 18), --- The highest value in the table
+        --- Presentation:
+        @levels   smallint=50;      --- How many levels/ranges to display
 
-				FROM #DealerAppsAndFunded) as x
-	) AS Main
-	UNPIVOT 
-	(
-	  byDealer FOR byDealers IN (Outstandings_Count_byDealer_01, Outstandings_Dollars_byDealer_02, Avg_LoanBalance_Dollars_byDealer_03, Avg_LTV_Booked_byDealer_04, Avg_PTI_Booked_byDealer_05, Avg_FICO_byDealer_06, Avg_TERM_byDealer_07, Avg_Flat_Dollars_byDealer_08, Avg_yield_PCNT_byDealer_09, Straight_Approvals_PCNT_byDealer_10, Declined_PCNT_byDealer_11, Counter_Offered_PCNT_byDealer_12, Auto_Declined_PCNT_byDealer_13, Auto_CounterOffered_PCNT_byDealer_14, Auto_Approved_PCNT_byDealer_15)
-	) AS theDealer	  --&lt;== These are the UnPivot Columns
-
-	UNPIVOT 
-	(
-	  CBT FOR CBTs IN (Outstandings_Count_CBT_01, Outstandings_Dollars_CBT_02, Avg_LoanBalance_Dollars_CBT_03, Avg_LTV_Booked_CBT_04, Avg_PTI_Booked_CBT_05, Avg_FICO_CBT_06, Avg_TERM_CBT_07, Avg_Flat_Dollars_CBT_08, Avg_yield_PCNT_CBT_09, Straight_Approvals_PCNT_CBT_10, Declined_PCNT_CBT_11, Counter_Offered_PCNT_CBT_12, Auto_Declined_PCNT_CBT_13, Auto_CounterOffered_PCNT_CBT_14, Auto_Approved_PCNT_CBT_15)
-
-	) AS theCBT	  --&lt;== These are the UnPivot Columns
-
-WHERE RIGHT(byDealers,3) =  RIGHT(CBTs,3)
+--- Check the source data for MIN(), MAX() and COUNT(). This
+--- is a highly efficient stream aggregate.
+SELECT @max=MAX(value),
+       @min=MIN(value)
+FROM #values;
 
 
--- This part is if I am converting the fields to Text, otherwise just SELECT the fields rather than do the Substring stuff
+SET @interval=(@max-@min)/@levels;
 
---SELECT TOP(22) * FROM #UnPivot_byDealer_and_CBT
---ORDER BY DealerCode, rnJUNK
 
-SELECT  t.DealerCode
-			  ,(SELECT 'TheCalculation' =  SUBSTRING(  byDealer, (CHARINDEX('_', byDealer)   + 1 ), LEN(byDealer)  ) ) AS [theLabel] 
-			  ,(SELECT 'TheCalculation' =  SUBSTRING(  byDealer, 1, (LEN(byDealer) -LEN(SUBSTRING(  byDealer, (CHARINDEX('_', byDealer)   + 0 ), LEN(byDealer)  )) )))  AS [byDealerValue]
-			  ,(SELECT 'TheCalculation' =  SUBSTRING(  CBT, 1, (LEN(CBT) -LEN(SUBSTRING(  CBT, (CHARINDEX('_', CBT)   + 0 ), LEN(CBT)  )) )))  AS [CBTValue]
-			  ,ROW_NUMBER() OVER(PARTITION BY t.[DealerCode] ORDER BY t.rnJUNK ) as r
-INTO #output
-FROM #UnPivot_byDealer_and_CBT t
-ORDER BY t.DealerCode, rnJUNK
+WITH ranges ([range], fromValue, toValue)
+AS ( --- Start with @min, increment by @interval until
+     --- [range] equals @levels:
+     SELECT 1 AS [range], @min AS fromValue, @min+@interval AS toValue
+     UNION ALL
+     SELECT [range]+1, toValue, toValue+@interval
+     FROM ranges
+     WHERE [range]&lt;@levels)
 
-SELECT DealerCode
-     --, theLabel AS Stat
-		, CASE
-			WHEN theLabel = 'Outstandings_Count' THEN 'Outstandings #'
-			WHEN theLabel = 'Outstandings_Dollars' THEN 'Outstandings $'
-			WHEN theLabel = 'Avg_LoanBalance_Dollars' THEN 'Avg Loan Balance'
-			WHEN theLabel = 'Avg_LTV_Booked' THEN 'Avg LTV Booked'
-			WHEN theLabel = 'Avg_PTI_Booked' THEN 'Avg PTI Booked'
-			WHEN theLabel = 'Avg_FICO' THEN 'Avg FICO'
-			WHEN theLabel = 'Avg_TERM' THEN 'Avg TERM'
-			WHEN theLabel = 'Avg_Flat_Dollars' THEN 'Avg Flat Dollars'
-			WHEN theLabel = 'Avg_yield_PCNT' THEN 'Avg yield '
-			WHEN theLabel = 'Straight_Approvals_PCNT' THEN 'Straight Approvals'
-			WHEN theLabel = 'Declined_PCNT' THEN 'Declined'
-			WHEN theLabel = 'Counter_Offered_PCNT' THEN 'Counter Offered'
-			WHEN theLabel = 'Auto_Declined_PCNT' THEN 'Auto Declined'
-			WHEN theLabel = 'Auto_CounterOffered_PCNT' THEN 'Auto CounterOffered'
-			WHEN theLabel = 'Auto_Approved_PCNT' THEN 'Auto Approved'
-			ELSE ''
-			END AS Stat
+--SELECT * FROM ranges;     --&lt;============  Here are the Ranges
 
-		--, byDealerValue AS dealer
-		--,CBTValue AS CBT
-		--, CAST(byDealerValue AS NUMERIC(20,10) ) AS dealer_NUM
-		--,CAST(CBTValue AS NUMERIC(20,10) ) as	CBT_NUM
-		,CASE
-			WHEN (RIGHT(theLabel,6) = '_Count') 
-					THEN CAST(CAST(CAST(byDealerValue AS NUMERIC(20,10) ) AS INT) AS NVARCHAR(50) ) 
-			WHEN (RIGHT(theLabel,8) = '_Dollars') 
-					--THEN '$ ' + CONVERT(varchar, CAST(CAST(byDealerValue AS NUMERIC(12,2) ) AS money), 1)	
-					THEN CONVERT(VARCHAR
-											, FORMAT(
-														CAST(
-																byDealerValue 
-																AS NUMERIC(12,2) 
-															) 
-														, 'C'
-														, 'en-us'
-													  )
-											, 1
-									  )	
 
-			WHEN (RIGHT(theLabel,5) = '_PCNT') 
-					THEN '% ' + CONVERT(varchar, CAST(  (CAST(byDealerValue AS NUMERIC(8,4) ) * 100)   AS money), 1)	
+, ranges2 ([range], fromValue, toValue)
+AS ( SELECT 1 AS [range], @min AS fromValue, @min+@interval AS toValue
+     UNION ALL
+     SELECT [range]+1, toValue, toValue+@interval
+     FROM ranges2
+     WHERE [range]&lt;@levels)
 
-			ELSE CONVERT(varchar, CAST(  (CAST(byDealerValue AS NUMERIC(8,4) )  )   AS money), 1)	
-			END AS Dealer_Value
-		,CASE
-			WHEN theLabel IN ('Outstandings_Count', 'Outstandings_Dollars') THEN ''
-		---------------------------
-			WHEN theLabel IN ('Straight_Approvals_PCNT', 'Declined_PCNT', 'Counter_Offered_PCNT', 'Auto_Declined_PCNT', 'Auto_CounterOffered_PCNT', 'Auto_Approved_PCNT')
-					AND  CBTValue= '0.000000' THEN ''
-		--------------------------				
-			WHEN (RIGHT(theLabel,6) = '_Count') 
-					THEN CAST(CAST(CAST(CBTValue AS NUMERIC(20,10) ) AS INT) AS NVARCHAR(50) ) 
-			WHEN (RIGHT(theLabel,8) = '_Dollars') 
-					--THEN '$ ' + CONVERT(varchar, CAST(CAST(CBTValue AS NUMERIC(12,2) ) AS money), 1)	
-					THEN CONVERT(VARCHAR
-											, FORMAT(
-														CAST(
-																CBTValue 
-																AS NUMERIC(12,2) 
-															) 
-														, 'C'
-														, 'en-us'
-													  )
-											, 1
-									  )	
+SELECT r.fromValue,
+       r.toValue,
+       COUNT(v.value) AS [count]
+FROM ranges2 AS r
+LEFT JOIN #values AS v ON
+    r.fromValue&lt;=v.value AND    --- v.value falls within the range r.fromValue..
+   (r.toValue&gt;v.value OR        --- ... and r.toValue, or r.toValue and v.value
+    r.toValue&gt;@max-0.5*@interval AND -- are both @max.
+    v.value=@max)
+GROUP BY r.[range], r.fromValue, r.toValue
+ORDER BY r.[range];
 
-			WHEN (RIGHT(theLabel,5) = '_PCNT') 
-					THEN '% ' + CONVERT(varchar, CAST(  (CAST(CBTValue AS NUMERIC(8,4) ) * 100)   AS money), 1)	
+--==========================================================================================================
 
-			ELSE CONVERT(varchar, CAST(  (CAST(CBTValue AS NUMERIC(8,4) )  )   AS money), 1)	
-			END AS CBT_Value
-     , r
-FROM #output
-ORDER BY DealerCode, r</Code>
+IF OBJECT_ID('tempdb..#tempListOfDates') IS NOT NULL DROP TABLE #tempListOfDates
+IF OBJECT_ID('tempdb..#values') IS NOT NULL DROP TABLE #values</Code>
       </SnippetValue>
     </value>
   </item>
   <item>
     <key>
       <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>POWER_BI</Category>
-        <Language>TEXT</Language>
+        <Category>JSON</Category>
+        <Language>SQLSERVER2K SQL</Language>
         <Public>false</Public>
-        <Name>Bi-Directional_Relationship_Ambiguity</Name>
+        <Name>example_UnPeelingTheOnion_fromGraham</Name>
         <Group>My Snippets</Group>
       </SnippetKey>
     </key>
     <value>
       <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
         <Key>
-          <Category>POWER_BI</Category>
-          <Language>TEXT</Language>
+          <Category>JSON</Category>
+          <Language>SQLSERVER2K SQL</Language>
           <Public>false</Public>
-          <Name>Bi-Directional_Relationship_Ambiguity</Name>
+          <Name>example_UnPeelingTheOnion_fromGraham</Name>
           <Group>My Snippets</Group>
         </Key>
         <Keywords />
         <Imports />
-        <Code>Bi-Directional_Relationship_Ambiguity
+        <Code>--example_UnPeelingTheOnion_fromGraham
 
-aka: bidirectional cross-filter relationships
-
-https://www.youtube.com/watch?v=x3m7qzsVJqQ
-
-People used Bidirectional Relationship to keep two slicers in Sync
-BUT
-Creating even one bi-directional relationship breaks the model by making it 'ambigous' 
-	which means that the numbers computed by the model are unpredictable
-	
-There are a few scenarios where the power of bidirectional cross-filter really shines. 
-	However, these need to be leveraged carefully making sure that the model does not become ambiguous because of the bidirectional relationship. 
-	Implementing bidirectional cross-filter for the purpose of syncing slicers is definitely a bad idea.	
-	
-
-------------------------------------------------------------------------------------
-https://www.sqlbi.com/articles/bidirectional-relationships-and-ambiguity-in-dax/
- A model is ambiguous when there are multiple paths between tables. In an ambiguous model, 
- 	the engine has multiple options when transferring a filter from one table to another. 
- 	Therefore, it either finds a preferred way to transfer the filter, or it raises an error. 
- In an example: We created an ambiguous model, and yet the engine has not complained about it. 
- 	The reason is that by analyzing the two paths, 
- 	the engine has decided that one path is to be preferred against the other. </Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>POWER_BI</Category>
-        <Language>TEXT</Language>
-        <Public>false</Public>
-        <Name>Cascading_DropDown_Slicer</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>POWER_BI</Category>
-          <Language>TEXT</Language>
-          <Public>false</Public>
-          <Name>Cascading_DropDown_Slicer</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>DAX Fridays! #138: INT, NOT EMPTY | Cascading slicers  (3 eays)
-https://www.youtube.com/watch?v=cYV-IkxvWfY
+Select 
+distinct(ws.applicationNumber)
+,NAS
 
 
-Syncing slicers in Power BI
-https://www.sqlbi.com/tv/syncing-slicers-in-power-bi/
-
-DO NOT use Bi-directional Relationships b/c this will create Ambigous results in the model
-
-PROBLEM:
-When you select a category, you want only the pertinent sub-categories to be selected in the second slicer
-
-
-0] Create a measure (see below for examples)
-1] Start with a category selected in the first slicer, then select the second slicer (i.e. Color) to make it active
-2] Drag the measure to the text box in the "FILTERS" pane that initially says "Add Data Fields here"
-3] set [Show Items when the value:]  Is  , then set the value to 1
-4] click [Apply Filter]
+From dl4.dbo.ApplicantDetail as app								-- For each row in ApplicantDetail:
+		OUTER APPLY
+	OPENJSON (app.instantIDResponse)							--Open the JSON for the field 'isntantIDResponse'
+		WITH ( 
+			NAS INT '$.nameAddressSSNSummary',					--assigned [NAS] from the keyword 'nameAddressSSNSummary'
+			risks NVARCHAR(MAX) '$.riskIndicators' AS JSON)		--Convert the nested structure 'riskIndicators' into a JSON called 'risks'
+			OUTER APPLY OPENJSON( risks)						--Open 'risks', and create multiple records for the same app, each with an associated reason code.
+			WITH (riskIndicator NVARCHAR(128) '$.reasonCode')
 
 
-It is a best practice to use Measures to filter slicers
 
-Example: better create a measure to see if there are rows in the sales table for a given Color, 
-	when a name is choosen, i.e. is the Sales Table empty OR not empty for a given Color
-
-FORMULA:
-----------
-Slicer Sales = NOT ISEMPTY (Sales)  
-
-With Boolean you can not choose:  "Show Items when the value:"   {in the FILTER pane}   
-
-BUT this is not good enough b/c it returns a BOOLEAN, 
-	and filters do not work with measures that return BOOLEAN values, 
-	but they do work with Integers, so CAST to INT
-
-THIS IS THE GOOD EXAMPLE:
---------------------------------------------
-Slicer Sales = INT ( NOT ISEMPTY (Sales)  )     
-
-NOW the slicer lets you choose a value from the drop-down of "Show Items when the value:" (in the Filter Pane)
-
-Another example of a measure for this type of use:
-This equals 1 if there are SALES or if there are PURCHASES
------------------------------------------------------------------
-Slicer_ProductsWithPurchasesOrSales = INT( NOT ISEMPTY(SALES) || NOT ISEMPTY( Purchases) )
-
-So you are building MEASURES that are filters for SLICERS
-Start the name of the MEASURE with the prefix:   SLICER_
-
-Then put all the slicer Measures into a table Named [Slicers]
-You can then hide the table before going into production
+Left Join dl4.dbo.worksheet ws with (READUNCOMMITTED) on ws.applicationId = app.internalApplicationId
+Where app.instantIdResponse &lt;&gt; ''  and (app.dateCreated between '01-01-2018' and '04-30-2019') and riskIndicator = 'MI'and NAS &lt; 9 
 
 
-You can use a Measure for various subtle issues:
-Example:
-	Use a measure to show just the top 5 items for a given selection
-	
-</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>POWER_BI</Category>
-        <Language>TEXT</Language>
-        <Public>false</Public>
-        <Name>Definitions_Terminology</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>POWER_BI</Category>
-          <Language>TEXT</Language>
-          <Public>false</Public>
-          <Name>Definitions_Terminology</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>IMPLICIT vs EXPLICIT FITLERS
-------------------------------------------------------------------------------------
-https://community.powerbi.com/t5/Desktop/Mysterious-DAX-filter-terminology/td-p/406483
-
-In Power BI, every visual on the report canvas is it's own query.
-
-The query can be filtered either internally (by items on the axis of the visual, 
-	or by row/column header items), 
-	or externally (a slicer or filter that exists outside the visual).
-	
-By "Explicit" filters, they mean filters that are set outside the current query.
-
-{So I guess Implicit filters are the fields in the 'query' of the Visual }
-
-If you use the ALLSELECTED function, it will remove the internal/implicit/query filtering on the calendar year, 
-	but still apply the filter coming from the slicer. 
-------------------------------------------------------------------------------------
-
-Cardinality
-	Each model relationship must be defined with a cardinality type. There are four cardinality type options, 
-	representing the data characteristics of the "from" and "to" related columns. 
-	The "one" side means the column contains unique values; the "many" side means 
-		the column can contain duplicate values.
-		
-	One-to-many (1:*)
-	Many-to-one (*:1)
-	One-to-one (1:1)
-	Many-to-many (*:*)
-	
-Disconnected Slicer
-	The reason that it is called a disconnected slicer is that it is not connected to anything.
-	
-Disconnected Table	
-	a model table isn't related to another model table
-	A disconnected table isn't intended to propagate filters to other model tables
-	
-	
-Granularity
-	the hierarchy of values in a column: Year, Month, Date</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>POWER_BI</Category>
-        <Language>TEXT</Language>
-        <Public>false</Public>
-        <Name>FilterContext_vs_RowContext</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>POWER_BI</Category>
-          <Language>TEXT</Language>
-          <Public>false</Public>
-          <Name>FilterContext_vs_RowContext</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>
-
-FILTER CONTEXT: CALCULATE, CALCULATETABLE
-==================
-•
-Filter context filters the tables in your data model
-•
-DAX creates filter context when dimensions are
-added to rows , columns , slicers &amp; filters in a report
-•
-CALCULATE can be used to systematically create or
-modify existing filter context
-•
-Filter context always travels (propagates) from the
-ONE side to the MANY side of a table relationship
-
-ROW CONTEXT:  ITERATOR functions: SUMX, RANKX, etc.
-=================
-•
-Row context iterates through the rows in a table
-•
-DAX creates row context when you add calculated
-columns to your data model
-•
-Iterator functions (SUMX, RANKX, etc.) use row
-context to evaluate row level calculations
-•
-Row context doesn't automatically propagate through
-table relationships (need to use RELATED or
-RELATEDTABLE functions)
+----============================================================================Here is one of the strings for [instantIDResponse] from: dl4.dbo.ApplicantDetail
+-- nameAddressSSNSummary is at line 27
+-- riskIndicators is at line 154
+-- reasonCode   at Line 159, 165 and 171
 
 
-Row context 
-(Iterator functions (SUMX, RANKX, etc.) use row context to evaluate row level calculations)
-( NOTE: in contrast to ROW context and ITERATORS, CALCULATE creates/modifies Filter Context)
-'doesn't automatically propagate through table relationships 
-(need to use RELATED or RELATEDTABLE functions) </Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>POWER_BI</Category>
-        <Language>TEXT</Language>
-        <Public>false</Public>
-        <Name>PARAMETER_in_Visual_View</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>POWER_BI</Category>
-          <Language>TEXT</Language>
-          <Public>false</Public>
-          <Name>PARAMETER_in_Visual_View</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>PARAMETER_in_Visual_View  or Report View
-
-Using Parameters in Power BI
-https://www.youtube.com/watch?v=LDWEoWoabAI
-===============================================
-
-Parameter used to limit data before it gets to you, 
-vs
-Filter which limits the data after you have it
-
-
-2 ways to Add a parameter
--------------------------
-1]  "What If" parameter
-	===================
-	
-	"What If" parameter are essentially pre-set measures that produce values within a given range, 
-			  based on user-inputs:
-			  	Data Type
-					 (options: Whole Number, Decimal Number, Fixed Decimal Number)
-								{if Whole Number} 
-									Minimum
-									Maximum
-									Increment
-									Default			  	
-			  	min/max
-			  	increment
-			  	default
-			  	
-	When you create a parameter, a new table is automatically added with DAX calculations for:
-		"Parameter"
-			e.g. 
-				theParameter = GENERATESERIES(-1,1,0.1)
-		
-		and
-		"Parameter Value" 
-			e.g.
-				theParameter Value = SELECTEDVALUE(theParameter[theParameter], 0)
-		
-		
-	STEPS
-	--------------
-	in Report View {DAX} =&gt; Modeling {tab on ribbon} =&gt; [New Parameter] =&gt; What-if paramter {window}
-	
-		EXAMPLE
-		Name:  Price Adjustment (%) 	
-		Data Type: Decimal number
-		Minimum: -1
-		Maximum: 1
-		Increment: 0.1
-		Default: 0
-		[x] Add Slicer to page
-
-If [x] Add Slicer is selected: it adds a slicer to the design surface
-It also adds a Table/field {in the Fields pane} 
-	New Table: [Price Adjustment (%)] 
-	and 
-	2 Parameter 'fields' within that table 
-	
-		A] 	One 'field' in the new table is the VALUE: "Price Adjustment (%) Value"				&lt;======= This is the one you can use as a 'parameter' in other DAX formula
-			If you select it you will see this in the formula bar:
-		
-			Price Adjustment (%) Value = SELECTEDVALUE('Price Adjustment (%)'[Price Adjustment (%)], 0)      &lt;== DAX
-	
-		B]	The other field is: "Price Adjustment (%)"
-		
-			Price Adjustment (%) = GENERATESERIES(-1, 1, 0.01)
-	
-BUT you can NOT see the table in the Query Editor
-
-
-Create the slider visual, and next to it create a Card visual whose value is the Price Parameter VALUE</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>POWER_BI</Category>
-        <Language>TEXT</Language>
-        <Public>false</Public>
-        <Name>PARAMETER_use_in_a_MEASURE</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>POWER_BI</Category>
-          <Language>TEXT</Language>
-          <Public>false</Public>
-          <Name>PARAMETER_use_in_a_MEASURE</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>PARAMETER_use_in_a_MEASURE
-
-
-USING a PARAMETER, that was created for Visual View, and controlled by a slider slicer
-
-
-1] : use the PARAMETER in a MEASURE  (i.e.in a DAX function)
-
-Create a new measure (i.e. a DAX function) , that will return a value based on the PARAMETER:
-
-	Right click on a 'query' in the Fields {pane} of the Visual View =&gt; create new measure
-
-Then you see the new measure, but it has no formula:
-
-Now enter a DAX formula:
-
-Quantity (Parm) = SUMX( FILTER( 'Internet Sales', 'Internet Sales'[UnitPrice] &lt; ??? ) , 'Internet Sales'[OrderQuantity])
-
-{ EXPLANATION of formula:
-	This DAX filters the [Internet Sales] where the [Unit Price] is greater than ???, and SUMS up the 'Internet Sales'[OrderQuantity]
+{
+	"searchDateTime":1526397633144
+	,"nameAddressSSNSummary":9
+	,"potentialFollowUpActions":[
+									{
+										"sequence":0
+										,"description":"Verify name with Address (via DL, utility bill, Directory Assistance, paycheck stub, or other Government Issued ID)"
+										,"jsonType":"LexisNexisElement"
+										,"reasonCode":"C"
+									}
+									,
+									{
+										"sequence":0
+										,"description":"Verify phone (Directory Assistance, utility bill)"
+										,"jsonType":"LexisNexisElement"
+										,"reasonCode":"D"
+									}
+								]
+	,"nameAddressPhoneSummary":0
+	,"chronologyHistory":{
+							"ChronologyHistories":{
+													"ChronologyHistory":[
+																			{
+																				"Address":{
+																								"StreetName":"COUNTY ROAD 107"
+																								,"State":"AL"
+																								,"Zip4":3966
+																								,"StreetNumber":2594
+																								,"City":"RANDOLPH"
+																								,"Zip5":36792
+																								,"StreetAddress1":"2594 COUNTY ROAD 107"
+																							}
+																							,"DateLastSeen":{
+																												"Month":"04"
+																												,"Year":2018
+																											}
+																							,"Phone":3348500522
+																							,"IsBestAddress":1
+																							,"DateFirstSeen":{
+																												"Month":11
+																												,"Year":2009
+																												}
+																			}
+																			,{
+																				"Address":{
+																								"StreetName":"BANKS RIDGE"
+																								,"State":"GA"
+																								,"Zip4":2817
+																								,"StreetNumber":183
+																								,"City":"BALDWIN"
+																								,"Zip5":30511
+																								,"StreetSuffix":"DR"
+																								,"StreetAddress1":"183 BANKS RIDGE DR"
+																							}
+																							,"DateLastSeen":{
+																												"Month":"05"
+																												,"Year":2018
+																											}
+																							,"DateFirstSeen":{
+																												"Month":"01"
+																												,"Year":2007
+																											  }
+																			}
+																			,{
+																				"Address":{
+																								"StreetName":"COUNTY ROAD 107"
+																								,"State":"AL"
+																								,"Zip4":3968
+																								,"StreetNumber":2672
+																								,"City":"RANDOLPH"
+																								,"Zip5":36792
+																								,"StreetAddress1":"2672 COUNTY ROAD 107"
+																						   }
+																						   ,"DateLastSeen":{
+																											"Month":12
+																											,"Year":2009
+																										   }
+																							,"DateFirstSeen":{
+																												"Month":"04"
+																												,"Year":2009
+																											  }
+																				}
+																			]
+													,"xmlns":"http:\/\/webservices.seisint.com\/WsIdentity"
+												}
+						}
+						,"verifiedInput":{
+											"VerifiedInput":{
+																"xmlns":"http:\/\/webservices.seisint.com\/WsIdentity"
+																,"Address":{
+																				"StreetName":"TRILLIAM"
+																				,"State":"AL"
+																				,"Zip4":8739
+																				,"StreetNumber":1002
+																				,"City":"CLANTON"
+																				,"County":"CHILTON"
+																				,"Zip5":35045
+																				,"StreetSuffix":"LN"
+																				,"StreetAddress1":"1002 TRILLIAM LN"
+																			}
+																			,"SSN":"41167xxxx"
+																			,"Name":{
+																						"Last":"PATE"
+																						,"First":"COY"
+																					}
+															}
+										}
+										,"SSNInfo":{
+													"SSNInfo":{
+																"xmlns":"http:\/\/webservices.seisint.com\/WsIdentity"
+																,"Valid":"G"
+																,"IssuedLocation":"Tennessee"
+																,"IssuedStartDate":{
+																						"Month":"01"
+																						,"Year":1991
+																						,"Day":"01"
+																					}
+																					,"IssuedEndDate":{
+																										"Month":12
+																										,"Year":1991
+																										,"Day":31
+																										}
+																}
+													}
+										,"jsonType":"LexisNexisInstantIdResponse"
+										,"riskIndicators":[
+															{
+																"sequence":1
+																,"description":"Unable to verify phone number"
+																,"jsonType":"LexisNexisElement"
+																,"reasonCode":"27"
+															}
+															,{
+																"sequence":2
+																,"description":"Unable to verify date-of-birth"
+																,"jsonType":"LexisNexisElement"
+																,"reasonCode":"28"
+																}
+															,{
+																"sequence":3
+																,"description":"The input phone number is a mobile number"
+																,"jsonType":"LexisNexisElement"
+																,"reasonCode":"10"
+																}
+														]
+										,"comprehensiveVerificationIndex":50
+										,"transactionId":"129247882R40949"
 }
-
-This example filters the [Internet Sales] Table where the [Internet Sales] .[UnitPrice] field is less than '???', and then  SUMX the field:  [Internet Sales] .[OrderQuantity] 
-
-Then replace the '???' with the name of the Parameter: Price Parameter
-
-Quantity (Parm) = SUMX( FILTER( 'Internet Sales', 'Internet Sales'[UnitPrice] &lt; Price Parameter ) , 'Internet Sales'[OrderQuantity])
-
-You can now use 'Quantity (Parm) ' just like any other field in a Visual, but its results are based on the user's input to the 'Price Parameter' slider visual
-
-</Code>
+		</Code>
       </SnippetValue>
     </value>
   </item>
   <item>
     <key>
       <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>POWER_BI</Category>
-        <Language>TEXT</Language>
+        <Category>MISC</Category>
+        <Language>SQLSERVER2K SQL</Language>
         <Public>false</Public>
-        <Name>Performance</Name>
+        <Name>NOLOCK</Name>
         <Group>My Snippets</Group>
       </SnippetKey>
     </key>
     <value>
       <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
         <Key>
-          <Category>POWER_BI</Category>
-          <Language>TEXT</Language>
+          <Category>MISC</Category>
+          <Language>SQLSERVER2K SQL</Language>
           <Public>false</Public>
-          <Name>Performance</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>http://blog.pragmaticworks.com/power-bi-performance-tips-and-techniques
-
-#1: Tall, narrow tables are faster*
-	Corollary to #1 Tip 1a: Remove any unused fields
-Tip #2: Integers are faster than strings
-Tip #3: Slicers use multiple queries
-	 if you have many large slicers on one report 
-	 they may start to slow performance as each slicer 
-	 selection causes full scans of each other slicer and the visualizations on the page.
-Tip #4: Understand DAX functions
-Tip #5: Remove unnecessary precision or split granularity values to reduce cardinality
-	e.g. Significantly reduce highly unique datetime values by splitting the date and time into separate columns. </Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>POWER_BI</Category>
-        <Language>TEXT</Language>
-        <Public>false</Public>
-        <Name>Segmented_Filtering_w_Slicersx</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>POWER_BI</Category>
-          <Language>TEXT</Language>
-          <Public>false</Public>
-          <Name>Segmented_Filtering_w_Slicersx</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>Format {Menu} =&gt;  "Edit Relationships" to let different slicers control different visuals, Buttons don't have relationships
-
-https://powerbi.tips/2018/06/segmented-filtering-with-slicers/
-</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>POWER_BI</Category>
-        <Language>TEXT</Language>
-        <Public>false</Public>
-        <Name>SORT_Legend_and_sections_of_StackedBarChart</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>POWER_BI</Category>
-          <Language>TEXT</Language>
-          <Public>false</Public>
-          <Name>SORT_Legend_and_sections_of_StackedBarChart</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>https://www.seerinteractive.com/blog/reorder-powerbi-legend/
-
-There is also a few paragraphs more about how to sort a slicer at the bottom of the web article
-
-Create a custom sort order in Power BI in a few steps.
-
-A] For this example, we’re using a stacked bar chart for INCOME grouped by an SQL CASE/WHEN statement in the SP, into the following Income categories field [IncomeCategories[
-
-	,CASE 
-		WHEN FA.APPL_INCOME is NULL THEN 'is NULL' 		
-		WHEN FA.APPL_INCOME &lt;= 1500 THEN '&lt; 1,500' 
-		WHEN FA.APPL_INCOME &gt; 1500 AND FA.APPL_INCOME &lt;= 2000 THEN '1501 to 2000' 
-		WHEN FA.APPL_INCOME &gt; 2000 AND FA.APPL_INCOME &lt;= 2500 THEN '2001 to 2500' 
-		WHEN FA.APPL_INCOME &gt; 2500 AND FA.APPL_INCOME &lt;= 3000 THEN '2501 to 3000' 
-		WHEN FA.APPL_INCOME &gt; 3000 AND FA.APPL_INCOME &lt;= 3500 THEN '3001 to 3500' 
-		WHEN FA.APPL_INCOME &gt; 3500 AND FA.APPL_INCOME &lt;= 4000 THEN '2501 to 3000' 
-		WHEN FA.APPL_INCOME &gt; 4000 AND FA.APPL_INCOME &lt;= 4500 THEN '4001 to 4500' 
-		WHEN FA.APPL_INCOME &gt; 4500 AND FA.APPL_INCOME &lt;= 5000 THEN '4501 to 5000' 
-		WHEN FA.APPL_INCOME &gt; 5000 AND FA.APPL_INCOME &lt;= 5500 THEN '5001 to 5500' 
-		WHEN FA.APPL_INCOME &gt; 5500 AND FA.APPL_INCOME &lt;= 6000 THEN '5501 to 6000' 
-		WHEN FA.APPL_INCOME &gt; 6000 AND FA.APPL_INCOME &lt;= 6500 THEN '6001 to 6500' 
-		WHEN FA.APPL_INCOME &gt; 6500 AND FA.APPL_INCOME &lt;= 7000 THEN '6501 to 7000' 
-		WHEN FA.APPL_INCOME &gt; 7000 AND FA.APPL_INCOME &lt;= 7500 THEN '7001 to 7500'
-		WHEN FA.APPL_INCOME &gt; 7500 AND FA.APPL_INCOME &lt;= 8000 THEN '7501 to 8000' 
-		WHEN FA.APPL_INCOME &gt; 8000 AND FA.APPL_INCOME &lt;= 8500 THEN '8001 to 8500' 		
-		WHEN FA.APPL_INCOME &gt; 8500 AND FA.APPL_INCOME &lt;= 9000 THEN '8501 to 9000' 
-		WHEN FA.APPL_INCOME &gt; 9000 AND FA.APPL_INCOME &lt;= 9500 THEN '9001 to 9500' 		
-		WHEN FA.APPL_INCOME &gt; 9500 AND FA.APPL_INCOME &lt;= 10000 THEN '9501 to 10000'	
-		WHEN FA.APPL_INCOME &gt; 10000 AND FA.APPL_INCOME &lt;= 15000 THEN '10001 to 15000' 		
-		WHEN FA.APPL_INCOME &gt; 15000 AND FA.APPL_INCOME &lt;= 20000 THEN '15001 to 20000'					 
-		ELSE '&gt; $ 20,000'
-		END as IncomeCategories
-
-In the example, the positions are out of order—this results in the stacked bar chart showing positions '&gt; $ 20,000' at the top
-
-B] create a field for the desired Order: [IncomeCategories_ORDER]
-
-	,CASE 
-		WHEN FA.APPL_INCOME is NULL THEN 0 		
-		WHEN FA.APPL_INCOME &lt;= 1500 THEN 1
-		WHEN FA.APPL_INCOME &gt; 1500 AND FA.APPL_INCOME &lt;= 2000 THEN 2 
-		WHEN FA.APPL_INCOME &gt; 2000 AND FA.APPL_INCOME &lt;= 2500 THEN 3 
-		WHEN FA.APPL_INCOME &gt; 2500 AND FA.APPL_INCOME &lt;= 3000 THEN 4 
-		WHEN FA.APPL_INCOME &gt; 3000 AND FA.APPL_INCOME &lt;= 3500 THEN 5 
-		WHEN FA.APPL_INCOME &gt; 3500 AND FA.APPL_INCOME &lt;= 4000 THEN 6 
-		WHEN FA.APPL_INCOME &gt; 4000 AND FA.APPL_INCOME &lt;= 4500 THEN 7
-		WHEN FA.APPL_INCOME &gt; 4500 AND FA.APPL_INCOME &lt;= 5000 THEN 8
-		WHEN FA.APPL_INCOME &gt; 5000 AND FA.APPL_INCOME &lt;= 5500 THEN 9 
-		WHEN FA.APPL_INCOME &gt; 5500 AND FA.APPL_INCOME &lt;= 6000 THEN 10 
-		WHEN FA.APPL_INCOME &gt; 6000 AND FA.APPL_INCOME &lt;= 6500 THEN 11
-		WHEN FA.APPL_INCOME &gt; 6500 AND FA.APPL_INCOME &lt;= 7000 THEN 12 
-		WHEN FA.APPL_INCOME &gt; 7000 AND FA.APPL_INCOME &lt;= 7500 THEN 13
-		WHEN FA.APPL_INCOME &gt; 7500 AND FA.APPL_INCOME &lt;= 8000 THEN 14 
-		WHEN FA.APPL_INCOME &gt; 8000 AND FA.APPL_INCOME &lt;= 8500 THEN 15		
-		WHEN FA.APPL_INCOME &gt; 8500 AND FA.APPL_INCOME &lt;= 9000 THEN 16 
-		WHEN FA.APPL_INCOME &gt; 9000 AND FA.APPL_INCOME &lt;= 9500 THEN 17		
-		WHEN FA.APPL_INCOME &gt; 9500 AND FA.APPL_INCOME &lt;= 10000 THEN 18
-		WHEN FA.APPL_INCOME &gt; 10000 AND FA.APPL_INCOME &lt;= 15000 THEN 19		
-		WHEN FA.APPL_INCOME &gt; 15000 AND FA.APPL_INCOME &lt;= 20000 THEN 20					 				 
-		ELSE 21
-		END as IncomeCategories_ORDER
-
--------------------------------------------------------------------------------------------------------
-
-0] the data from the SP goes into Query: INCOME
-
-1]Create a new query with your sort order: INCOME_SORT
-	- copy the data table (i.e. INCOME)
-	- =&gt; Edit Query
-	- Just leave the columns: 
-			IncomeCategories
-			IncomeCategories_ORDER
-	- Remove the duplicate rows 
-
-In one column (example: “IncomeCategories”), include the groups you want to sort, making sure to enter the groups exactly as written (case-sensitive). 
-In the second column (example: “IncomeCategories_ORDER”), are the numbers to designate your sort order. 
-
-
-2] Create a relationship between the new table and your data
-Select manage relationships and create a relationship between the new table and the original table. Relate them using the field: [“IncomeCategories_ORDER”]
-
-3]Use the DAX related function to create a sort order
-In the original table (i.e. [INCOME]), create a custom column by right clicking on the ellipses to the right of the original table and selecting new column.
-
-Use the DAX function Custom Column = RELATED(Table[Column]). For this example, the formula should look like 
-“Custom Sort = RELATED(INCOME_SORT[IncomeCategories_ORDER])”.
-
-4] Sort your column (i.e. [IncomeCategories]) in the Fields Panel {right side of the design surface}  by your custom sort order (i.e. [Custom Sort]).
-Select the column you want to sort with your custom order (for this example, “ [IncomeCategories]”) 
-	and select sort by column under the modeling tab, select the name of your custom column (in this example, “[Custom Sort]”).
-
-
-
-You’re done! The bar chart legend and colored sections are now organized.
-
-
-</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>SSRS</Category>
-        <Language>TEXT</Language>
-        <Public>false</Public>
-        <Name>aaa_SSRS</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>SSRS</Category>
-          <Language>TEXT</Language>
-          <Public>false</Public>
-          <Name>aaa_SSRS</Name>
+          <Name>NOLOCK</Name>
           <Group>My Snippets</Group>
         </Key>
         <Keywords />
         <Imports />
         <Code>
 
-EXAMPLE of the 2 URLs to remember
-================================
+--USAGE:
+SELECT * FROM Person.Contact WITH (NOLOCK) WHERE ContactID &lt; 20
+---------------------------------
+from 
+		CBCustom.dbo.PaymentusCustomerDailyActivity CUS with (READUNCOMMITTED)
+		left join 
+		collect.dbo.M01 M01 with (READUNCOMMITTED)
+		ON'000'+ CUS.ACCOUNT_NUMBER = M01.ACCOUNT
+------------------------------
 
-URL to browse to reports
-	http://cbtdevbidw01/pbireports/report/Managerial%20Reports/
+Lock Types
+	MD - metadata lock
+	DB - database lock
+	TAB - table lock
+	PAG - page lock
+Mode
+	S - Shared access
+	Sch-S - Schema stability makes sure the schema is not changed while object is in use
+	IS - Intent shared indicates intention to use S locks
 	
-URL to see the directories:
-	http://cbtdevbidw01/PBIReportServer
+===============================================================================================================================================		
+https://www.sqlshack.com/understanding-the-impact-of-nolock-and-with-nolock-table-hints-in-sql-server/
+
+The default behaviour in SQL Server is for every query to acquire its own shared lock prior to reading data from a given table. 
+This behaviour ensures that you are only reading committed data. 
+However, the NOLOCK table hint allows you to instruct the query optimiser to read a given table without obtaining an exclusive or shared lock.
+
+ SELECT [Jersey Number]      
+  FROM [SQLShack].[dbo].[2016_FIFABallonDOr] (NOLOCK)   --&lt;================ NOLOCK HINT {deprecated by Microsoft as of 2017}
+  WHERE [Nominee] = 'Lionel Messi'
+
+The benefits of querying data using the NOLOCK table hint is that it requires less memory and prevents deadlocks from occurring 
+with any other queries that may be reading similar data. 
+===============================================================================================================================================	
+https://stackoverflow.com/questions/12608780/understanding-sql-server-locks-on-select-queries  ================================================================
 	
-=====================================================================
-	cbtdevbidw01/PBIReportServer - /
-    Monday, November 12, 2018 11:39 AM       &lt;pbix&gt; Application Loan Overview - Modified
-   Thursday, November 8, 2018 11:18 AM       &lt;pbix&gt; Application Loan Overview Aug 2018
-    Wednesday, January 9, 2019 3:29 PM        &lt;dir&gt; Collections
-     Wednesday, July 22, 2020 11:08 AM       &lt;pbix&gt; Courtneys Report Including YOY AM Tabs Changing Chart Type Hierarchy Slicer
-         Monday, May 13, 2019 10:29 AM        &lt;dir&gt; Data Sources
-      Friday, December 1, 2017 4:06 PM        &lt;dir&gt; EDWDemo
-      Tuesday, January 9, 2018 3:30 PM        &lt;dir&gt; Managerial Reports
-       Tuesday, June 23, 2020 11:08 AM        &lt;dir&gt; Report Parts
-       Thursday, July 19, 2018 1:37 PM       &lt;pbix&gt; SSAS - SalesSummary
-         Monday, March 1, 2021 9:17 AM        &lt;dir&gt; TulaneProject
-Microsoft Power BI Report Server Version 15.0.1102.371
-=====================================================================
-</Code>
+A SELECT in SQL Server will place a shared lock on a table row - and a second SELECT would also require a shared lock, and those are compatible with one another.
+
+So no - one SELECT cannot block another SELECT.
+
+What the WITH (NOLOCK) query hint is used for is to be able to read data that's in the process of being inserted 
+	(by another connection) and that hasn't been committed yet.
+
+Without that query hint, 
+	a SELECT might be blocked reading a table by an ongoing INSERT (or UPDATE) statement that places an exclusive lock on rows 
+	(or possibly a whole table), until that operation's transaction has been committed (or rolled back).
+
+Problem of the WITH (NOLOCK) hint is: you might be reading data rows that aren't going to be inserted at all, 
+	in the end (if the INSERT transaction is rolled back) - 
+	so your e.g. report might show data that's never really been committed to the database.
+
+There's another query hint that might be useful - WITH (READPAST). 
+	This instructs the SELECT command to just skip any rows that it attempts to read and that are locked exclusively. 
+	The SELECT will not block, and it will not read any "dirty" un-committed data - 
+	but it might skip some rows, e.g. not show all your rows in the table.
+	
+------------------------------------------------------------------------------------------------------
+On performance you keep focusing on select.
+Shared does not block reads.
+Shared lock blocks update.
+If you have hundreds of shared locks it is going to take an update a while to get an exclusive lock as it must wait for shared locks to clear.
+
+By default a select (read) takes a shared lock.
+Shared (S) locks allow concurrent transactions to read (SELECT) a resource.
+A shared lock as no effect on other selects (1 or a 1000).	
+
+The difference is how the nolock versus shared lock effects update or insert operation.
+
+No other transactions can modify the data while shared (S) locks exist on the resource.
+
+A shared lock blocks an update!
+But nolock does not block an update.
+==========================================	==========================================	==========================================	==========================================</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>Table_Hints_LocksScanSeek_etc</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>readMe_Table_Hints_LocksScanSeek_etc</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>Table_Hints_LocksScanSeek_etc</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>readMe_Table_Hints_LocksScanSeek_etc</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>readMe_Table_Hints_LocksScanSeek_etc
+
+Because the SQL Server query optimizer typically selects the best execution plan for a query, 
+we recommend that hints be used only as a last resort by experienced developers and database administrators.
+
+
+WITH  ( &lt;table_hint&gt; [ [, ]...n ] )
+
+&lt;table_hint&gt; ::= 
+[ NOEXPAND ] { 
+    INDEX ( index_value [ ,...n ] ) | INDEX =  ( index_value )
+  | FASTFIRSTROW 
+  | FORCESEEK [( index_value ( index_column_name  [ ,... ] ) ) ]
+  | FORCESCAN
+  | HOLDLOCK 
+  | NOLOCK 
+  | NOWAIT
+  | PAGLOCK 
+  | READCOMMITTED 
+  | READCOMMITTEDLOCK 
+  | READPAST 
+  | READUNCOMMITTED 
+  | REPEATABLEREAD 
+  | ROWLOCK 
+  | SERIALIZABLE 
+  | TABLOCK 
+  | TABLOCKX 
+  | UPDLOCK 
+  | XLOCK 
+} 
+
+&lt;table_hint_limited&gt; ::=
+{
+    KEEPIDENTITY 
+  | KEEPDEFAULTS 
+  | FASTFIRSTROW 
+  | HOLDLOCK 
+  | IGNORE_CONSTRAINTS 
+  | IGNORE_TRIGGERS 
+  | NOLOCK 
+  | NOWAIT
+  | PAGLOCK 
+  | READCOMMITTED 
+  | READCOMMITTEDLOCK 
+  | READPAST 
+  | REPEATABLEREAD 
+  | ROWLOCK 
+  | SERIALIZABLE 
+  | TABLOCK 
+  | TABLOCKX 
+  | UPDLOCK 
+  | XLOCK 
+} </Code>
       </SnippetValue>
     </value>
   </item>
