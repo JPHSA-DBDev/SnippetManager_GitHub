@@ -1,2 +1,2697 @@
 <?xml version="1.0" encoding="utf-8"?>
-<dictionary />
+<dictionary>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_DATEs</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>DATE_functions</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_DATEs</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>DATE_functions</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>https://docs.microsoft.com/en-us/dax/date-and-time-functions-dax
+
+CALENDAR			CALENDAR(&lt;start_date&gt;, &lt;end_date&gt;)  
+
+=CALENDAR (DATE (2005, 1, 1), DATE (2015, 12, 31))
+==================================================================================================================
+
+CALENDARAUTO		CALENDARAUTO([fiscal_year_end_month])
+'WHERE
+fiscal_year_end_month '= Any DAX expression that returns an integer from 1 to 12. 
+					'	If omitted, defaults to the value specified in the calendar table 
+					'	template for the current user, if present; otherwise, defaults to 12.
+  
+'Returns a table with a single column named “Date” that contains a contiguous set of dates. 
+'The range of dates is calculated automatically based on data in the model.
+==================================================================================================================
+
+DATE
+	'Returns the specified date in datetime format.
+	'Syntax:
+		DATE(&lt;year&gt;, &lt;month&gt;, &lt;day&gt;)  
+
+DATEADD
+
+	DATEADD(
+			&lt;dates&gt;
+			,&lt;number_of_intervals&gt;
+			,&lt;interval&gt;
+		   ) 
+
+	dates	
+		'A column that contains dates.
+	number_of_intervals	
+		'An integer that specifies the number of intervals to add to or subtract from the dates.
+	interval	
+		'The interval by which to shift the dates. The value for interval can be one of the following: 
+		year, quarter, month, day
+
+DATEDIFF
+	= DATEDIFF(startDATE,endDATE,dateInteval)
+	'e.g. calc column
+	Duration = DATEDIFF(Promotion[StartDate],Promotion[EndDate],DAY)
+DATEVALUE
+	'Converts a date in text format to a date in datetime format.
+	DATEVALUE(date_text)  
+	= DATEVALUE("8/1/2009") 
+	
+DAY
+	=DAY(theDate)
+EDATE
+
+EOMONTH(&lt;start_date&gt;, &lt;months&gt;) 
+	'Returns the date in datetime format of the last day of the month, 
+	'	before or after a specified number of months	
+	start_date	
+	'The start date in datetime format, or in an accepted text representation of a date.
+	months	
+	'A number representing the number of months before or after the start_date. 
+	'Note: If you enter a number that is not an integer, the number is rounded up or down to the nearest integer.
+	' 0 will return the EOM for the same month
+	'EXAMPLE
+		EVALUATE
+		VAR A = EOMONTH("March 3, 2008",0)
+		RETURN {A}	
+		'=&gt; 3/31/2008 12:00:00 AM
+		
+EOMONTH
+	'Returns the date in datetime format of the last day of the month, before or after a specified number of months
+	EOMONTH(&lt;start_date&gt;, &lt;months&gt;)  
+	
+	
+HOUR
+	= HOUR(theTime)
+MINUTE
+	= MINUTE(theTime)
+==================================================================================================================
+MONTH			MONTH(&lt;datetime&gt;) 
+'Returns the month as a number from 1 (January) to 12 (December).
+	=MONTH(theDate)
+==================================================================================================================
+NOW
+	'Returns the current date and time in datetime format.
+	=NOW()
+SECOND
+	= SECOND(theTime)
+	
+STARTOFMONTH	
+	'Syntax
+		STARTOFMONTH(&lt;dates&gt;) 
+	'Return value
+		'A table containing a single column and single row with a date value.
+	'EXAMPLE
+		'The following sample formula creates a measure that returns the start of the month, for the current context.
+		= STARTOFMONTH(DateTime[DateKey])  
+TIME
+TIMEVALUE
+TODAY
+	=TODAY()
+WEEKDAY
+	'Returns a number from 1 to 7 identifying the day of the week of a date. 
+	'	By default the day ranges from 1 (Sunday) to 7 (Saturday).
+	WEEKDAY(&lt;date&gt;, &lt;return_type&gt;) 
+	=WEEKDAY(theDate)
+	'EXAMPLE
+	' gets the date from the [HireDate] column, adds 1, and displays the weekday corresponding to that date. 
+	WEEKDAY([HireDate]+1)  
+WEEKNUM
+	=WEEKNUM(theDate)
+==================================================================================================================
+YEAR 			YEAR(&lt;date&gt;)
+'Returns the year of a date as a four digit integer in the range 1900-9999.
+	=YEAR(theDate)
+==================================================================================================================
+YEARFRAC
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Time_Intelligence</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>Calendar_CalculatedTable_goodTemplate_from_DAX</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Time_Intelligence</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>Calendar_CalculatedTable_goodTemplate_from_DAX</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>//'from UDEMY Time Intelligence
+
+
+Calendar = 
+
+-- Configuration items
+VAR FirstYear = 2010
+VAR LastYear = 2020
+VAR FirstDayOfWeek = 0      -- Use 0 for Sunday or 1 for Monday. For an ISO calendar use 1.
+VAR FiscalMonthEnd = 12     -- For an ISO calendar use 12. ISO always starts in January
+
+VAR StartDate = Date(Firstyear,1,1)
+VAR EndDate = Date(LastYear,12,31)
+
+-- Generate a base table of dates
+VAR BaseTable = CALENDAR(StartDate, EndDate)			// &lt;==== 'BASE
+
+-- Add the Year for each individual date
+VAR Years = ADDCOLUMNS(
+    BaseTable,
+    "Year", YEAR([Date])
+    )
+
+-- Add the calendar month and other month related data for each date
+VAR Months = ADDCOLUMNS(
+    Years,
+    "Month", MONTH([Date]),
+    "Date Key", FORMAT([Date],"YYYYMMDD"),					// &lt;=== 'Date Key
+    "Year and Month Number",FORMAT([Date],"YYYY-MM"),
+    "Year and Month Name",FORMAT([Date],"YYYY-MMM"),
+    "Fiscal Year", 
+        IF( FiscalMonthEnd = 12, 
+            YEAR([Date]), 
+            IF( MONTH([DATE]) &lt;= FiscalMonthEnd, 
+                YEAR([DATE])-1, 
+                YEAR([Date])
+                )
+            ),
+    "Fiscal Month", 
+        IF( 
+            FiscalMonthEnd = 12, 
+                MONTH([Date]), 
+                IF(MONTH([Date]) &lt;= FiscalMonthEnd, 
+                    FiscalMonthEnd + MONTH([Date]), 
+                    MONTH([Date]) - FiscalMonthEnd)
+            )
+)
+
+-- Add the Quarter and other quarter related data for each date    
+VAR Quarters = ADDCOLUMNS(
+    Months,
+    "Quarter",ROUNDUP(MONTH([Date])/3,0),
+    "Year and Quarter",[Year] &amp; "-Q" &amp; ROUNDUP(MONTH([Date])/3,0)
+    )
+
+-- Add the Day and other day related data for each date    
+VAR Days = ADDCOLUMNS(
+    Quarters,
+    "Day", DAY([Date]),
+    "Day Name", FORMAT([Date],"DDDD"),
+    "Day Of Week", WEEKDAY([Date]),
+    "Day Of Year", DATEDIFF (DATE(YEAR([Date]),1,1), [Date], DAY) + 1
+    )
+
+-- Add a few week columns. This is all dependent upon the variable FirstDayOfWeek which controls what day of the week a week starts (usually Sunday or Monday)
+VAR Weeks = ADDCOLUMNS(
+    Days,
+    "Week Of Month", 1 + WEEKNUM([Date], FirstDayOfWeek+1) - WEEKNUM( DATE(YEAR([Date]), MONTH([Date]), 1), FirstDayOfWeek+1),
+    "Week of Year", WEEKNUM([Date], FirstDayOfWeek+1),                  -- The second parameter is 1 for Sunday and 2 for Monday
+    "Year and Week", [Year] &amp; "-W" &amp; WEEKNUM([Date],FirstDayOfWeek+1)
+    )
+
+-- Add all US holidays
+var Holidays = ADDCOLUMNS(
+    Weeks,
+    "Holiday", 
+        IF ( MONTH([Date]) = 12 &amp;&amp; DAY([DATE] = 25),                                        -- Christmas Day: December 25
+            "Christmas",
+        If ( MONTH([Date]) = 1 &amp;&amp; DAY([Date]) = 1,                                          -- New Years' Day: January 1
+            "New Year's Day",
+        If ( MONTH([Date]) = 7 &amp;&amp; DAY([Date]) = 4,                                          -- Independence Day: July 4
+            "Independence Day",
+        If ( MONTH([Date]) = 11 &amp;&amp; DAY([Date]) = 11,                                        -- Veteran's Day: November 11
+            "Veterans Day",
+        If ( MONTH([Date]) = 11 &amp;&amp; [Day Name] = "Thursday" &amp;&amp; ([Day] &gt;= 22 &amp;&amp; [Day] &lt;= 28), -- Thanksgiving: 4th Thursday of November
+            "Thanksgiving Day",
+        If ( MONTH([Date]) = 10 &amp;&amp; [Day Name] = "Monday" &amp;&amp; ([Day] &gt;= 8 &amp;&amp; [Day] &lt;= 14),    -- Columbus Day: 2nd Monday in October
+            "Columbus Day",
+        If ( MONTH([Date]) = 9 &amp;&amp; [Day Name] = "Monday" &amp;&amp; ([Day] &gt;= 1 &amp;&amp; [Day] &lt;= 7),      -- Labor Day: 1st Monday in September
+            "Labor Day",
+        If ( MONTH([Date]) = 2 &amp;&amp; [Day Name] = "Monday" &amp;&amp; ([Day] &gt;= 15 &amp;&amp; [Day] &lt;= 21),    -- Presidents' Day: 3rd Monday in February
+            "Presidents' Day",
+        If ( MONTH([Date]) = 1 &amp;&amp; [Day Name] = "Monday" &amp;&amp; ([Day] &gt;= 15 &amp;&amp; [Day] &lt;= 21),    -- Martin Luther King Jr.' Day: 3rd Monday in January
+            "Martin Luther King Jr. Day"))))))))
+        )
+    )
+
+-- Add if each date is a working day. It won't be if the day is Saturday or Sunday or if it's a holiday
+VAR IsWorkingDay = ADDCOLUMNS(
+    Holidays,
+    "Is Working Day", IF ([Day Name] IN { "Saturday", "Sunday" } || NOT ISBLANK([Holiday]), FALSE(), TRUE())
+    )
+
+RETURN IsWorkingDay</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Time_Intelligence</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>Rolling_Measures_or_Running_Aggregates</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Time_Intelligence</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>Rolling_Measures_or_Running_Aggregates</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>https://www.youtube.com/watch?v=XUW0yADyx84
+
+1] 'Assume you have a Date Table:  OrderDateTable
+2] 'Assume you have a measure that already creates some type of aggregate:
+	'e.g.
+	TotalFreight = SUM(Orders[Freight])
+3] 'To get a running aggregate use this measure:
+	---------------------------------------------------------------------------------------------------------------------------------
+		RollingThreeMonthTotalFreight = 
+		VAR StartDate = NEXTDAY(                        //' and add one date b/c e.g. for March it goes back to 12/31/YYYY
+		                    lastdate(                   //'Since a series of dates is returned, get just the Last date of the series
+		                                DATEADD(        //'go back 3 months prior to the 'date'
+		                                        OrderDateTable[Date],-3,MONTH   
+		                                        )
+		                            )
+		)
+		VAR EndDate =   lastdate(OrderDateTable[Date] )		                            		
+		RETURN
+		CALCULATE([TotalFreight],DATESBETWEEN(OrderDateTable[Date],StartDate,EndDate))
+	---------------------------------------------------------------------------------------------------------------------------------			</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>M_Dates</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>01__00_DateTable_Overview</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>M_Dates</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>01__00_DateTable_Overview</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>01__00_DateTable_Overview
+
+
+'1] Crete the Start Date Parameter:
+ Create a Query in the Query Editor, 
+ In the Query definition field at the top of the screen, under the ribbon =&gt; paste the following formula
+	
+		= Date.AddDays(Date.From(DateTime.LocalNow()),-10)
+		
+		'{also: Date.AddMonths, Date.AddQuarters, Date.AddWeeks, Date.AddYears}
+		
+		------------------
+		'OR for a specific date usd this
+		= Date.FromText("2010, 09, 01")
+		------------------
+	
+	A3] rename the Query "StartDATE"
+	
+	close and apply, inorder to return to the Power BI home 
+	
+	
+
+
+'2] Create the function that is called to create the [DateTable], in query editor: new blank query
+	'see snippet: 01__01_DateTable_function
+	'copy/paste the snippet into the Advanced Editor
+	
+'3] Create the query that will be the DateTable
+	'see snippet: 01__02_DateTable_AdvancedEditory_code
+	'Create a new blank query and copy/paste this into the Advanced Editor
+	'Rename the query: DateTable
+	</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>M_Dates</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>01__01_DateTable_function</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>M_Dates</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>01__01_DateTable_function</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>01__01_DateTable_function
+
+
+'Name this function: fn_createDateTable, do it in Query Editor (new blank query)
+==============================Advanced Editor====================
+(StartDate as date, EndDate as date)=&gt;
+
+let
+    //Capture the date range from the parameters
+    StartDate = #date(Date.Year(StartDate), Date.Month(StartDate), 
+    Date.Day(StartDate)),
+    EndDate = #date(Date.Year(EndDate), Date.Month(EndDate), 
+    Date.Day(EndDate)),
+
+    //Get the number of dates that will be required for the table
+    GetDateCount = Duration.Days(EndDate - StartDate),
+
+    //Take the count of dates and turn it into a list of dates
+    GetDateList = List.Dates(StartDate, GetDateCount, 
+    #duration(1,0,0,0)),
+
+    //Convert the list into a table
+    DateListToTable = Table.FromList(GetDateList, 
+    Splitter.SplitByNothing(), {"Date"}, null, ExtraValues.Error),
+
+    //Create various date attributes from the date column
+    //Add Year Column
+    YearNumber = Table.AddColumn(DateListToTable, "Year", 
+    each Date.Year([Date])),
+
+    //Add Quarter Column
+    QuarterNumber = Table.AddColumn(YearNumber , "Quarter", 
+    each "Q" &amp; Number.ToText(Date.QuarterOfYear([Date]))),
+
+    //Add Week Number Column
+    WeekNumber= Table.AddColumn(QuarterNumber , "Week of Year Number", 
+    each Date.WeekOfYear([Date])),
+
+    //Add Month Number Column
+    MonthNumber = Table.AddColumn(WeekNumber, "Month Number", 
+    each Date.Month([Date])),
+
+    //Add Month Name Column
+    MonthName = Table.AddColumn(MonthNumber , "Month", 
+    each Date.ToText([Date],"MMMM")),
+
+    //Add Day of Week Column
+    DayOfWeek = Table.AddColumn(MonthName , "Day of Week", 
+    each Date.ToText([Date],"dddd"))
+
+in
+    DayOfWeek
+    
+ ============================================================</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>M_Dates</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>01__02_DateTable_AdvancedEditor_code</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>M_Dates</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>01__02_DateTable_AdvancedEditor_code</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>01__02_DateTable_AdvancedEditory_code
+
+
+'Create a new blank query and copy/paste this into the Advanced Editor
+'Rename the query: DateTable
+
+============================================================================================
+let
+    Source = fn_createDateTable(StartDATE, Date.From(DateTime.LocalNow())),
+    #"Changed Type" = Table.TransformColumntypes(Source,{{"Date", type date}, {"Year", Int64.Type}, {"Month Number", Int64.Type}}),
+    #"Added YYYYMMDD" = Table.AddColumn(#"Changed Type", "YYYYMMDD", each ([Year] * 10000) + ([Month Number] * 100) + Date.Day([Date])),
+    #"Added DateOfMonth" = Table.AddColumn(#"Added YYYYMMDD", "DateOfMonth", each Date.Day([Date])),
+    #"Reordered Columns" = Table.ReorderColumns(#"Added DateOfMonth",{"Date", "Year", "Quarter", "Month Number", "Week of Year Number", "DateOfMonth", "YYYYMMDD", "Month", "Day of Week"}),
+    #"Added isPreviousWeek" = Table.AddColumn(#"Reordered Columns", "IsPreviousWeek", each Number.From(Date.IsInPreviousNWeeks([Date], 1)) ),
+    #"Added isMTD" = Table.AddColumn(#"Added isPreviousWeek", "isMTD", each (  Date.IsInCurrentMonth([Date])   and Date.From([Date]) &lt;  Date.From(DateTime.LocalNow())  )   ),
+    #"Added WeekOfMonthNumber" = Table.AddColumn(#"Added isMTD", "WeekOfMonthNumber", each Date.WeekOfMonth([Date])),
+    #"Renamed Columns" = Table.RenameColumns(#"Added WeekOfMonthNumber",{{"Month", "MonthName"}, {"Day of Week", "DayOfWeekName"}}),
+    SameWeekOfMonth_as_LastWeek = Table.AddColumn(#"Renamed Columns", "SameWeekOfMonth_as_LastWeek", each Number.From(
+								Value.Equals(
+                                                                    		[WeekOfMonthNumber]
+                                                                    		,
+                                                                   		 Date.WeekOfMonth(Date.From(DateTime.LocalNow())) - 1
+								  	   ) 
+												         )
+                                                                  
+		  ),
+    #"Added isLastMonth" = Table.AddColumn(SameWeekOfMonth_as_LastWeek, "isLastMonth", each Number.From(Date.IsInPreviousMonth ([Date]) )),
+    #"Changed Type1" = Table.TransformColumnTypes(#"Added isLastMonth",{{"SameWeekOfMonth_as_LastWeek", Int64.Type}, {"isLastMonth", Int64.Type}}),
+    #"Added isPreviousWeekOfLastMonth" = Table.AddColumn(#"Changed Type1", "isPreviousWeekOfLastMonth", each ([isLastMonth] = 1) and ([SameWeekOfMonth_as_LastWeek]=1)),
+    #"Changed Type2" = Table.TransformColumnTypes(#"Added isPreviousWeekOfLastMonth",{{"DateOfMonth", Int64.Type}, {"YYYYMMDD", Int64.Type}, {"IsPreviousWeek", Int64.Type}, {"WeekOfMonthNumber", Int64.Type}}),
+    #"Added MTD_aMonthAgo" = Table.AddColumn(#"Changed Type2", "Custom", each [Month Number] = Number.From(Date.Month(Date.From(DateTime.LocalNow())))-1
+ and
+ [DateOfMonth] &lt; Date.Day(DateTime.LocalNow()))
+in
+    #"Added MTD_aMonthAgo"
+=============================================================================================
+'You get this error
+Expression.Error: The name 'Table.TransformColumntypes' wasn't recognized.  Make sure it's spelled correctly.
+
+'Remove everything from that line down, save the query,
+
+'ie. from this line down:
+    #"Changed Type" = Table.TransformColumntypes(Source,{{"Date", type date}, {"Year", Int64.Type}, {"Month Number", Int64.Type}}),
+
+
+'Leave it like this in Advanced editory
+
+= let
+    Source = fn_createDateTable(StartDATE, Date.From(DateTime.LocalNow()))
+ 
+in
+    Source
+    
+ ' save the query,
+ 
+ 'then go back and change the data types for those 3 columns
+ 
+ 
+'Close and Apply, then back to Query Editor
+
+'add a comma im, and copy/paste the code from right after that line</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>M_Dates</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>DataTable_DevinKnight_Modifications</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>M_Dates</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>DataTable_DevinKnight_Modifications</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>To get YYYYMMDD from Kevin Knight
+
+Once the table is created by Kevin Knight's function
+Then add custom columns to create new fields in the Power Query Editor:
+
+Here is the Advanced Editor script:
+====================================
+let
+    Source = orig_Fn_createDateTable(StartDate, Date.From(DateTime.LocalNow())),
+    #"Changed Type" = Table.TransformColumntypes(Source,{{"Date", type date}, {"Year", Int64.Type}, {"Week of Year Number", Int64.Type}, {"Month Number", Int64.Type}}),
+    #"Added YYYYMMDD" = Table.AddColumn(#"Changed Type", "YYYYMMDD", each ([Year] * 10000) + ([Month Number] * 100) + Date.Day([Date])),
+    #"Added DateOfMonth" = Table.AddColumn(#"Added YYYYMMDD", "DateOfMonth", each Date.Day([Date])),
+    #"Reordered Columns" = Table.ReorderColumns(#"Added DateOfMonth",{"Date", "Year", "Quarter", "Month Number", "Week of Year Number", "DateOfMonth", "YYYYMMDD", "Month", "Day of Week"}),
+    #"Added isPreviousWeek" = Table.AddColumn(#"Reordered Columns", "IsPreviousWeek", each Number.From(Date.IsInPreviousNWeeks([Date], 1)) ),
+    #"Added isMTD" = Table.AddColumn(#"Added isPreviousWeek", "isMTD", each (  Date.IsInCurrentMonth([Date])   and Date.From([Date]) &lt;  Date.From(DateTime.LocalNow())  )   ),
+    #"Added WeekOfMonthNumber" = Table.AddColumn(#"Added isMTD", "WeekOfMonthNumber", each Date.WeekOfMonth([Date])),
+    #"Renamed Columns" = Table.RenameColumns(#"Added WeekOfMonthNumber",{{"Month", "MonthName"}, {"Day of Week", "DayOfWeekName"}}),
+    SameWeekOfMonth_as_LastWeek = Table.AddColumn(#"Renamed Columns", "SameWeekOfMonth_as_LastWeek", each Number.From(
+								Value.Equals(
+                                                                    		[WeekOfMonthNumber]
+                                                                    		,
+                                                                   		 Date.WeekOfMonth(Date.From(DateTime.LocalNow())) - 1
+								  	   ) 
+												         )
+                                                                  
+		  ),
+    #"Added isLastMonth" = Table.AddColumn(SameWeekOfMonth_as_LastWeek, "isLastMonth", each Number.From(Date.IsInPreviousMonth ([Date]) )),
+    #"Changed Type1" = Table.TransformColumnTypes(#"Added isLastMonth",{{"SameWeekOfMonth_as_LastWeek", Int64.Type}, {"isLastMonth", Int64.Type}}),
+    #"Added isPreviousWeekOfLastMonth" = Table.AddColumn(#"Changed Type1", "isPreviousWeekOfLastMonth", each ([isLastMonth] = 1) and ([SameWeekOfMonth_as_LastWeek]=1)),
+    #"Changed Type2" = Table.TransformColumnTypes(#"Added isPreviousWeekOfLastMonth",{{"DateOfMonth", Int64.Type}, {"YYYYMMDD", Int64.Type}, {"IsPreviousWeek", Int64.Type}, {"WeekOfMonthNumber", Int64.Type}}),
+    #"Added MTD_aMonthAgo" = Table.AddColumn(#"Changed Type2", "Custom", each [Month Number] = Number.From(Date.Month(Date.From(DateTime.LocalNow())))-1
+ and
+ [DateOfMonth] &lt; Date.Day(DateTime.LocalNow()))
+in
+    #"Added MTD_aMonthAgo"</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>M_Dates</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>DATE_Table_1_record_every14days_using_LIST_functions</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>M_Dates</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>DATE_Table_1_record_every14days_using_LIST_functions</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+		
+'FINAL CODE
+========================================================================================		
+		
+let
+    referencedate = Number.From(#"Reference Date"),
+    startdate = Number.From(Date.StartOfYear(#"Reference Date")),
+    enddate = Number.From(Date.EndOfYear(#"Reference Date")),
+    list1 = List.Generate(()=&gt;referencedate, each _ &lt;=enddate, each _+14),
+    list2 = List.Generate(()=&gt;startdate, each _ &lt;referencedate, each _-14),
+    dates = List.Combine({list2,list1}),
+    #"Converted to Table" = Table.FromList(dates, Splitter.SplitByNothing(), null, null, ExtraValues.Error),
+    #"Changed Type" = Table.TransformColumntypes(#"Converted to Table",{{"Column1", type date}}),
+    #"Renamed Columns" = Table.RenameColumns(#"Changed Type",{{"Column1", "Dates"}})
+in
+    #"Renamed Columns"
+======================================================================================== 
+
+
+'This M-Code produces a date List for every day from start to end of the present year
+'=====================================================================================
+let
+    startdate = Number.From(Date.StartOfYear(DateTime.Date(DateTime.FixedLocalNow()))),
+    enddate = Number.From(Date.EndOfYear(DateTime.Date(DateTime.FixedLocalNow()))),
+    Source = {startdate..enddate},
+    #"Converted to Table" = Table.FromList(Source, Splitter.SplitByNothing(), null, null, ExtraValues.Error),
+    #"Changed Type" = Table.TransformColumntypes(#"Converted to Table",{{"Column1", type date}}),
+    #"Renamed Columns" = Table.RenameColumns(#"Changed Type",{{"Column1", "Dates"}})
+in
+    #"Renamed Columns"
+
+' BUT we want a List of dates, every 14 days, on Fridays, for the year
+'============================================================
+
+1] 'Create a reference day from a Blank Query, this is a Friday
+	'Turn a string value into a DATE value using the Date.From function
+	= Date.From("8/23/2019")
+
+2] 'Then start the second query w/ a List.Generate Function
+	' start with zero, increase each value in the list by increments of 2
+	' until we reach 10, then the loop stops
+	' the underscore serves as a 'variable' in conjunction with'each' for the LIST function
+
+	= List.Generate(()=&gt;0, each _ &lt;=10, each _+2)
+	
+	'OUTPUT
+	------------
+		0
+		2
+		4
+		6
+		8
+		10
+		
+	'Then convert to a table: Transform {menu} =&gt; [To Table]	
+	= Table.FromList(Source, Splitter.SplitByNothing(), null, null, ExtraValues.Error)	
+		
+	'Then change datatype to DATE: in the header of the column
+	= Table.TransformColumnTypes(#"Converted to Table",{{"Column1", type date}})
+	
+	'This is proof-of-concept that we can go from a list of numbers to a DATES table
+		
+3] 'Remove the last two steps from the query back to this:		
+	= List.Generate(()=&gt;0, each _ &lt;=10, each _+2)	
+		
+	' and go into the advanced editor:
+	
+		let
+		    Source = List.Generate(()=&gt;0, each _ &lt;=10, each _+2)
+		in
+		    Source		
+			
+4] 'Add the Parms, and test to look at the 'enddate'
+
+		let
+		    referencedate = Number.From(#"Reference Date"),
+		    startdate = Number.From(Date.StartOfYear(#"Reference Date")),
+		    enddate = Number.From(Date.EndOfYear(#"Reference Date"))
+		    Source = List.Generate(()=&gt;0, each _ &lt;=10, each _+2)
+		in
+		    enddate
+		
+	'OUTPUT
+	========
+	43830	
+		
+5] 'Modify the 'source' using reference date,enddate, and jumping 14 days at atime:
+		let
+		    referencedate = Number.From(#"Reference Date"),
+		    startdate = Number.From(Date.StartOfYear(#"Reference Date")),
+		    enddate = Number.From(Date.EndOfYear(#"Reference Date")),
+			Source = List.Generate(()=&gt;referencedate, each _ &lt;=enddate, each _+14)
+		in
+		    Source		
+		
+	'OUTPUT
+	========
+		43700
+		43714
+		43728
+		43742
+		43756
+		43770
+		43784
+		43798
+		43812
+		43826			
+				
+6] 'MODIFY the M-Code: create 2 lists, one counting up, the other counting down.
+	' exclude the reference date (i.e. remove "=") from list2, so that it is not duplicated
+	'NOTE: put the pair of lists within brackets (i.e. list characters}
+	'Put list2 before list1 to get them in the right order
+	
+		let
+			referencedate = Number.From(#"Reference Date"),
+			startdate = Number.From(Date.StartOfYear(#"Reference Date")),
+			enddate = Number.From(Date.EndOfYear(#"Reference Date")),
+			list1 = List.Generate(()=&gt;referencedate, each _ &lt;=enddate, each _+14),
+			list2 = List.Generate(()=&gt;startdate, each _ &lt;referencedate, each _-14),
+			dates = List.Combine({list2,list1})
+			
+		in
+			dates
+			
+	'OUTPUT is whole numbers
+	=========
+		43700
+		43714
+		43728
+		43742
+		...
+		29648
+		29634
+		29620		
+		
+7] 'Convert Whole numbers to DATEs		
+	Transform {menu} =&gt; [To Table]
+	{and convert to DATE type}
+		
+	'OUTPUT
+	=======
+	1/1/2019
+	12/18/2018
+	12/4/2018
+	11/20/2018
+	11/6/2018
+	10/23/2018
+	10/9/2018
+	...
+	12/23/1980
+	12/9/1980
+	11/25/1980
+	11/11/1980
+	10/28/1980
+	10/14/1980
+	9/30/1980
+	9/16/1980			
+		
+   </Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>M_Dates</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>Dates_of_interest</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>M_Dates</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>Dates_of_interest</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+//Start of month, 3 months prior to today
+Date.StartOfMonth(Date.AddMonths(Date.From(DateTime.LocalNow()),-3))
+
+==============================================================================Date =&gt; YYYYMMDD
+'YYYYMMDD from Date
+= Number.FromText((Date.ToText(StartDate_2MonthsAgo,"YYYYMMDD")) )
+
+'where StartDate_2MonthsAgo is the result of the query:
+= Date.AddMonths(Date.From(DateTime.LocalNow()),-2)
+==============================================================================</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>M_Dates</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>DateTable_DevinKnight_PARAMETER_for_StartDate</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>M_Dates</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>DateTable_DevinKnight_PARAMETER_for_StartDate</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>Quick Alternative from Courtney:
+= Table.SelectRows(FactApplication1, each Date.IsInPreviousNMonths([ApplicationDate], 12))
+===============================================================================================
+
+
+
+
+This example uses the dynamic Scaler Query value in the SOURCE step, so only the last 10 days of data is uploaded 
+
+
+example get data from DimContract where [DateCreated] is greater than 10 days prior to Power BI report refresh date
+
+A] Create a Query in the Query Editor, using [Tranform Data] to get the date 10 days prior to today
+
+	A1) In Query Editor =&gt; right-click in Queries {Pane on left} =&gt; New Query =&gt; Blank Query
+	
+	A2] In the Query definition field at the top of the screen, under the ribbon =&gt; paste the following formula
+	
+		= Date.AddDays(Date.From(DateTime.LocalNow()),-10)
+	
+	A3] rename the Query "StartDate"
+	
+	close and apply, inorder to return to the Power BI home 
+
+B]  Modify the First Parameter of Devin Knight's scrip
+
+		
+	B2] Get the M-code from the Advanced Editor, in the 'Query' secton, of the Home Tab of the ribbon of the Query Editor:
+	
+	
+		let
+		    Source = orig_Fn_createDateTable(#date(2021, 1, 1), #date(2021, 10, 19)),
+		    #"Changed Type" = Table.TransformColumntypes(Source,{{"Date", type date}, {"Year", Int64.Type}, {"Week Number", Int64.Type}, {"Month Number", Int64.Type}}),
+		    #"Added Custom" = Table.AddColumn(#"Changed Type", "YYYYMMDD", each ([Year] * 10000) + ([Month Number] * 100) + Date.Day([Date])),
+		    #"Added Custom1" = Table.AddColumn(#"Added Custom", "DateOfMonth", each Date.Day([Date])),
+		    #"Reordered Columns" = Table.ReorderColumns(#"Added Custom1",{"Date", "Year", "Quarter", "Month Number", "Week Number", "DateOfMonth", "YYYYMMDD", "Month", "Day of Week"})
+		in
+		    #"Reordered Columns"
+		
+	B3] Modify the M-code to use the Scaler Query value rather than the Hard-Coded date value as Start Date, and today as End date
+	
+		let
+		    Source = orig_Fn_createDateTable(StartDate, Date.From(DateTime.LocalNow())),
+		    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Date", type date}, {"Year", Int64.Type}, {"Week Number", Int64.Type}, {"Month Number", Int64.Type}}),
+		    #"Added Custom" = Table.AddColumn(#"Changed Type", "YYYYMMDD", each ([Year] * 10000) + ([Month Number] * 100) + Date.Day([Date])),
+		    #"Added Custom1" = Table.AddColumn(#"Added Custom", "DateOfMonth", each Date.Day([Date])),
+		    #"Reordered Columns" = Table.ReorderColumns(#"Added Custom1",{"Date", "Year", "Quarter", "Month Number", "Week Number", "DateOfMonth", "YYYYMMDD", "Month", "Day of Week"})
+		in
+		    #"Reordered Columns"
+			    
+Now when you refresh the data it will just get the data for the last 10 days	  </Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>M_Dates</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>DateTable_DevinKnight</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>M_Dates</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>DateTable_DevinKnight</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>https://devinknightsql.com/2015/06/16/creating-a-date-dimension-with-power-query/
+
+
+'This query is actually a function that accepts parameters so you will see that it’s waiting for you to invoke it with values.
+
+a) Get Data =&gt; Blank Query =&gt; Replace everything in the Advanced Editor with this code
+
+'This creates a 'Function' in the Query pane of the Query Editor, rename it: orig_Fn_createDateTable
+
+b) ' Double click the function, when it opens populate the StartDate, and EndDate =&gt; click [Invoke]
+
+c) ' it crates a new table in the Query Pane =&gt; rename it "theDateTable"
+	' Modify the data types of each column (right click and choose the column header)
+	
+d) 'Close and Apply the Query editor windowm, and you will see the "theDataTable" table in the list of tables
+
+e) 'Then set up the relationships in the Relationship view
+===Advanced Editor===========================================================================================
+
+//Create Date Dimension
+= (StartDate as date, EndDate as date)=&gt;
+
+let
+    //Capture the date range from the parameters
+    StartDate = #date(Date.Year(StartDate), Date.Month(StartDate), 
+    Date.Day(StartDate)),
+    EndDate = #date(Date.Year(EndDate), Date.Month(EndDate), 
+    Date.Day(EndDate)),
+
+    //Get the number of dates that will be required for the table
+    GetDateCount = Duration.Days(EndDate - StartDate),
+
+    //Take the count of dates and turn it into a list of dates
+    GetDateList = List.Dates(StartDate, GetDateCount, 
+    #duration(1,0,0,0)),
+
+    //Convert the list into a table
+    DateListToTable = Table.FromList(GetDateList, 
+    Splitter.SplitByNothing(), {"Date"}, null, ExtraValues.Error),
+
+    //Create various date attributes from the date column
+    //Add Year Column
+    YearNumber = Table.AddColumn(DateListToTable, "Year", 
+    each Date.Year([Date])),
+
+    //Add Quarter Column
+    QuarterNumber = Table.AddColumn(YearNumber , "Quarter", 
+    each "Q" &amp; Number.ToText(Date.QuarterOfYear([Date]))),
+
+    //Add Week Number Column
+    WeekNumber= Table.AddColumn(QuarterNumber , "Week of Year Number", 
+    each Date.WeekOfYear([Date])),
+
+    //Add Month Number Column
+    MonthNumber = Table.AddColumn(WeekNumber, "Month Number", 
+    each Date.Month([Date])),
+
+    //Add Month Name Column
+    MonthName = Table.AddColumn(MonthNumber , "Month", 
+    each Date.ToText([Date],"MMMM")),
+
+    //Add Day of Week Column
+    DayOfWeek = Table.AddColumn(MonthName , "Day of Week", 
+    each Date.ToText([Date],"dddd"))
+
+in
+    DayOfWeek
+
+================================================================================================</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>M_Dates</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>DateTable_Dynamic_from_Start_to_END</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>M_Dates</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>DateTable_Dynamic_from_Start_to_END</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>To creat a Dynamic Data Table for the current year from the START to the END of the current year:
+
+
+
+1] Create a list from 1..100
+
+	New Source =&gt; Blank Query
+	{set the Formula Bar:}  = {1..100}
+	
+2] In the Transform {Menu, Ribbon} =&gt; [To Table] {except defaults}
+
+	{now you have a table}
+	
+	{Now you see in the formulat bar:}
+		= Table.FromList(Source, Splitter.SplitByNothing(), null, null, ExtraValues.Error)
+		
+3] }Select the column, and change the Data type to DATE}
+	{Right click the column head} =&gt; DATE
+	{Now you see dates in the column, and this in the formula Bar:}
+		= Table.TransformColumnTypes(#"Converted to Table",{{"Column1", type date}})
+		
+	{rename the column: Dates}
+	{formula bar:}
+		= Table.RenameColumns(#"Changed Type",{{"Column1", "Dates"}})
+		
+4] {Then go to the Advanced Editor for the M-code}
+
+	let
+	    Source = {1..100},
+	    #"Converted to Table" = Table.FromList(Source, Splitter.SplitByNothing(), null, null, ExtraValues.Error),
+	    #"Changed Type" = Table.TransformColumnTypes(#"Converted to Table",{{"Column1", type date}}),
+	    #"Renamed Columns" = Table.RenameColumns(#"Changed Type",{{"Column1", "Dates"}})
+	in
+	    #"Renamed Columns"
+	    
+5] {edit the M-code, to have the list start and end appropriately}
+
+	let
+	    startdate = Number.From(Date.StartOfYear(DateTime.Date(DateTime.FixedLocalNow()))),
+	    enddate = Number.From(Date.EndOfYear(DateTime.Date(DateTime.FixedLocalNow()))),
+	    Source = {startdate..enddate},
+	    #"Converted to Table" = Table.FromList(Source, Splitter.SplitByNothing(), null, null, ExtraValues.Error),
+	    #"Changed Type" = Table.TransformColumnTypes(#"Converted to Table",{{"Column1", type date}}),
+	    #"Renamed Columns" = Table.RenameColumns(#"Changed Type",{{"Column1", "Dates"}})
+	in
+	    #"Renamed Columns"	    	
+	    
+	    
+	    
+	 {NOTE: that the Number.From() function converts the dates to numbers}</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>M_PowerQuery</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>SOURCE_statement_using_StartDate_PARM</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>M_PowerQuery</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>SOURCE_statement_using_StartDate_PARM</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+
+'1] Create the query PARAMETER that holds the critical Parameter: StartDATE
+
+= Date.AddMonths(Date.From(DateTime.LocalNow()),-2)
+
+'2] Create the query PARAMETER that uses the critical Parameter to output YYYYMMDD: StartYYYYMMDD
+
+= Number.FromText((Date.ToText(StartDATE,"YYYYMMDD")) )
+
+'3] Then use the PARAMETERS in the SOURCE statements to bring in data from the tables
+
+
+'FactApplication
+===========================================
+let
+    StartDateParm = Text.From (Start_YYYYMMDD),
+    Source = Sql.Database("cbtsql04", "edwCrescent", [Query="SELECT *#(lf)  FROM [edwCrescent].[dbo].[FactApplication]#(lf)  WHERE [ApplicationDateKey] &gt; ' " &amp; StartDateParm &amp;  " ' ", CreateNavigationProperties=false, HierarchicalNavigation=true])
+in
+    #"Source"
+===========================================
+'APP_MAST {OK}
+===========================================
+let
+    StartDateParm = Text.From (StartDate_2MonthsAgo),
+    Source = Sql.Database("cbtsql04", "edwCrescent", [Query="SELECT *#(lf)  FROM [edwCrescent].[dbo].[APP_MAST]#(lf)  WHERE [APPLICATION_DATE] &gt; ' " &amp; StartDateParm &amp;  " ' ", CreateNavigationProperties=false, HierarchicalNavigation=true]),
+    #"Merged Queries" = Table.NestedJoin(#"Source", {"CREDIT_TIER"}, Credit_Tier_Sort, {"CREDIT_TIER"}, "Credit_Tier_Sort", JoinKind.LeftOuter),
+    #"Expanded Credit_Tier_Sort" = Table.ExpandTableColumn(#"Merged Queries", "Credit_Tier_Sort", {"SORT"}, {"Credit_Tier_Sort.SORT"}),
+    #"Renamed Columns" = Table.RenameColumns(#"Expanded Credit_Tier_Sort",{{"CREDIT_TIER", "Grade"}})
+in
+    #"Renamed Columns"
+===========================================
+'FundedApplications
+===========================================
+let
+   StartDateParm = Text.From (StartDate_2MonthsAgo),
+   Source = Sql.Database("cbtsql04", "edwCrescent", [Query="SELECT *#(lf)  FROM [edwCrescent].[dbo].[FundedApplications]#(lf)  WHERE [APPLICATION_DATE] &gt; ' " &amp; StartDateParm &amp;  " ' ", CreateNavigationProperties=false, HierarchicalNavigation=true])
+
+in
+    #"Source"
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_calculations</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>Measure-Object_sum_average_first_last_Example</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_calculations</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>Measure-Object_sum_average_first_last_Example</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>#requires -version 5.0
+
+&lt;#
+JSON Processing script for Toolmaking book
+
+Process the directory of JSON files and create a summary report in the
+form of an object with these properties:
+
+    Number of files processed
+    Total number of items processed
+    Average number of items processed
+    Total number of Errors
+    Average number of Errors
+    Total number of Warnings
+    Average number of Warnings
+    StartDate (the earliest run date value)
+    EndDate (the last run date value)
+
+#&gt;
+
+[cmdletbinding()]
+Param(
+[Parameter(Position = 0, Mandatory, HelpMessage = "Enter the path with the json test data")]
+[ValidateNotNullorEmpty()]    
+[string]$Path
+)
+
+Write-Verbose "Starting $($MyInvocation.MyCommand)"
+
+Write-Verbose "Processing files from $Path"
+
+$files = Get-ChildItem -Path $path -Filter *.dat
+
+Write-Verbose "Found $($files.count) files."
+$data = foreach ($file in $files) {
+    Write-Verbose "Converting $($file.name)"
+    Get-Content -Path $file.fullname | ConvertFrom-Json |
+    Select-Object @{Name="Date";Expression={$_.RunDate -as [datetime]}},
+    Errors,Warnings,@{name = "ItemCount"; expression = {$_.'Items processed'}}
+}
+
+#sort the data to get the first and last dates
+$sorted = $data | Sort-Object Date 
+$first =  $sorted[0].Date
+$last = $sorted[-1].Date
+
+Write-Verbose "Measuring data"
+# The $stats variable will be an array of measurements for each property
+$stats = $data | Measure-Object errors,warnings,ItemCount -sum -average
+
+Write-Verbose "Creating summary result"
+[PSCustomObject]@{
+    NumberFiles = $data.count
+    TotalItemsProcessed = $stats[2].sum
+    AverageItemsProcessed = $stats[2].Average
+    TotalErrors = $stats[0].sum
+    AverageErrors = $stats[0].average
+    TotalWarnings = $stats[1].sum
+    AverageWarnings = $stats[1].Average
+    StartDate = $first
+    EndDate = $last
+}
+
+Write-Verbose "Ending $($MyInvocation.MyCommand)"
+
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Computer_info</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>Login__get_LoginInstancesFunction</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Computer_info</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>Login__get_LoginInstancesFunction</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>USAGE:
+
+&gt;Get-LoginInstance -ComputerName "LT-103111" -StartDate (Get-Date).AddDays(-1) -Verbose  | SELECT UserName, LoginTime, SessionType, LoginIpAddress
+
+
+
+'Get-LoginInstance - Retrieve Local and Remote Computer Login/Logout Instances
+https://gallery.technet.microsoft.com/scriptcenter/Get-LoginInstance-Retrieve-6437b1af
+
+#'This script contains a function (Get-LoginInstance), 
+#'    as well as two sub-functions (Get-LoginData and Get-LogoutData), 
+#'    which are used to retrieve login and logout events from the Security event log on a local or remote computer, 
+#'    and join them together to display login instance data.  
+#'    Please use the native help bundled with the cmdlet for more information on ways to utilize/run this function.
+#'
+#'Additionally, please note that this cmdlet is reliant upon Remote Event Log Management, 
+#'    which may need to be enabled on the target machine(s), 
+#'    and due to its use of Get-WinEvent, can only work on Vista, 
+#'    Server 2008 R2 and later Windows releases for consumer and enterprise markets, respectively.
+#'
+#'UPDATE - 10/23/14: I've revised the cmdlet to fix a few different areas - 
+#'                    please download the latest version of this if you have a previous version of the script.  
+#'                    Changes made to the latest version include:
+#'
+#'New sorting algorithm to ensure all login instances 
+#'        (logins and logouts) and logins without corresponding logouts 
+#'        appear in final collection, regardless of OS, account domain, etc.
+#'Official support of PowerShell versions 2, 3 and 4 - Get-LoginInstance has now been tested and confirmed to work in all of those versions
+#'Remove Desktop Window Manager (DWM) logins from final collection if present
+#'Minor help file tweaks
+=================================================================================
+    -------------------------- EXAMPLE 1 --------------------------
+    
+    PS C:\&gt;Get-LoginInstance
+    
+    Retrieve all available login instances from the local computer within 
+    the past week.
+    
+    
+    
+    
+    -------------------------- EXAMPLE 2 --------------------------
+    
+    PS C:\&gt;Get-LoginInstance -ComputerName "GSR-242" -StartDate (Get-Date).AddMonths(-1) -Verbose
+    
+    Retrieve all available login instances from remote computer "GSR-242" 
+    within the past month, displaying verbose output as well.
+
+=================================================================================
+
+#PowerShell Script Containing Function(s) Used to Retrieve Login &amp; Logout Instances from a Local or Remote Computer
+#Developer: Andrew Saraceni (saraceni@wharton.upenn.edu)
+#Date: 10/23/14
+
+function Get-LoginInstance
+{
+    &lt;#
+    .SYNOPSIS
+    Retrieves login and logout instances from a local or remote computer.
+    .DESCRIPTION
+    Retrieves all interactive and remote-based logins from a specific 
+    computer, then obtains all logouts and joins the instances together 
+    via processing.  This information is retrieved from the Security 
+    event logs on the computer, and thus can only pull data from logs 
+    that have yet to turn over.
+
+    Without parameters, a Get-LoginInstance command retrieves all logins 
+    and logouts from the local computer within the past week.
+    .PARAMETER ComputerName
+    Specifies the computer from which to pull the login/logout 
+    information.  The default value for this is the local computer.
+    .PARAMETER StartDate
+    Specifies the earliest (i.e. oldest) date from which to retrieve 
+    logins/logouts.  The default value for this is one week before the 
+    current date: (Get-Date).AddDays(-7)
+    .PARAMETER EndDate
+    Specifies the most recent date from which to retrieve logins/logouts.  
+    The default value for this is the current date.
+    .EXAMPLE
+    Get-LoginInstance
+    Retrieve all available login instances from the local computer within 
+    the past week.
+    .EXAMPLE
+    Get-LoginInstance -ComputerName "GSR-242" -StartDate (Get-Date).AddMonths(-1) -Verbose
+    Retrieve all available login instances from remote computer "GSR-242" 
+    within the past month, displaying verbose output as well.
+    .NOTES
+    This cmdlet makes use of the Get-WinEvent cmdlet, which is only 
+    available on Windows Vista, Windows Server 2008 R2 and later consumer 
+    and enterprise verisons of Windows, respectively.
+
+    Additionally, Remote Event Log Management will need to be enabled 
+    via your firewall.  The following CMD prompt command can enable this 
+    on a local computer:
+
+    netsh advfirewall firewall set rule group=”remote event log management” new enable=yes
+    #&gt;
+    
+    [CmdletBinding()]
+    param(
+        [Parameter(Position=0,Mandatory=$false)]
+        [String]$ComputerName = $env:COMPUTERNAME,
+        [Parameter(Position=1,Mandatory=$false)]
+        [DateTime]$StartDate = (Get-Date).AddDays(-7),
+        [Parameter(Position=2,Mandatory=$false)]
+        [DateTime]$EndDate = (Get-Date)
+    )
+
+    function Get-LoginData
+    {
+        param($ComputerName,$StartDate,$EndDate)
+        
+        Write-Verbose "Getting Login Data from $ComputerName..."
+        [Int32[]]$loginID = @(4624)
+
+        try
+        {
+            $loginEvents = Get-WinEvent -ComputerName $ComputerName -FilterHashtable @{ LogName="Security"; ID=$loginID; StartTime=$StartDate; EndTime=$EndDate } -ErrorAction Stop
+        }
+        catch
+        {
+            Set-Variable -Name catchError -Value $_
+            if ($catchError -match "No events were found that match the specified selection criteria.")
+            {
+                Write-Warning "No Login Events Found - Ending Login Collection"
+            }
+        }
+
+        Write-Verbose "Converting Logins to XML &amp; Parsing Data for Better Readability..."
+        foreach ($loginEvent in $loginEvents)
+        {
+            $xmlLoginEvent = [Xml]$loginEvent.ToXml()
+
+            for ($i=0; $i -lt $xmlLoginEvent.Event.EventData.Data.Count; $i++)
+            {            
+                Add-Member -InputObject $loginEvent -MemberType NoteProperty -Name $xmlLoginEvent.Event.EventData.Data[$i].Name -Value $xmlLoginEvent.Event.EventData.Data[$i]."#Text" -Force
+            }
+        }
+
+        $revisedLoginEvents = @()
+        $xmlLoginEvents = $loginEvents | Where-Object { (($_.LogonType -eq "2") -or ($_.LogonType -eq "10")) -and ($_.TargetDomainName -ne "Window Manager") } | Select-Object -Property *
+        foreach ($xmlLoginEvent in $xmlLoginEvents)
+        {
+            switch ($xmlLoginEvent.LogonType)
+            {
+                "2" {
+                    $xmlLoginEvent.LogonType = "Login-Interactive"
+                }
+                "10" {
+                    $xmlLoginEvent.LogonType = "Login-Remote"
+                }
+            }
+            
+            if (($xmlLoginEvent.IpAddress -eq "127.0.0.1") -or ($xmlLoginEvent.IpAddress -eq "::1"))
+            {
+                $xmlLoginEvent.IpAddress = $null
+            }
+
+            if ($xmlLoginEvent.IpPort -eq "0")
+            {
+                $xmlLoginEvent.IpPort = $null
+            }
+            
+            $revisedLoginEvents += $xmlLoginEvent
+        }
+        
+        return $revisedLoginEvents
+    }
+
+    function Get-LogoutData
+    {
+        param($ComputerName,$StartDate,$EndDate)
+
+        Write-Verbose "Getting Logout Data from $ComputerName..."
+        [Int32[]]$logoutID = @(4647)
+
+        try
+        {
+            $logoutEvents = Get-WinEvent -ComputerName $ComputerName -FilterHashtable @{ LogName="Security"; ID=$logoutID; StartTime=$startDate; EndTime=$endDate } -ErrorAction Stop
+        }
+        catch
+        {
+            Set-Variable -Name catchError -Value $_
+            if ($catchError -match "No events were found that match the specified selection criteria.")
+            {
+                Write-Warning "No Logout Events Found - Ending Logout Collection"
+            }
+        }
+
+        Write-Verbose "Converting Logouts to XML &amp; Parsing Data for Better Readability..."
+        foreach ($logoutEvent in $logoutEvents)
+        {
+            $xmlLogoutEvent = [Xml]$logoutEvent.ToXml()
+
+            for ($i=0; $i -lt $xmlLogoutEvent.Event.EventData.Data.Count; $i++)
+            {            
+                Add-Member -InputObject $logoutEvent -MemberType NoteProperty -Name $xmlLogoutEvent.Event.EventData.Data[$i].name -Value $xmlLogoutEvent.Event.EventData.Data[$i]."#Text" -Force
+            }
+        }
+        
+        $revisedLogoutEvents = @()
+        $xmlLogoutEvents = $logoutEvents | Select-Object -Property *
+        foreach ($xmlLogoutEvent in $xmlLogoutEvents)
+        {
+            Add-Member -InputObject $xmlLogoutEvent -MemberType NoteProperty -Name "WorkstationName" -Value $ComputerName -Force
+
+            $revisedLogoutEvents += $xmlLogoutEvent
+        }
+        
+        return $revisedLogoutEvents
+    }
+
+    $finalLoginEvents = Get-LoginData -ComputerName $ComputerName -StartDate $StartDate -EndDate $EndDate
+    $finalLogoutEvents = Get-LogoutData -ComputerName $ComputerName -StartDate $StartDate -EndDate $EndDate
+
+    Write-Verbose "Creating Final Collection of Revised Login and Logout Instance Data..."
+    $loginInstances = @()
+
+    foreach ($finalLoginEvent in $finalLoginEvents)
+    {
+        $instanceProperties = @{
+            ComputerName = $finalLoginEvent.WorkstationName
+            UserName = $finalLoginEvent.TargetUserName
+            AccountDomain = $finalLoginEvent.TargetDomainName
+            LoginTime = $finalLoginEvent.TimeCreated
+            LogoutTime = $null
+            TargetLogonID = $finalLoginEvent.TargetLogonID
+            Days = $null
+            Hours = $null
+            Minutes = $null
+            Seconds = $null
+            SessionType = $finalLoginEvent.LogonType
+            LoginIpAddress = $finalLoginEvent.IpAddress
+            LoginIpPort = $finalLoginEvent.IpPort
+            LogonGuid = $finalLoginEvent.LogonGuid
+        }
+
+        $loginInstance = New-Object -TypeName PSObject -Property $instanceProperties
+
+        foreach ($finalLogoutEvent in $finalLogoutEvents)
+        {
+            if (($finalLogoutEvent.WorkstationName -eq $finalLoginEvent.WorkstationName) -and ($finalLogoutEvent.TargetUserName -eq $finalLoginEvent.TargetUserName) -and ($finalLogoutEvent.TargetLogonID -eq $finalLoginEvent.TargetLogonID))
+            {
+                $loginInstance.LogoutTime = $finalLogoutEvent.TimeCreated
+                $loginInstance.Days = (New-TimeSpan -Start $finalLoginEvent.TimeCreated -End $finalLogoutEvent.TimeCreated).Days
+                $loginInstance.Hours = (New-TimeSpan -Start $finalLoginEvent.TimeCreated -End $finalLogoutEvent.TimeCreated).Hours
+                $loginInstance.Minutes = (New-TimeSpan -Start $finalLoginEvent.TimeCreated -End $finalLogoutEvent.TimeCreated).Minutes
+                $loginInstance.Seconds = (New-TimeSpan -Start $finalLoginEvent.TimeCreated -End $finalLogoutEvent.TimeCreated).Seconds
+            }
+        }
+
+        $loginInstances += $loginInstance
+    }
+
+    $fullLoginInstances = $loginInstances | Where-Object { $_.LogoutTime -ne $null }
+    $partialLoginInstances = $loginInstances | Where-Object { $_.LogoutTime -eq $null } | Sort-Object -Property LoginTime -Descending -Unique
+
+    $fullLoginInstanceLoginTimes = $fullLoginInstances | Select-Object -ExpandProperty LoginTime
+    $filteredPartialLoginInstances = @()
+    
+    foreach ($partialLoginInstance in $partialLoginInstances)
+    {
+        if ($fullLoginInstanceLoginTimes -notcontains $partialLoginInstance.LoginTime)
+        {
+            $filteredPartialLoginInstances += $partialLoginInstance
+        }
+    }
+
+    $finalLoginInstances = @($fullLoginInstances) + @($filteredPartialLoginInstances) | Sort-Object -Property LoginTime -Descending -Unique
+
+    return $finalLoginInstances | Select-Object -Property ComputerName, UserName, AccountDomain, LoginTime, LogoutTime, TargetLogonID, Days, Hours, Minutes, Seconds, SessionType, LoginIpAddress, LoginIpPort, LogonGuid
+}</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Event_Logs</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>Filter_and_Search_</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Event_Logs</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>Filter_and_Search_</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>https://4sysops.com/archives/search-the-event-log-with-the-get-winevent-powershell-cmdlet/
+
+NOTE: Get-WinEvent does NOT show the message field very well
+HOWEVER Get-EventLog does show the message field
+
+-------------------------------------------------------------------
+-------------------
+Log = Application
+Source = UltraVNC
+Event ID = 1 
+Task Category = (1)
+----------------------
+ Get-EventLog -Log "Application" -Source "ultraVNC" | Select * | where {$_.eventID -eq 1} | Out-GridView
+---------------------------------------------------------------------
+
+
+
+
+'Single Event
+Get-WinEvent -FilterHashTable @{LogName='System';ID='1020'}
+
+'Multiple Events
+Get-WinEvent -FilterHashTable @{LogName='System';ID='1','42'}
+
+
+'With specific Information Level
+Get-WinEvent -FilterHashTable @{LogName='System';Level='2'}
+
+'Events with messages containing specific words
+Get-WinEvent -FilterHashtable @{LogName='System'} | Where-Object -Property Message -Match 'the system has resumed'
+
+'Events with a specific date or time
+ --------------------------------------
+'The following command stores "2017 January 1st at 15:30" into a $StartTime variable:
+$StartTime=Get-Date -Year 2017 -Month 1 -Day 1 -Hour 15 -Minute 30
+'And the next command stores "2017 February 15th at 20:00" into $EndTime:
+$EndTime=Get-Date -Year 2017 -Month 2 -Day 15 -Hour 20 -Minute 00
+
+'The second step is to specify the StartTime and/or EndTime keys in the hash table. 
+'The following example uses the variables we created above to display only 
+'System events generated between these two dates:
+
+Get-WinEvent -FilterHashtable @{LogName='System';StartTime=$StartTime;EndTime=$EndTime}
+
+----------------------------------------------------------------------------------------------
+'You can also combine several keys in the hash table. 
+'The next example displays the five most recent Error events 
+	'from the System log, 
+	'generated after a specified date 
+	'with the ID 10010:
+'Please note that if you use the MaxEvents parameter, it always has to stay outside the hash table.
+Get-WinEvent -FilterHashtable @{LogName='System';StartTime=$StartDate;Level='2';ID='10010'} -MaxEvents 5
+
+
+-----------------------------------------------------------------------------------------
+The whole message
+-------------------
+'While the default display format (as a table) is useful to give an overview of all selected events,
+' the event message is usually truncated.
+' In this case, you can just pipe the result to the Format-List cmdlet:
+
+Get-WinEvent -LogName System -MaxEvents 5 | Format-List
+
+-----------------------------------------------------------------------------------------------
+A specific event
+------------------
+'The trick here is to display them and then use an additional property containing the record number of every event. 
+'This record number is a unique identifier for each event.
+'The first step is to use the Format-Table cmdlet and specify the RecordId property 
+'in addition to all other properties. 
+'For example, the next command displays the RecordId property as the first column:
+
+Get-WinEvent -FilterHashtable @{LogName='Security';Keywords='4503599627370496'} | Format-Table -Property RecordId,TimeCreated,ID,LevelDisplayName,Message
+
+'The second step is to launch the Get-WinEvent cmdlet again 
+'and pipe the result to the Where-Object cmdlet while specifying the RecordId number:
+
+Get-WinEvent -FilterHashtable @{LogName='Security'} |Where-Object ‑Property RecordId -eq 810
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_JSON</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>example_read_multiple_files_read_data_DoCalculations</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_JSON</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>example_read_multiple_files_read_data_DoCalculations</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>#requires -version 5.0
+
+&lt;#
+JSON Processing script for Toolmaking book
+
+Process the directory of JSON files and create a summary report in the
+form of an object with these properties:
+
+    Number of files processed
+    Total number of items processed
+    Average number of items processed
+    Total number of Errors
+    Average number of Errors
+    Total number of Warnings
+    Average number of Warnings
+    StartDate (the earliest run date value)
+    EndDate (the last run date value)
+
+#&gt;
+
+[cmdletbinding()]
+Param(
+[Parameter(Position = 0, Mandatory, HelpMessage = "Enter the path with the json test data")]
+[ValidateNotNullorEmpty()]    
+[string]$Path
+)
+
+Write-Verbose "Starting $($MyInvocation.MyCommand)"
+
+Write-Verbose "Processing files from $Path"
+
+$files = Get-ChildItem -Path $path -Filter *.dat
+
+Write-Verbose "Found $($files.count) files."
+$data = foreach ($file in $files) {
+    Write-Verbose "Converting $($file.name)"
+    Get-Content -Path $file.fullname | ConvertFrom-Json |
+    Select-Object @{Name="Date";Expression={$_.RunDate -as [datetime]}},
+    Errors,Warnings,@{name = "ItemCount"; expression = {$_.'Items processed'}}
+}
+
+#sort the data to get the first and last dates
+$sorted = $data | Sort-Object Date 
+$first =  $sorted[0].Date
+$last = $sorted[-1].Date
+
+Write-Verbose "Measuring data"
+# The $stats variable will be an array of measurements for each property
+$stats = $data | Measure-Object errors,warnings,ItemCount -sum -average
+
+Write-Verbose "Creating summary result"
+[PSCustomObject]@{
+    NumberFiles = $data.count
+    TotalItemsProcessed = $stats[2].sum
+    AverageItemsProcessed = $stats[2].Average
+    TotalErrors = $stats[0].sum
+    AverageErrors = $stats[0].average
+    TotalWarnings = $stats[1].sum
+    AverageWarnings = $stats[1].Average
+    StartDate = $first
+    EndDate = $last
+}
+
+Write-Verbose "Ending $($MyInvocation.MyCommand)"
+
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_MISC</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>URL_WSDL_LookUp</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_MISC</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>URL_WSDL_LookUp</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>https://www.reddit.com/r/sysadmin/comments/2ls3ny/best_way_to_find_computer_age/
+
+The basic to get the warranty info back from Dell, though is:
+$Serial="XYZ" #(Would likely pipe this from a list or WMI
+$proxy = New-WebServiceProxy -URI "http://xserv.dell.com/services/assetservice.asmx?WSDL" if (!$?) { Write-Error "Error accessing webservice" -warning; continue } $proxy.Url = "http://xserv.dell.com/services/AssetService.asmx" $WarrantyInformation = $proxy.GetAssetInformation(([guid]::NewGuid()).Guid, 'DellWarranty', $Serial) | Select-Object -ExpandProperty Entitlements
+$WarrantyInformation.startdate | sort -unique | select -first 1
+
+
+--==============
+
+
+Workaround appears to be registering with techdirect.dell.com ( https://techdirect.dell.com/portal.30/Login.aspx ) and receiving an API key.
+Then you can run something like:
+Invoke-RestMethod -URI "https://api.dell.com/support/v2/assetinfo/header/tags.xml?svcta</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Network_subnet_IP_DNS_etc</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>Computer_Age_using_WSDL_Lookup</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Network_subnet_IP_DNS_etc</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>Computer_Age_using_WSDL_Lookup</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>https://www.reddit.com/r/sysadmin/comments/2ls3ny/best_way_to_find_computer_age/
+
+
+'http://poshcode.org/4121 is a script I had at some point, though I'd use the below over that. I think the one I actually use now is slightly different but same API, I merged my HP and Dell lookups.
+'The basic to get the warranty info back from Dell, though is:
+
+$Serial="XYZ" #(Would likely pipe this from a list or WMI
+$proxy = New-WebServiceProxy -URI "http://xserv.dell.com/services/assetservice.asmx?WSDL" if (!$?) { Write-Error "Error accessing webservice" -warning; continue } $proxy.Url = "http://xserv.dell.com/services/AssetService.asmx" $WarrantyInformation = $proxy.GetAssetInformation(([guid]::NewGuid()).Guid, 'DellWarranty', $Serial) | Select-Object -ExpandProperty Entitlements
+$WarrantyInformation.startdate | sort -unique | select -first 1
+
+'the last line would then give you your start date of your Dell warranty. You could pipe the list of serial #s by querying AD and polling each for WMI, but the preferred way in this case would be a list of system serial #s that you may have from another system, as then you wouldn't be dependent upon that system actually being online at the time to do the lookup of serial #. I have a powershell script to do similar w/ HP but it's a lot more involved.
+'I personally use this for almost the same purpose--aging systems that are up for replacement--but we go by warranty expiration so it's the opposite date I am looking at. The only caveat on that end w/ Dell lookups is they include a super-long "Dell Digitial Delivery" period with a service level code "D" and "dell" entitlement type comes back with code "DL" that's also just a few days after the end of all entitlements; so you have to exclude warranty types with servicelevelcode set to "DL" or "D" to be really accurate. For start date it shouldn't matter, though.</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>VBA_OUTLOOK</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name> info on currently selected email using the Outlook Object Model</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>VBA_OUTLOOK</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name> info on currently selected email using the Outlook Object Model</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>Option Explicit
+
+' VBA Script that gets info on the currently selected email using the Outlook Object Model
+' (see other scripts a http://www.GregThatcher.com for other ways to get email properties)
+' Use Tools-&gt;Macro-&gt;Security to allow Macros to run, then restart Outlook
+' Run Outlook, Press Alt+F11 to open VBA
+' Programming by Greg Thatcher, http://www.GregThatcher.com
+
+Public Sub GetCurrentEmailInfo()
+    Dim Session As Outlook.NameSpace
+    Dim currentExplorer As Explorer
+    Dim Selection As Selection
+    Dim currentItem As Object
+    Dim currentMail As MailItem
+    Dim report As String
+    Dim currentAction As Action
+    Dim currentConflict As Conflict
+    Dim currentLink As Link
+    Dim currentRecipient As Recipient
+    
+    Set currentExplorer = Application.ActiveExplorer
+    Set Selection = currentExplorer.Selection
+    
+    'for all items do...
+    For Each currentItem In Selection
+        If currentItem.Class = olMail Then
+            Set currentMail = currentItem
+            report = report &amp; AddToReportIfNotBlank("EntryID: ", currentMail.entryID) &amp; vbCrLf
+            report = report &amp; "Actions: " &amp; vbCrLf
+            For Each currentAction In currentMail.Actions
+                report = report &amp; vbTab &amp; currentAction.Name &amp; vbCrLf
+            Next
+            report = report &amp; vbCrLf
+            
+            report = report &amp; AddToReportIfNotBlank("AlternateRecipientAllowed: ", currentMail.AlternateRecipientAllowed)
+            report = report &amp; AddToReportIfNotBlank("Application: ", currentMail.Application.Name)
+            report = report &amp; AddToReportIfNotBlank("AutoForwarded: ", currentMail.AutoForwarded)
+            report = report &amp; AddToReportIfNotBlank("AutoResolvedWinner: ", currentMail.AutoResolvedWinner)
+            report = report &amp; AddToReportIfNotBlank("BCC: ", currentMail.BCC)
+            report = report &amp; AddToReportIfNotBlank("BillingInformation: ", currentMail.BillingInformation)
+            report = report &amp; AddToReportIfNotBlank("BodyFormat: ", currentMail.BodyFormat)
+            
+            report = report &amp; AddToReportIfNotBlank("Categories: ", currentMail.Categories)
+            report = report &amp; AddToReportIfNotBlank("CC: ", currentMail.CC)
+            report = report &amp; AddToReportIfNotBlank("Class: ", currentMail.Application.Class)
+            report = report &amp; AddToReportIfNotBlank("Companies: ", currentMail.Companies)
+            
+            If currentMail.Conflicts.Count &gt; 0 Then
+                report = report &amp; "Conflicts: " &amp; vbCrLf
+                For Each currentConflict In currentMail.Conflicts
+                    report = report &amp; vbTab &amp; currentConflict.Name &amp; vbCrLf
+                Next
+                report = report &amp; vbCrLf
+            End If
+            
+            
+            report = report &amp; AddToReportIfNotBlank("ConversationIndex: ", currentMail.ConversationIndex)
+            report = report &amp; AddToReportIfNotBlank("ConversationTopic: ", currentMail.ConversationTopic)
+            report = report &amp; AddToReportIfNotBlank("CreationTime: ", currentMail.CreationTime)
+            report = report &amp; AddToReportIfNotBlank("DeferredDeliveryTime: ", currentMail.DeferredDeliveryTime)
+            
+            report = report &amp; AddToReportIfNotBlank("DeleteAfterSubmit: ", currentMail.DeleteAfterSubmit)
+            report = report &amp; AddToReportIfNotBlank("DownloadState: ", currentMail.DownloadState)
+            report = report &amp; AddToReportIfNotBlank("Entry ID: ", currentMail.entryID)
+
+            report = report &amp; AddToReportIfNotBlank("ExpiryTime: ", currentMail.ExpiryTime)
+            report = report &amp; AddToReportIfNotBlank("FlagRequest: ", currentMail.FlagRequest)
+            report = report &amp; AddToReportIfNotBlank("FormDescription: ", currentMail.FormDescription)
+            report = report &amp; AddToReportIfNotBlank("Importance: ", currentMail.Importance)
+            report = report &amp; AddToReportIfNotBlank("InternetCodepage: ", currentMail.InternetCodepage)
+            report = report &amp; AddToReportIfNotBlank("IsConflict: ", currentMail.IsConflict)
+            ' Not available for Outlook 2003
+            'report = report &amp; AddToReportIfNotBlank("IsMarkedAsTask: ", currentMail.IsMarkedAsTask)
+            'report = report &amp; AddToReportIfNotBlank("LastModificationTime: ", currentMail.ItemProperties)
+
+            report = report &amp; AddToReportIfNotBlank("LastModificationTime: ", currentMail.LastModificationTime)
+            
+            'If currentMail.Links.Count &gt; 0 Then
+            '    report = report &amp; "Links: " &amp; vbCrLf
+            '    For Each currentLink In currentMail.Links
+            '        report = report &amp; vbTab &amp; currentLink.Name &amp; vbCrLf
+            '    Next
+            '    report = report &amp; vbCrLf
+            'End If
+
+            report = report &amp; AddToReportIfNotBlank("MarkForDownload: ", currentMail.MarkForDownload)
+            report = report &amp; AddToReportIfNotBlank("MessageClass: ", currentMail.MessageClass)
+            report = report &amp; AddToReportIfNotBlank("Mileage: ", currentMail.Mileage)
+            report = report &amp; AddToReportIfNotBlank("NoAging: ", currentMail.NoAging)
+            report = report &amp; AddToReportIfNotBlank("OriginatorDeliveryReportRequested: ", currentMail.OriginatorDeliveryReportRequested)
+            report = report &amp; AddToReportIfNotBlank("OutlookInternalVersion: ", currentMail.OutlookInternalVersion)
+            report = report &amp; AddToReportIfNotBlank("OutlookVersion: ", currentMail.OutlookVersion)
+            report = report &amp; AddToReportIfNotBlank("Permission: ", currentMail.Permission)
+            report = report &amp; AddToReportIfNotBlank("PermissionService: ", currentMail.PermissionService)
+            'report = report &amp; AddToReportIfNotBlank("Permission: ", currentMail.PropertyAccessor)
+            report = report &amp; AddToReportIfNotBlank("ReadReceiptRequested: ", currentMail.ReadReceiptRequested)
+            'report = report &amp; AddToReportIfNotBlank("ReceivedByEntryID: ", currentMail.ReceivedByEntryID)
+            report = report &amp; AddToReportIfNotBlank("ReceivedByName: ", currentMail.ReceivedByName)
+            'report = report &amp; AddToReportIfNotBlank("ReceivedOnBehalfOfEntryID: ", currentMail.ReceivedOnBehalfOfEntryID)
+            report = report &amp; AddToReportIfNotBlank("ReceivedOnBehalfOfName: ", currentMail.ReceivedOnBehalfOfName)
+            report = report &amp; AddToReportIfNotBlank("ReceivedTime: ", currentMail.ReceivedTime)
+            report = report &amp; AddToReportIfNotBlank("RecipientReassignmentProhibited: ", currentMail.RecipientReassignmentProhibited)
+            
+            report = report &amp; "Recipients: " &amp; vbCrLf
+            For Each currentRecipient In currentMail.Recipients
+                report = report &amp; vbTab &amp; "Name: " &amp; currentRecipient.Name &amp; vbCrLf
+                report = report &amp; vbTab &amp; vbTab &amp; "Address: " &amp; currentRecipient.Address &amp; vbCrLf
+                report = report &amp; vbTab &amp; vbTab &amp; "AddressEntry: " &amp; currentRecipient.AddressEntry &amp; vbCrLf
+                report = report &amp; vbTab &amp; vbTab &amp; "AutoResponse: " &amp; currentRecipient.AutoResponse &amp; vbCrLf
+                report = report &amp; vbTab &amp; vbTab &amp; "Class: " &amp; currentRecipient.Class &amp; vbCrLf
+                'report = report &amp; vbTab &amp; vbTab &amp; "DisplayType: " &amp; currentRecipient.DisplayType &amp; vbCrLf
+                report = report &amp; vbTab &amp; vbTab &amp; "EntryID: " &amp; currentRecipient.entryID &amp; vbCrLf
+                report = report &amp; vbTab &amp; vbTab &amp; "Index: " &amp; currentRecipient.Index &amp; vbCrLf
+                report = report &amp; vbTab &amp; vbTab &amp; "MeetingResponseStatus: " &amp; currentRecipient.MeetingResponseStatus &amp; vbCrLf
+                'report = report &amp; vbTab &amp; vbTab &amp; "Parent: " &amp; currentRecipient.Parent &amp; vbCrLf
+                'report = report &amp; vbTab &amp; vbTab &amp; "PropertyAccessor: " &amp; currentRecipient.PropertyAccessor &amp; vbCrLf
+                report = report &amp; vbTab &amp; vbTab &amp; "Resolved: " &amp; currentRecipient.Resolved &amp; vbCrLf
+                'report = report &amp; vbTab &amp; vbTab &amp; "Session: " &amp; currentRecipient.Session &amp; vbCrLf
+                report = report &amp; vbTab &amp; vbTab &amp; "TrackingStatus: " &amp; currentRecipient.TrackingStatus &amp; vbCrLf
+                report = report &amp; vbTab &amp; vbTab &amp; "TrackingStatusTime: " &amp; currentRecipient.TrackingStatusTime &amp; vbCrLf
+                report = report &amp; vbTab &amp; vbTab &amp; "Type: " &amp; currentRecipient.Type &amp; vbCrLf
+            Next
+            report = report &amp; vbCrLf
+
+            report = report &amp; AddToReportIfNotBlank("ReminderOverrideDefault: ", currentMail.ReminderOverrideDefault)
+            report = report &amp; AddToReportIfNotBlank("ReminderPlaySound: ", currentMail.ReminderPlaySound)
+            report = report &amp; AddToReportIfNotBlank("ReminderSet: ", currentMail.ReminderSet)
+            report = report &amp; AddToReportIfNotBlank("ReminderSoundFile: ", currentMail.ReminderSoundFile)
+            report = report &amp; AddToReportIfNotBlank("ReminderTime: ", currentMail.ReminderTime)
+            report = report &amp; AddToReportIfNotBlank("ReminderTime: ", currentMail.RemoteStatus)
+
+            report = report &amp; AddToReportIfNotBlank("ReplyRecipientNames: ", currentMail.ReplyRecipientNames)
+            
+            If currentMail.ReplyRecipients.Count &gt; 0 Then
+                report = report &amp; "ReplyRecipients: " &amp; vbCrLf
+                For Each currentRecipient In currentMail.ReplyRecipients
+                    report = report &amp; vbTab &amp; "Name: " &amp; currentRecipient.Name &amp; vbCrLf
+                    report = report &amp; vbTab &amp; vbTab &amp; "Address: " &amp; currentRecipient.Address &amp; vbCrLf
+                    report = report &amp; vbTab &amp; vbTab &amp; "AddressEntry: " &amp; currentRecipient.AddressEntry &amp; vbCrLf
+                    report = report &amp; vbTab &amp; vbTab &amp; "AutoResponse: " &amp; currentRecipient.AutoResponse &amp; vbCrLf
+                    report = report &amp; vbTab &amp; vbTab &amp; "Class: " &amp; currentRecipient.Class &amp; vbCrLf
+                    report = report &amp; vbTab &amp; vbTab &amp; "DisplayType: " &amp; currentRecipient.DisplayType &amp; vbCrLf
+                    report = report &amp; vbTab &amp; vbTab &amp; "EntryID: " &amp; currentRecipient.entryID &amp; vbCrLf
+                    report = report &amp; vbTab &amp; vbTab &amp; "Index: " &amp; currentRecipient.Index &amp; vbCrLf
+                    report = report &amp; vbTab &amp; vbTab &amp; "MeetingResponseStatus: " &amp; currentRecipient.MeetingResponseStatus &amp; vbCrLf
+                    'report = report &amp; vbTab &amp; vbTab &amp; "Parent: " &amp; currentRecipient.Parent &amp; vbCrLf
+                    'report = report &amp; vbTab &amp; vbTab &amp; "PropertyAccessor: " &amp; currentRecipient.PropertyAccessor &amp; vbCrLf
+                    report = report &amp; vbTab &amp; vbTab &amp; "Resolved: " &amp; currentRecipient.Resolved &amp; vbCrLf
+                    'report = report &amp; vbTab &amp; vbTab &amp; "Session: " &amp; currentRecipient.Session &amp; vbCrLf
+                    report = report &amp; vbTab &amp; vbTab &amp; "TrackingStatus: " &amp; currentRecipient.TrackingStatus &amp; vbCrLf
+                    report = report &amp; vbTab &amp; vbTab &amp; "TrackingStatusTime: " &amp; currentRecipient.TrackingStatusTime &amp; vbCrLf
+                    report = report &amp; vbTab &amp; vbTab &amp; "Type: " &amp; currentRecipient.Type &amp; vbCrLf
+                Next
+                report = report &amp; vbCrLf
+            End If
+            
+            
+            report = report &amp; AddToReportIfNotBlank("Saved: ", currentMail.Saved)
+            report = report &amp; AddToReportIfNotBlank("Subject: ", currentMail.Subject)
+            report = report &amp; AddToReportIfNotBlank("Submitted: ", currentMail.Submitted)
+            ' Not Available for Outlook 2003
+            'report = report &amp; AddToReportIfNotBlank("TaskCompletedDate: ", currentMail.TaskCompletedDate)
+            ' Not Available for Outlook 2003
+            'report = report &amp; AddToReportIfNotBlank("TaskDueDate: ", currentMail.TaskDueDate)
+            ' Not Available for Outlook 2003
+            'report = report &amp; AddToReportIfNotBlank("TaskStartDate: ", currentMail.TaskStartDate)
+            ' Not Available for Outlook 2003
+            'report = report &amp; AddToReportIfNotBlank("TaskSubject: ", currentMail.TaskSubject)
+            report = report &amp; AddToReportIfNotBlank("To: ", currentMail.To)
+            ' Not Available for Outlook 2003
+            ' report = report &amp; AddToReportIfNotBlank("ToDoTaskOrdinal: ", currentMail.ToDoTaskOrdinal)
+            report = report &amp; AddToReportIfNotBlank("UnRead: ", currentMail.UnRead)
+            'report = report &amp; AddToReportIfNotBlank("UserProperties: ", currentMail.UserProperties)
+            report = report &amp; AddToReportIfNotBlank("VotingOptions: ", currentMail.VotingOptions)
+            report = report &amp; AddToReportIfNotBlank("VotingResponse: ", currentMail.VotingResponse)
+            
+            report = report &amp; vbCrLf
+            report = report &amp; vbCrLf
+            report = report &amp; "Body: " &amp; vbCrLf
+            report = report &amp; currentMail.Body &amp; vbCrLf
+            report = report &amp; vbCrLf
+            report = report &amp; vbCrLf
+            report = report &amp; "HTML Body: " &amp; vbCrLf
+            report = report &amp; currentMail.HTMLBody &amp; vbCrLf
+            report = report &amp; vbCrLf
+            report = report &amp; vbCrLf
+            report = report &amp; vbCrLf
+            report = report &amp; vbCrLf
+        End If
+    Next
+    
+    Call CreateReportAsEmail("Current Email Report", report)
+    
+End Sub
+
+Private Function AddToReportIfNotBlank(FieldName As String, FieldValue As String)
+    AddToReportIfNotBlank = ""
+    If (FieldValue &lt;&gt; "") Then
+        AddToReportIfNotBlank = FieldName &amp; " : " &amp; FieldValue &amp; vbCrLf
+    End If
+    
+End Function
+
+' VBA SubRoutine which displays a report inside an email
+' Programming by Greg Thatcher, http://www.GregThatcher.com
+Public Sub CreateReportAsEmail(Title As String, report As String)
+    On Error GoTo On_Error
+
+    Dim Session As Outlook.NameSpace
+    Dim mail As MailItem
+    Dim MyAddress As AddressEntry
+    Dim Inbox
+
+    Set Session = Application.Session
+    Set Inbox = Session.GetDefaultFolder(olFolderInbox)
+    Set mail = Inbox.Items.Add("IPM.Mail")
+
+    mail.Subject = Title
+    mail.Body = report
+
+    mail.Save
+    mail.Display
+    
+
+Exiting:
+        Set Session = Nothing
+        Exit Sub
+
+On_Error:
+    MsgBox "error=" &amp; Err.Number &amp; " " &amp; Err.Description
+    Resume Exiting
+
+End Sub</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>VBA_OUTLOOK</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>list of Outlook Contacts using the Outlook Object Model</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>VBA_OUTLOOK</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>list of Outlook Contacts using the Outlook Object Model</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>Option Explicit
+
+' VBA Script that gets list of Outlook Contacts
+' Use Tools-&gt;Macro-&gt;Security to allow Macros to run, then restart Outlook
+' Run Outlook, Press Alt+F11 to open VBA
+' Programming by Greg Thatcher, http://www.GregThatcher.com
+' (see other scripts at http://www.GregThatcher.com for other ways to get contact properties)
+Public Sub GetListOfContacts()
+    On Error GoTo On_Error
+    
+    Dim Session As Outlook.NameSpace
+    Dim Report As String
+    Dim ContactFolder As Outlook.Folder
+    Dim currentItem As Object
+    Dim currentContact As ContactItem
+    Set Session = Application.Session
+    
+    Set ContactFolder = Session.GetDefaultFolder(olFolderContacts)
+    
+    For Each currentItem In ContactFolder.Items
+        If (currentItem.Class = olContact) Then
+            Set currentContact = currentItem
+            
+            
+            Report = Report &amp; AddToReportIfNotBlank("Full Name", currentContact.FullName)
+            Report = Report &amp; AddToReportIfNotBlank("Account", currentContact.Account)
+            'Report = Report &amp; AddToReportIfNotBlank("Anniversary", currentContact.Anniversary)
+            Report = Report &amp; AddToReportIfNotBlank("AssistantName", currentContact.AssistantName)
+            Report = Report &amp; AddToReportIfNotBlank("AssistantTelephoneNumber", currentContact.AssistantTelephoneNumber)
+            Report = Report &amp; AddToReportIfNotBlank("BillingInformation", currentContact.BillingInformation)
+            'Report = Report &amp; AddToReportIfNotBlank("Birthday", currentContact.Birthday)
+            Report = Report &amp; AddToReportIfNotBlank("Body", currentContact.Body)
+            Report = Report &amp; AddToReportIfNotBlank("Business2TelephoneNumber", currentContact.Business2TelephoneNumber)
+            Report = Report &amp; AddToReportIfNotBlank("BusinessAddress", currentContact.BusinessAddress)
+            Report = Report &amp; AddToReportIfNotBlank("BusinessAddressCity", currentContact.BusinessAddressCity)
+            Report = Report &amp; AddToReportIfNotBlank("BusinessAddressCountry", currentContact.BusinessAddressCountry)
+            Report = Report &amp; AddToReportIfNotBlank("BusinessAddressPostalCode", currentContact.BusinessAddressPostalCode)
+            Report = Report &amp; AddToReportIfNotBlank("BusinessAddressPostOfficeBox", currentContact.BusinessAddressPostOfficeBox)
+            Report = Report &amp; AddToReportIfNotBlank("BusinessAddressState", currentContact.BusinessAddressState)
+            Report = Report &amp; AddToReportIfNotBlank("BusinessAddressStreet", currentContact.BusinessAddressStreet)
+            'Report = Report &amp; AddToReportIfNotBlank("BusinessCardLayoutXml", currentContact.BusinessCardLayoutXml)
+            Report = Report &amp; AddToReportIfNotBlank("BusinessCardType", currentContact.BusinessCardType)
+            Report = Report &amp; AddToReportIfNotBlank("BusinessFaxNumber", currentContact.BusinessFaxNumber)
+            Report = Report &amp; AddToReportIfNotBlank("BusinessHomePage", currentContact.BusinessHomePage)
+            Report = Report &amp; AddToReportIfNotBlank("BusinessTelephoneNumber", currentContact.BusinessTelephoneNumber)
+            Report = Report &amp; AddToReportIfNotBlank("CallbackTelephoneNumber", currentContact.CallbackTelephoneNumber)
+            Report = Report &amp; AddToReportIfNotBlank("CarTelephoneNumber", currentContact.CarTelephoneNumber)
+            Report = Report &amp; AddToReportIfNotBlank("Categories", currentContact.Categories)
+            Report = Report &amp; AddToReportIfNotBlank("Children", currentContact.Children)
+            Report = Report &amp; AddToReportIfNotBlank("Companies", currentContact.Companies)
+            Report = Report &amp; AddToReportIfNotBlank("CompanyAndFullName", currentContact.CompanyAndFullName)
+            Report = Report &amp; AddToReportIfNotBlank("CompanyLastFirstNoSpace", currentContact.CompanyLastFirstNoSpace)
+            Report = Report &amp; AddToReportIfNotBlank("CompanyLastFirstSpaceOnly", currentContact.CompanyLastFirstSpaceOnly)
+            Report = Report &amp; AddToReportIfNotBlank("CompanyMainTelephoneNumber", currentContact.CompanyMainTelephoneNumber)
+            Report = Report &amp; AddToReportIfNotBlank("CompanyName", currentContact.CompanyName)
+            Report = Report &amp; AddToReportIfNotBlank("ComputerNetworkName", currentContact.ComputerNetworkName)
+            Report = Report &amp; AddToReportIfNotBlank("ConversationIndex ", currentContact.ConversationIndex)
+            Report = Report &amp; AddToReportIfNotBlank("ConversationTopic", currentContact.ConversationTopic)
+            Report = Report &amp; AddToReportIfNotBlank("CreationTime", currentContact.CreationTime)
+            Report = Report &amp; AddToReportIfNotBlank("CustomerID", currentContact.CustomerID)
+            Report = Report &amp; AddToReportIfNotBlank("Department", currentContact.Department)
+            Report = Report &amp; AddToReportIfNotBlank("DownloadState", currentContact.DownloadState)
+            Report = Report &amp; AddToReportIfNotBlank("Email1Address", currentContact.Email1Address)
+            Report = Report &amp; AddToReportIfNotBlank("Email1AddressType", currentContact.Email1AddressType)
+            Report = Report &amp; AddToReportIfNotBlank("Email1DisplayName", currentContact.Email1DisplayName)
+            'Report = Report &amp; AddToReportIfNotBlank("Email1EntryID", currentContact.Email1EntryID)
+            Report = Report &amp; AddToReportIfNotBlank("Email2Address", currentContact.Email2Address)
+            Report = Report &amp; AddToReportIfNotBlank("Email2AddressType", currentContact.Email2AddressType)
+            Report = Report &amp; AddToReportIfNotBlank("Email2DisplayName", currentContact.Email2DisplayName)
+            Report = Report &amp; AddToReportIfNotBlank("Email2EntryID", currentContact.Email2EntryID)
+            Report = Report &amp; AddToReportIfNotBlank("Email3Address", currentContact.Email3Address)
+            Report = Report &amp; AddToReportIfNotBlank("Email3AddressType", currentContact.Email3AddressType)
+            Report = Report &amp; AddToReportIfNotBlank("Email3DisplayName ", currentContact.Email3DisplayName)
+            Report = Report &amp; AddToReportIfNotBlank("Email3EntryID ", currentContact.Email3EntryID)
+            Report = Report &amp; AddToReportIfNotBlank("EntryID", currentContact.Account)
+            Report = Report &amp; AddToReportIfNotBlank("FileAs", currentContact.FileAs)
+            Report = Report &amp; AddToReportIfNotBlank("FirstName", currentContact.FirstName)
+            Report = Report &amp; AddToReportIfNotBlank("FTPSite", currentContact.FTPSite)
+            Report = Report &amp; AddToReportIfNotBlank("FullName", currentContact.FullName)
+            Report = Report &amp; AddToReportIfNotBlank("FullNameAndCompany", currentContact.FullNameAndCompany)
+            Report = Report &amp; AddToReportIfNotBlank("Gender", currentContact.Gender)
+            Report = Report &amp; AddToReportIfNotBlank("GovernmentIDNumber", currentContact.GovernmentIDNumber)
+            Report = Report &amp; AddToReportIfNotBlank("HasPicture", currentContact.HasPicture)
+            Report = Report &amp; AddToReportIfNotBlank("Hobby", currentContact.Hobby)
+            Report = Report &amp; AddToReportIfNotBlank("Home2TelephoneNumber", currentContact.Home2TelephoneNumber)
+            Report = Report &amp; AddToReportIfNotBlank("HomeAddress ", currentContact.HomeAddress)
+            Report = Report &amp; AddToReportIfNotBlank("HomeAddressCity", currentContact.HomeAddressCity)
+            Report = Report &amp; AddToReportIfNotBlank("HomeAddressCountry", currentContact.HomeAddressCountry)
+            Report = Report &amp; AddToReportIfNotBlank("HomeAddressPostalCode ", currentContact.HomeAddressPostalCode)
+            Report = Report &amp; AddToReportIfNotBlank("HomeAddressPostOfficeBox", currentContact.HomeAddressPostOfficeBox)
+            Report = Report &amp; AddToReportIfNotBlank("HomeAddressState", currentContact.HomeAddressState)
+           
+            Report = Report &amp; AddToReportIfNotBlank("HomeAddressStreet", currentContact.HomeAddressStreet)
+            Report = Report &amp; AddToReportIfNotBlank("HomeFaxNumber", currentContact.HomeFaxNumber)
+            Report = Report &amp; AddToReportIfNotBlank("HomeTelephoneNumber", currentContact.HomeTelephoneNumber)
+            Report = Report &amp; AddToReportIfNotBlank("IMAddress", currentContact.IMAddress)
+            Report = Report &amp; AddToReportIfNotBlank("Importance", currentContact.Importance)
+            Report = Report &amp; AddToReportIfNotBlank("Initials", currentContact.Initials)
+            Report = Report &amp; AddToReportIfNotBlank("InternetFreeBusyAddress", currentContact.InternetFreeBusyAddress)
+            Report = Report &amp; AddToReportIfNotBlank("IsConflict", currentContact.IsConflict)
+            Report = Report &amp; AddToReportIfNotBlank("ISDNNumber", currentContact.ISDNNumber)
+            Report = Report &amp; AddToReportIfNotBlank("IsMarkedAsTask", currentContact.IsMarkedAsTask)
+            Report = Report &amp; AddToReportIfNotBlank("JobTitle", currentContact.JobTitle)
+            Report = Report &amp; AddToReportIfNotBlank("Journal", currentContact.Journal)
+            Report = Report &amp; AddToReportIfNotBlank("Language", currentContact.Language)
+            Report = Report &amp; AddToReportIfNotBlank("LastFirstAndSuffix", currentContact.LastFirstAndSuffix)
+            Report = Report &amp; AddToReportIfNotBlank("LastFirstNoSpace", currentContact.LastFirstNoSpace)
+            Report = Report &amp; AddToReportIfNotBlank("LastFirstNoSpaceAndSuffix", currentContact.LastFirstNoSpaceAndSuffix)
+            Report = Report &amp; AddToReportIfNotBlank("LastFirstNoSpaceCompany", currentContact.LastFirstNoSpaceCompany)
+            Report = Report &amp; AddToReportIfNotBlank("LastFirstSpaceOnly", currentContact.LastFirstSpaceOnly)
+            Report = Report &amp; AddToReportIfNotBlank("LastFirstSpaceOnlyCompany", currentContact.LastFirstSpaceOnlyCompany)
+            Report = Report &amp; AddToReportIfNotBlank("LastModificationTime", currentContact.LastModificationTime)
+            Report = Report &amp; AddToReportIfNotBlank("LastName", currentContact.LastName)
+            Report = Report &amp; AddToReportIfNotBlank("LastNameAndFirstName", currentContact.LastNameAndFirstName)
+            'Report = Report &amp; AddToReportIfNotBlank("Links", currentContact.Links)
+            Report = Report &amp; AddToReportIfNotBlank("MailingAddress", currentContact.MailingAddress)
+            Report = Report &amp; AddToReportIfNotBlank("MailingAddressCity", currentContact.MailingAddressCity)
+            Report = Report &amp; AddToReportIfNotBlank("MailingAddressCountry", currentContact.MailingAddressCountry)
+            Report = Report &amp; AddToReportIfNotBlank("MailingAddressPostalCode", currentContact.MailingAddressPostalCode)
+
+            Report = Report &amp; AddToReportIfNotBlank("MailingAddressPostOfficeBox", currentContact.MailingAddressPostOfficeBox)
+            Report = Report &amp; AddToReportIfNotBlank("MailingAddressState", currentContact.MailingAddressState)
+            Report = Report &amp; AddToReportIfNotBlank("MailingAddressStreet", currentContact.MailingAddressStreet)
+            Report = Report &amp; AddToReportIfNotBlank("ManagerName", currentContact.ManagerName)
+            Report = Report &amp; AddToReportIfNotBlank("MarkForDownload", currentContact.MarkForDownload)
+            Report = Report &amp; AddToReportIfNotBlank("MessageClass", currentContact.MessageClass)
+            Report = Report &amp; AddToReportIfNotBlank("MiddleName", currentContact.MiddleName)
+            Report = Report &amp; AddToReportIfNotBlank("Mileage", currentContact.Mileage)
+            Report = Report &amp; AddToReportIfNotBlank("MobileTelephoneNumber", currentContact.MobileTelephoneNumber)
+            Report = Report &amp; AddToReportIfNotBlank("NetMeetingAlias", currentContact.NetMeetingAlias)
+            Report = Report &amp; AddToReportIfNotBlank("NetMeetingServer", currentContact.NetMeetingServer)
+            Report = Report &amp; AddToReportIfNotBlank("NickName", currentContact.NickName)
+            Report = Report &amp; AddToReportIfNotBlank("NoAging", currentContact.NoAging)
+            Report = Report &amp; AddToReportIfNotBlank("OfficeLocation", currentContact.OfficeLocation)
+            Report = Report &amp; AddToReportIfNotBlank("OrganizationalIDNumber", currentContact.OrganizationalIDNumber)
+            Report = Report &amp; AddToReportIfNotBlank("OtherAddress", currentContact.OtherAddress)
+            Report = Report &amp; AddToReportIfNotBlank("OtherAddressCity", currentContact.OtherAddressCity)
+            Report = Report &amp; AddToReportIfNotBlank("OtherAddressCountry", currentContact.OtherAddressCountry)
+            Report = Report &amp; AddToReportIfNotBlank("OtherAddressPostalCode", currentContact.OtherAddressPostalCode)
+            Report = Report &amp; AddToReportIfNotBlank("OtherAddressPostOfficeBox", currentContact.OtherAddressPostOfficeBox)
+            Report = Report &amp; AddToReportIfNotBlank("OtherAddressState", currentContact.OtherAddressState)
+            Report = Report &amp; AddToReportIfNotBlank("OtherAddressStreet", currentContact.OtherAddressStreet)
+            Report = Report &amp; AddToReportIfNotBlank("OtherFaxNumber", currentContact.OtherFaxNumber)
+            Report = Report &amp; AddToReportIfNotBlank("OtherTelephoneNumber", currentContact.OtherTelephoneNumber)
+            Report = Report &amp; AddToReportIfNotBlank("OutlookInternalVersion", currentContact.OutlookInternalVersion)
+            Report = Report &amp; AddToReportIfNotBlank("OutlookVersion", currentContact.OutlookVersion)
+            Report = Report &amp; AddToReportIfNotBlank("PagerNumber", currentContact.PagerNumber)
+            Report = Report &amp; AddToReportIfNotBlank("PersonalHomePage", currentContact.PersonalHomePage)
+            Report = Report &amp; AddToReportIfNotBlank("PrimaryTelephoneNumber", currentContact.PrimaryTelephoneNumber)
+            Report = Report &amp; AddToReportIfNotBlank("Profession", currentContact.Profession)
+            Report = Report &amp; AddToReportIfNotBlank("RadioTelephoneNumber", currentContact.RadioTelephoneNumber)
+            Report = Report &amp; AddToReportIfNotBlank("ReferredBy", currentContact.ReferredBy)
+            Report = Report &amp; AddToReportIfNotBlank("ReminderOverrideDefault", currentContact.ReminderOverrideDefault)
+            Report = Report &amp; AddToReportIfNotBlank("ReminderPlaySound", currentContact.ReminderPlaySound)
+            Report = Report &amp; AddToReportIfNotBlank("ReminderSet", currentContact.ReminderSet)
+            Report = Report &amp; AddToReportIfNotBlank("ReminderSoundFile", currentContact.ReminderSoundFile)
+            Report = Report &amp; AddToReportIfNotBlank("ReminderTime", currentContact.ReminderTime)
+            Report = Report &amp; AddToReportIfNotBlank("Saved", currentContact.Saved)
+            Report = Report &amp; AddToReportIfNotBlank("SelectedMailingAddress", currentContact.SelectedMailingAddress)
+            Report = Report &amp; AddToReportIfNotBlank("Sensitivity", currentContact.Sensitivity)
+            Report = Report &amp; AddToReportIfNotBlank("Size", currentContact.Size)
+            Report = Report &amp; AddToReportIfNotBlank("Spouse", currentContact.Spouse)
+            Report = Report &amp; AddToReportIfNotBlank("Subject", currentContact.Subject)
+            Report = Report &amp; AddToReportIfNotBlank("Suffix", currentContact.Suffix)
+            Report = Report &amp; AddToReportIfNotBlank("TaskCompletedDate", currentContact.TaskCompletedDate)
+            Report = Report &amp; AddToReportIfNotBlank("TaskDueDate", currentContact.TaskDueDate)
+            Report = Report &amp; AddToReportIfNotBlank("TaskStartDate", currentContact.TaskStartDate)
+            Report = Report &amp; AddToReportIfNotBlank("TaskSubject", currentContact.TaskSubject)
+            Report = Report &amp; AddToReportIfNotBlank("TelexNumber", currentContact.TelexNumber)
+            Report = Report &amp; AddToReportIfNotBlank("Title", currentContact.Title)
+            Report = Report &amp; AddToReportIfNotBlank("ToDoTaskOrdinal", currentContact.ToDoTaskOrdinal)
+            Report = Report &amp; AddToReportIfNotBlank("TTYTDDTelephoneNumber", currentContact.TTYTDDTelephoneNumber)
+            Report = Report &amp; AddToReportIfNotBlank("UnRead", currentContact.UnRead)
+            Report = Report &amp; AddToReportIfNotBlank("User1", currentContact.User1)
+            Report = Report &amp; AddToReportIfNotBlank("User2", currentContact.User2)
+            Report = Report &amp; AddToReportIfNotBlank("User3", currentContact.User3)
+            Report = Report &amp; AddToReportIfNotBlank("User4", currentContact.User4)
+            Report = Report &amp; AddToReportIfNotBlank("WebPage", currentContact.WebPage)
+            Report = Report &amp; AddToReportIfNotBlank("YomiCompanyName", currentContact.YomiCompanyName)
+            Report = Report &amp; AddToReportIfNotBlank("YomiFirstName", currentContact.YomiFirstName)
+            Report = Report &amp; AddToReportIfNotBlank("YomiLastName", currentContact.YomiLastName)
+            Report = Report &amp; vbCrLf &amp; vbCrLf
+        End If
+        
+    Next
+    
+    
+    Call CreateReportAsEmail("List of Contacts", Report)
+    
+Exiting:
+        Exit Sub
+On_Error:
+    MsgBox "error=" &amp; Err.Number &amp; " " &amp; Err.Description
+    Resume Exiting
+    
+End Sub
+
+Private Function AddToReportIfNotBlank(FieldName As String, FieldValue As String)
+    AddToReportIfNotBlank = ""
+    If (FieldValue &lt;&gt; "") Then
+        AddToReportIfNotBlank = FieldName &amp; " : " &amp; FieldValue &amp; vbCrLf
+    End If
+    
+End Function
+
+' VBA SubRoutine which displays a report inside an email
+' Programming by Greg Thatcher, http://www.GregThatcher.com
+Public Sub CreateReportAsEmail(Title As String, Report As String)
+    On Error GoTo On_Error
+    
+    Dim Session As Outlook.NameSpace
+    Dim mail As MailItem
+    Dim MyAddress As AddressEntry
+    Dim Inbox As Outlook.Folder
+    
+    Set Session = Application.Session
+    Set Inbox = Session.GetDefaultFolder(olFolderInbox)
+    Set mail = Inbox.Items.Add("IPM.Mail")
+    
+    Set MyAddress = Session.CurrentUser.AddressEntry
+    mail.Recipients.Add (MyAddress.Address)
+    mail.Recipients.ResolveAll
+    
+    mail.Subject = Title
+    mail.Body = Report
+    
+    mail.Save
+    mail.Display
+    
+    
+Exiting:
+        Set Session = Nothing
+        Exit Sub
+On_Error:
+    MsgBox "error=" &amp; Err.Number &amp; " " &amp; Err.Description
+    Resume Exiting
+
+End Sub</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>VBA_OUTLOOK</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>list of Outlook Tasks using the Outlook Object Model</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>VBA_OUTLOOK</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>list of Outlook Tasks using the Outlook Object Model</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>Option Explicit
+
+' VBA Script that gets list of Outlook Tasks
+' Use Tools-&gt;Macro-&gt;Security to allow Macros to run, then restart Outlook
+' Run Outlook, Press Alt+F11 to open VBA
+' Programming by Greg Thatcher, http://www.GregThatcher.com
+Public Sub GetListOfTasks()
+    On Error GoTo On_Error
+    
+    Dim Session As Outlook.NameSpace
+    Dim Report As String
+    Dim TaskFolder As Outlook.Folder
+    Dim currentItem As Object
+    Dim currentTask As TaskItem
+    Set Session = Application.Session
+    
+    Set TaskFolder = Session.GetDefaultFolder(olFolderTasks)
+    
+    For Each currentItem In TaskFolder.Items
+        If (currentItem.Class = olTask) Then
+            Set currentTask = currentItem
+            
+            
+            Report = Report &amp; AddToReportIfNotBlank("ConversationTopic", currentTask.ConversationTopic)
+            Report = Report &amp; AddToReportIfNotBlank("ActualWork", currentTask.ActualWork)
+            Report = Report &amp; AddToReportIfNotBlank("AutoResolvedWinner", currentTask.AutoResolvedWinner)
+            Report = Report &amp; AddToReportIfNotBlank("BillingInformation", currentTask.BillingInformation)
+            Report = Report &amp; AddToReportIfNotBlank("Body", currentTask.Body)
+            Report = Report &amp; AddToReportIfNotBlank("CardData", currentTask.CardData)
+            Report = Report &amp; AddToReportIfNotBlank("Categories", currentTask.Categories)
+            Report = Report &amp; AddToReportIfNotBlank("Companies", currentTask.Companies)
+            Report = Report &amp; AddToReportIfNotBlank("Complete", currentTask.Complete)
+            Report = Report &amp; AddToReportIfNotBlank("ContactNames", currentTask.ContactNames)
+            Report = Report &amp; AddToReportIfNotBlank("ConversationIndex", currentTask.ConversationIndex)
+            Report = Report &amp; AddToReportIfNotBlank("CreationTime", currentTask.CreationTime)
+            Report = Report &amp; AddToReportIfNotBlank("DateCompleted", currentTask.DateCompleted)
+            Report = Report &amp; AddToReportIfNotBlank("DelegationState", currentTask.DelegationState)
+            Report = Report &amp; AddToReportIfNotBlank("Delegator", currentTask.Delegator)
+            Report = Report &amp; AddToReportIfNotBlank("DownloadState", currentTask.DownloadState)
+            Report = Report &amp; AddToReportIfNotBlank("DueDate", currentTask.DueDate)
+            Report = Report &amp; AddToReportIfNotBlank("EntryID", currentTask.EntryID)
+            Report = Report &amp; AddToReportIfNotBlank("Importance", currentTask.Importance)
+            Report = Report &amp; AddToReportIfNotBlank("InternetCodepage", currentTask.InternetCodepage)
+            Report = Report &amp; AddToReportIfNotBlank("IsConflict", currentTask.IsConflict)
+            Report = Report &amp; AddToReportIfNotBlank("IsRecurring", currentTask.IsRecurring)
+            Report = Report &amp; AddToReportIfNotBlank("LastModificationTime", currentTask.LastModificationTime)
+            Report = Report &amp; AddToReportIfNotBlank("MarkForDownload", currentTask.MarkForDownload)
+            Report = Report &amp; AddToReportIfNotBlank("MessageClass", currentTask.MessageClass)
+            Report = Report &amp; AddToReportIfNotBlank("Mileage", currentTask.Mileage)
+            Report = Report &amp; AddToReportIfNotBlank("NoAging", currentTask.NoAging)
+            Report = Report &amp; AddToReportIfNotBlank("Ordinal", currentTask.Ordinal)
+            Report = Report &amp; AddToReportIfNotBlank("OutlookInternalVersion", currentTask.OutlookInternalVersion)
+            Report = Report &amp; AddToReportIfNotBlank("OutlookVersion", currentTask.OutlookVersion)
+            Report = Report &amp; AddToReportIfNotBlank("Owner", currentTask.Owner)
+            Report = Report &amp; AddToReportIfNotBlank("Ownership", currentTask.Ownership)
+            Report = Report &amp; AddToReportIfNotBlank("PercentComplete", currentTask.PercentComplete)
+            Report = Report &amp; AddToReportIfNotBlank("ReminderOverrideDefault", currentTask.ReminderOverrideDefault)
+            Report = Report &amp; AddToReportIfNotBlank("ReminderPlaySound", currentTask.ReminderPlaySound)
+            Report = Report &amp; AddToReportIfNotBlank("ReminderSet", currentTask.ReminderSet)
+            Report = Report &amp; AddToReportIfNotBlank("ReminderSoundFile", currentTask.ReminderSoundFile)
+            Report = Report &amp; AddToReportIfNotBlank("ReminderTime", currentTask.ReminderTime)
+            Report = Report &amp; AddToReportIfNotBlank("ResponseState", currentTask.ResponseState)
+            Report = Report &amp; AddToReportIfNotBlank("Role", currentTask.Role)
+            Report = Report &amp; AddToReportIfNotBlank("Saved", currentTask.Saved)
+            Report = Report &amp; AddToReportIfNotBlank("SchedulePlusPriority", currentTask.SchedulePlusPriority)
+            Report = Report &amp; AddToReportIfNotBlank("SendUsingAccount", currentTask.SendUsingAccount)
+            Report = Report &amp; AddToReportIfNotBlank("Sensitivity", currentTask.Sensitivity)
+            Report = Report &amp; AddToReportIfNotBlank("Size", currentTask.Size)
+            Report = Report &amp; AddToReportIfNotBlank("StartDate", currentTask.StartDate)
+            Report = Report &amp; AddToReportIfNotBlank("Status", currentTask.Status)
+            Report = Report &amp; AddToReportIfNotBlank("StatusOnCompletionRecipients", currentTask.StatusOnCompletionRecipients)
+            Report = Report &amp; AddToReportIfNotBlank("StatusUpdateRecipients", currentTask.StatusUpdateRecipients)
+            Report = Report &amp; AddToReportIfNotBlank("Subject", currentTask.Subject)
+            Report = Report &amp; AddToReportIfNotBlank("TeamTask", currentTask.TeamTask)
+            Report = Report &amp; AddToReportIfNotBlank("ToDoTaskOrdinal", currentTask.ToDoTaskOrdinal)
+            Report = Report &amp; AddToReportIfNotBlank("TotalWork", currentTask.TotalWork)
+            Report = Report &amp; AddToReportIfNotBlank("UnRead", currentTask.UnRead)
+            
+            Report = Report &amp; vbCrLf &amp; vbCrLf
+        End If
+        
+    Next
+    
+    
+    Call CreateReportAsEmail("List of Tasks", Report)
+    
+Exiting:
+        Exit Sub
+On_Error:
+    MsgBox "error=" &amp; Err.Number &amp; " " &amp; Err.Description
+    Resume Exiting
+    
+End Sub
+
+Private Function AddToReportIfNotBlank(FieldName As String, FieldValue As String)
+    AddToReportIfNotBlank = ""
+    If (FieldValue &lt;&gt; "") Then
+        AddToReportIfNotBlank = FieldName &amp; " : " &amp; FieldValue &amp; vbCrLf
+    End If
+    
+End Function
+
+' VBA SubRoutine which displays a report inside an email
+' Programming by Greg Thatcher, http://www.GregThatcher.com
+Public Sub CreateReportAsEmail(Title As String, Report As String)
+    On Error GoTo On_Error
+    
+    Dim Session As Outlook.NameSpace
+    Dim mail As MailItem
+    Dim MyAddress As AddressEntry
+    Dim Inbox As Outlook.Folder
+    
+    Set Session = Application.Session
+    Set Inbox = Session.GetDefaultFolder(olFolderInbox)
+    Set mail = Inbox.Items.Add("IPM.Mail")
+    
+    Set MyAddress = Session.CurrentUser.AddressEntry
+    mail.Recipients.Add (MyAddress.Address)
+    mail.Recipients.ResolveAll
+    
+    mail.Subject = Title
+    mail.Body = Report
+    
+    mail.Save
+    mail.Display
+    
+    
+Exiting:
+        Set Session = Nothing
+        Exit Sub
+On_Error:
+    MsgBox "error=" &amp; Err.Number &amp; " " &amp; Err.Description
+    Resume Exiting
+
+End Sub</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_DATEs</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>1_Drop-Down_ForDateTimePeriods_TABLE_DateTable</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_DATEs</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>1_Drop-Down_ForDateTimePeriods_TABLE_DateTable</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>1_Drop-Down_ForDateTimePeriods_TABLE_DateTable
+
+'From: TerritorrialGoals_NEW_v11.pbix
+'M language for the DateTable: [RowHeader_ID] field based on various Time Periods
+'Note
+
+let
+    Source = fn_createDateTable(StartDATE, Date.From(DateTime.LocalNow())),
+    #"Changed Type" = Table.TransformColumntypes(Source,{{"Date", type date}, {"Year", Int64.Type}, {"Month Number", Int64.Type}}),
+    #"Added YYYYMMDD" = Table.AddColumn(#"Changed Type", "YYYYMMDD", each ([Year] * 10000) + ([Month Number] * 100) + Date.Day([Date])),
+    #"Added DateOfMonth" = Table.AddColumn(#"Added YYYYMMDD", "DateOfMonth", each Date.Day([Date])),
+    #"Reordered Columns" = Table.ReorderColumns(#"Added DateOfMonth",{"Date", "Year", "Quarter", "Month Number", "Week of Year Number", "DateOfMonth", "YYYYMMDD", "Month", "Day of Week"}),
+    #"Added isPreviousWeek" = Table.AddColumn(#"Reordered Columns", "IsPreviousWeek", each Number.From(Date.IsInPreviousNWeeks([Date], 1)) ),
+    #"Added isMTD" = Table.AddColumn(#"Added isPreviousWeek", "isMTD", each (  Date.IsInCurrentMonth([Date])   and Date.From([Date]) &lt;  Date.From(DateTime.LocalNow())  )   ),
+    #"Added WeekOfMonthNumber" = Table.AddColumn(#"Added isMTD", "WeekOfMonthNumber", each Date.WeekOfMonth([Date])),
+    #"Renamed Columns" = Table.RenameColumns(#"Added WeekOfMonthNumber",{{"Month", "MonthName"}, {"Day of Week", "DayOfWeekName"}}),
+    SameWeekOfMonth_as_LastWeek = Table.AddColumn(#"Renamed Columns", "SameWeekOfMonth_as_LastWeek", each Number.From(
+								Value.Equals(
+                                                                    		[WeekOfMonthNumber]
+                                                                    		,
+                                                                   		 Date.WeekOfMonth(Date.From(DateTime.LocalNow())) - 1
+								  	   ) 
+												         )
+                                                                  
+		  ),
+    #"Added isLastMonth" = Table.AddColumn(SameWeekOfMonth_as_LastWeek, "isLastMonth", each Number.From(Date.IsInPreviousMonth ([Date]) )),
+    #"Changed Type1" = Table.TransformColumnTypes(#"Added isLastMonth",{{"SameWeekOfMonth_as_LastWeek", Int64.Type}, {"isLastMonth", Int64.Type}}),
+    #"Added isPreviousWeekOfLastMonth" = Table.AddColumn(#"Changed Type1", "isPreviousWeekOfLastMonth", each ([isLastMonth] = 1) and ([SameWeekOfMonth_as_LastWeek]=1)),
+    #"Changed Type2" = Table.TransformColumnTypes(#"Added isPreviousWeekOfLastMonth",{{"DateOfMonth", Int64.Type}, {"YYYYMMDD", Int64.Type}, {"IsPreviousWeek", Int64.Type}, {"WeekOfMonthNumber", Int64.Type}}),
+    #"Added MTD_aMonthAgo" = Table.AddColumn(#"Changed Type2", "Custom", each [Month Number] = Number.From(Date.Month(Date.From(DateTime.LocalNow())))-1
+ and
+ [DateOfMonth] &lt; Date.Day(DateTime.LocalNow())),
+    #"Changed Type3" = Table.TransformColumnTypes(#"Added MTD_aMonthAgo",{{"isMTD", Int64.Type}, {"isPreviousWeekOfLastMonth", Int64.Type}}),
+    #"Renamed Columns1" = Table.RenameColumns(#"Changed Type3",{{"Custom", "MTD_aMonthAgo"}}),
+    #"Changed Type4" = Table.TransformColumnTypes(#"Renamed Columns1",{{"MTD_aMonthAgo", Int64.Type}}),
+    #"Renamed Columns2" = Table.RenameColumns(#"Changed Type4",{{"MTD_aMonthAgo", "isMTD_aMonthAgo"}}),
+    #"Added Custom" = Table.AddColumn(#"Renamed Columns2", "RowHeader_ID", each (1 * [IsPreviousWeek]) +
+(10 * [isMTD]) +
+(100 * [isPreviousWeekOfLastMonth]) +
+(1000 * [isMTD_aMonthAgo])),
+    #"Filtered Rows" = Table.SelectRows(#"Added Custom", each true)
+in
+    #"Filtered Rows"</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Time_Intelligence</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>1_DAX_DateTable_MainPart</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Time_Intelligence</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>1_DAX_DateTable_MainPart</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>1_DAX_DateTable_MainPart
+
+
+DateTable = 
+
+-- Configuration items
+//VAR FirstYear = YEAR(NOW()) - 1
+VAR FirstYear = YEAR(StartDate) 
+VAR LastYear = YEAR(NOW()) 
+VAR FirstDayOfWeek = 0      -- Use 0 for Sunday or 1 for Monday. For an ISO calendar use 1.
+VAR FiscalMonthEnd = 12     -- For an ISO calendar use 12. ISO always starts in January
+
+VAR theStartDate= Date(Firstyear,1,1)
+VAR EndDate = Date(LastYear,12,31)
+
+-- Generate a base table of dates
+VAR BaseTable = CALENDAR(theStartDate, EndDate)			// &lt;==== 'BASE
+
+-- Add the Year for each individual date
+VAR Years = ADDCOLUMNS(
+    BaseTable,
+    "Year", YEAR([Date])
+    )
+
+-- Add the calendar month and other month related data for each date
+VAR Months = ADDCOLUMNS(
+    Years,
+    "Month", MONTH([Date]),
+    "YYYYMMDD", FORMAT([Date],"YYYYMMDD"),					// &lt;=== 'YYYYMMDD
+    "YYYYMM",  ( YEAR([Date]) * 100) + MONTH([Date] ),
+    "Year and Month Name",FORMAT([Date],"YYYY-MMM"),
+    "Fiscal Year", 
+        IF( FiscalMonthEnd = 12, 
+            YEAR([Date]), 
+            IF( MONTH([DATE]) &lt;= FiscalMonthEnd, 
+                YEAR([DATE])-1, 
+                YEAR([Date])
+                )
+            ),
+    "Fiscal Month", 
+        IF( 
+            FiscalMonthEnd = 12, 
+                MONTH([Date]), 
+                IF(MONTH([Date]) &lt;= FiscalMonthEnd, 
+                    FiscalMonthEnd + MONTH([Date]), 
+                    MONTH([Date]) - FiscalMonthEnd)
+            )
+)
+
+-- Add the Quarter and other quarter related data for each date    
+VAR Quarters = ADDCOLUMNS(
+    Months,
+    "Quarter",ROUNDUP(MONTH([Date])/3,0),
+    "YYYYQ",[Year] &amp; ROUNDUP(MONTH([Date])/3,0)
+    )
+
+-- Add the Day and other day related data for each date    
+VAR Days = ADDCOLUMNS(
+    Quarters,
+    "DayOfMonth", DAY([Date]),
+    "DayOfWeekName", FORMAT([Date],"DDDD"),
+    "DayOfWeekNumber", WEEKDAY([Date]),
+    "DayOfYear", DATEDIFF (DATE(YEAR([Date]),1,1), [Date], DAY) + 1
+    ,"Today_DATE", DATE( YEAR(TODAY()), MONTH(TODAY()), Day(TODAY()) )
+    ,"Report_DATE", DATE( YEAR(TODAY()-1), MONTH(TODAY()-1), Day(TODAY()-1) )     
+    )
+
+-- Add a few week columns. This is all dependent upon the variable FirstDayOfWeek which controls what day of the week a week starts (usually Sunday or Monday)
+VAR Weeks = ADDCOLUMNS(
+    Days,
+    "WeekOfMonth", 1 + WEEKNUM([Date], FirstDayOfWeek+1) - WEEKNUM( DATE(YEAR([Date]), MONTH([Date]), 1), FirstDayOfWeek+1),
+    "WeekofYear", WEEKNUM([Date], FirstDayOfWeek+1),                  -- The second parameter is 1 for Sunday and 2 for Monday
+    "YYYYWW", ( YEAR([Date]) * 100) + WEEKNUM([Date], FirstDayOfWeek+1)
+    //"YYYYWW", [Year] &amp; WEEKNUM([Date],FirstDayOfWeek+1)  
+    )
+
+-- Add all US holidays
+var Holidays = ADDCOLUMNS(
+    Weeks,
+    "Holiday", 
+        IF ( MONTH([Date]) = 12 &amp;&amp; DAY([DATE] = 25),                                        -- Christmas Day: December 25
+            "Christmas",
+        If ( MONTH([Date]) = 1 &amp;&amp; DAY([Date]) = 1,                                          -- New Years' Day: January 1
+            "New Year's Day",
+        If ( MONTH([Date]) = 7 &amp;&amp; DAY([Date]) = 4,                                          -- Independence Day: July 4
+            "Independence Day",
+        If ( MONTH([Date]) = 11 &amp;&amp; DAY([Date]) = 11,                                        -- Veteran's Day: November 11
+            "Veterans Day",
+        If ( MONTH([Date]) = 11 &amp;&amp; [DayOfWeekName] = "Thursday" &amp;&amp; ([DayOfMonth] &gt;= 22 &amp;&amp; [DayOfMonth] &lt;= 28), -- Thanksgiving: 4th Thursday of November
+            "Thanksgiving Day",
+        If ( MONTH([Date]) = 10 &amp;&amp; [DayOfWeekName] = "Monday" &amp;&amp; ([DayOfMonth] &gt;= 8 &amp;&amp; [DayOfMonth] &lt;= 14),    -- Columbus Day: 2nd Monday in October
+            "Columbus Day",
+        If ( MONTH([Date]) = 9 &amp;&amp; [DayOfWeekName] = "Monday" &amp;&amp; ([DayOfMonth] &gt;= 1 &amp;&amp; [DayOfMonth] &lt;= 7),      -- Labor Day: 1st Monday in September
+            "Labor Day",
+        If ( MONTH([Date]) = 2 &amp;&amp; [DayOfWeekName] = "Monday" &amp;&amp; ([DayOfMonth] &gt;= 15 &amp;&amp; [DayOfMonth] &lt;= 21),    -- Presidents' Day: 3rd Monday in February
+            "Presidents' Day",
+        If ( MONTH([Date]) = 1 &amp;&amp; [DayOfWeekName] = "Monday" &amp;&amp; ([DayOfMonth] &gt;= 15 &amp;&amp; [DayOfMonth] &lt;= 21),    -- Martin Luther King Jr.' Day: 3rd Monday in January
+            "Martin Luther King Jr. Day"))))))))
+        )
+    )
+
+-- Add if each date is a working day. It won't be if the day is Saturday or Sunday or if it's a holiday
+VAR IsWorkingDay = ADDCOLUMNS(
+    Holidays,
+    "IsBusinesDay", IF ([DayOfWeekName] IN { "Saturday", "Sunday" } || NOT ISBLANK([Holiday]), FALSE(), TRUE())
+    )
+
+--VAR Today_DATE = {DATE(YEAR(NOW()), MONTH(NOW()), Day(NOW()) ) }
+
+
+
+
+
+VAR isDates = ADDCOLUMNS(
+    IsWorkingDay
+    ,"isYTD", IF( YEAR([Date]) = YEAR(NOW()) &amp;&amp; [Date] &lt;= NOW(), 1, 0 )   
+                       
+
+)
+
+
+
+
+                                    
+
+  
+
+RETURN isDates</Code>
+      </SnippetValue>
+    </value>
+  </item>
+</dictionary>
