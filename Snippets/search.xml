@@ -1,2 +1,2835 @@
 <?xml version="1.0" encoding="utf-8"?>
-<dictionary />
+<dictionary>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_DATEs</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>Date_table_Simple_using_CALENDARAUTO</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_DATEs</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>Date_table_Simple_using_CALENDARAUTO</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+CALENDARAUTO uses all the dates in all your tables to figure out what data range to use to 
+	automatically create a Table with a column of [Dates] in the format: mm/dd/yyyy hr:mm:ss AM/PM
+	
+CALENDAR	
+
+https://www.youtube.com/watch?v=-li7sxUxEqA
+=============================================
+
+Data View =&gt; Home {tab} =&gt; New Table {writes a DAX expression to create a new table}
+
+Name it DateTable
+Formula: 
+DateTable = CALENDARAUTO()
+
+'Then modify the DAX:
+
+DateTable = 
+ADDCOLUMNS(
+CALENDARAUTO(),
+"YEAR", YEAR([Date]),
+"Month", FORMAT( [Date], "mmmm"),
+"Month_Number", MONTH([Date]),
+"Quarter", FORMAT( [Date], "\QQ")
+)
+
+https://www.sqlbi.com/tools/dax-date-template/</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_DATEs</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>GENERATE_to_creaate_a_Calendar_or_DATE_table</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_DATEs</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>GENERATE_to_creaate_a_Calendar_or_DATE_table</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>Using GENERATE and ROW instead of ADDCOLUMNS in DAX
+video:https://www.youtube.com/watch?v=AieQMS6rGvM
+article: https://www.sqlbi.com/articles/using-generate-and-row-instead-of-addcolumns-in-dax/
+
+
+'Use this code in a 
+
+Calendar 5 =
+VAR BaseCalendar =
+    CALENDAR ( DATE ( 2016, 1, 1 ), DATE ( 2018, 12, 31 ) )
+RETURN
+    GENERATE (
+        BaseCalendar, '--&lt;== It iterates through this table, the calculates the following lines for each row in Table1, then adds those columns to table 1
+        VAR BaseDate = [Date]
+        VAR YearDate = YEAR ( BaseDate )
+        VAR MonthNumber = MONTH ( BaseDate )
+        VAR MonthName = FORMAT ( BaseDate, "mmmm" )
+        VAR YearMonthName = FORMAT ( BaseDate, "mmm yy" )
+        VAR YearMonthNumber = YearDate * 12 + MonthNumber - 1
+        RETURN ROW (
+            "Day", BaseDate,
+            "Year", YearDate,
+            "Month Number", MonthNumber,
+            "Month", MonthName,
+            "Year Month Number", YearMonthNumber,
+            "Year Month", YearMonthName
+        )
+    )
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Functions_ITERATORS</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>about_DAX_Functions_ITERATORS</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Functions_ITERATORS</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>about_DAX_Functions_ITERATORS</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>about_DAX_Functions_ITERATORS
+
+'Iterators are Limited by a Filter Context, which are ALL the filters applied by the user
+
+'Row-by-row iterators do have worse performance than their non-interator functions
+
+'Iterators allow for multi-column expressions (in an aggregator)
+
+'Iterator Parameters: 2
+'First Parameter:  is a Table
+'Second Parameter: is an expression
+
+'Iterator says for each row, of the Table Parameter, evaluate the Expression Parameter
+
+
+Iterator functions 
+==================================================================================================
+'Iterator functions allow you to loop through the same expression on every row of a table
+'	in order to evaluate a single scalar value (e.g. max, min, average) or derive a new table
+
+'USE CASES
+'	aggregating a column into a single value (e.g. max, min, average)
+'	Return a table of data (e.g. ADDCOLUMNS, SELECTCOLUMNS)
+
+
+'(SUMX, RANKX, etc.) use row context to evaluate row level calculations
+
+'Row context doesn't automatically propagate through table relationships 
+'	(need to use RELATED or RELATEDTABLE functions)
+------------------------------------------------------------------------------CARDINALITY
+CARDINALITY '(with reference to ITERATORS)
+'is the uniqueness of values within a column
+
+ITERATOR CARDINALITY
+'is the number of rows in the table(s) being iterated; the more unique rows,
+'	the higher the cardinality (this is not the same as relationship cardinality)
+
+'When using nested iterators, cardinality depends on whether you are using physical or virtual relationships:
+'	For physical relationships, cardinality is defined as the max number of unique rows in the largest table
+'	For virtual relationships, cardinality is defined as the number of unique rows in each table 
+'		multiplied together (e.g. using a FILTER virtual table)
+
+'When using nested iterators, only the innermost 'X' function can be optimized by the DAX engine.
+'	Nested iterators aren't always bad, but they can have significant performance implications.
+
+=============================examples of interating functions (that end in X)========================
+
+https://www.youtube.com/watch?v=HdG_0yv7gAs
+
+Syntax: FunctionX(theTable, the expression/calculation for each row)
+
+'The calculation is done for each row, saved in memory, then the aggregate function is called
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Functions_ITERATORS</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>ADDCOLUMNS_combined_with_SELECTCOLUMNS</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Functions_ITERATORS</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>ADDCOLUMNS_combined_with_SELECTCOLUMNS</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+
+'Adds a Measure, to a column containing the 'Customers'[Customer Name] from the 'Customers' table
+EVALUATE
+    ADDCOLUMNS(
+        SELECTCOLUMNS(
+            'Customers',
+            "Customer Name", 'Customers'[Customer Name]
+            ),
+        "Sales Amount", [Sales Amount]
+        )
+---------------------------------------------------------- note ROW CONTEXT differs for inner vs outer function
+DEFINE 
+MEASURE _Measures[Sales Amount] = 
+        SUMX(
+            'Online Sales',
+            'Online Sales'[Sales Quantity] * 'Online Sales'[Unit Price] - 'Online Sales'[Discount Amount]
+        )
+
+
+
+EVALUATE
+    ADDCOLUMNS(										//' ROW CONTEXT is: the Color column, that was generated by the inner SELECTCOLUMNS function
+        SELECTCOLUMNS(								//' ROW CONTEXT is: the row of the Producs table
+            Products,
+            "Color", Products[Color],				//' This puts a column with the color from the Products Table 
+            "Product Amount", [Sales Amount]		//' This generates the [Sales Amount] for each row of the Products Table
+            ),
+        "Color Sales Amount", [Sales Amount]		//' At this point the only row context is the colum of 'Color' from the SELECTCOLUMNS step, so this is the Total Sales Amount corresponding to the color
+        )
+
+  ----------------------------------------------------------create a calculated table
+  
+  aCalculatedTable = 
+				ADDCOLUMNS(
+				    FILTER(
+				        'Employee Lookup',
+				        'Employee Lookup'[staff_id] IN {6,16,31}
+				    ),
+				    "Manager Name &amp; Store",
+				    'Employee Lookup'[first_name] &amp; " " &amp; 'Employee Lookup'[last_name] &amp; "-" &amp; 'Employee Lookup'[location]
+				)
+			</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Functions_ITERATORS</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>ADDCOLUMNS</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Functions_ITERATORS</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>ADDCOLUMNS</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>' ADDCOLUMNS is an Iterator
+'Returns a table with selected columns from the &lt;table&gt; plus any new columns
+'	specified by the DAX expression(s)
+' ADDCOLUMNS starts with the entire original table and tacks on columns
+
+'ADDCOLUMNS and SELECTCOLUMNS are nearly identical and behave similarly with an
+'	exception, SELECTCOLUMNS starts from a blank table whereas ADDCOLUMNS starts
+'	with the entire original table and tacks on columns
+
+SYNTAX
+	ADDCOLUMNS(
+				&lt;table&gt;							//' starts with this
+				, &lt;name&gt;, &lt;expression&gt;			//' Adds these columns to &lt;table&gt;
+				[, &lt;name&gt;, &lt;expression&gt;]…
+			  )
+
+ADDCOLUMNS 'is an Iterator function, and thus creates a row Context, when used in CALCULATE or CALCULATETABLE you get a context transition
+			' thus any expressions in ADDCOLUMNS are done for each row		  
+			  
+table	
+'Any DAX expression that returns a table of data.
+name	
+'The name given to the column, enclosed in double quotes.
+expression	
+'Any DAX expression that returns a scalar expression, evaluated for each row of table.			  
+			  
+Return value
+'A table with all its original columns and the added ones.			    
+			    
+			    
+EXAMPLES
+-----------
+
+'The following example returns an extended version of the Product Category table 
+'	that includes total sales values from the reseller channel and the internet sales.
+
+ADDCOLUMNS(ProductCategory,
+               , "Internet Sales", SUMX(RELATEDTABLE(InternetSales_USD), InternetSales_USD[SalesAmount_USD])  
+               , "Reseller Sales", SUMX(RELATEDTABLE(ResellerSales_USD), ResellerSales_USD[SalesAmount_USD]))
+
+
+'Adds a Measure, to a column containing the 'Customers'[Customer Name] from the 'Customers' table
+EVALUATE
+    ADDCOLUMNS(
+        SELECTCOLUMNS(
+            'Customers',
+            "Customer Name", 'Customers'[Customer Name]
+            ),
+        "Sales Amount", [Sales Amount]
+        )</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Functions_ITERATORS</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>SELECTCOLUMNS</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Functions_ITERATORS</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>SELECTCOLUMNS</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>SELECTCOLUMNS
+
+'SELECTCOLUMNS returns a table with selected columns from the table plus any new columns 
+'	specified by the DAX expression(s)
+'SELECTCOLUMNS starts from a blank table
+
+'SELECTCOLUMNS is an Iterator function
+'	so when used with CALCULATE or CALCULATETABLE a context transition will occur
+' if there are multiple/duplicate rows then there would be  multiple/duplicate in the output
+'	and as such no aggregation of multple columns is taking place
+
+
+'ADDCOLUMNS and SELECTCOLUMNS are nearly identical and behave similarly with an
+'	exception, SELECTCOLUMNS starts from a blank table whereas ADDCOLUMNS starts
+'	with the entire original table and tacks on columns
+
+
+'Usefull for creating Calculated Tables
+
+SELECTCOLUMNS(
+				&lt;table&gt;									//' source of the selected columns
+				, &lt;name&gt;, &lt;scalar_expression&gt; 			//' Selects these columns from &lt;table&gt; to keep.		
+				[, &lt;name&gt;, &lt;scalar_expression&gt;]…
+				) 
+
+table	'Any DAX expression that returns a table, physical or virtual (e.g. from FILTER)
+		'There will be one row in the output for each row that of the Table
+		' if there are multiple/duplicate rows then there would be  multiple/duplicate in the output
+name	'The name given to the column, enclosed in double quotes.
+		' b/c it is working within a row context it can access the column name directly
+expression	'Any expression that returns a scalar value like a column reference, integer, or string value.
+			'can be columns from the source table, or measures
+			'This works b/c SELECTCOLUMNS is an Iterator, and processes each row individually
+			
+'It is also doing a context transition, b/c every reference to a MEASURE is rewritten to expand the MEASURE
+'	surrounded by a CALCULATE, and when you execute a CALCULATE in a Row context you have a context transition
+'	Caution: may end up with inflated results from duplicate data
+
+============================================EXAMPLES===============================================
+
+
+
+SELECTCOLUMNS(
+				Info
+				, "StateCountry", [State]&amp;", "&amp;[Country]
+				)
+
+----------------------------------------------------------------
+EVALUATE
+    SELECTCOLUMNS(
+        Customers,										//'Source table
+        "Customer Name",'Customers'[Customer Name],		//'Column from the Source table
+        "Sales Amount", [Sales Amount],					//'a MEASURE
+        "Profit Margin %", [Profit Margin %]			//'a MEASURE
+        )
+        
+-----------------------------------------------------------------Calculated Table:
+
+theCalculatedTable = 
+					SELECTCOLUMNS(
+								    FILTER(
+								        'Employee Lookup',
+								        'Employee Lookup'[staff_id] IN {6,16,31}
+								    	  ),
+								    "Employee ID", 
+								    'Employee Lookup'[staff_id],
+								    "Manager Name &amp; Store",
+								    'Employee Lookup'[first_name] &amp; " " &amp; 'Employee Lookup'[last_name] &amp; "-" &amp; 'Employee Lookup'[location]
+							   	)
+        
+----------------------------------------------------------------
+Calendar 4 =
+			VAR BaseCalendar =
+			    CALENDAR ( DATE ( 2016, 1, 1 ), DATE ( 2018, 12, 31 ) )
+		
+			VAR RenamedCalendar =
+			    SELECTCOLUMNS ( 
+			    				BaseCalendar, 
+			    				"Calendar[Date]", [Date] 
+			    				)
+		
+			VAR Calendar_1 =
+			    SELECTCOLUMNS (
+						        RenamedCalendar,
+						        "Date", 'Calendar'[Date],
+						        "Year", YEAR ( Calendar[Date] ),
+						        "Month Number", MONTH ( Calendar[Date] ),
+						        "Month", FORMAT ( Calendar[Date], "mmmm" ),
+						        "Year Month", FORMAT ( Calendar[Date], "mmm yy" 
+						        )
+			    )
+			
+			VAR Calendar_2 =
+			    ADDCOLUMNS ( 
+			    				Calendar_1, 
+			    				"Year Month Number", [Year] * 12 + [Month Number] - 1 
+			    			)
+			
+			RETURN
+			    Calendar_2
+
+
+
+============================================= 'turns a virtual table into a table
+
+
+EVALUATE 
+var campaigns = 
+	
+	SUMMARIZE( 
+				Map_DealerCode_Campaign,
+				Map_DealerCode_Campaign[Campaign],
+				"whatever", COUNT(IndirectAuto_CBTJITSQL02_JIT[applicationID])
+			  )
+VAR renamedCampaignCols = 
+			SELECTCOLUMNS( 
+							campaigns, 
+							"campaigns[whatever]", [whatever] 
+						  )
+
+RETURN
+renamedCampaignCols
+
+============================================= 'Useing a virtual 
+EVALUATE 
+var campaigns = 
+	
+	SUMMARIZE( 
+				Map_DealerCode_Campaign,
+				Map_DealerCode_Campaign[Campaign],
+				"whatever", COUNT(IndirectAuto_CBTJITSQL02_JIT[applicationID])
+			  )
+VAR renamedCampaignCols = SELECTCOLUMNS( campaigns, "campaigns[whatever]", [whatever] )
+
+var theTotal = SUMX(SELECTCOLUMNS( campaigns, "campaigns[whatever]", [whatever] ), [Whatever] )
+
+
+var theTotal2 = SUMX(renamedCampaignCols, [Whatever])
+
+RETURN
+{theTotal2}			'You can use either theTotal, or theTotal2 here and it works in DAX Studio
+
+
+================================='One of the Data columns (i.e. 'Customers'[Customer Name]) , and A Measure (i.e. [Sales Amount]
+'WITHOUT a filter
+
+EVALUATE
+    ADDCOLUMNS(
+        SELECTCOLUMNS(
+            'Customers',
+            "Customer Name", 'Customers'[Customer Name]
+            ),
+        "Sales Amount", [Sales Amount]
+        )
+
+
+================================='One of the Data columns (i.e. 'Customers'[Customer Name]) , and A Measure (i.e. [Sales Amount]
+'WITH a filter
+EVALUATE
+	//' CALCULATETABLE lets us add the filter for [Brand Name]
+    CALCULATETABLE(
+        ADDCOLUMNS(
+            SELECTCOLUMNS(
+            	//'The Row header is Customer
+                'Customers',
+                "Customer Name", 'Customers'[Customer Name]
+                ),
+            //'ADD a column for the Measure
+            "Sales Amount", [Sales Amount]
+            ),
+        'Products'[Brand Name] = "Contoso"
+        )</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Functions</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>CALCULATETABLE_examples_with_SUMMARIZE_as_inner_function</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Functions</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>CALCULATETABLE_examples_with_SUMMARIZE_as_inner_function</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>'This returns a table with a list of Dates, where they meet the criteria in the last 3 rows      
+CALCULATETABLE(
+		SUMMARIZE(
+					Sales, 
+					Date[date]
+				 ),
+		Date[Year] = 2018,
+		Date[Month Number] = 6,
+		Store[StoreKey] = 430
+		)
+
+'This version has the StoreKey, and the date list where the criteria are met:
+'This returns a table with a list of Dates, where they meet the criteria in the last 3 rows      
+CALCULATETABLE(
+		SUMMARIZE(Sales, Store[StoreKey], Date[date]),
+		Date[Year] = 2018,
+		Date[Month Number] = 6,
+		Store[StoreKey] = 430
+		)		
+		       		       
+'This version has the StoreKey, and the date list AND the same date (in the Previous Year) where the criteria are met:
+'This returns a table with a list of Dates, where they meet the criteria in the last 3 rows      
+CALCULATETABLE(
+		ADDCOLUMNS(
+					SUMMARIZE(Sales, Store[StoreKey], Date[date]),
+				 	"@PreviousYearDate",
+				 			DATE(
+				 					YEAR(Date[Date]) - 1,
+				 					MONTH(Date[Date]),
+				 					DAY(Date[Date])
+				 			
+				 				)
+				 	),
+		Date[Year] = 2018,
+		Date[Month Number] = 6,
+		Store[StoreKey] = 430
+		)		       
+		
+'This version has JUST the StoreKey,  AND the same date (in the Previous Year) where the criteria are met:
+'This returns a table with a list of Dates, where they meet the criteria in the last 3 rows 
+'The SELECTCOLUMNS part could be used in a Measure as a VAR, and the last three lines would be the Row context     
+CALCULATETABLE(
+		SELECTCOLUMNS(
+						ADDCOLUMNS(
+									SUMMARIZE(Sales, Store[StoreKey], Date[date]),
+								 	"@PreviousYearDate",
+								 			DATE(
+								 					YEAR(Date[Date]) - 1,
+								 					MONTH(Date[Date]),
+								 					DAY(Date[Date])
+								 			
+								 				)
+								 	),
+					 "StoreKey", Store[StoreKey],
+					 "DateKey", [@PreviousYearDate]
+					 ),
+		Date[Year] = 2018,
+		Date[Month Number] = 6,
+		Store[StoreKey] = 430
+		)		</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Functions</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>CALCULATETABLE_examples</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Functions</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>CALCULATETABLE_examples</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+=======================================e.g. for a Calculated Column: SUM by itself, vs. inside a CALCULATE
+
+'This would evaluate to the same number on every row
+Quantity Sold (SUM) = 
+SUM(
+    Food Inventory[quantity_sold]
+)
+
+'This would use the row context as the filter context and produce a different number on each row
+
+Quantity Sold (CALCULATE) = 
+CALCULATE(  
+    SUM(
+    'Food Inventory'[quantity_sold]
+    )
+)
+========================================
+= SUMX(
+    CALCULATETABLE(
+        InternetSales_USD,						--	&lt;expression&gt;
+        DateTime[CalendarYear] = 2006			--  &lt;filter1&gt; 
+    ),
+    [SalesAmount_USD]
+) 
+
+=================================
+'One of the Data columns (i.e. 'Customers'[Customer Name]) , and A Measure (i.e. [Sales Amount]
+'WITH a filter
+EVALUATE
+	//'3]  CALCULATETABLE lets us add the filter for [Brand Name]
+    CALCULATETABLE(
+    	//'1] This part gives you the column of Customers, and the measure: [Sales Amount]    
+        ADDCOLUMNS(
+            SELECTCOLUMNS(
+            	//'The ROW HEADER is Customer
+                'Customers',
+                "Customer Name", 'Customers'[Customer Name]
+                ),
+            //'2] ADD a column for the MEASURE
+            "Sales Amount", [Sales Amount]
+            ),
+        //'3] the FILTER
+        'Products'[Brand Name] = "Contoso"
+        )
+ ==============================================CALCULATE TABLE as an alternative to FILTER
+ 
+ 'FILTER
+ --------
+ FILTER(
+	 		KEEPFILTERS(
+	 						VALUES(Products[Color] ) 
+	 					), 
+	 		Products[Color] = "RED"
+ 		)
+ 		
+ 'vs.
+'CALCULATETABLE performs better
+ ------------------
+ CALCULATETABLE(
+	 				Products,
+	 				Products[Color] = "RED"
+	 			)
+ ==============================================	 
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Functions</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>GENERATE_syntax</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Functions</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>GENERATE_syntax</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>Using GENERATE and ROW instead of ADDCOLUMNS in DAX
+video:https://www.youtube.com/watch?v=AieQMS6rGvM
+article: https://www.sqlbi.com/articles/using-generate-and-row-instead-of-addcolumns-in-dax/
+
+'Returns a table with the Cartesian product between each row in table1 
+'	and the table that results from evaluating table2 in the context of the current row from table1.
+'it is an ITERATOR function
+GENERATE(&lt;table1&gt;, &lt;table2&gt;) 
+
+table1	Any DAX expression that returns a table.
+table2	Any DAX expression that returns a table.
+
+
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Functions</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>Statistical_Functions</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Functions</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>Statistical_Functions</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>https://docs.microsoft.com/en-us/dax/statistical-functions-dax
+
+' Filters do not propogate in a Row Context, i.e. in Calculated Columns
+----------------------------------------------------------------------------------
+'SO if you created two columns in a Visual (e.g. Table) and one was based on a Calculated Column using data from a Related table, 
+'	and the other was based on a Measure using data from a Related table, then the Calculated-based Rank would remain unchanged as you
+'	apply filters to the related Table, but the Measure-based Rank would change as you applied filters to the related Table.
+
+'e.g. for a Calculated Column
+Ranking =        RANKX(ALL(Products), SUMX(RELATEDTABLE(SalesOrderDetail), SalesOrderDetail[GrossSales]))
+
+'e.g. for a MEASURE Column
+RankingMeasure = RANKX(ALL(Products), SUMX(RELATEDTABLE(SalesOrderDetail), SalesOrderDetail[GrossSales]))		
+---------------------------------------------------------------------------------
+
+ADDCOLUMNS
+APPROXIMATEDISTINCTCOUNT
+AVERAGE
+AVERAGEA
+
+AVERAGEX
+ 		'e.g.
+ 		AverageGrossSales = AVERAGEX(SalesOrderDetail, SalesOrderDetail[OrderQty] * SalesOrderDetail[UnitPrice] * (1 - SalesOrderDetail[UnitPriceDiscount]))
+ 		
+BETA.DIST
+BETA.INV
+CHISQ.INV
+CHISQ.INV.RT
+CONFIDENCE.NORM
+CONFIDENCE.T
+
+COUNT():
+	'The COUNT function counts the number of cells in a column that contains 
+	'values of the whole number or integer or string datatype excluding the 
+	'blank cell. It even counts the cell with repeated values.
+	' only count non-empty cells  and are not sensitive to repetitive values 
+	'in cells.
+	Apps = COUNT(FactApplication[Client_App_ID])
+	
+	'EXAMPLE: show 0 if there are none, 1 if there are some
+	' add a zero to convert the blanks to zero, then use "&gt;" to create boolean, then INT to convert back to 0/1
+	INT((COUNT(FactApplication[Client_App_ID]) + 0) &gt; 0)
+
+COUNTA():
+	'COUNTA function can also count the boolean values (True or False) 
+	'whereas count function returns an error .
+	' only count non-empty cells  and are not sensitive to repetitive values 
+	'in cells.
+
+	Measure  = CALCULATE(
+							COUNTA(	Table[Column1] )
+							,ALLEXCEPT(
+										Table
+										,Table[Column1]
+									   )
+					     )
+
+COUNTX():
+	'Syntax: COUNTX(&lt;table&gt;,&lt;expression&gt;)
+	'COUNTX function counts the number of rows which are non-empty when 
+	'evaluating an expression over a table.
+	'This function cannot be used for boolean values.
+
+COUNTAX():
+	'Syntax: COUNTAX(&lt;table&gt;,&lt;expression&gt;)
+	'similar to COUNTX function with the only difference being that COUNTAX function can operate on boolean values.	
+
+COUNTBLANKS():
+	'Syntax: COUNTBLANK(&lt;column&gt;)
+	' calculate the number of blanks present in a column.
+	 NumbOfRowNumbersWithBlanks = COUNTBLANK('tableName'[columnName])
+	
+COUNTROWS():
+	'Syntax : COUNTROWS(&lt;table&gt;)
+	'NOTE: can use FILTERs in place of &lt;table&gt;
+	'counts the number of rows in the specified table, or in a table defined by an expression .
+
+
+CROSSJOIN
+	'e.g. Cross Join 3 tables
+	RowHeader_Territory_Segment = CROSSJOIN(RowHeaders,Segments,Territories)
+DATATABLE function
+DISTINCTCOUNT():
+	'Syntax: DISTINCTCOUNT(&lt;column&gt;)
+	' returns the number of unique values present in a column.
+	'It counts NULL as a unique value
+
+DISTINCTCOUNTNOBLANK
+	' returns the number of unique values present in a column.
+	'It DOES NOT counts NULL as a unique value
+	
+	CALCULATE( 
+				DISTINCTCOUNT(DimDealer[DealerCode]),
+				FILTER(DimDealer,DimDealer[DealerActive] = True())
+			  )
+	
+	
+EXPON.DIST
+GENERATE
+GENERATEALL
+GEOMEAN
+GEOMEANX
+MAX
+	'This takes the Max from a column, but does not let you filter by some category
+MAXA
+MAXX
+	'This takes the Max from an expression, where the expression is what let's us 'filter' 
+	'	down to just some rows
+	
+	Last Purchase Date for each Customer = 
+	    //'return the MAX value from the set of returned rows
+	    MAXX(
+	            RELATEDTABLE(Internet Sales),     //'Work on the related set of rows from the table, related by the relationship (i.e. the customer)
+	            Internet Sales[Order Date]       // 'for each row returned, return this field
+	        )	
+MEDIAN
+MEDIANX
+MIN
+MINA
+MINX
+NORM.DIST
+NORM.INV
+NORM.S.DIST
+NORM.S.INV (DAX)
+PERCENTILE.EXC
+PERCENTILE.INC
+PERCENTILEX.EXC
+PERCENTILEX.INC
+POISSON.DIST
+RANK.EQ
+RANKX
+	RANKX(&lt;table&gt;, &lt;expression&gt;[, &lt;value&gt;[, &lt;order&gt;[, &lt;ties&gt;]]])  
+	'e.g. create a MEASURE: for each product (in TABLE_1: Products), go through each row in another table (TABLE_2: SalesOrderDetail)
+	
+	Ranking = RANKX(
+					ALL(Products), 
+					SUMX(
+							RELATEDTABLE(SalesOrderDetail), 
+							SalesOrderDetail[GrossSales])
+						)
+					)
+	'NOTE: if you used  SUMX(SalesOrderDetail, SalesOrderDetail[GrossSales]) 
+	'	then it would sum up all the rows, rather than just the related rows
+	'NOTE: if we did not use ALL (for [Products] table) then it would only rank for the filtered rows of [Products], and not give us an overall Rank
+
+
+ROW
+SAMPLE
+SELECTCOLUMNS
+SIN
+SINH
+SQRTPI
+STDEV.P
+STDEV.S
+STDEVX.P
+STDEVX.S
+SUMMARIZE
+	'SYNTAX
+	SUMMARIZE (&lt;table&gt;, &lt;groupBy_columnName&gt;[, &lt;groupBy_columnName&gt;]…[, &lt;name&gt;, &lt;expression&gt;]…)
+	'Returns a summary table for the requested totals over a set of groups.
+	&lt;expression&gt;	'Any DAX expression that returns a single scalar value, where the expression is to be evaluated multiple times (for each row/context).
+T.DIST
+T.DIST.2T
+T.DIST.RT
+T.INV
+T.INV.2t
+TAN
+TANH
+TOPN
+VAR.P
+VAR.S
+VARX.P
+VARX.S
+XIRR
+XNPV
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Functions</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>SUMMARIZE</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Functions</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>SUMMARIZE</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>'Microsoft says you may get wrong results if you use Aggregation functions in the  &lt;expression&gt;, inside a SUMMARIZE function
+
+'Best Practice is to use it like SELECT DISTINCT * in SQL
+' and if you use a FILTER to construct the &lt;table&gt; then that acts like the WHERE statement.
+
+'SUMMARIZE creates a summary of the input table grouped by the specified columns
+'	it is NOT an AGGREGATION function, instead it returns all unique combinations
+'	of values based on the columns selected
+
+SUMMARIZE (
+			&lt;table&gt;, 
+			&lt;groupBy_columnName&gt;		
+			[, &lt;groupBy_columnName&gt;]…
+			[, &lt;name&gt;, &lt;expression&gt;]…		//' This is DEPRECATED
+		   )
+		   
+table	
+'Any DAX expression that returns a table of data.
+groupBy_ColumnName	
+'(Optional) The qualified name of an existing column used to create summary groups based on the values found in it. 
+'	This parameter cannot be an expression.
+' the column can be in other tables besides the Source table, as long as there is a many to one relationship
+'		from the source to the group by column 
+' With multiple &lt;groupBy_columnName&gt;, you will get all the combinations of those categories
+name	
+'The name given to a total or summarize column, enclosed in double quotes.
+expression	
+'Any DAX expression that returns a single scalar value, where the expression is to be evaluated multiple times (for each row/context).		   
+
+
+========================================================================'to create from a filtered subset of the rows
+example 1] aCalculatedTable = 
+					SUMMARIZE(
+					    FILTER(
+					        'Sales by Store',
+					        'Sales by Store'[quantity_sold] &gt;=3
+					    ),
+					    'Sales by Store'[customer_id],
+					    'Sales by Store'[quantity_sold]
+					)
+--------------------------------------------------------------------------
+example 2 Unsold Pastries = 
+						SUMMARIZE(
+									    FILTER(
+											        'Food Inventory',
+											        'Food Inventory'[quantity_sold] &lt;&gt; 'Food Inventory'[quantity_start_of_day]
+											    ),
+									    'Food Inventory'[transaction_date],
+									    'Food Inventory'[store_id],
+									    'Food Inventory'[quantity_sold],
+									    'Food Inventory'[quantity_start_of_day],
+									    'Product Lookup'[current_retail_price],
+									    'Product Lookup'[product]
+									)
+================ DEPRECATED PATTERN vs. BEST PRACTICES PATTERN for Aggregation
+
+DEPRECATED PATTERN
+------------------
+//'NOTE: this is not a best practive, b/c MS recognizes that there are performance issues with this pattern (i.e. aggregations within Summarize)
+//' and MS says you could get unexpected (i.e. wrong results) with complex expressions
+//' NO problem with generating the set of unique category combinations, the problem is with aggregating data using the SUMMARIZE function
+
+EVALUATE
+    SUMMARIZE(
+        'Online Sales',
+        'Products'[Category],
+        'Customers'[Country],
+        'Calendar'[Calendar Month Label],
+        "Sales Amount", [Sales Amount]		//'This aggregates, for the groupBy columns as row-contexts for the MEASURE
+        )
+ 
+ BEST PRACTICES PATTERN
+ ---------------------       
+ //' A much better pattern for getting the aggregate is this:
+ //' 1] Use SUMMARIZE to get the combinations of the categories
+ //' 2] Then use ADDCOLUMNS to get the aggregate columns
+         
+  EVALUATE
+    ADDCOLUMNS(
+        SUMMARIZE(
+            'Online Sales',
+            'Products'[Category],
+            'Customers'[Country],
+            'Calendar'[Calendar Month Label]
+            ),
+        "Sales Amount", [Sales Amount],
+        "Total Cost", [Total Cost]
+        )
+      
+
+
+      
+================  'SUMMARIZE function, with a CALCULATETABLE  as the 'table' parameter  
+'introduce the filter (i.e. "January) inside the CALCULATETABLE, then group by the subsequent columns
+
+'1] This gives you the group-by columns:
+
+EVALUATE
+    SUMMARIZE(
+        'Online Sales',
+        'Products'[Category],
+        'Customers'[Country],
+        'Calendar'[Calendar Month Label]
+        )
+
+'2] HOWEVER, if you want to just get the categories for "January": replace the simple table (i.e. 'Online Sales') with a filtered version
+EVALUATE
+    SUMMARIZE(
+        CALCULATETABLE(
+            'Online Sales',
+            'Calendar'[Calendar Month Label] = "January"
+            ),
+        'Products'[Category],
+        'Customers'[Country],
+        'Calendar'[Calendar Month Label]
+        )
+      
+================  'SUMMARIZE function, inside a CALCULATETABLE    
+'This returns a table with a list of Dates, where they meet the criteria in the last 3 rows      
+CALCULATETABLE(
+		SUMMARIZE(
+					Sales, 
+					Date[date]
+				 ),
+		Date[Year] = 2018,
+		Date[Month Number] = 6,
+		Store[StoreKey] = 430
+		)
+
+
+================'Here is the measure that could be created from the SELECTCOLUMNS part	
+
+Sales Past Year SameDayLastYear =
+VAR DatesToConsider = 
+		SELECTCOLUMNS(
+						ADDCOLUMNS(
+									SUMMARIZE(
+												Sales, 
+												Store[StoreKey], 
+												Date[date]
+											  ),
+								 	"@PreviousYearDate", DATE(
+											 					YEAR(Date[Date]) - 1,
+											 					MONTH(Date[Date]),
+											 					DAY(Date[Date])
+											 				)
+								 	),
+					 "StoreKey", Store[StoreKey],
+					 "DateKey", [@PreviousYearDate]
+					 )
+VAR result = 
+	CALCULATE(
+		[Sales Amount],
+		DatesToConsider		
+		)
+RETURN
+	Result	
+	
+					 
+================ AGGREGATION is DEPRECATED!
+ example 
+ 'returns a summary of the reseller sales grouped around the calendar year 
+ '	and the product category name, 
+ 'this result table allows you to do analysis over the reseller sales by year and product category.
+
+SUMMARIZE(ResellerSales_USD  
+      , DateTime[CalendarYear]  
+      , ProductCategory[ProductCategoryName]  
+      , "Sales Amount (USD)", SUM(ResellerSales_USD[SalesAmount_USD])  		'simple aggregates may be ok, but should be avoided
+      , "Discount Amount (USD)", SUM(ResellerSales_USD[DiscountAmount])   	'simple aggregates may be ok, but should be avoided
+      )  </Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Functions</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>VARIABLES_inside_a_Measure</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Functions</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>VARIABLES_inside_a_Measure</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+
+
+FirstDaySales v1 :=
+SUMX (
+    'Product',
+    VAR FirstSale =
+        CALCULATE ( MIN ( Sales[Order Date] ) )
+    RETURN
+        CALCULATE ( [Sales Amount], 'Date'[Date] = FirstSale )
+)
+
+============================================================
+
+FirstDaySales v2 :=
+VAR ProductsWithSales =
+    SUMMARIZE ( Sales, 'Product'[Product Name] )
+VAR ProductsAndFirstDate =
+    ADDCOLUMNS (
+        ProductsWithSales,
+        "Date First Sale", CALCULATE ( MIN ( Sales[Order Date] ) )
+    )
+VAR Result =
+    SUMX (
+        ProductsAndFirstDate,
+        VAR DateFirstSale = [Date First Sale]
+        RETURN
+            CALCULATE ( [Sales Amount], 'Date'[Date] = DateFirstSale )
+    )
+RETURN
+    Result</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_HowTo</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>MEASURE_that_will_have_correct_totals_in_Table</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_HowTo</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>MEASURE_that_will_have_correct_totals_in_Table</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>https://finance-bi.com/blog/power-bi-totals-incorrect/
+
+EXAMPLE:
+'Here is an example: I have a table with Salespeople and their monthly sales, 
+'based on that I want to calculate their sales incentive. 
+'The sales incentive is equal to 5% of the sales if they sell more than 80k$, otherwise it's zero.
+
+'Here is the incentive measure formula:
+
+Incentive = IF(SUM([Sales])&gt;80000, SUM([Sales])*5/100,0)
+
+'The total is wrong: Power BI applies the incentive formula on the total instead of adding up the incentives of the salespeople.
+
+First solution 
+'for incorrect totals in Power BI: move from a calculated measure to a calculated column
+
+Second solution: 
+'create a summarised table and use SUMX
+
+The solution is to:
+1) 'Create a summary table by salesperson, removing the product detail
+2) 'Calculate the incentive for each row of this new table
+3) 'Add up the incentives to calculate the total
+
+'Here is the formula for that:
+
+Incentive measure correct = 
+
+var summarizedTable = ADDCOLUMNS (
+								SUMMARIZE ( 'Sales', 'Sales'[Salesperson] ),
+								"Sales", CALCULATE ( SUM('Sales'[Sales]) ))
+
+RETURN
+SUMX(
+		summarizedTable,
+		IF([Sales]&gt;80000, [Sales]*5/100,0)
+	)
+
+'The variable 'summarizedTable' 
+'takes care of step 1 of the solution, and gives us the summary table we need.
+
+Specifically, SUMMARIZE takes two parameters:
+– 'the table to summarize (Sales),
+– 'the columns to keep (only Salesperson and not Product)
+
+ADDCOLUMNS takes three parameters:
+– 'the table created by SUMMARIZE
+– 'the name of a new column to add to the summarized table (Sales)
+– 'the formula for the new sales column (the sum of sales from the initial table)
+
+Afterward, 
+'SUMX takes care of steps 2 and 3 of the solution: 
+'it calculates the incentive for each row of the summary table and then adds it up.</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_JOIN___Intercect_UNION_CrossJOIN</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>CROSSJOIN</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_JOIN___Intercect_UNION_CrossJOIN</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>CROSSJOIN</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+Returns a table that contains the Cartesian product of all rows from all tables in the arguments. 
+The columns in the new table are all the columns in all the argument tables.
+CROSSJOIN is not an Iterator
+
+SYNTAX
+------
+CROSSJOIN(
+			&lt;table&gt;, 		
+			&lt;table&gt;
+			[, &lt;table&gt;]…
+		) 
+		
+table	
+'	Any DAX expression that returns a table of data, or physical tables	 
+
+'Column names from table arguments must all be different in all tables or an error is returned.
+
+'The total number of rows returned by CROSSJOIN() is equal to the product of the number of rows from all tables in the arguments; 
+'	also, the total number of columns in the result table is the sum of the number of columns in all tables. 
+'For example, if TableA has rA rows and cA columns, and TableB has rB rows and cB columns, and TableC has rC rows and cC column; 
+'	then, the resulting table has rA × rb × rC rows and cA + cB + cC columns.
+
+
+EXAMPLES
+===========
+
+'Calculated Table: cartesion product of unique rows in 2 columns, then crossjoin with just one store ID
+CROSSJOIN Demo = 
+				CROSSJOIN(
+						    VALUES(
+						        	'Product Lookup'[product_category]
+						    	  ),
+						    VALUES(
+						        	'Product Lookup'[product_group]
+						    	  ),
+						    FILTER(
+							        VALUES(
+							        		'Store Lookup'[store_id]
+							    		  ),
+							    	'Store Lookup'[store_id] = 3
+						   		  )
+						)
+
+
+
+EVALUATE
+CALCULATETABLE (
+    ADDCOLUMNS (
+        CROSSJOIN (
+            VALUES ( 'Product'[Color] ),
+            VALUES ( 'Product'[Category] )
+        ),
+        "#Prods", CALCULATE ( COUNTROWS ( 'Product' ) )
+    ),
+    'Product'[Category] IN { "TV and Video", "Computers" }
+)
+ORDER BY [Category], [Color]
+
+==========================================
+
+//'This would throw an error:
+EVALUATE
+    ADDCOLUMNS(
+        CROSSJOIN(
+            'Products'[Category],	
+            'Products'[Brand Name] 			//'This would not work, it would error: A single value for column "Brand Name" in table "Products" cannot be determined
+            ),
+        "Sales Amount", [Sales Amount] + 0
+        )
+    ORDER BY Products[Category], Products[Brand Name] 
+
+//'This one would work, to show all combinations of the Category and the Brand Name, with Zero where there were no Sales
+EVALUATE
+    ADDCOLUMNS(
+        CROSSJOIN(
+            VALUES('Products'[Category]),
+            VALUES('Products'[Brand Name])
+            ),
+        "Sales Amount", [Sales Amount] + 0
+        )
+    ORDER BY Products[Category], Products[Brand Name]    
+
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_JOIN___Intercect_UNION_CrossJOIN</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>INTERSECT</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_JOIN___Intercect_UNION_CrossJOIN</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>INTERSECT</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>INTERSECT
+'performs the set intersection between two tables, i.e. the INNER JOIN
+' It returns all the rows in the first argument that are also present in the second argument, and it retains any duplicates present in the first argument. 
+'The order of the parameters matters: duplicates are kept only if present in the first argument.
+
+'SYNTAX
+INTERSECT(
+			&lt;table_expression1&gt;, 			//'the first table must be a physical table
+			&lt;table_expression2&gt;
+	   	 )  
+
+Table_expression	
+'Any DAX expression that returns a table.
+
+Returns
+'Returns the row intersection of two tables, retaining duplicates from the first &lt;table_expression1&gt;
+
+
+NOTES:
+=======
+'Intersect is not commutative. 
+'	In general, Intersect(T1, T2) will have a different result set than Intersect(T2, T1).
+
+'Duplicate rows are retained. If a row appears in table_expression1 and table_expression2, 
+'	it and all duplicates in table_expression_1 are included in the result set.
+
+'The column names will match the column names in table_expression1. Columns are compared based on 
+'	the positioning in their respective tables.
+
+'The returned table has lineage based on the columns in table_expression1 , 
+'	regardless of the lineage of the columns in the second table. 
+'For example, if the first column of first table_expression has lineage to the base column C1 in the model, 
+'		the intersect will reduce the rows based on the intersect on first column of second table_expression 
+'		and keep the lineage on base column C1 intact.
+
+'The resulting table does NOT retain relationships to other tables (can't be used an an expanded table)
+
+Columns are compared based on positioning, and data comparison with no type coercion.
+
+The returned table does not include columns from tables related to table_expression1.
+
+
+
+
+
+EXAMPLE
+==================================================================================
+New Employees (INTERSECT) = 
+							INTERSECT(
+							    ADDCOLUMNS(
+							        'Employee Lookup',				//'First table has to be in the Data Model
+							        "Revenue",
+							        [Customer Sales]
+							    ),
+							    ADDCOLUMNS(
+							        FILTER(
+							        'Employee Lookup',
+							        'Employee Lookup'[start_date] &gt; DATE(2016,12,31)
+							        ),
+							        "Revenue",
+							        [Customer Sales]
+							    )
+							)
+
+
+
+
+EVALUATE
+		VAR SunMon =									//'NOTE (DAX STUDIO) this first table is NOT from a DATA MODEL
+		    CALCULATETABLE (
+		        VALUES ( 'Date'[Day of Week] ),
+		        'Date'[Day of Week Number] IN { 1, 2 }
+		    )
+		VAR MonTue =
+		    CALCULATETABLE (
+		        VALUES ( 'Date'[Day of Week] ),
+		        'Date'[Day of Week Number] IN { 2, 3 }
+		    )
+		VAR IntersectResult = INTERSECT( SunMon, MonTue )
+		RETURN
+		    IntersectResult</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_SimulatedData</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>Date_Table</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_SimulatedData</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>Date_Table</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+
+'========================================= version 1
+Dates = 
+
+VAR BaseTable =                             --VAR creates a variable and opens a SCOPE
+    CALENDAR(DATE(2017,1,1) , TODAY())
+    
+VAR AddYears =
+    ADDCOLUMNS(BaseTable,"Year",YEAR([Date]))
+    
+VAR AddMonths =
+                ADDCOLUMNS(
+                            AddYears,
+                            "MonthID", FORMAT([Date], "YYYYMM"),
+                            "Month", FORMAT( [Date], "MMM YY")
+                            )
+VAR AddDay =
+     ADDCOLUMNS(AddMonths, "Day", FORMAT([Date], "DDD d MMM YY"))
+     
+VAR AddStartOfWeek =
+     ADDCOLUMNS(AddDay, "Start of Week", [Date] - WEEKDAY([Date]))
+     
+--RETURN is required to close the scope opened by a VAR
+--RETURN BaseTable  --&lt;== This would just return the BaseTable, but not the AddYears Column
+RETURN AddStartOfWeek    
+
+'========================================= version 2 -- this gives the same results:
+Dates ALL = 
+    VAR BaseTable =                             --VAR creates a variable and opens a SCOPE
+                    CALENDAR(DATE(2017,1,1) , TODAY())
+RETURN GENERATE(
+     BaseTable,
+     VAR BaseDay = [Date]
+     VAR BaseYear = YEAR(BaseDay)
+     VAR BaseMonthID = INT(FORMAT(BaseDay,"YYYYMM"))
+     VAR BaseMonth = FORMAT(BaseDay, "MMM YY")
+     VAR BaseDayLong = FORMAT(BaseDay, "DDD d  MMM YY")
+     VAR BaseStartOfWeek = WEEKDAY(BaseDay)
+
+RETURN ROW(
+     "Year", BaseYear,
+     "MonthID", BaseMonthID,
+     "Month", BaseMonth, 
+     "Day", BaseDayLong,
+     "Start of Week", BaseDay - BaseStartOfWeek
+            )
+)
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Studio</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>MEASURE_defined_in_query</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Studio</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>MEASURE_defined_in_query</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>'NOTE: to get the definition of a MEASURE, into DAX STUDIO without having to retype it:
+Right Click the Measure in the Metadata pane =&gt; Define Measure
+'To get the Measures that depend on a particular MEASURE from the MetaData:
+Right Click the Measure in the Metadata pane =&gt; Define Dependent Measures
+
+======================================================================================== 'Define a local MEASURE
+DEFINE																	//'&lt;== required in DAX STUDIO to create the MEASURE
+    MEASURE 															//'Need to tell it which TABLE will host the MEASURE
+    	'Customers'[Number Of Sales] = 
+    									COUNTROWS( 'Online Sales' )
+																		//' BUT it will not persist there after the query runs
+EVALUATE
+    CALCULATETABLE(
+        ADDCOLUMNS(
+            SELECTCOLUMNS(
+                'Customers',
+                "Customer Name", 'Customers'[Customer Name]
+                ),
+            "Sales Amount", [Sales Amount],			//' first MEASURE (defined outside this query)
+            "Number of Sales", [Number of Sales]	//' second MEASURE (defined inside this query)
+            ),
+        'Products'[Brand Name] = "Contoso"
+        )
+
+======================================================================================== 'DEFINE multiple Local MEASURES, and override one from the .pbix
+DEFINE
+    MEASURE 'Customers'[Number Of Sales] =
+        COUNTROWS ( 'Online Sales' )
+        
+    //' This one actually overrides an existing MEASURE in the .pbix file, locally, during the execution of the query    
+    MEASURE 'Online Sales'[Sales Amount] =
+        SUMX (
+	            'Online Sales',
+	            'Online Sales'[Sales Quantity] * 'Online Sales'[Unit Price] - 'Online Sales'[Discount Amount]
+        	 ) / 100
+
+EVALUATE
+CALCULATETABLE (
+    ADDCOLUMNS (
+        SELECTCOLUMNS ( 'Customers', "Customer Name", 'Customers'[Customer Name] ),
+        "Sales Amount", [Sales Amount],
+        "Profit", [Profit],							//' &lt;== This [Profit] would be the measure defined in .pbix, not in DATA STUDIO
+        "Number of Sales", [Number of Sales]
+    ),
+    'Products'[Brand Name] = "Contoso"
+)        
+========================================================================================'Locally define the measure [Profit],rather than use the one from .pbix
+DEFINE
+    
+MEASURE _Measures[Profit] = [Sales Amount] - [Total Cost]
+
+MEASURE _Measures[Sales Amount] = SUMX(
+            'Online Sales',
+            'Online Sales'[Sales Quantity] * 'Online Sales'[Unit Price] - 'Online Sales'[Discount Amount]
+        ) / 100
+        
+MEASURE _Measures[Total Cost] = SUMX(
+        'Online Sales',
+        'Online Sales'[Unit Cost] * 'Online Sales'[Sales Quantity]
+    ) / 100
+
+MEASURE 'Customers'[Number Of Sales] =
+        COUNTROWS ( 'Online Sales' )
+        
+EVALUATE
+CALCULATETABLE (
+    ADDCOLUMNS (
+        SELECTCOLUMNS ( 'Customers', "Customer Name", 'Customers'[Customer Name] ),
+        "Sales Amount", [Sales Amount],
+        "Profit", [Profit],
+        "Number of Sales", [Number of Sales]
+    ),
+    'Products'[Brand Name] = "Contoso"
+)</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Studio</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>MEASURE_TEST</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Studio</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>MEASURE_TEST</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+======================================================================== Simple, using ADDCOLUMNS
+DEFINE
+
+	MEASURE '1Measures'[isPreviousWeek] = 1
+
+
+EVALUATE
+
+var TopRowsOfCalendar = TOPN(11,DimDate, DimDate[DateKey],ASC)
+
+
+RETURN
+ADDCOLUMNS( TopRowsOfCalendar, "xxx", '1Measures'[isPreviousWeek])
+
+
+======================================================================== VAR in Measure, using ADDCOLUMNS
+
+DEFINE
+	VAR two = 2
+	MEASURE '1Measures'[isPreviousWeek] = two
+
+
+EVALUATE
+
+var TopRowsOfCalendar = TOPN(11,DimDate, DimDate[DateKey],ASC)
+
+
+RETURN
+ADDCOLUMNS( 
+			TopRowsOfCalendar
+			, "xxx", '1Measures'[isPreviousWeek])
+			
+======================================================================== VAR in Measure, using ADDCOLUMNS\SELECTCOLUMNS				
+DEFINE
+	VAR two = 2
+	MEASURE '1Measures'[isPreviousWeek] = two
+
+
+EVALUATE
+
+
+var theColumns = SELECTCOLUMNS( 
+									DimDate
+									,DimDate[Datekey]
+								  )
+
+var output = ADDCOLUMNS(
+						SELECTCOLUMNS( 
+									DimDate
+									,DimDate[Datekey]
+								  )
+						,
+						  "xxx", '1Measures'[isPreviousWeek]
+						)
+
+RETURN
+output				
+
+========================================================================DimDate
+//isPreviousWeek_v2.dax
+
+DEFINE
+	VAR two = 2
+	MEASURE '1Measures'[isPreviousWeek] = two
+
+
+EVALUATE
+
+
+var theColumns = SELECTCOLUMNS( 
+									DimDate
+									,DimDate[Datekey]
+								  )
+
+var output = ADDCOLUMNS(
+						SELECTCOLUMNS( 
+									DimDate
+									,DimDate[Datekey]
+									,DimDate[CalendarYear]
+									,DimDate[DayNumberOfYear]
+									,DimDate[DayNumberOfMonth]	
+									,DimDate[WeekNumberOfYear]									
+									
+								  )
+						,
+						  "xxx", '1Measures'[isPreviousWeek]
+						)
+
+RETURN
+output
+
+
+
+//EVALUATE
+//TOPN(11,DimDate, DimDate[DateKey],ASC)
+========================================================================</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Studio</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>Query_Examples</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Studio</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>Query_Examples</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>'https://daxstudio.org/tutorials/writing-dax-queries/
+
+
+==================================================VAR
+
+EVALUATE
+VAR p = PATH('Parent Child'[EmployeeKey],'Parent Child'[ParentEmployeeKey])
+RETURN
+ADDCOLUMNS  (
+            'Parent Child',
+            "Path",p,
+            "Path Length", PATHLENGTH(p),
+            "Path Item", PATHITEM(p, 3)
+            )
+            
+==================================================VAR
+DEFINE
+	VAR Number1 = 45
+	VAR Number2 = 55
+EVALUATE
+	{
+		Number1 + Number2
+	}            </Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Time_Intelligence</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>1_DAX_DateTable_MainPart</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Time_Intelligence</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>1_DAX_DateTable_MainPart</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>1_DAX_DateTable_MainPart
+
+'Modeling {Menu} =&gt; New Table {icon on ribbon}
+
+
+DateTable = 
+
+-- Configuration items
+//VAR FirstYear = YEAR(NOW()) - 1
+VAR StartYear = YEAR(now())-2
+VAR StartDate = DATE(StartYear,01,01)
+VAR FirstYear = YEAR(StartDate) 
+VAR LastYear = YEAR(NOW()) 
+VAR FirstDayOfWeek = 0      -- Use 0 for Sunday or 1 for Monday. For an ISO calendar use 1.
+VAR FiscalMonthEnd = 12     -- For an ISO calendar use 12. ISO always starts in January
+
+VAR theStartDate= Date(Firstyear,1,1)
+VAR EndDate = Date(LastYear,12,31)
+
+-- Generate a base table of dates
+VAR BaseTable = CALENDAR(theStartDate, EndDate)			// &lt;==== 'BASE
+
+-- Add the Year for each individual date
+VAR Years = ADDCOLUMNS(
+    BaseTable,
+    "Year", YEAR([Date])                                          //Use this one when you want to sort by Years asccending
+    ,"Year_SORT_Descending", (YEAR(now()) - YEAR([Date])) + 1     //this year is 1, previous years are increasing from 1
+    ,"Year_descending" , YEAR([Date])                             // use this one when you want to sort by Years descending, use the Model =&gt; sort by column: Year_SORT_Descending
+    )
+
+
+-- Add the calendar month and other month related data for each date
+VAR Months = ADDCOLUMNS(
+    Years,
+    "Month", MONTH([Date]),
+    "MonthName", FORMAT([Date],"mmmm"),	  
+    "YYYYMMDD", FORMAT([Date],"YYYYMMDD"),					// &lt;=== 'YYYYMMDD
+    "YYYYMM",  ( YEAR([Date]) * 100) + MONTH([Date] ),
+    "Year and Month Name",FORMAT([Date],"YYYY-MMM"),
+    "Fiscal Year", 
+        IF( FiscalMonthEnd = 12, 
+            YEAR([Date]), 
+            IF( MONTH([DATE]) &lt;= FiscalMonthEnd, 
+                YEAR([DATE])-1, 
+                YEAR([Date])
+                )
+            ),
+    "Fiscal Month", 
+        IF( 
+            FiscalMonthEnd = 12, 
+                MONTH([Date]), 
+                IF(MONTH([Date]) &lt;= FiscalMonthEnd, 
+                    FiscalMonthEnd + MONTH([Date]), 
+                    MONTH([Date]) - FiscalMonthEnd)
+            )
+)
+
+-- Add the Quarter and other quarter related data for each date    
+VAR Quarters = ADDCOLUMNS(
+    Months,
+    "Quarter",ROUNDUP(MONTH([Date])/3,0),
+    "YYYYQ",[Year] &amp; ROUNDUP(MONTH([Date])/3,0)
+    )
+
+-- Add the Day and other day related data for each date    
+VAR Days = ADDCOLUMNS(
+    Quarters,
+    "DayOfMonth", DAY([Date]),
+    "DayOfWeekName", FORMAT([Date],"DDDD"),
+    "DayOfWeekNumber", WEEKDAY([Date]),
+    "DayOfYear", DATEDIFF (DATE(YEAR([Date]),1,1), [Date], DAY) + 1
+    ,"Today_DATE", DATE( YEAR(TODAY()), MONTH(TODAY()), Day(TODAY()) )
+    ,"Report_DATE", DATE( YEAR(TODAY()-1), MONTH(TODAY()-1), Day(TODAY()-1) )     
+    )
+
+-- Add a few week columns. This is all dependent upon the variable FirstDayOfWeek which controls what day of the week a week starts (usually Sunday or Monday)
+VAR Weeks = ADDCOLUMNS(
+    Days,
+    "WeekOfMonth", 1 + WEEKNUM([Date], FirstDayOfWeek+1) - WEEKNUM( DATE(YEAR([Date]), MONTH([Date]), 1), FirstDayOfWeek+1),
+    "WeekofYear", WEEKNUM([Date], FirstDayOfWeek+1),                  -- The second parameter is 1 for Sunday and 2 for Monday
+    "YYYYWW", ( YEAR([Date]) * 100) + WEEKNUM([Date], FirstDayOfWeek+1)
+    //"YYYYWW", [Year] &amp; WEEKNUM([Date],FirstDayOfWeek+1)  
+    )
+
+-- Add all US holidays
+var Holidays = ADDCOLUMNS(
+    Weeks,
+    "Holiday", 
+        IF ( MONTH([Date]) = 12 &amp;&amp; DAY([DATE] = 25),                                        -- Christmas Day: December 25
+            "Christmas",
+        If ( MONTH([Date]) = 1 &amp;&amp; DAY([Date]) = 1,                                          -- New Years' Day: January 1
+            "New Year's Day",
+        If ( MONTH([Date]) = 7 &amp;&amp; DAY([Date]) = 4,                                          -- Independence Day: July 4
+            "Independence Day",
+        If ( MONTH([Date]) = 11 &amp;&amp; DAY([Date]) = 11,                                        -- Veteran's Day: November 11
+            "Veterans Day",
+        If ( MONTH([Date]) = 11 &amp;&amp; [DayOfWeekName] = "Thursday" &amp;&amp; ([DayOfMonth] &gt;= 22 &amp;&amp; [DayOfMonth] &lt;= 28), -- Thanksgiving: 4th Thursday of November
+            "Thanksgiving Day",
+        If ( MONTH([Date]) = 10 &amp;&amp; [DayOfWeekName] = "Monday" &amp;&amp; ([DayOfMonth] &gt;= 8 &amp;&amp; [DayOfMonth] &lt;= 14),    -- Columbus Day: 2nd Monday in October
+            "Columbus Day",
+        If ( MONTH([Date]) = 9 &amp;&amp; [DayOfWeekName] = "Monday" &amp;&amp; ([DayOfMonth] &gt;= 1 &amp;&amp; [DayOfMonth] &lt;= 7),      -- Labor Day: 1st Monday in September
+            "Labor Day",
+        If ( MONTH([Date]) = 2 &amp;&amp; [DayOfWeekName] = "Monday" &amp;&amp; ([DayOfMonth] &gt;= 15 &amp;&amp; [DayOfMonth] &lt;= 21),    -- Presidents' Day: 3rd Monday in February
+            "Presidents' Day",
+        If ( MONTH([Date]) = 1 &amp;&amp; [DayOfWeekName] = "Monday" &amp;&amp; ([DayOfMonth] &gt;= 15 &amp;&amp; [DayOfMonth] &lt;= 21),    -- Martin Luther King Jr.' Day: 3rd Monday in January
+            "Martin Luther King Jr. Day"))))))))
+        )
+    )
+
+-- Add if each date is a working day. It won't be if the day is Saturday or Sunday or if it's a holiday
+VAR IsWorkingDay = ADDCOLUMNS(
+    Holidays,
+    "IsBusinesDay", IF ([DayOfWeekName] IN { "Saturday", "Sunday" } || NOT ISBLANK([Holiday]), FALSE(), TRUE())
+    )
+
+--VAR Today_DATE = {DATE(YEAR(NOW()), MONTH(NOW()), Day(NOW()) ) }
+
+
+
+
+
+VAR isDates = ADDCOLUMNS(
+    IsWorkingDay
+    ,"isYTD", IF( YEAR([Date]) = YEAR(NOW()) &amp;&amp; [Date] &lt;= NOW(), 1, 0 )   
+                       
+
+)
+
+
+RETURN isDates</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Time_Intelligence</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>Calendar_CalculatedTable_goodTemplate_from_DAX</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Time_Intelligence</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>Calendar_CalculatedTable_goodTemplate_from_DAX</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>//'from UDEMY Time Intelligence
+
+
+Calendar = 
+
+-- Configuration items
+VAR FirstYear = 2010
+VAR LastYear = 2020
+VAR FirstDayOfWeek = 0      -- Use 0 for Sunday or 1 for Monday. For an ISO calendar use 1.
+VAR FiscalMonthEnd = 12     -- For an ISO calendar use 12. ISO always starts in January
+
+VAR StartDate = Date(Firstyear,1,1)
+VAR EndDate = Date(LastYear,12,31)
+
+-- Generate a base table of dates
+VAR BaseTable = CALENDAR(StartDate, EndDate)			// &lt;==== 'BASE
+
+-- Add the Year for each individual date
+VAR Years = ADDCOLUMNS(
+    BaseTable,
+    "Year", YEAR([Date])
+    )
+
+-- Add the calendar month and other month related data for each date
+VAR Months = ADDCOLUMNS(
+    Years,
+    "Month", MONTH([Date]),
+    "Date Key", FORMAT([Date],"YYYYMMDD"),					// &lt;=== 'Date Key
+    "Year and Month Number",FORMAT([Date],"YYYY-MM"),
+    "Year and Month Name",FORMAT([Date],"YYYY-MMM"),
+    "Fiscal Year", 
+        IF( FiscalMonthEnd = 12, 
+            YEAR([Date]), 
+            IF( MONTH([DATE]) &lt;= FiscalMonthEnd, 
+                YEAR([DATE])-1, 
+                YEAR([Date])
+                )
+            ),
+    "Fiscal Month", 
+        IF( 
+            FiscalMonthEnd = 12, 
+                MONTH([Date]), 
+                IF(MONTH([Date]) &lt;= FiscalMonthEnd, 
+                    FiscalMonthEnd + MONTH([Date]), 
+                    MONTH([Date]) - FiscalMonthEnd)
+            )
+)
+
+-- Add the Quarter and other quarter related data for each date    
+VAR Quarters = ADDCOLUMNS(
+    Months,
+    "Quarter",ROUNDUP(MONTH([Date])/3,0),
+    "Year and Quarter",[Year] &amp; "-Q" &amp; ROUNDUP(MONTH([Date])/3,0)
+    )
+
+-- Add the Day and other day related data for each date    
+VAR Days = ADDCOLUMNS(
+    Quarters,
+    "Day", DAY([Date]),
+    "Day Name", FORMAT([Date],"DDDD"),
+    "Day Of Week", WEEKDAY([Date]),
+    "Day Of Year", DATEDIFF (DATE(YEAR([Date]),1,1), [Date], DAY) + 1
+    )
+
+-- Add a few week columns. This is all dependent upon the variable FirstDayOfWeek which controls what day of the week a week starts (usually Sunday or Monday)
+VAR Weeks = ADDCOLUMNS(
+    Days,
+    "Week Of Month", 1 + WEEKNUM([Date], FirstDayOfWeek+1) - WEEKNUM( DATE(YEAR([Date]), MONTH([Date]), 1), FirstDayOfWeek+1),
+    "Week of Year", WEEKNUM([Date], FirstDayOfWeek+1),                  -- The second parameter is 1 for Sunday and 2 for Monday
+    "Year and Week", [Year] &amp; "-W" &amp; WEEKNUM([Date],FirstDayOfWeek+1)
+    )
+
+-- Add all US holidays
+var Holidays = ADDCOLUMNS(
+    Weeks,
+    "Holiday", 
+        IF ( MONTH([Date]) = 12 &amp;&amp; DAY([DATE] = 25),                                        -- Christmas Day: December 25
+            "Christmas",
+        If ( MONTH([Date]) = 1 &amp;&amp; DAY([Date]) = 1,                                          -- New Years' Day: January 1
+            "New Year's Day",
+        If ( MONTH([Date]) = 7 &amp;&amp; DAY([Date]) = 4,                                          -- Independence Day: July 4
+            "Independence Day",
+        If ( MONTH([Date]) = 11 &amp;&amp; DAY([Date]) = 11,                                        -- Veteran's Day: November 11
+            "Veterans Day",
+        If ( MONTH([Date]) = 11 &amp;&amp; [Day Name] = "Thursday" &amp;&amp; ([Day] &gt;= 22 &amp;&amp; [Day] &lt;= 28), -- Thanksgiving: 4th Thursday of November
+            "Thanksgiving Day",
+        If ( MONTH([Date]) = 10 &amp;&amp; [Day Name] = "Monday" &amp;&amp; ([Day] &gt;= 8 &amp;&amp; [Day] &lt;= 14),    -- Columbus Day: 2nd Monday in October
+            "Columbus Day",
+        If ( MONTH([Date]) = 9 &amp;&amp; [Day Name] = "Monday" &amp;&amp; ([Day] &gt;= 1 &amp;&amp; [Day] &lt;= 7),      -- Labor Day: 1st Monday in September
+            "Labor Day",
+        If ( MONTH([Date]) = 2 &amp;&amp; [Day Name] = "Monday" &amp;&amp; ([Day] &gt;= 15 &amp;&amp; [Day] &lt;= 21),    -- Presidents' Day: 3rd Monday in February
+            "Presidents' Day",
+        If ( MONTH([Date]) = 1 &amp;&amp; [Day Name] = "Monday" &amp;&amp; ([Day] &gt;= 15 &amp;&amp; [Day] &lt;= 21),    -- Martin Luther King Jr.' Day: 3rd Monday in January
+            "Martin Luther King Jr. Day"))))))))
+        )
+    )
+
+-- Add if each date is a working day. It won't be if the day is Saturday or Sunday or if it's a holiday
+VAR IsWorkingDay = ADDCOLUMNS(
+    Holidays,
+    "Is Working Day", IF ([Day Name] IN { "Saturday", "Sunday" } || NOT ISBLANK([Holiday]), FALSE(), TRUE())
+    )
+
+RETURN IsWorkingDay</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Time_Intelligence</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>DATE_Table_from_CalendarAuto</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Time_Intelligence</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>DATE_Table_from_CalendarAuto</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+
+Date Table (CALENDARAUTO) = 
+VAR MinYear = YEAR(MIN('Calendar'[Transaction_Date]))
+VAR MaxYear = YEAR(MAX('Calendar'[Transaction_Date]))
+
+RETURN
+ADDCOLUMNS(
+    FILTER(
+        CALENDARAUTO(),					//'Starts from the automatic table
+        YEAR([Date]) &gt;= MinYear &amp;&amp;		//' but filters out dates before/after specific field min/max values
+        YEAR([Date]) &lt;= MaxYear
+    ),
+    "Year", YEAR([Date]),
+    "Quarter Number", INT(FORMAT([Date], "q")),
+    "Quarter", "Q" &amp; INT(FORMAT([Date],"q")),
+    "Month Number", MONTH([Date]),
+    "Month Short", FORMAT([Date],"mmm"),
+    "Week Number", WEEKNUM([Date])
+)</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Time_Intelligence</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>Date_Table</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Time_Intelligence</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>Date_Table</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>a 'date table' is all the dates between a specific range
+'often have additional columns such as: MonthName, YearName, Quarter, Holiday
+
+'Time Intelligence requires continous series of dates w/ no gaps
+
+'To Create Date Table in DAX
+-----------------------------
+' "Modeling" {Main Menu} =&gt; 'New Table' {icon in ribbon}
+' In the formula bar: "Table =" =&gt; rename 'Table' to 'DatesDAX' and change it to:
+DatesDAX = CALENDAR("01/01/2011","01/01/2021") 
+'This would give you one column, so add the "ADDCOLUMNS" iterator
+DatesDAX = ADDCOLUMNS( CALENDAR("01/01/2011","01/01/2021"), "Year", YEAR([Date]))
+'Where [Date] is the existing column to use  
+
+'Create Relationship with Date Table to use for subsequent filtering
+--------------------------------------------------------------------
+'To automatically calculate the calendar, w/o specifying start and end date
+'	where fiscal year end and start is December (i.e. 12)
+DatesDAX = ADDCOLUMNS(CALENDARAUTO(12),"Year",YEAR([Date]))
+
+'Then build relationship between [Date] column of the newly created Date Table, 
+'	AND the [OrderDate] field of the [SalesOrderHeader] table  {FOR EXAMPLE}
+
+'Go to the relationships pane {on left} and drag the  [Date] column of the newly created Date Table
+'	and drop it on the [OrderDate] field of the [SalesOrderHeader] table 
+
+
+'could also calculate a PreviousYear column:
+Date = ADDCOLUMNS(CALENDARAUTO(12),"Year", YEAR([Date]),"Month", Month([Date]), "PreviousYear",(YEAR([Date]-1) )) 
+
+====Date Table=======================================================================================================
+https://powerbi.tips/2017/12/start-of-month-dax-calendar/
+'Open Power BI Desktop, on the Modeling ribbon click New Table.
+'Enter the following code:
+
+Dates = 
+  GENERATE ( 
+    CALENDAR ( DATE ( 2017, 1, 1 ), DATE ( 2017, 12, 31 ) ), 
+    VAR currentDay = [Date]
+    VAR day = DAY( currentDay )
+    VAR month = MONTH ( currentDay ) 
+    VAR year = YEAR ( currentDay )
+  RETURN ROW ( 
+    "day", day, 
+    "month", month, 
+    "year", year )
+  )
+  
+  'Note: When you drag over the field labeled Date the field will be naturally added as a Date Hierarchy.  
+  'To remove the Date Hierarchy, you have to click the little drop down arrow next to the word DATE 
+  '	and select the word Date in the drop down menu.  
+  '	This will remove the Year, Quarter, Month and Day date context from the visual.
+====Data Table - Just 1st of month ===============================================================
+https://powerbi.tips/2017/12/start-of-month-dax-calendar/
+'Open Power BI Desktop, on the Modeling ribbon click New Table.
+'Enter the following code:
+
+Start of Month Dates = 
+  GENERATE (
+    GENERATESERIES(1,(12*118)),
+    VAR inc = [Value]
+  RETURN ROW (
+    "date", DATE(1900,inc,1)
+    )
+  )  
+====Data Table - Beginning and End of month ===============================================================
+https://powerbi.tips/2017/12/start-of-month-dax-calendar/
+'Open Power BI Desktop, on the Modeling ribbon click New Table.
+'Enter the following code:
+  
+End of Month Dates = 
+  GENERATE (
+    GENERATESERIES(1,12*119),
+    VAR yearToStart = 1900
+    VAR inc = [Value]
+  RETURN ROW (
+    "Date", DATE(yearToStart,inc,1) ,
+    "Month End", EOMONTH( DATE(yearToStart,inc,1), 0)
+    )
+  )</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Time_Intelligence</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>YearOverYear_Growth</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Time_Intelligence</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>YearOverYear_Growth</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>YearOverYear_Growth
+
+'Relationship:
+[OrderDate] of table [SalesHeader]  &lt;=&gt; [Date] of table [Date]
+'Cardinality: Many-to-one
+
+'TABLE: [Date] w/ 3 column &amp; 1 Measure
+--------------
+'C1: Date
+'C2: "Year"
+'C3: "Month"
+
+Date =
+ADDCOLUMNS (
+    CALENDARAUTO ( 12 ),
+    "Year", YEAR ( [Date] ),
+    "Month", MONTH ( [Date] )
+)
+'Measure: YTD which pulls from the [SalesHeader] Table
+YTD = TOTALYTD(SUM(SalesHeader[TotalDue]),'Date'[Date])
+
+
+'TABLE: [SalesHeader]
+---------------------
+'C1: OrderDate
+'C2: OrderDateNum  {YYYYMMDD : INTEGER}
+'Measure1: 
+	Prev Year = CALCULATE(SUM(SalesHeader[TotalDue]),PREVIOUSYEAR('Date'[Date]))
+'C3: SalesOrderID
+'C4: TotalDue
+'Measure2: 
+YoY Growth =
+	 ( SUM ( SalesHeader[TotalDue] ) - [Prev Year] )
+	    / SUM ( SalesHeader[TotalDue] )
+	
+'Design Surface
+---------------------
+Table Visual
+'Values:
+	[DATE].[Year]				'{Don't summarize}
+	[SalesHeader].[TotalDue]	'{Sum}
+	[SalesHeader].[Prev Year]	'
+	[SalesHeader].[YoY Growth]	'
+	
+	
+
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Time_Intelligence</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>YearToDate_total</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Time_Intelligence</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>YearToDate_total</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>'Start w/ 2 tables:
+
+'Relationship:
+[OrderDate] of table [SalesHeader]  &lt;=&gt; [Date] of table [Date]
+'Cardinality: Many-to-one
+
+'TABLE: [Date] w/ 3 column &amp; 1 Measure
+--------------
+'C1: Date
+'C2: "Year"
+'C3: "Month"
+Date = ADDCOLUMNS(CALENDARAUTO(12),"Year", YEAR([Date]),"Month", Month([Date]))
+'Measure: YTD which pulls from the [SalesHeader] Table
+YTD = TOTALYTD(SUM(SalesHeader[TotalDue]),'Date'[Date])
+
+
+'TABLE: [SalesHeader]
+---------------------
+'C1: OrderDate
+'C2: OrderDateNum  {YYYYMMDD : INTEGER}
+'Measure1: 
+	Prev Year = CALCULATE(SUM(SalesHeader[TotalDue]),PREVIOUSYEAR('Date'[Date]))
+'C3: SalesOrderID
+'C4: TotalDue
+'Measure2: 
+	YoY Growth = (SUM(SalesHeader[TotalDue]) - [Prev Year]) / Sum(SalesHeader[TotalDue])
+
+'Design Surface
+---------------------
+Table Visual
+'Values:
+	[DATE].[Year]				'{Don't summarize}
+	[DATE].[Month]				'{Don't summarize}	
+	[SalesHeader].[TotalDue]	'{Sum}
+	[DATE].[YTD]				'
+	
+	
+
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Time_Intelligence</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>1_DAX_DateTable_MainPart_v2</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Time_Intelligence</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>1_DAX_DateTable_MainPart_v2</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>1_DAX_DateTable_MainPart
+
+'Modeling {Menu} =&gt; New Table {icon on ribbon}
+
+'v2 - Modified - 6/23/2022: added the MonthName
+
+
+
+DateTable = 
+
+-- Configuration items
+//VAR FirstYear = YEAR(NOW()) - 1
+VAR StartYear = YEAR(now())-2
+VAR StartDate = DATE(StartYear,01,01)
+VAR FirstYear = YEAR(StartDate) 
+VAR LastYear = YEAR(NOW()) 
+VAR FirstDayOfWeek = 0      -- Use 0 for Sunday or 1 for Monday. For an ISO calendar use 1.
+VAR FiscalMonthEnd = 12     -- For an ISO calendar use 12. ISO always starts in January
+
+VAR theStartDate= Date(Firstyear,1,1)
+VAR EndDate = Date(LastYear,12,31)
+
+-- Generate a base table of dates
+VAR BaseTable = CALENDAR(theStartDate, EndDate)			// &lt;==== 'BASE
+
+-- Add the Year for each individual date
+VAR Years = ADDCOLUMNS(
+    BaseTable,
+    "Year", YEAR([Date])
+    )
+
+-- Add the calendar month and other month related data for each date
+VAR Months = ADDCOLUMNS(
+    Years,
+    "Month", MONTH([Date]),
+    "MonthName", FORMAT([Date],"mmmm"),	  
+    "YYYYMMDD", FORMAT([Date],"YYYYMMDD"),					// &lt;=== 'YYYYMMDD
+    "YYYYMM",  ( YEAR([Date]) * 100) + MONTH([Date] ),
+    "Year and Month Name",FORMAT([Date],"YYYY-MMM"),
+    "Fiscal Year", 
+        IF( FiscalMonthEnd = 12, 
+            YEAR([Date]), 
+            IF( MONTH([DATE]) &lt;= FiscalMonthEnd, 
+                YEAR([DATE])-1, 
+                YEAR([Date])
+                )
+            ),
+    "Fiscal Month", 
+        IF( 
+            FiscalMonthEnd = 12, 
+                MONTH([Date]), 
+                IF(MONTH([Date]) &lt;= FiscalMonthEnd, 
+                    FiscalMonthEnd + MONTH([Date]), 
+                    MONTH([Date]) - FiscalMonthEnd)
+            )
+)
+
+-- Add the Quarter and other quarter related data for each date    
+VAR Quarters = ADDCOLUMNS(
+    Months,
+    "Quarter",ROUNDUP(MONTH([Date])/3,0),
+    "YYYYQ",[Year] &amp; ROUNDUP(MONTH([Date])/3,0)
+    )
+
+-- Add the Day and other day related data for each date    
+VAR Days = ADDCOLUMNS(
+    Quarters,
+    "DayOfMonth", DAY([Date]),
+    "DayOfWeekName", FORMAT([Date],"DDDD"),
+    "DayOfWeekNumber", WEEKDAY([Date]),
+    "DayOfYear", DATEDIFF (DATE(YEAR([Date]),1,1), [Date], DAY) + 1
+    ,"Today_DATE", DATE( YEAR(TODAY()), MONTH(TODAY()), Day(TODAY()) )
+    ,"Report_DATE", DATE( YEAR(TODAY()-1), MONTH(TODAY()-1), Day(TODAY()-1) )     
+    )
+
+-- Add a few week columns. This is all dependent upon the variable FirstDayOfWeek which controls what day of the week a week starts (usually Sunday or Monday)
+VAR Weeks = ADDCOLUMNS(
+    Days,
+    "WeekOfMonth", 1 + WEEKNUM([Date], FirstDayOfWeek+1) - WEEKNUM( DATE(YEAR([Date]), MONTH([Date]), 1), FirstDayOfWeek+1),
+    "WeekofYear", WEEKNUM([Date], FirstDayOfWeek+1),                  -- The second parameter is 1 for Sunday and 2 for Monday
+    "YYYYWW", ( YEAR([Date]) * 100) + WEEKNUM([Date], FirstDayOfWeek+1)
+    //"YYYYWW", [Year] &amp; WEEKNUM([Date],FirstDayOfWeek+1)  
+    )
+
+-- Add all US holidays
+var Holidays = ADDCOLUMNS(
+    Weeks,
+    "Holiday", 
+        IF ( MONTH([Date]) = 12 &amp;&amp; DAY([DATE] = 25),                                        -- Christmas Day: December 25
+            "Christmas",
+        If ( MONTH([Date]) = 1 &amp;&amp; DAY([Date]) = 1,                                          -- New Years' Day: January 1
+            "New Year's Day",
+        If ( MONTH([Date]) = 7 &amp;&amp; DAY([Date]) = 4,                                          -- Independence Day: July 4
+            "Independence Day",
+        If ( MONTH([Date]) = 11 &amp;&amp; DAY([Date]) = 11,                                        -- Veteran's Day: November 11
+            "Veterans Day",
+        If ( MONTH([Date]) = 11 &amp;&amp; [DayOfWeekName] = "Thursday" &amp;&amp; ([DayOfMonth] &gt;= 22 &amp;&amp; [DayOfMonth] &lt;= 28), -- Thanksgiving: 4th Thursday of November
+            "Thanksgiving Day",
+        If ( MONTH([Date]) = 10 &amp;&amp; [DayOfWeekName] = "Monday" &amp;&amp; ([DayOfMonth] &gt;= 8 &amp;&amp; [DayOfMonth] &lt;= 14),    -- Columbus Day: 2nd Monday in October
+            "Columbus Day",
+        If ( MONTH([Date]) = 9 &amp;&amp; [DayOfWeekName] = "Monday" &amp;&amp; ([DayOfMonth] &gt;= 1 &amp;&amp; [DayOfMonth] &lt;= 7),      -- Labor Day: 1st Monday in September
+            "Labor Day",
+        If ( MONTH([Date]) = 2 &amp;&amp; [DayOfWeekName] = "Monday" &amp;&amp; ([DayOfMonth] &gt;= 15 &amp;&amp; [DayOfMonth] &lt;= 21),    -- Presidents' Day: 3rd Monday in February
+            "Presidents' Day",
+        If ( MONTH([Date]) = 1 &amp;&amp; [DayOfWeekName] = "Monday" &amp;&amp; ([DayOfMonth] &gt;= 15 &amp;&amp; [DayOfMonth] &lt;= 21),    -- Martin Luther King Jr.' Day: 3rd Monday in January
+            "Martin Luther King Jr. Day"))))))))
+        )
+    )
+
+-- Add if each date is a working day. It won't be if the day is Saturday or Sunday or if it's a holiday
+VAR IsWorkingDay = ADDCOLUMNS(
+    Holidays,
+    "IsBusinesDay", IF ([DayOfWeekName] IN { "Saturday", "Sunday" } || NOT ISBLANK([Holiday]), FALSE(), TRUE())
+    )
+
+--VAR Today_DATE = {DATE(YEAR(NOW()), MONTH(NOW()), Day(NOW()) ) }
+
+
+
+
+
+VAR isDates = ADDCOLUMNS(
+    IsWorkingDay
+    ,"isYTD", IF( YEAR([Date]) = YEAR(NOW()) &amp;&amp; [Date] &lt;= NOW(), 1, 0 )   
+                       
+
+)
+
+
+
+
+                                    
+
+  
+
+RETURN isDates</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Time_Intelligence</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>1_DAX_DateTable_MainPart__commentedOutToSpeedItUp</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Time_Intelligence</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>1_DAX_DateTable_MainPart__commentedOutToSpeedItUp</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>DateTable = 
+
+-- Configuration items
+//VAR FirstYear = YEAR(NOW()) - 1
+VAR StartYear = YEAR(now())-2
+VAR StartDate = DATE(StartYear,01,01)
+VAR FirstYear = YEAR(StartDate) 
+VAR LastYear = YEAR(NOW()) 
+VAR FirstDayOfWeek = 0      -- Use 0 for Sunday or 1 for Monday. For an ISO calendar use 1.
+VAR FiscalMonthEnd = 12     -- For an ISO calendar use 12. ISO always starts in January
+
+VAR theStartDate= Date(Firstyear,1,1)
+VAR EndDate = Date(LastYear,12,31)
+
+-- Generate a base table of dates
+VAR BaseTable = CALENDAR(theStartDate, EndDate)			// &lt;==== 'BASE
+
+-- Add the Year for each individual date
+VAR Years = ADDCOLUMNS(
+    BaseTable,
+    "Year", YEAR([Date])                                          //Use this one when you want to sort by Years asccending
+    ,"Year_SORT_Descending", (YEAR(now()) - YEAR([Date])) + 1     //this year is 1, previous years are increasing from 1
+    ,"Year_descending" , YEAR([Date])                             // use this one when you want to sort by Years descending, use the Model =&gt; sort by column: Year_SORT_Descending
+    )
+
+
+-- Add the calendar month and other month related data for each date
+VAR Months = ADDCOLUMNS(
+    Years,
+    "Month", MONTH([Date])
+    ,"MonthName", FORMAT([Date],"mmmm")  
+    /*
+    ,"YYYYMMDD", FORMAT([Date],"YYYYMMDD")					// &lt;=== 'YYYYMMDD
+    ,"YYYYMM",  ( YEAR([Date]) * 100) + MONTH([Date] )
+    ,"Year and Month Name",FORMAT([Date],"YYYY-MMM")
+    ,"Fiscal Year", 
+        IF( FiscalMonthEnd = 12, 
+            YEAR([Date]), 
+            IF( MONTH([DATE]) &lt;= FiscalMonthEnd, 
+                YEAR([DATE])-1, 
+                YEAR([Date])
+                )
+            )
+    ,"Fiscal Month", 
+        IF( 
+            FiscalMonthEnd = 12, 
+                MONTH([Date]), 
+                IF(MONTH([Date]) &lt;= FiscalMonthEnd, 
+                    FiscalMonthEnd + MONTH([Date]), 
+                    MONTH([Date]) - FiscalMonthEnd)
+            )
+    */
+)
+
+-- Add the Quarter and other quarter related data for each date    
+VAR Quarters = ADDCOLUMNS(
+    Months,
+    "Quarter",ROUNDUP(MONTH([Date])/3,0)
+    //,"YYYYQ",[Year] &amp; ROUNDUP(MONTH([Date])/3,0)
+    )
+
+-- Add the Day and other day related data for each date    
+VAR Days = ADDCOLUMNS(
+    Quarters,
+    "DayOfMonth", DAY([Date]),
+    "DayOfWeekName", FORMAT([Date],"DDDD")          //,
+   // "DayOfWeekNumber", WEEKDAY([Date]),
+    //"DayOfYear", DATEDIFF (DATE(YEAR([Date]),1,1), [Date], DAY) + 1
+    //"Today_DATE", DATE( YEAR(TODAY()), MONTH(TODAY()), Day(TODAY()) )
+   // ,"Report_DATE", DATE( YEAR(TODAY()-1), MONTH(TODAY()-1), Day(TODAY()-1) )     
+    )
+/*
+-- Add a few week columns. This is all dependent upon the variable FirstDayOfWeek which controls what day of the week a week starts (usually Sunday or Monday)
+VAR Weeks = ADDCOLUMNS(
+    Days,
+    "WeekOfMonth", 1 + WEEKNUM([Date], FirstDayOfWeek+1) - WEEKNUM( DATE(YEAR([Date]), MONTH([Date]), 1), FirstDayOfWeek+1),
+    "WeekofYear", WEEKNUM([Date], FirstDayOfWeek+1),                  -- The second parameter is 1 for Sunday and 2 for Monday
+    "YYYYWW", ( YEAR([Date]) * 100) + WEEKNUM([Date], FirstDayOfWeek+1)
+    //"YYYYWW", [Year] &amp; WEEKNUM([Date],FirstDayOfWeek+1)  
+    )
+
+-- Add all US holidays
+var Holidays = ADDCOLUMNS(
+    Weeks,
+    "Holiday", 
+        IF ( MONTH([Date]) = 12 &amp;&amp; DAY([DATE] = 25),                                        -- Christmas Day: December 25
+            "Christmas",
+        If ( MONTH([Date]) = 1 &amp;&amp; DAY([Date]) = 1,                                          -- New Years' Day: January 1
+            "New Year's Day",
+        If ( MONTH([Date]) = 7 &amp;&amp; DAY([Date]) = 4,                                          -- Independence Day: July 4
+            "Independence Day",
+        If ( MONTH([Date]) = 11 &amp;&amp; DAY([Date]) = 11,                                        -- Veteran's Day: November 11
+            "Veterans Day",
+        If ( MONTH([Date]) = 11 &amp;&amp; [DayOfWeekName] = "Thursday" &amp;&amp; ([DayOfMonth] &gt;= 22 &amp;&amp; [DayOfMonth] &lt;= 28), -- Thanksgiving: 4th Thursday of November
+            "Thanksgiving Day",
+        If ( MONTH([Date]) = 10 &amp;&amp; [DayOfWeekName] = "Monday" &amp;&amp; ([DayOfMonth] &gt;= 8 &amp;&amp; [DayOfMonth] &lt;= 14),    -- Columbus Day: 2nd Monday in October
+            "Columbus Day",
+        If ( MONTH([Date]) = 9 &amp;&amp; [DayOfWeekName] = "Monday" &amp;&amp; ([DayOfMonth] &gt;= 1 &amp;&amp; [DayOfMonth] &lt;= 7),      -- Labor Day: 1st Monday in September
+            "Labor Day",
+        If ( MONTH([Date]) = 2 &amp;&amp; [DayOfWeekName] = "Monday" &amp;&amp; ([DayOfMonth] &gt;= 15 &amp;&amp; [DayOfMonth] &lt;= 21),    -- Presidents' Day: 3rd Monday in February
+            "Presidents' Day",
+        If ( MONTH([Date]) = 1 &amp;&amp; [DayOfWeekName] = "Monday" &amp;&amp; ([DayOfMonth] &gt;= 15 &amp;&amp; [DayOfMonth] &lt;= 21),    -- Martin Luther King Jr.' Day: 3rd Monday in January
+            "Martin Luther King Jr. Day"))))))))
+        )
+    )
+
+-- Add if each date is a working day. It won't be if the day is Saturday or Sunday or if it's a holiday
+VAR IsWorkingDay = ADDCOLUMNS(
+    Holidays,
+    "IsBusinesDay", IF ([DayOfWeekName] IN { "Saturday", "Sunday" } || NOT ISBLANK([Holiday]), FALSE(), TRUE())
+    )
+
+--VAR Today_DATE = {DATE(YEAR(NOW()), MONTH(NOW()), Day(NOW()) ) }
+
+
+
+
+
+VAR isDates = ADDCOLUMNS(
+    IsWorkingDay
+    ,"isYTD", IF( YEAR([Date]) = YEAR(NOW()) &amp;&amp; [Date] &lt;= NOW(), 1, 0 )   
+                       
+
+)
+
+
+*/
+
+                                    
+
+  
+RETURN Days
+//RETURN isDates</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Studio</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>z_Example_using_a_measure_in_The_calculation</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Studio</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>z_Example_using_a_measure_in_The_calculation</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+
+DEFINE
+//	MEASURE
+//		'MEASURE'[theColorHexCode] = 
+		
+		VAR Thetype = "Contacts"	//"Distance"	//"Contacts"		//USE THIS IN THE REAL MEASURE:  SELECTEDVALUE('Type selector'[Type])	
+		
+		//VAR TheDistance = 0				//Will need to use the RowContext for this
+								
+//		VAR theMeasure = SWITCH(TheType
+//                 ,"Distance",[Distance (M)] 
+//                 ,"Contacts", [Dealer_Contacts_Completed_RC] 
+//								)		
+
+		VAR theMeasure = 0
+
+
+		VAR Legend_Master_temp = 		
+									FILTER(
+									Legend_Master
+									, Legend_Master[Type] = TheType
+								   )
+								   
+		VAR Legend_Master_temp_2 = ADDCOLUMNS(
+												Legend_Master_temp
+												, "x", IF(		
+															  ( (theMeasure) &gt;= Legend_Master[LowerLimit] &amp;&amp; (theMeasure) &lt; Legend_Master[UpperLimit] )
+															  , Legend_Master[Color]
+															  )
+										     )
+
+
+VAR Legend_Master_temp_3 = ADDCOLUMNS(
+                                    FILTER(
+                                    Legend_Master
+                                    , Legend_Master[Type] = TheType
+                                        )												
+												, "x", IF(		
+															  ( (TheMeasure ) &gt;= Legend_Master[LowerLimit] &amp;&amp; (TheMeasure ) &lt; Legend_Master[UpperLimit] )
+															  , Legend_Master[Color]
+											   				)
+                                        )	
+												
+		VAR Legend_Master_temp_4 = ADDCOLUMNS(
+												FILTER(
+												Legend_Master
+												, Legend_Master[Type] = TheType
+											   		)												
+												, "x", IF(		
+															  ( (theMeasure + 0) &gt;= Legend_Master[LowerLimit] &amp;&amp; (theMeasure + 0) &lt; Legend_Master[UpperLimit] )
+															  , Legend_Master[Color]
+											   				)
+												)												
+												
+		VAR renamedColumn = SELECTCOLUMNS(Legend_Master_temp_3,"Legend_Master_temp_3[x]", [x])
+		
+		var theColor = FILTER(
+							SELECTCOLUMNS(Legend_Master_temp_3,"Legend_Master_temp_3[x]", [x]),
+							NOT( ISBLANK(Legend_Master_temp_3[x]))
+							)
+							
+		var output = {IF(  ISBLANK(theColor), "#ff0000", theColor)}				
+	
+	
+//		RETURN a
+//EVALUATE {SELECTEDVALUE('Type selector'[Type])}
+EVALUATE	output		//Legend_Master_temp_3	//Legend_Master_temp_3		//Legend_Master_temp_2		//Legend_Master_temp		//output	// {TheType}	//	{theMeasure}
+
+		 </Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Studio</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>z_example_using_a_Selector</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Studio</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>z_example_using_a_Selector</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+
+DEFINE
+//	MEASURE
+//		'MEASURE'[theColorHexCode] = 
+		
+		VAR Thetype = SELECTEDVALUE('Type selector'[Type])
+		
+		VAR a = SWITCH(
+		                TheType,
+		                "Distance", 1,
+		                
+		                0
+		)
+		
+		
+//		RETURN a
+EVALUATE  {a}
+/*	CALCULATETABLE(
+					ADDCOLUMNS(
+								Dealers,
+								"TheColor", a
+							   )
+				   )
+*/</Code>
+      </SnippetValue>
+    </value>
+  </item>
+</dictionary>
