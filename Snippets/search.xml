@@ -1,2 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<dictionary />
+<dictionary>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Measures</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>Explicit_vs_Implicit_Measures</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Measures</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>Explicit_vs_Implicit_Measures</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+
+1] EXPLICIT: Actually create a measure, for example:
+	TotalSales_Measure = SUM(Sales[SalesAmount])
+	{then in a TABLE visual, use TotalSales_Measure, and Manufacturer, to have a table of total sales by Manufacturer}
+OR
+
+2] IMPLICIT: create a TABLE visual, use Sales[SalesAmount], and Manufacturer, to have a table of total sales by Manufacturer
+
+  
+ Both tables will look the same, but with an EXPLICIT measure you can name it, or format it and it will stay that way wherever you use it.
+ 	HOWEVER with an IMPLICIT measure it won't retain it's customized name from one visul to another, nor it's format. </Code>
+      </SnippetValue>
+    </value>
+  </item>
+</dictionary>
