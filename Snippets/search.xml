@@ -3,36 +3,882 @@
   <item>
     <key>
       <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>DAX_Measures</Category>
-        <Language>VB</Language>
+        <Category>ASPNET_C#_EntityFramework</Category>
+        <Language>ASP</Language>
         <Public>false</Public>
-        <Name>Explicit_vs_Implicit_Measures</Name>
+        <Name>1_Simple_DropDown_GridView_AWModel.edmx</Name>
         <Group>My Snippets</Group>
       </SnippetKey>
     </key>
     <value>
       <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
         <Key>
-          <Category>DAX_Measures</Category>
-          <Language>VB</Language>
+          <Category>ASPNET_C#_EntityFramework</Category>
+          <Language>ASP</Language>
           <Public>false</Public>
-          <Name>Explicit_vs_Implicit_Measures</Name>
+          <Name>1_Simple_DropDown_GridView_AWModel.edmx</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx"&gt;
+  &lt;!-- EF Runtime content --&gt;
+  &lt;edmx:Runtime&gt;
+    &lt;!-- SSDL content --&gt;
+    &lt;edmx:StorageModels&gt;
+      &lt;Schema Namespace="AWDataModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl"&gt;
+        &lt;EntityContainer Name="AWDataModelStoreContainer"&gt;
+          &lt;EntitySet Name="Customer" EntityType="AWDataModel.Store.Customer" store:Type="Tables" Schema="SalesLT" /&gt;
+        &lt;/EntityContainer&gt;
+        &lt;EntityType Name="Customer"&gt;
+          &lt;Key&gt;
+            &lt;PropertyRef Name="CustomerID" /&gt;
+          &lt;/Key&gt;
+          &lt;Property Name="CustomerID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" /&gt;
+          &lt;Property Name="NameStyle" Type="bit" Nullable="false" /&gt;
+          &lt;Property Name="Title" Type="nvarchar" MaxLength="8" /&gt;
+          &lt;Property Name="FirstName" Type="nvarchar" Nullable="false" MaxLength="50" /&gt;
+          &lt;Property Name="MiddleName" Type="nvarchar" MaxLength="50" /&gt;
+          &lt;Property Name="LastName" Type="nvarchar" Nullable="false" MaxLength="50" /&gt;
+          &lt;Property Name="Suffix" Type="nvarchar" MaxLength="10" /&gt;
+          &lt;Property Name="CompanyName" Type="nvarchar" MaxLength="128" /&gt;
+          &lt;Property Name="SalesPerson" Type="nvarchar" MaxLength="256" /&gt;
+          &lt;Property Name="EmailAddress" Type="nvarchar" MaxLength="50" /&gt;
+          &lt;Property Name="Phone" Type="nvarchar" MaxLength="25" /&gt;
+          &lt;Property Name="PasswordHash" Type="varchar" Nullable="false" MaxLength="128" /&gt;
+          &lt;Property Name="PasswordSalt" Type="varchar" Nullable="false" MaxLength="10" /&gt;
+          &lt;Property Name="rowguid" Type="uniqueidentifier" Nullable="false" /&gt;
+          &lt;Property Name="ModifiedDate" Type="datetime" Nullable="false" /&gt;
+        &lt;/EntityType&gt;
+      &lt;/Schema&gt;
+    &lt;/edmx:StorageModels&gt;
+    &lt;!-- CSDL content --&gt;
+    &lt;edmx:ConceptualModels&gt;
+      &lt;Schema Namespace="AWDataModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm"&gt;
+        &lt;EntityContainer Name="AdventureWorksLT2008R2Entities" annotation:LazyLoadingEnabled="true"&gt;
+          &lt;EntitySet Name="Customers" EntityType="AWDataModel.Customer" /&gt;
+        &lt;/EntityContainer&gt;
+        &lt;EntityType Name="Customer"&gt;
+          &lt;Key&gt;
+            &lt;PropertyRef Name="CustomerID" /&gt;
+          &lt;/Key&gt;
+          &lt;Property Name="CustomerID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" /&gt;
+          &lt;Property Name="NameStyle" Type="Boolean" Nullable="false" /&gt;
+          &lt;Property Name="Title" Type="String" MaxLength="8" Unicode="true" FixedLength="false" /&gt;
+          &lt;Property Name="FirstName" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" /&gt;
+          &lt;Property Name="MiddleName" Type="String" MaxLength="50" Unicode="true" FixedLength="false" /&gt;
+          &lt;Property Name="LastName" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" /&gt;
+          &lt;Property Name="Suffix" Type="String" MaxLength="10" Unicode="true" FixedLength="false" /&gt;
+          &lt;Property Name="CompanyName" Type="String" MaxLength="128" Unicode="true" FixedLength="false" /&gt;
+          &lt;Property Name="SalesPerson" Type="String" MaxLength="256" Unicode="true" FixedLength="false" /&gt;
+          &lt;Property Name="EmailAddress" Type="String" MaxLength="50" Unicode="true" FixedLength="false" /&gt;
+          &lt;Property Name="Phone" Type="String" MaxLength="25" Unicode="true" FixedLength="false" /&gt;
+          &lt;Property Name="PasswordHash" Type="String" Nullable="false" MaxLength="128" Unicode="false" FixedLength="false" /&gt;
+          &lt;Property Name="PasswordSalt" Type="String" Nullable="false" MaxLength="10" Unicode="false" FixedLength="false" /&gt;
+          &lt;Property Name="rowguid" Type="Guid" Nullable="false" /&gt;
+          &lt;Property Name="ModifiedDate" Type="DateTime" Nullable="false" /&gt;
+        &lt;/EntityType&gt;
+      &lt;/Schema&gt;
+    &lt;/edmx:ConceptualModels&gt;
+    &lt;!-- C-S mapping content --&gt;
+    &lt;edmx:Mappings&gt;
+      &lt;Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs"&gt;
+        &lt;EntityContainerMapping StorageEntityContainer="AWDataModelStoreContainer" CdmEntityContainer="AdventureWorksLT2008R2Entities"&gt;
+          &lt;EntitySetMapping Name="Customers"&gt;
+            &lt;EntityTypeMapping TypeName="AWDataModel.Customer"&gt;
+              &lt;MappingFragment StoreEntitySet="Customer"&gt;
+                &lt;ScalarProperty Name="CustomerID" ColumnName="CustomerID" /&gt;
+                &lt;ScalarProperty Name="NameStyle" ColumnName="NameStyle" /&gt;
+                &lt;ScalarProperty Name="Title" ColumnName="Title" /&gt;
+                &lt;ScalarProperty Name="FirstName" ColumnName="FirstName" /&gt;
+                &lt;ScalarProperty Name="MiddleName" ColumnName="MiddleName" /&gt;
+                &lt;ScalarProperty Name="LastName" ColumnName="LastName" /&gt;
+                &lt;ScalarProperty Name="Suffix" ColumnName="Suffix" /&gt;
+                &lt;ScalarProperty Name="CompanyName" ColumnName="CompanyName" /&gt;
+                &lt;ScalarProperty Name="SalesPerson" ColumnName="SalesPerson" /&gt;
+                &lt;ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" /&gt;
+                &lt;ScalarProperty Name="Phone" ColumnName="Phone" /&gt;
+                &lt;ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" /&gt;
+                &lt;ScalarProperty Name="PasswordSalt" ColumnName="PasswordSalt" /&gt;
+                &lt;ScalarProperty Name="rowguid" ColumnName="rowguid" /&gt;
+                &lt;ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" /&gt;
+              &lt;/MappingFragment&gt;
+            &lt;/EntityTypeMapping&gt;
+          &lt;/EntitySetMapping&gt;
+        &lt;/EntityContainerMapping&gt;
+      &lt;/Mapping&gt;
+    &lt;/edmx:Mappings&gt;
+  &lt;/edmx:Runtime&gt;
+  &lt;!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) --&gt;
+  &lt;Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx"&gt;
+    &lt;Connection&gt;
+      &lt;DesignerInfoPropertySet&gt;
+        &lt;DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" /&gt;
+      &lt;/DesignerInfoPropertySet&gt;
+    &lt;/Connection&gt;
+    &lt;Options&gt;
+      &lt;DesignerInfoPropertySet&gt;
+        &lt;DesignerProperty Name="ValidateOnBuild" Value="true" /&gt;
+        &lt;DesignerProperty Name="EnablePluralization" Value="True" /&gt;
+        &lt;DesignerProperty Name="IncludeForeignKeysInModel" Value="True" /&gt;
+      &lt;/DesignerInfoPropertySet&gt;
+    &lt;/Options&gt;
+    &lt;!-- Diagram content (shape and connector positions) --&gt;
+    &lt;Diagrams&gt;
+      &lt;Diagram Name="AWModel"&gt;
+        &lt;EntityTypeShape EntityType="AWDataModel.Customer" Width="1.5" PointX="0.75" PointY="0.75" Height="3.4453905713558193" IsExpanded="true" /&gt;
+      &lt;/Diagram&gt;
+    &lt;/Diagrams&gt;
+  &lt;/Designer&gt;
+&lt;/edmx:Edmx&gt;</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>CDC_Change_Data_Capture</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>Enable_CDC_For_Database</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>CDC_Change_Data_Capture</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>Enable_CDC_For_Database</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>-- From: http://www.dotnetfunda.com/articles/show/1924/cdc-in-sql-server-2008-r2-part-i
+-- has good diagram of enabling CDC
+
+
+--1] Create database
+--2] Enable CDC
+
+
+
+////////////////////////////////////////////////////////
+USE master;
+
+go
+
+IF EXISTS (SELECT * FROM sys.databases WHERE name = 'TrialDB')
+
+      DROP DATABASE TrialDB;
+
+go
+
+ 
+
+CREATE DATABASE TrialDB;
+
+Go
+
+////////////////////////////////////////////////////////
+
+--The next step is to enable the CDC for this database.
+
+USE TrialDB;
+
+GO 
+
+EXECUTE sys.sp_cdc_enable_db;
+
+GO
+
+/* The execution of this command results into 3 actions
+
+1.       Create the Schema named “cdc”
+
+2.       Create database user named “cdc”
+
+3.       Create 5 tables with schema “cdc”
+
+*/
+
+--Is it all done? Not yet, the CDC is enabled for database but it has to be enabled for individual tables too.
+
+
+/* 
+Is it all done? Not yet, the CDC is enabled for database but it has to be enabled for individual tables too.
+
+Let’s create a table called “Employee”. This table originally belongs to database “AdventureWorks”.
+*/
+
+SET ANSI_NULLS ON
+
+GO
+
+ 
+
+SET QUOTED_IDENTIFIER ON
+
+GO
+
+ 
+
+CREATE TABLE [Employee](
+
+      [EmployeeID] [int] IDENTITY(1,1) NOT NULL,
+
+      [NationalIDNumber] [nvarchar](15) NOT NULL,
+
+      [ContactID] [int] NOT NULL,
+
+      [LoginID] [nvarchar](256)  NULL,
+
+      [ManagerID] [int] NULL,
+
+      [Title] [nvarchar](50)  NULL,
+
+      [BirthDate] [datetime]  NULL,
+
+      [MaritalStatus] [nchar](1)  NULL,
+
+      [Gender] [nchar](1)  NULL,
+
+      [HireDate] [datetime]  NULL, 
+
+      [VacationHours] [smallint]  NULL,
+
+      [SickLeaveHours] [smallint]  NULL,
+
+      [rowguid] [uniqueidentifier] ROWGUIDCOL   NULL,		--&lt;== Is this it?
+
+      [ModifiedDate] [datetime]  NULL,
+
+ CONSTRAINT [PK_Employee_EmployeeID] PRIMARY KEY CLUSTERED
+
+(
+
+      [EmployeeID] ASC
+
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+
+) ON [PRIMARY]
+
+ 
+
+GO
+
+
+--This resultes in a new table also being created, in DB: TrialDB, called cdc.ebo_Employee_CT under the 'System Tables' of that DB
+
+
+
+--After that is shows a script, but I don't know if I am supposed to create and run it or, if  it is automatically created and run byt the above actions:
+
+EXEC sys.sp_cdc_enable_table
+	@source_schema = N'dbo'
+	, @source_name = N'Employee'
+	, @role_name = NULL;
+
+
+
+
+
+
+
+
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>EntityFramework_PowerTools</Category>
+        <Language>TEXT</Language>
+        <Public>false</Public>
+        <Name> about_EntityFramework_PowerTools</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>EntityFramework_PowerTools</Category>
+          <Language>TEXT</Language>
+          <Public>false</Public>
+          <Name> about_EntityFramework_PowerTools</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>about_EntityFramework_PowerTools
+
+
+
+walkthrough: http://msdn.microsoft.com/en-us/data/jj593170.aspx
+
+
+
+Summary of Commands
+
+The following context menu items are available after you install the EF Power Tools. These options are discussed in detail in this walkthrough: 
+
+When you right-click on a C# project, you will see:
+Reverse Engineer Code First - Generates derived DbContext class, POCO classes, and Code First mapping classes for an existing database.
+Customize Reverse Engineer Templates - Adds the default reverse engineer T4 templates to your project so you could customize code generation.
+
+When you right-click on a file containing a derived DbContext class, you will see:
+View Entity Data Model(Read-only) - Displays a read-only view of the Code First model in the EF Designer.
+View Entity Data Model XML- Displays the EDMX XML representing the underlying Code First model.
+View Entity Data Model DDL SQL- Displays the DDL SQL corresponding to the SSDL in the underlying EDM Model.
+Generate Views - Generates pre-compiled views used by the EF runtime to improve start-up performance.  
+
+When right-clicking on an EDMX file (that gets generated when you work with the EF Designer), you will see: 
+Generate Views – same description as above.
+
+After you install the tools, some additional options appear in context menus. 
+For example, when you right-click your context class in Solution Explorer, 
+you get an option to generate a diagram. 
+When you're using Code First you can't change the data model in the diagram, 
+but you can move things around to make it easier to understand.   
+   
+
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>HISTOGRAM</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>CreateGenericHistogramFunction</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>HISTOGRAM</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>CreateGenericHistogramFunction</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>https://protect-us.mimecast.com/s/0Qg1C68mV2h58P1hpsTZ6?domain=sqlsunday.com
+---------------------------------------------------
+--Creating a generic histogram T-SQL function
+--Finishing off this post, I’m going to show you how to write a table value function that performs a histogram calculation using the modulo method above. 
+--In order to pass an arbitrary number of values into a function, we’ll first need to define a user-defined table type to hold the values:
+
+CREATE TYPE dbo.valueArray AS TABLE (
+    value     numeric(38, 18) NOT NULL
+);
+--And here’s the finished function:
+
+CREATE FUNCTION dbo.fn_histogram (
+    @values  dbo.valueArray READONLY,
+    @levels  smallint=10
+)
+RETURNS @output TABLE (
+    lowerBound     numeric(38, 18) NOT NULL,
+    upperBound     numeric(38, 18) NOT NULL,
+    [count]        int NOT NULL,
+    PRIMARY KEY CLUSTERED (lowerBound)
+)
+WITH SCHEMABINDING
+AS
+
+BEGIN;
+    --- Declare and set the work variables:
+    DECLARE @interval numeric(38, 18),
+            @min      numeric(38, 18),
+            @max      numeric(38, 18);
+
+    SELECT @min=MIN(value),
+           @max=MAX(value)
+    FROM @values;
+
+    SET @interval=(@max-@min)/@levels;
+
+    --- Calculate the histogram, using modulo, and
+    --- insert the result into @output:
+    INSERT INTO @output (lowerBound, upperBound, [count])
+    SELECT @min+(value-value%@interval)           AS lowerBound,
+           @min+(value-value%@interval)+@interval AS upperBound,
+           COUNT(*)                               AS [count]
+    FROM (
+          --- If value is @max, set value to @max-0.5*@interval
+          --- Then subtract @min.
+          SELECT ISNULL(NULLIF(value, @max), @max-0.5*@interval)-@min AS value
+          FROM @values
+          ) AS sub
+    GROUP BY value-value%@interval;
+
+    --- ... and done:
+    RETURN;
+END;
+
+--SCHEMABINDING helps the query processor to further optimize the solution for performance. I’ve deliberatly left out a clustered index on the table type because this operation doesn’t benefit from ordered data (in fact, the sort operation may even slow things down). And everything we do on the table is a start-to-finish full table scan on @values anyway.
+
+--To test the function, try this:
+
+--- Declare a table variable using the user-defined table type:
+DECLARE @test dbo.valueArray;
+
+--- Fill @test with some data:
+WITH n (i)
+AS ( SELECT CAST(0.0 AS numeric(28, 8)) AS i UNION ALL
+     SELECT CAST(.00001*PI()+i AS numeric(28, 8)) FROM n WHERE i&lt;PI())
+
+INSERT INTO @test (value)
+SELECT SIN(i) FROM n
+OPTION (MAXRECURSION 0);
+
+--- .. and call the histogram function:
+SELECT *
+FROM dbo.fn_histogram(@test, 16);
+If you want the fancy bar chart as well, you can try this. ;)
+
+SELECT lowerBound, upperBound, [count],
+       --- Percent of total row count:
+       STR(100.0*[count]/SUM([count]) OVER (PARTITION BY NULL), 5, 2)+'%' AS [percent],
+       --- Bar diagram, width between 0 and 50 characters:
+       REPLICATE(':', 50*[count]/MAX([count]) OVER (PARTITION BY NULL)) AS barChart
+FROM dbo.fn_histogram(@test, 16);
+
+--The REPLICATE() function has nothing to do with SQL Server replication; 
+--	it just copies a string a given number of times. In this case, we’re using it to create a horizontal bar for the histogram.</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>JOIN</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>about_JOIN</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>JOIN</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>about_JOIN</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>great VENN diagram: https://blog.jooq.org/2015/10/06/you-probably-dont-use-sql-intersect-or-except-often-enough/
+
+SYNTAX
+
+
+"JOIN"  = "INNER JOIN"
+--Both these joins will give me the same results:
+SELECT * FROM table JOIN otherTable ON table.ID = otherTable.FK
+--vs
+SELECT * FROM table INNER JOIN otherTable ON table.ID = otherTable.FK
+
+
+FULL JOIN and FULL OUTER JOIN are the same
+
+
+LEFT OUTER JOIN or LEFT JOIN
+RIGHT OUTER JOIN or RIGHT JOIN
+
+
+
+Visual Studio Syntax: https://msdn.microsoft.com/en-us/library/dd172122(v=vs.100).aspx
+--LEGACY syntax
+-- Example 1: Deprecated syntax for an inner join
+SELECT [T2].[c3], [T1].[c3] 
+FROM [dbo].[Table2] T2, [dbo].[Table1] T1 				--&lt;======= NOTE the comma "," means INNER JOIN !!!!!
+WHERE [T1].[ID] = [T2].[ID]								--&lt;=======  uses "="	
+
+-- Example 2: Current syntax for an inner join
+SELECT [T2].[c3], [T1].[c3] 
+FROM [dbo].[Table2] AS T2
+INNER JOIN [dbo].[Table1] as T1
+ON [T2].[ID] = [T2].[ID]
+
+
+-- Example 3: Deprecated syntax for a left outer join
+SELECT [T2].[c3], [T1].[c3] 
+FROM [dbo].[Table2] T2, [dbo].[Table1] T1  				--&lt;======= NOTE the comma "," means LEFT OUTER JOIN !!!!
+WHERE [T1].[ID] *= [T2].[ID]							--&lt;=======  uses "*="
+
+-- Example 4: Fixed syntax for a left outer join
+SELECT [T2].[c3], [T1].[c3] 
+FROM [dbo].[Table2] AS T2
+LEFT OUTER JOIN [dbo].[Table1] as T1
+ON [T2].[ID] = [T2].[ID]
+
+-- Example 5: Deprecated syntax for a right outer join
+SELECT [T2].[c3], [T1].[c3] 
+FROM [dbo].[Table2] T2, [dbo].[Table1] T1  				--&lt;======= NOTE the comma "," means RIGHT OUTER JOIN !!!! 
+WHERE [T1].[ID] =* [T2].[ID]							--&lt;=======  uses "=*"
+
+-- Example 6: Fixed syntax for a right outer join
+SELECT [T2].[c3], [T1].[c3] 
+FROM [dbo].[Table2] AS T2
+RIGHT OUTER JOIN [dbo].[Table1] as T1
+ON [T2].[ID] = [T2].[ID]</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>MISC</Category>
+        <Language>ORACLE SQL</Language>
+        <Public>false</Public>
+        <Name>Data_Modeler</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>MISC</Category>
+          <Language>ORACLE SQL</Language>
+          <Public>false</Public>
+          <Name>Data_Modeler</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>/*
+From Oracle SQLDeveloper
+File =&gt; Data Modeler =&gt; Import =&gt; Data Dictionary
+Then pick a Connection, for the import
+Then select a schema from the database (e.g. OE for Order Entries)
+	[n]
+Select objects (i.e. Tables) to import
+	e.g. pick ORDERS, and ORDER_ITEMS
+	[n]
+Summary Screen
+
+{
+	I just used the HR schema, and my connection, I then chose HR.DEPARTMENTS, and HR.EMPLOYEES
+	When it finished I had a Diagram of the two tables
+	and their fields, datatypes, and relationship
+	
+	This is the imported "Data Model" with the FK relationship between orders
+}</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>MISC</Category>
+        <Language>ORACLE SQL</Language>
+        <Public>false</Public>
+        <Name>Terminology</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>MISC</Category>
+          <Language>ORACLE SQL</Language>
+          <Public>false</Public>
+          <Name>Terminology</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>Terminology
+---------------
+/*
+Relational Model is three things: Entities, Relationships and Attributes
+
+	a collection of objects (aka relations are stored as Tables)  
+	operators that act on the relations  (e.g. filtering 
+	and data integrity operations (PK, and FK)
+	
+The collection of objects represent real world things such as
+ 
+	a list of auto parts, 
+	a balance sheet,
+	 or in this case, customer orders, much like a spreadsheet.
+	
+So the 'object' is a record
+
+Tables (entities)
+Rows (tubples)
+Columns (Projections, or Attribute of an Entity)
+Field (intersection of Row and column)
+NULLS
+
+===============================================================
+
+Entity-Relationship Diagram  (Logical ER Diagram)
+=============================
+At this level not so worried about data types
+rather what are the important elements that you are trying to capture.
+Entity and Attribute are usually singular
+
+
+Relationships
+-------------
+
+Entity 
+------
+(e.g. Employee or Department: An Employee is assigned to a Department)
+(or e.g. a Department is composed of Employees)
+Singular unique name
+Uppercase (e.g. EMPLOYEE)
+Soft box
+Synonym in Parethesis
+	
+Attribute
+----------
+Singular name
+Lowercase (e.g. name of EMPLOYEE, job title of EMPLOYEE)
+If Mandatory then Marked with "*"
+If Optional then marked with "o"
+
+Unique Identifier (UID) is a type of Attribute 
+------------------
+Primary marked with "#"
+Secondary marked with "(#)"
+
+===============================================================
+
+Projection: e.g. pull just 2 columns from a table
+
+Can generate a new "relation" from a "join"
+
+Constraint (e.g. FK constraint)
+
+===============================================================
+Table model of Entity Model
+
+
+========================================================================
+
+
+What is Oracle container database?
+-----------------------------------
+A CDB includes zero, one, or many customer-created pluggable databases (PDBs). 
+A PDB is a portable collection of schemas, schema objects, and nonschema objects 
+	that appears to an Oracle Net client as a non-CDB. 
+All Oracle databases before Oracle Database 12c were non-CDBs.
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>MVC</Category>
+        <Language>TEXT</Language>
+        <Public>false</Public>
+        <Name>ASP.NET_EF_MVC_Current_Version</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>MVC</Category>
+          <Language>TEXT</Language>
+          <Public>false</Public>
+          <Name>ASP.NET_EF_MVC_Current_Version</Name>
           <Group>My Snippets</Group>
         </Key>
         <Keywords />
         <Imports />
         <Code>
+6/20/2016
+============
 
-1] EXPLICIT: Actually create a measure, for example:
-	TotalSales_Measure = SUM(Sales[SalesAmount])
-	{then in a TABLE visual, use TotalSales_Measure, and Manufacturer, to have a table of total sales by Manufacturer}
-OR
+Bleeding edge from ASP.NET 5 and MVC 6 and up (And EF6 and EF7?)
+Dewey is using:
+	.Net Framework 4.6.1 on the new Explorer Application Server
+	ASP.NET Framework 4.6 {which he thought was 5.0 but when we looked in VS it was 4}
+	EF 6
+	MVC: he is not using it.
 
-2] IMPLICIT: create a TABLE visual, use Sales[SalesAmount], and Manufacturer, to have a table of total sales by Manufacturer
+.NET Framework
+--------------
+https://msdn.microsoft.com/en-US/library/5a4x27ek.aspx
+4.6.2 Preview	Can be installed on Windows	
+			    ✓ 10 Insider Preview Build 14295
+				+ 10 November Update
+				+ 10
+				+ 8.1
+				+ 7
+4.6 			Included in Visual Studio 2015 (ASP.NET Core 5)
+4.5.2 			For use with Visual Studio 2013, Visual Studio 2012, or other IDEs
+4.5				Included in Visual Studio 2012, Also available as part of the Windows 8 SDK
 
-  
- Both tables will look the same, but with an EXPLICIT measure you can name it, or format it and it will stay that way wherever you use it.
- 	HOWEVER with an IMPLICIT measure it won't retain it's customized name from one visul to another, nor it's format. </Code>
+
+
+ASP.NET
+-------
+(1/19/2016)
+			http://www.hanselman.com/blog/ASPNET5IsDeadIntroducingASPNETCore10AndNETCore10.aspx  
+			ASP.NET 5 is now ASP.NET Core 1.0.
+			.NET Core 5 is now .NET Core 1.0.
+			Entity Framework 7 is now Entity Framework Core 1.0 or EF Core 1.0 colloquially
+			 .NET Core isn't as complete as the full .NET Framework 4.6
+			  ASP.NET 4.6 is the more mature platform. It's battle-tested and released and available today. 
+			
+
+
+
+EF
+-----------------
+https://msdn.microsoft.com/en-us/data/jj574253.aspx
+
+EF5			
+		This release can be used in Visual Studio 2010 and Visual Studio 2012 to write applications that target .NET 4.0 and .NET 4.5. 
+			When targeting .NET 4.5 this release introduces some new features including enum support, 
+			table-valued functions, spatial data types and various performance improvements.		
+		If you create a new model using the Entity Framework Designer in Visual Studio 2012,
+			the EF5 NuGet package will be installed to your project and the generated code will make use of EF5. 
+			New ASP.NET projects created in Visual Studio 2012 (including MVC projects) also have the EF5 NuGet package installed by default.		
+		The Entity Framework Designer in Visual Studio 2012 also introduces support for multiple-diagrams per model, 
+			coloring of shapes on the design surface and batch import of stored procedures.
+			
+EF6
+		This release can be used in Visual Studio 2013, Visual Studio 2012 and Visual Studio 2010 (runtime only) to write applications that target .NET 4.0 and .NET 4.5.
+		Tooling		
+		The EF6 Tooling is included in Visual Studio 2013 and available for download for Visual Studio 2012. See the Get Entity Framework page for more information.		
+		The focus for the tooling in EF6 was to add support for the EF6 runtime and to enable shipping out-of-band between releases of Visual Studio.		
+		The tooling itself does not include any new features, but most of the new runtime features can be used with models created in the EF Designer.
+		
+You can use the EF 5 NuGet package with both .NET 4 and with .NET 4.5.		
+		
+ASP.NET MVC	
+-----------	
+				
+9 February 2015	ASP.NET MVC 5.2.3[23]
+7 November 2015	ASP.NET MVC 6.0.0-beta1[24]
+18 November 2015	ASP.NET MVC 6.0.0-rc1[24]
+17 May 2016	ASP.NET MVC 1.0.0-rc2[24]</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>OLAP_general</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>about_OLAP_general</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>OLAP_general</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>about_OLAP_general</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>about_OLAP_general
+
+--Types of Tables
+==================
+--Fact Table
+------------------
+--	Measurement of business process
+
+--	Ex: Money
+
+--Dimension Table 
+------------------
+--	Filtering
+--	Grouping
+--	Sorting
+
+--	Ex. Time, Location, 
+
+--Dimension Table Design (check the diagram to get an idea which design it is)
+========================
+STAR	-- Simpler, better performance, Dimension tables are unrelated, but provides less options
+SNOWFLAKE  
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>PYTHON_Class_Object</Category>
+        <Language>PYTHON</Language>
+        <Public>false</Public>
+        <Name>Aggregation_OneObjectHasOtherTypesOfOjbects</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>PYTHON_Class_Object</Category>
+          <Language>PYTHON</Language>
+          <Public>false</Public>
+          <Name>Aggregation_OneObjectHasOtherTypesOfOjbects</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>Aggregation can also be referred to as 'Composition' - UML Diagrams
+
+a [Person] object can have two [hand] objects, and two [eye] objects</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>SQLDeveloper</Category>
+        <Language>ORACLE SQL</Language>
+        <Public>false</Public>
+        <Name>generate an entity-relationship (ER) diagram</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>SQLDeveloper</Category>
+          <Language>ORACLE SQL</Language>
+          <Public>false</Public>
+          <Name>generate an entity-relationship (ER) diagram</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>https://stackoverflow.com/questions/6580529/how-to-generate-an-entity-relationship-er-diagram-using-oracle-sql-developer
+http://www.oracle.com/technetwork/issue-archive/2014/14-may/o34sqldev-2193423.html
+
+
+File =&gt; Data Modeler =&gt; Import =&gt; Data Dictionary 
+	select DB connection =&gt; Next 
+	select database [n]
+	select tabels -&gt; Finish
+	
+Once you have the Diagram, if you want the Table Description	
+To get Table Description: Engineer to Logical Model =&gt; double-click on the table	</Code>
       </SnippetValue>
     </value>
   </item>
