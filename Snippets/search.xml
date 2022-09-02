@@ -3,128 +3,281 @@
   <item>
     <key>
       <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>DAX_Functions</Category>
-        <Language>VB</Language>
+        <Category>NETSH</Category>
+        <Language>VBSCRIPT</Language>
         <Public>false</Public>
-        <Name>CALCULATE_CrossFilter</Name>
+        <Name>about_NETSH</Name>
         <Group>My Snippets</Group>
       </SnippetKey>
     </key>
     <value>
       <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
         <Key>
-          <Category>DAX_Functions</Category>
-          <Language>VB</Language>
+          <Category>NETSH</Category>
+          <Language>VBSCRIPT</Language>
           <Public>false</Public>
-          <Name>CALCULATE_CrossFilter</Name>
+          <Name>about_NETSH</Name>
           <Group>My Snippets</Group>
         </Key>
         <Keywords />
         <Imports />
-        <Code>CROSSFILTERR
-'	cannot deactivate an activer relationship, it just changes direction in which the filter flows
+        <Code>about_NETSH</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>NETSH</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>Change_WiFi_Password</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>NETSH</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>Change_WiFi_Password</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
 
-'SYNTAX
-CROSSFILTER(
-				&lt;columnName1&gt;
-				, &lt;columnName2&gt;
-				, &lt;direction&gt;
-			)  
-			
-columnName1	
-'usually represents the many side of the relationship to be used; 
-'	if the arguments are given in reverse order the function will swap them before using them. This argument cannot be an expression.		
+#'Though you can’t actually make changes to the network profiles themselves, 
+#'    you can export a desired profile, 
+#'    make changes to the XML file, 
+#'    and then import the profile back onto the same machine or another one.
 
-columnName2
-'usually represents the one side or lookup side of the relationship to be used; 
-'	if the arguments are given in reverse order the function will swap them before using them. This argument cannot be an expression.
+'Export a wireless network profile: 
+netsh wlan export profile name=[profile name]
 
-Direction
-	None 
-	' No cross-filtering occurs along this relationship.
-	Both 
-	' OK for 1=&gt;Many
-	' Filters on either side filters the other side.
-	OneWay 
-	' NOT for one-to-one relationship, NOR  many-to-many relationship
-	' 	Filters on the one side or the lookup side of a relationship filter the other side. 
-	'	This option cannot be used with a one-to-one relationship . 
-	'	Don’t use this option on a many-to-many relationship because it is unclear which side is the lookup side; 
-	'	use OneWay_LeftFiltersRight or OneWay_RightFiltersLeft instead.
-	OneWay_LeftFiltersRight 
-	' NOT for one-to-one relationship, NOR  many-to-one relationship
-	'	Filters on the side of &lt;columnName1&gt; filter the side of &lt;columnName2&gt;. 
-	'	This option cannot be used with a one-to-one or many-to-one relationship.
-	OneWay_RightFiltersLeft 
-	' NOT for one-to-one relationship, NOR  many-to-one relationship
-	'	Filters on the side of &lt;columnName2&gt; filter the side of &lt;columnName1&gt;. 
-	'	This option cannot be used with a one-to-one or many-to-one relationship.
-
-NOTES
-
-'In the case of a 1:1 relationship, there is no difference between the one and both direction.
-
-'CROSSFILTER can only be used in functions that take a filter as an argument, 
-'	for example: 
-		CALCULATE
-		CALCULATETABL
-		CLOSINGBALANCEMONTH
-		CLOSINGBALANCEQUARTER
-		CLOSINGBALANCEYEAR
-		OPENINGBALANCEMONTH
-		OPENINGBALANCEQUARTER
-		OPENINGBALANCEYEAR
-		TOTALMTD
-		TOTALQTD
-		TOTALYTD 
-
-'CROSSFILTER uses existing relationships in the model, identifying relationships by their ending point columns.
-
-'In CROSSFILTER, the cross-filtering setting of a relationship is not important; 
-'	that is, whether the relationship is set to filter one, or both directions in the model does not affect the usage of the function. 
-'	CROSSFILTER will override any existing cross-filtering setting.
-
-'An error is returned if any of the columns named as an argument is not part of a relationship 
-'	or the arguments belong to different relationships.
-
-'If CALCULATE expressions are nested, and more than one CALCULATE expression contains a CROSSFILTER function, 
-'	then the innermost CROSSFILTER is the one that prevails in case of a conflict or ambiguity.
+'e.g. Export profile of Remote machine
+psexec \\lt-103368 -u "administrator" -p "JPHSA@Work" netsh wlan export profile name="JPHSA" folder="\\win10vm\All_Share\WiFi\" key=clear
 
 
-=======================================================================================================EXAMPLES
+'Delete a wireless profile: 
+netsh wlan delete profile name=[profile name]
 
-'Suppose you have 2 tables [Dealers] 1 =&gt; * [Sales], i.e. 1 to many, with the direction of the 'filter' from [Dealers] =&gt;  [Sales]
-'So if you use [Sales] in the &lt;filter1&gt; of a CALCULATE function to filter the &lt;expression&gt; you will not get the expected results
-
-'SYNTAX
-CALCULATE(
-			&lt;expression&gt;
-			[, &lt;filter1&gt; 	&lt;== You need to use CROSSFILTERR If the active relationship of this does not allow it to filter the &lt;expression&gt;
-			[, &lt;filter2&gt; 
-			[, …]
-			]])
-		
-'So this will NOT give you the right results, it will not actually 'filter' so you will actually get the TOTAL number of distinct rows in the whole table
-
-		EVALUATE
-		{
-		    CALCULATE(
-		        DISTINCTCOUNT(Dealers[Row Id]),
-		        Sales[Date of Sale] = DATE(2018,4,12)
-		        )        
-		}
-
-'The Solutiuon is to use CROSSFILTER, and just for the calculation use 'BOTH' (or 2)
+'Import a network profile:
+netsh wlan add profile filename=[path_and_filename.xml] interface=[interface_name]
+---------------------------------------------------------------------------------
+https://stackoverflow.com/questions/35232162/add-wifi-profile-with-password-in-windows-programmatically
 
 
-	EVALUATE
-	{
-	    CALCULATE(
-	        DISTINCTCOUNT(Dealers[Row Id]),
-	        Sales[Date of Sale] = DATE(2018,4,12),
-	        CROSSFILTER(Sales[Dealer Row Id], Dealers[Row Id], BOTH)
-	        )        
-	}
+#'I found a way to add a wifi profile.
+#'
+#'At first you export an existing wifi profile:
+#'
+&gt; netsh wlan export profile name="WifiNetwork" folder="C:\path\" key=clear
+#'Than you get a XML file with the following style:
+
+
+&lt;?xml version="1.0"?&gt;
+&lt;WLANProfile xmlns="http://www.microsoft.com/networking/WLAN/profile/v1"&gt;
+&lt;name&gt;WifiNetwork&lt;/name&gt;
+&lt;SSIDConfig&gt;
+    &lt;SSID&gt;
+        &lt;hex&gt;123456789ABCDEF&lt;/hex&gt;
+        &lt;name&gt;WifiNetwork&lt;/name&gt;
+    &lt;/SSID&gt;
+&lt;/SSIDConfig&gt;
+&lt;connectionType&gt;ESS&lt;/connectionType&gt;
+&lt;connectionMode&gt;auto&lt;/connectionMode&gt;
+&lt;MSM&gt;
+    &lt;security&gt;
+        &lt;authEncryption&gt;
+            &lt;authentication&gt;WPA2PSK&lt;/authentication&gt;
+            &lt;encryption&gt;AES&lt;/encryption&gt;
+            &lt;useOneX&gt;false&lt;/useOneX&gt;
+        &lt;/authEncryption&gt;
+        &lt;sharedKey&gt;
+            &lt;keyType&gt;passPhrase&lt;/keyType&gt;
+            &lt;protected&gt;false&lt;/protected&gt;
+            &lt;keyMaterial&gt;Password123&lt;/keyMaterial&gt;
+        &lt;/sharedKey&gt;
+    &lt;/security&gt;
+&lt;/MSM&gt;
+
+--------------sample from JPHSA LT-103368 --------------------
+
+&lt;?xml version="1.0"?&gt;
+&lt;WLANProfile xmlns="http://www.microsoft.com/networking/WLAN/profile/v1"&gt;
+	&lt;name&gt;JPHSA&lt;/name&gt;
+	&lt;SSIDConfig&gt;
+		&lt;SSID&gt;
+			&lt;hex&gt;4A50485341&lt;/hex&gt;
+			&lt;name&gt;JPHSA&lt;/name&gt;
+		&lt;/SSID&gt;
+		&lt;nonBroadcast&gt;false&lt;/nonBroadcast&gt;
+	&lt;/SSIDConfig&gt;
+	&lt;connectionType&gt;ESS&lt;/connectionType&gt;
+	&lt;connectionMode&gt;auto&lt;/connectionMode&gt;
+	&lt;MSM&gt;
+		&lt;security&gt;
+			&lt;authEncryption&gt;
+				&lt;authentication&gt;WPA2PSK&lt;/authentication&gt;
+				&lt;encryption&gt;AES&lt;/encryption&gt;
+				&lt;useOneX&gt;false&lt;/useOneX&gt;
+			&lt;/authEncryption&gt;
+			&lt;sharedKey&gt;
+				&lt;keyType&gt;passPhrase&lt;/keyType&gt;
+				&lt;protected&gt;false&lt;/protected&gt;
+				&lt;keyMaterial&gt;100%True&lt;/keyMaterial&gt;
+			&lt;/sharedKey&gt;
+		&lt;/security&gt;
+	&lt;/MSM&gt;
+&lt;/WLANProfile&gt;
+
+
+---------------------------------------------------------------
+
+#'Than you can modify this file and import it to add this wifi with this command:
+
+netsh wlan add profile filename="C:\path\WifiNetwork.xml"
+
+#'Check your profiles with:
+
+netsh wlan show profile</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>NETSH</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>Create_WIreless_WIFI_Profile</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>NETSH</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>Create_WIreless_WIFI_Profile</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>https://social.technet.microsoft.com/Forums/windows/en-US/6a2def2e-8663-4c19-8fba-c2c4c3f0eb57/create-wireless-profile-in-command-line?forum=w7itpronetworking
+
+The Netsh command allows to manage wireless profile. 
+But to create a wireless profile, 
+	you must create a wireless profile manually through the GUI on a reference computer first, 
+	then export it to an XML file. 
+With the XML file, you can use with the Netsh command 
+	to configure the network profile on any other system you want.
+
+To configure wireless profile, please refer to the following steps:
+
+Export to XML file: 
+	Netsh wlan export profile folder= PathAndFileName [[name=] ProfileName] [[interface=] InterfaceName] [[key=] clear]
+
+Example: Netsh wlan export profile  folder=”c:\profiles” name="Profile 1" interface="Wireless Network Connection"
+
+Add a profile from a file: 
+	Netsh wlan add profile filename= PathAndFileName [[interface=]InterfaceName] [[user=]{all|current}]
+
+Example: 
+	Netsh wlan add profile filename=C:\Users\WirelessUser\Documents\profile1.xml interface="Wireless Network Connection"</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>NETSH</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>NETSH_display_WiFi_Saved_Password</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>NETSH</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>NETSH_display_WiFi_Saved_Password</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>#'http://blog.jocha.se/tech/display-all-saved-wifi-passwords
+
+Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope LocalMachine
+
+
+(netsh wlan show profiles) | 
+    Select-String "\:(.+)$" | 
+    %{$name=$_.Matches.Groups[1].Value.Trim(); $_} | 
+    %{(netsh wlan show profile name="$name" key=clear)}  | 
+    Select-String "Key Content\W+\:(.+)$" | 
+    %{$pass=$_.Matches.Groups[1].Value.Trim(); $_} | 
+    %{[PSCustomObject]@{ PROFILE_NAME=$name;PASSWORD=$pass }} | 
+    Format-Table -AutoSize 
+    
+    
+'To see the profile (and password)
+&gt;netsh wlan show profile name="JPHSA" key=clear
+    
+    
+'To delete a profile    
+&gt; netsh wlan delete profile name='JPHSA'    
+
+'Show the list of wireless profiles: 
+netsh wlan show profiles
+
+'Retrieve the stored key (WPA, WEP, etc) of a profile: 
+netsh wlan show profiles name=[profile name] key=clear
+
+'Delete a wireless profile: 
+netsh wlan delete profile name=[profile name]
+
+'Set a network’s priority: 
+netsh wlan set profileorder name=[profile name]interface=[interface_name] priority=1
+
+'Stop automatically connecting to a network: 
+netsh wlan set profileparameter name=[profile name] connectionmode=manual</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>NETSH</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>PSEXEC_run_on_remote_computer</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>NETSH</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>PSEXEC_run_on_remote_computer</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+'display password on remote PC for Wifi JPHSA
+&gt; psexec \\lt-103368 netsh wlan show profile name="JPHSA" key=clear
+
+'Show WIFI profiles on remote PC
+&gt;psexec \\lt-103368 netsh wlan show profiles
 </Code>
       </SnippetValue>
     </value>
@@ -132,1041 +285,1298 @@ CALCULATE(
   <item>
     <key>
       <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>DAX_Functions</Category>
-        <Language>VB</Language>
+        <Category>NETSH</Category>
+        <Language>VBSCRIPT</Language>
         <Public>false</Public>
-        <Name>Time_Intelligence_Functions</Name>
+        <Name>PSEXEC_Sysinternals_NETSH_for_multipleComputers</Name>
         <Group>My Snippets</Group>
       </SnippetKey>
     </key>
     <value>
       <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
         <Key>
-          <Category>DAX_Functions</Category>
-          <Language>VB</Language>
+          <Category>NETSH</Category>
+          <Language>VBSCRIPT</Language>
           <Public>false</Public>
-          <Name>Time_Intelligence_Functions</Name>
+          <Name>PSEXEC_Sysinternals_NETSH_for_multipleComputers</Name>
           <Group>My Snippets</Group>
         </Key>
         <Keywords />
         <Imports />
-        <Code>https://docs.microsoft.com/en-us/dax/time-intelligence-functions-dax
+        <Code>https://www.serverwatch.com/server-tutorials/using-netsh-to-manage-remote-servers-and-workstations.html
 
-CLOSINGBALANCEMONTH
-CLOSINGBALANCEQUARTER
-CLOSINGBALANCEYEAR
-DATEADD
-DATESBETWEEN
-DATESINPERIOD
-DATESMTD
-DATESQTD
-DATESYTD
-ENDOFMONTH
-ENDOFQUARTER
-ENDOFYEAR
-FIRSTDATE
-FIRSTNONBLANK
-LASTDATE
-LASTNONBLANK
-NEXTDAY
-NEXTMONTH
-NEXTQUARTER
-NEXTYEAR
-OPENINGBALANCEMONTH
-OPENINGBALANCEQUARTER
-OPENINGBALANCEYEAR
-PARALLELPERIOD
-PREVIOUSDAY
-PREVIOUSMONTH
-PREVIOUSQUARTER
-PREVIOUSYEAR
-SAMEPERIODLASTYEAR
-STARTOFMONTH
-STARTOFQUARTER
-STARTOFYEAR
-TOTALMTD
-TOTALQTD
-TOTALYTD
-</Code>
+#'Netsh lacks an easy way to simultaneously manage multiple remote machines. 
+#'Though you could get creative with the built-in remote functionality, 
+#'    like incorporating multiple remote addresses in batch files and other scripts, 
+#'    you might have better luck pursuing other options.
+#'
+#'For instance, 
+#'    utilizing the PsExec utility from Windows Sysinternals allows you to push out Netsh (or any other commands) 
+#'    to multiple machines at once.
+#'
+#'Once you download PsExec, 
+#'    open a Command Prompt to the folder containing it and try the following command to access the CLI of a remote machine:
+#'
+#'psexec \\hostname -u domain\admin -p password cmd
+#'
+#'If the remote machine is Windows Vista or higher, 
+#'    you may need to use the -h option to have the process run with the account's elevated token.
+#'
+#'Once you've established that you can gain remote access, 
+#'    you can also run netsh commands directly, for instance:
+#'
+psexec \\hostname -u domain\admin -p password cmd.exe /c netsh.exe interface ip show config
+#'
+#'If an interactive CLI isn't needed — 
+#'    for example, if you're running a command that doesn't provide output — 
+#'        consider adding the psexec -d option. 
+#'        This option tells it not to wait for the process to terminate. 
+#'    On the other hand, 
+#'        if you'd like the program to be interactive on the desktop of the remote machine, 
+#'        consider the -i option.</Code>
       </SnippetValue>
     </value>
   </item>
   <item>
     <key>
       <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>DAX_Relationhships</Category>
-        <Language>VB</Language>
+        <Category>NETSH</Category>
+        <Language>VBSCRIPT</Language>
         <Public>false</Public>
-        <Name>USERELATIONSHIPS</Name>
+        <Name>Remote</Name>
         <Group>My Snippets</Group>
       </SnippetKey>
     </key>
     <value>
       <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
         <Key>
-          <Category>DAX_Relationhships</Category>
-          <Language>VB</Language>
+          <Category>NETSH</Category>
+          <Language>VBSCRIPT</Language>
           <Public>false</Public>
-          <Name>USERELATIONSHIPS</Name>
+          <Name>Remote</Name>
           <Group>My Snippets</Group>
         </Key>
         <Keywords />
         <Imports />
-        <Code>USERELATIONSHIP
-'Specifies an existing relationship to be used in a specific calculation as the one that exists between columnName1 and columnName2.
-'Very usefull for multiple date fields connected to a single calendar table; forces MEASURES to use inactive relationships without having to manually activate them
+        <Code>https://www.serverwatch.com/server-tutorials/using-netsh-to-manage-remote-servers-and-workstations.html
+-------------------------------------------------------------------
+#'If you run into connectivity issues with remote machines, 
+#'    ensure the Remote Registry service is running on the remote computer. 
+#'If it is not, then Windows may display a "Network Path Not Found" error message. 
+#'    Additionally, verify File and Printer Sharing for Microsoft Networks is enabled in the network connection properties of the remote machine. 
+#'As always, ensure there aren't any firewalls blocking the traffic.
+#'
+#'If connectivity issues persist, try the following Registry edit:
+#'
+#'Open RegEdit on the remote machine and navigate to
+#'
+ 
+#'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
+#'Add a new DWORD value called 
+
+    "LocalAccountTokenFilterPolicy," 
+#'if it doesn't already exist, and ensure its value is set to 
+    "1"
+#'Reboot the remote machine.
+-------------------------------------------------------------------
 
 
-'SYNTAX
-USERELATIONSHIP(
-				&lt;columnName1&gt;,		//'should be the FK of the relationship, but DAX engine will swap then if they are in the incorrect order
-				&lt;columnName2&gt;		//'should be the PK of the relationship
-			 	)
-			 	
-columnName1	
-'The name of an existing column, using standard DAX syntax and fully qualified, 
-'	that usually represents the many side of the relationship to be used; 
-'if the arguments are given in reverse order the function will swap them before using them. This argument cannot be an expression.
-columnName2	
-'The name of an existing column, using standard DAX syntax and fully qualified, 
-'	that usually represents the one side or lookup side of the relationship to be used; 
-'if the arguments are given in reverse order the function will swap them before using them. This argument cannot be an expression.
-			 	 
-Return value
-'The function returns no value; 
-'the function only enables the indicated relationship for the duration of the calculation.			 	 
-			 	 
-NOTES
-=========
-'USERELATIONSHIP can only be used in functions that take a filter as an argument, 
-'	for example: 
-'	CALCULATE, CALCULATETABLE, CLOSINGBALANCEMONTH, CLOSINGBALANCEQUARTER, CLOSINGBALANCEYEAR, OPENINGBALANCEMONTH, 
-'	OPENINGBALANCEQUARTER, OPENINGBALANCEYEAR, TOTALMTD, TOTALQTD and TOTALYTD functions.
+'Open a Command Prompt and enter the following command 
+'to access the Netsh CLI on a remote machine:
 
-'USERELATIONSHIP cannot be used when row level security is defined for the table in which the measure is included. 
-'	For example, 
-	CALCULATE(
-				SUM(
-					[SalesAmount]
-					)
-			    , USERELATIONSHIP(
-			    					FactInternetSales[CustomerKey]
-			    					, DimCustomer[CustomerKey]
-			    				  )
-			   ) 
-'will return an error if row level security is defined for DimCustomer.
+netsh -r hostname -u domain\admin -p password
 
-'USERELATIONSHIP uses existing relationships in the model, identifying relationships by their ending point columns.
+'Once you've established that you can gain remote access, 
+'you can also run netsh commands directly. For instance, here's how to obtain the IP configuration:
 
-'In USERELATIONSHIP, the status of a relationship is not important; 
-'	that is, whether the relationship is active or not does not affect the usage of the function. 
-'Even if the relationship is inactive, 
-'	it will be used and overrides any other active relationships that might be present in the model but not mentioned in the function arguments.
+netsh -r hostname -u domain\admin -p password interface ip show config
 
-'An error is returned if any of the columns named as an argument is not part of a relationship or the arguments belong to different relationships.
-
-'If multiple relationships are needed to join table A to table B in a calculation, 
-'	each relationship must be indicated in a different USERELATIONSHIP function.
-
-'If CALCULATE expressions are nested, 
-'	and more than one CALCULATE expression contains a USERELATIONSHIP function, 
-'	then the innermost USERELATIONSHIP is the one that prevails in case of a conflict or ambiguity.
-
-'Up to 10 USERELATIONSHIP functions can be nested; 
-'	however, your expression might have a deeper level of nesting, 
-'	ie. the following sample expression is nested 3 levels deep but only 2 for USEREALTIONSHIP: 
-=CALCULATE(CALCULATE( CALCULATE( &amp;lt;anyExpression&amp;gt;, USERELATIONSHIP( t1[colA], t2[colB])), t99[colZ]=999), USERELATIONSHIP( t1[colA], t2[colA])).
-
-'For 1-to-1 relationships, 
-'	USERELATIONSHIP will only activate the relationship in one direction. 
-'	In particular, filters will only be able to flow from columnName2's table to columnName1's table. 
-'If bi-directional cross-filtering is desired, two USERELATIONSHIPs with opposite directionality can be used in the same calculation. 
-'For example, 
-	CALCULATE(..., USERELATIONSHIP(T1[K], T2[K]), USERELATIONSHIP(T2[K], T1[K])).
-			 	 
-'EXAMPLES
-===========			 	 
-'for a situation were there are multiple relationships to the Calendar, but only one is active			 	 
-Quantity Sold (USERELATIONSHIP) = 
-									CALCULATE(
-									    [SUM Quantity Sold],
-									    USERELATIONSHIP(
-												        'Food Inventory'[baked_date],			//'FK
-												        'Calendar'[Transaction_Date]			//'PK
-									    				)
-												)			 	 
----------------------------------------------------------------------------------------------------------
-'There are multiple date relationships, just use one of them for the Count
-Funded (count) = CALCULATE(
-									COUNTX (
-												FILTER(
-														P_0052_TASK_17_VIEW_01_vwApplicationsContracts
-														,P_0052_TASK_17_VIEW_01_vwApplicationsContracts[Funded_DATE]  &lt;&gt; BLANK ()
-														)
-												,P_0052_TASK_17_VIEW_01_vwApplicationsContracts[CLIENT_APP_ID]
-											)	
-									, USERELATIONSHIP(
-															P_0052_TASK_17_VIEW_01_vwApplicationsContracts[Funded_DATE] 
-															, DateTable[Date]
-														  )
-							)			 	 
-			 	 </Code>
+'For the -r option, you can also use the IP address or FQDN 
+' in addition to the host name of remote machines.</Code>
       </SnippetValue>
     </value>
   </item>
   <item>
     <key>
       <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>DAX_Time_Intelligence</Category>
-        <Language>VB</Language>
+        <Category>NETSH</Category>
+        <Language>VBSCRIPT</Language>
         <Public>false</Public>
-        <Name>FUNCTIONS_for_TimeIntelligence</Name>
+        <Name>WIFI_profile_Add</Name>
         <Group>My Snippets</Group>
       </SnippetKey>
     </key>
     <value>
       <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
         <Key>
-          <Category>DAX_Time_Intelligence</Category>
-          <Language>VB</Language>
+          <Category>NETSH</Category>
+          <Language>VBSCRIPT</Language>
           <Public>false</Public>
-          <Name>FUNCTIONS_for_TimeIntelligence</Name>
+          <Name>WIFI_profile_Add</Name>
           <Group>My Snippets</Group>
         </Key>
         <Keywords />
         <Imports />
-        <Code>Performance-to-Date
-====================
-DATESYTD
-DATESQTD
-DATESMTD
+        <Code>https://stackoverflow.com/questions/35232162/add-wifi-profile-with-password-in-windows-programmatically
 
-Time Period Shift  aka Previous Period Pattern
-==================     =======================
-SAMEPERIODLASTYEAR
-DATEADD
-PARALLELPERIOD
-PREVIOUSYEAR
-	'Quarter/Month/Day
-NEXTYEAR
-	'Quarter/Month/Day
+'At first you export an existing wifi profile:
 
-Running Total '(moving average os is the running total divided by the number of periods)
-===================
-DATESINPERIOD
+netsh wlan export profile name="WifiNetwork" folder="C:\path\" key=clear
 
-#######################################################################################################################
+'e.g. Remote
+psexec \\lt-103368 -u "administrator" -p "JPHSA@Work" netsh wlan export profile name="JPHSA" folder="\\win10vm\All_Share\WiFi\" key=clear
 
-DATEADD 'for previous periods
-========
----------------------------------------------------------------------------------------------------------------------------
-'EXAMPLE
+
+'Than you get a XML file with the following style:
+
+&lt;?xml version="1.0"?&gt;
+&lt;WLANProfile xmlns="http://www.microsoft.com/networking/WLAN/profile/v1"&gt;
+&lt;name&gt;WifiNetwork&lt;/name&gt;
+&lt;SSIDConfig&gt;
+    &lt;SSID&gt;
+        &lt;hex&gt;123456789ABCDEF&lt;/hex&gt;
+        &lt;name&gt;WifiNetwork&lt;/name&gt;
+    &lt;/SSID&gt;
+&lt;/SSIDConfig&gt;
+&lt;connectionType&gt;ESS&lt;/connectionType&gt;
+&lt;connectionMode&gt;auto&lt;/connectionMode&gt;
+&lt;MSM&gt;
+    &lt;security&gt;
+        &lt;authEncryption&gt;
+            &lt;authentication&gt;WPA2PSK&lt;/authentication&gt;
+            &lt;encryption&gt;AES&lt;/encryption&gt;
+            &lt;useOneX&gt;false&lt;/useOneX&gt;
+        &lt;/authEncryption&gt;
+        &lt;sharedKey&gt;
+            &lt;keyType&gt;passPhrase&lt;/keyType&gt;
+            &lt;protected&gt;false&lt;/protected&gt;
+            &lt;keyMaterial&gt;Password123&lt;/keyMaterial&gt;
+        &lt;/sharedKey&gt;
+    &lt;/security&gt;
+&lt;/MSM&gt;
+
+'Than you can modify this file and import it to add this wifi with this command:
+
+netsh wlan add profile filename="C:\path\WifiNetwork.xml"
+
+'Check your profiles with:
+
+netsh wlan show profile</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Computer_info</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>Login__get_LoginInstancesFunction</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Computer_info</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>Login__get_LoginInstancesFunction</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>USAGE:
+
+&gt;Get-LoginInstance -ComputerName "LT-103111" -StartDate (Get-Date).AddDays(-1) -Verbose  | SELECT UserName, LoginTime, SessionType, LoginIpAddress
+
+
+
+'Get-LoginInstance - Retrieve Local and Remote Computer Login/Logout Instances
+https://gallery.technet.microsoft.com/scriptcenter/Get-LoginInstance-Retrieve-6437b1af
+
+#'This script contains a function (Get-LoginInstance), 
+#'    as well as two sub-functions (Get-LoginData and Get-LogoutData), 
+#'    which are used to retrieve login and logout events from the Security event log on a local or remote computer, 
+#'    and join them together to display login instance data.  
+#'    Please use the native help bundled with the cmdlet for more information on ways to utilize/run this function.
+#'
+#'Additionally, please note that this cmdlet is reliant upon Remote Event Log Management, 
+#'    which may need to be enabled on the target machine(s), 
+#'    and due to its use of Get-WinEvent, can only work on Vista, 
+#'    Server 2008 R2 and later Windows releases for consumer and enterprise markets, respectively.
+#'
+#'UPDATE - 10/23/14: I've revised the cmdlet to fix a few different areas - 
+#'                    please download the latest version of this if you have a previous version of the script.  
+#'                    Changes made to the latest version include:
+#'
+#'New sorting algorithm to ensure all login instances 
+#'        (logins and logouts) and logins without corresponding logouts 
+#'        appear in final collection, regardless of OS, account domain, etc.
+#'Official support of PowerShell versions 2, 3 and 4 - Get-LoginInstance has now been tested and confirmed to work in all of those versions
+#'Remove Desktop Window Manager (DWM) logins from final collection if present
+#'Minor help file tweaks
+=================================================================================
+    -------------------------- EXAMPLE 1 --------------------------
+    
+    PS C:\&gt;Get-LoginInstance
+    
+    Retrieve all available login instances from the local computer within 
+    the past week.
+    
+    
+    
+    
+    -------------------------- EXAMPLE 2 --------------------------
+    
+    PS C:\&gt;Get-LoginInstance -ComputerName "GSR-242" -StartDate (Get-Date).AddMonths(-1) -Verbose
+    
+    Retrieve all available login instances from remote computer "GSR-242" 
+    within the past month, displaying verbose output as well.
+
+=================================================================================
+
+#PowerShell Script Containing Function(s) Used to Retrieve Login &amp; Logout Instances from a Local or Remote Computer
+#Developer: Andrew Saraceni (saraceni@wharton.upenn.edu)
+#Date: 10/23/14
+
+function Get-LoginInstance
+{
+    &lt;#
+    .SYNOPSIS
+    Retrieves login and logout instances from a local or remote computer.
+    .DESCRIPTION
+    Retrieves all interactive and remote-based logins from a specific 
+    computer, then obtains all logouts and joins the instances together 
+    via processing.  This information is retrieved from the Security 
+    event logs on the computer, and thus can only pull data from logs 
+    that have yet to turn over.
+
+    Without parameters, a Get-LoginInstance command retrieves all logins 
+    and logouts from the local computer within the past week.
+    .PARAMETER ComputerName
+    Specifies the computer from which to pull the login/logout 
+    information.  The default value for this is the local computer.
+    .PARAMETER StartDate
+    Specifies the earliest (i.e. oldest) date from which to retrieve 
+    logins/logouts.  The default value for this is one week before the 
+    current date: (Get-Date).AddDays(-7)
+    .PARAMETER EndDate
+    Specifies the most recent date from which to retrieve logins/logouts.  
+    The default value for this is the current date.
+    .EXAMPLE
+    Get-LoginInstance
+    Retrieve all available login instances from the local computer within 
+    the past week.
+    .EXAMPLE
+    Get-LoginInstance -ComputerName "GSR-242" -StartDate (Get-Date).AddMonths(-1) -Verbose
+    Retrieve all available login instances from remote computer "GSR-242" 
+    within the past month, displaying verbose output as well.
+    .NOTES
+    This cmdlet makes use of the Get-WinEvent cmdlet, which is only 
+    available on Windows Vista, Windows Server 2008 R2 and later consumer 
+    and enterprise verisons of Windows, respectively.
+
+    Additionally, Remote Event Log Management will need to be enabled 
+    via your firewall.  The following CMD prompt command can enable this 
+    on a local computer:
+
+    netsh advfirewall firewall set rule group=”remote event log management” new enable=yes
+    #&gt;
+    
+    [CmdletBinding()]
+    param(
+        [Parameter(Position=0,Mandatory=$false)]
+        [String]$ComputerName = $env:COMPUTERNAME,
+        [Parameter(Position=1,Mandatory=$false)]
+        [DateTime]$StartDate = (Get-Date).AddDays(-7),
+        [Parameter(Position=2,Mandatory=$false)]
+        [DateTime]$EndDate = (Get-Date)
+    )
+
+    function Get-LoginData
+    {
+        param($ComputerName,$StartDate,$EndDate)
+        
+        Write-Verbose "Getting Login Data from $ComputerName..."
+        [Int32[]]$loginID = @(4624)
+
+        try
+        {
+            $loginEvents = Get-WinEvent -ComputerName $ComputerName -FilterHashtable @{ LogName="Security"; ID=$loginID; StartTime=$StartDate; EndTime=$EndDate } -ErrorAction Stop
+        }
+        catch
+        {
+            Set-Variable -Name catchError -Value $_
+            if ($catchError -match "No events were found that match the specified selection criteria.")
+            {
+                Write-Warning "No Login Events Found - Ending Login Collection"
+            }
+        }
+
+        Write-Verbose "Converting Logins to XML &amp; Parsing Data for Better Readability..."
+        foreach ($loginEvent in $loginEvents)
+        {
+            $xmlLoginEvent = [Xml]$loginEvent.ToXml()
+
+            for ($i=0; $i -lt $xmlLoginEvent.Event.EventData.Data.Count; $i++)
+            {            
+                Add-Member -InputObject $loginEvent -MemberType NoteProperty -Name $xmlLoginEvent.Event.EventData.Data[$i].Name -Value $xmlLoginEvent.Event.EventData.Data[$i]."#Text" -Force
+            }
+        }
+
+        $revisedLoginEvents = @()
+        $xmlLoginEvents = $loginEvents | Where-Object { (($_.LogonType -eq "2") -or ($_.LogonType -eq "10")) -and ($_.TargetDomainName -ne "Window Manager") } | Select-Object -Property *
+        foreach ($xmlLoginEvent in $xmlLoginEvents)
+        {
+            switch ($xmlLoginEvent.LogonType)
+            {
+                "2" {
+                    $xmlLoginEvent.LogonType = "Login-Interactive"
+                }
+                "10" {
+                    $xmlLoginEvent.LogonType = "Login-Remote"
+                }
+            }
+            
+            if (($xmlLoginEvent.IpAddress -eq "127.0.0.1") -or ($xmlLoginEvent.IpAddress -eq "::1"))
+            {
+                $xmlLoginEvent.IpAddress = $null
+            }
+
+            if ($xmlLoginEvent.IpPort -eq "0")
+            {
+                $xmlLoginEvent.IpPort = $null
+            }
+            
+            $revisedLoginEvents += $xmlLoginEvent
+        }
+        
+        return $revisedLoginEvents
+    }
+
+    function Get-LogoutData
+    {
+        param($ComputerName,$StartDate,$EndDate)
+
+        Write-Verbose "Getting Logout Data from $ComputerName..."
+        [Int32[]]$logoutID = @(4647)
+
+        try
+        {
+            $logoutEvents = Get-WinEvent -ComputerName $ComputerName -FilterHashtable @{ LogName="Security"; ID=$logoutID; StartTime=$startDate; EndTime=$endDate } -ErrorAction Stop
+        }
+        catch
+        {
+            Set-Variable -Name catchError -Value $_
+            if ($catchError -match "No events were found that match the specified selection criteria.")
+            {
+                Write-Warning "No Logout Events Found - Ending Logout Collection"
+            }
+        }
+
+        Write-Verbose "Converting Logouts to XML &amp; Parsing Data for Better Readability..."
+        foreach ($logoutEvent in $logoutEvents)
+        {
+            $xmlLogoutEvent = [Xml]$logoutEvent.ToXml()
+
+            for ($i=0; $i -lt $xmlLogoutEvent.Event.EventData.Data.Count; $i++)
+            {            
+                Add-Member -InputObject $logoutEvent -MemberType NoteProperty -Name $xmlLogoutEvent.Event.EventData.Data[$i].name -Value $xmlLogoutEvent.Event.EventData.Data[$i]."#Text" -Force
+            }
+        }
+        
+        $revisedLogoutEvents = @()
+        $xmlLogoutEvents = $logoutEvents | Select-Object -Property *
+        foreach ($xmlLogoutEvent in $xmlLogoutEvents)
+        {
+            Add-Member -InputObject $xmlLogoutEvent -MemberType NoteProperty -Name "WorkstationName" -Value $ComputerName -Force
+
+            $revisedLogoutEvents += $xmlLogoutEvent
+        }
+        
+        return $revisedLogoutEvents
+    }
+
+    $finalLoginEvents = Get-LoginData -ComputerName $ComputerName -StartDate $StartDate -EndDate $EndDate
+    $finalLogoutEvents = Get-LogoutData -ComputerName $ComputerName -StartDate $StartDate -EndDate $EndDate
+
+    Write-Verbose "Creating Final Collection of Revised Login and Logout Instance Data..."
+    $loginInstances = @()
+
+    foreach ($finalLoginEvent in $finalLoginEvents)
+    {
+        $instanceProperties = @{
+            ComputerName = $finalLoginEvent.WorkstationName
+            UserName = $finalLoginEvent.TargetUserName
+            AccountDomain = $finalLoginEvent.TargetDomainName
+            LoginTime = $finalLoginEvent.TimeCreated
+            LogoutTime = $null
+            TargetLogonID = $finalLoginEvent.TargetLogonID
+            Days = $null
+            Hours = $null
+            Minutes = $null
+            Seconds = $null
+            SessionType = $finalLoginEvent.LogonType
+            LoginIpAddress = $finalLoginEvent.IpAddress
+            LoginIpPort = $finalLoginEvent.IpPort
+            LogonGuid = $finalLoginEvent.LogonGuid
+        }
+
+        $loginInstance = New-Object -TypeName PSObject -Property $instanceProperties
+
+        foreach ($finalLogoutEvent in $finalLogoutEvents)
+        {
+            if (($finalLogoutEvent.WorkstationName -eq $finalLoginEvent.WorkstationName) -and ($finalLogoutEvent.TargetUserName -eq $finalLoginEvent.TargetUserName) -and ($finalLogoutEvent.TargetLogonID -eq $finalLoginEvent.TargetLogonID))
+            {
+                $loginInstance.LogoutTime = $finalLogoutEvent.TimeCreated
+                $loginInstance.Days = (New-TimeSpan -Start $finalLoginEvent.TimeCreated -End $finalLogoutEvent.TimeCreated).Days
+                $loginInstance.Hours = (New-TimeSpan -Start $finalLoginEvent.TimeCreated -End $finalLogoutEvent.TimeCreated).Hours
+                $loginInstance.Minutes = (New-TimeSpan -Start $finalLoginEvent.TimeCreated -End $finalLogoutEvent.TimeCreated).Minutes
+                $loginInstance.Seconds = (New-TimeSpan -Start $finalLoginEvent.TimeCreated -End $finalLogoutEvent.TimeCreated).Seconds
+            }
+        }
+
+        $loginInstances += $loginInstance
+    }
+
+    $fullLoginInstances = $loginInstances | Where-Object { $_.LogoutTime -ne $null }
+    $partialLoginInstances = $loginInstances | Where-Object { $_.LogoutTime -eq $null } | Sort-Object -Property LoginTime -Descending -Unique
+
+    $fullLoginInstanceLoginTimes = $fullLoginInstances | Select-Object -ExpandProperty LoginTime
+    $filteredPartialLoginInstances = @()
+    
+    foreach ($partialLoginInstance in $partialLoginInstances)
+    {
+        if ($fullLoginInstanceLoginTimes -notcontains $partialLoginInstance.LoginTime)
+        {
+            $filteredPartialLoginInstances += $partialLoginInstance
+        }
+    }
+
+    $finalLoginInstances = @($fullLoginInstances) + @($filteredPartialLoginInstances) | Sort-Object -Property LoginTime -Descending -Unique
+
+    return $finalLoginInstances | Select-Object -Property ComputerName, UserName, AccountDomain, LoginTime, LogoutTime, TargetLogonID, Days, Hours, Minutes, Seconds, SessionType, LoginIpAddress, LoginIpPort, LogonGuid
+}</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Network_subnet_IP_DNS_etc</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>FIREWALL_set_rule_for_WMI_to_be_allowed_on_remote_Machines</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Network_subnet_IP_DNS_etc</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>FIREWALL_set_rule_for_WMI_to_be_allowed_on_remote_Machines</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>https://stackoverflow.com/questions/11330874/get-wmiobject-the-rpc-server-is-unavailable-exception-from-hresult-0x800706
+
+'Thought I would add that we also ran into this issue with multiple machines in our domain. 
+'I created a list of offending machines and added them all to a text file from which to run the script. 
+'I ran this from the CMD prompt using elevated privileges.
+
+'psexec' is from SysInternals, and you should put the executable in the path of the computer ENV.
+You must run it from the CMD (admin privileges)
+
+
+ psexec @firewallFix.txt -d netsh advfirewall firewall 
+        set rule name="Windows Management Instrumentation (WMI-In)" 
+        profile=domain new enable=yes profile=domain</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Network_subnet_IP_DNS_etc</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>FIREWALL_STATE_local_or_remote_machine_using_NETSH</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Network_subnet_IP_DNS_etc</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>FIREWALL_STATE_local_or_remote_machine_using_NETSH</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>http://power-shell.com/2015/powershell-scripts/get-curent-firewall-status-utilizing-netsh/
+
+#' USAGE:
+&gt;Get-FirewallState -HOSTNAME SERVER01
+
+#' The function:
+
+Function Get-FirewallState
+{
+	[CmdletBinding()]
 	
-	'example to calculate the MEASURE for a previous month
-	CALCULATE(
-				MEASURE, 
-				DATEADD(
-							CALENDAR[DATE]
-							,-1,			' # of intervals
-							MONTH			'Interval tpe: DAY, MONTH, QUARTER, YEAR
-						)
-			 )
-			 
----------------------------------------------------------------------------------------------------------------------------		 
-	Prev Month Revenue = CALCULATE(
-									[Total Revenue]
-									,DATEADD(
-												AW_Calendar_Lookup[Date]
-												,-1
-												,MONTH
-											)
-								  )	
-								  
----------------------------------------------------------------------------------------------------------------------------								  	 
-DATESBETWEEN
-=============	
-		'equivalent in this example to MTD							  	 
-		EVALUATE
+	Param ([Parameter(Mandatory = $true)][string]$HOSTNAME)
+$ErrorActionPreference = "Stop"
+Try {
+$FirewallBlock = {
+				$content = netsh advfirewall show allprofiles
+				If ($domprofile = $content | Select-String 'Domain Profile' -Context 2 | Out-String)
+				{ $domainpro = ($domprofile.Substring($domprofile.Length - 9)).Trim()}
+				Else { $domainpro = $null }
+				If ($priprofile = $content | Select-String 'Private Profile' -Context 2 | Out-String)
+				{ $privatepro = ($priprofile.Substring($priprofile.Length - 9)).Trim()}
+				Else { $privatepro = $null }
+				If ($pubprofile = $content | Select-String 'Public Profile' -Context 2 | Out-String)
+				{ $publicpro = ($pubprofile.Substring($pubprofile.Length - 9)).Trim()}
+				Else { $publicpro = $null }
+				
+				$FirewallObject = New-Object PSObject
+				Add-Member -inputObject $FirewallObject -memberType NoteProperty -name "FirewallDomain" -value $domainpro
+				Add-Member -inputObject $FirewallObject -memberType NoteProperty -name "FirewallPrivate" -value $privatepro
+				Add-Member -inputObject $FirewallObject -memberType NoteProperty -name "FirewallPublic" -value $publicpro
+				$FirewallObject
+			}
+ 
+Invoke-Command -computerName $HOSTNAME -command $FirewallBlock | Select-Object FirewallDomain, FirewallPrivate, FirewallPublic
+ 
+}
+Catch
 		{
-			CALCULATE(
-				CALCULATE(
-					[Sales Amount],
-					DATESBETWEEN(
-						'Calendar'[Date],
-						STARTOFMONTH(LastDate('Calendar'[Date])), 
-						LASTDATE('Calendar'[Date])
-						)
-					),
-				'Calendar'[Date] = DATE(2008,4,12)
-				)
-		}								  	 
----------------------------------------------------------------------------------------------------------------------------
-DATESINPERIOD	'Running Total
+       Write-Host  ($_.Exception.Message -split ' For')[0] -ForegroundColor Red
+        }
+}</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Network_subnet_IP_DNS_etc</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>FIREWALL_STATE_pipeline_input</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Network_subnet_IP_DNS_etc</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>FIREWALL_STATE_pipeline_input</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>https://gist.github.com/micmaher/f101132fd86554062aaaa50b234b3cdc
+==============
+'USAGE
+
+'1] The Input file
+LT-103336
+LT-103110
+
+'2] Call the function, and assign the items in the list to the 'Name' variable
+'	Basically, the select operation is turning the object into a property value. 
+
+&gt;$Computers = get-content computers_2.txt -OutVariable Name;
+&gt;$Computers  | Select @{ Name = "Name"; Expression = {$_}} | Get-FirewallState ;
+
+
+'OR
+'3]
+
+$Computers = get-content computers_2.txt -OutVariable Name;
+$Computers  | Get-FirewallState -Hostname {$_} ;
+
+
 =============
 
----------------------------------------------------------------------------------------------------------------------------
-'EXAMPLE
-	CALCULATE(
-				MEASURE
-				, DATESINPERIOD(
-									CALENDAR[DATE]
-									, MAX[Calendar[DATE])								//'START parm for the DATESINPERIOD function
-									,-10												//'NumberOfIntervals parm, use negative (-) for previous periods
-									,DAY												//'Interval parm: DAY, MONTH, QUARTER, YEAR
-							   )
-			 )
----------------------------------------------------------------------------------------------------------------------------			 
-10-day Rolling Revenue = CALCULATE(
-									[Total Revenue]
-									, DATESINPERIOD(
-													AW_Calendar_Lookup[Date]
-													, MAX(AW_Calendar_Lookup[Date])
-													,-10
-													,DAY)
-									)			 
-			 
----------------------------------------------------------------------------------------------------------------------------
-'NOTE: Moving Averages
-	'To calculate Moving Average, use the running total calculation above and divide by the number of intervals
+#Requires -Version 4.0
+&lt;#
+    .SYNOPSIS
+        Gets the Firewall State for for a local, remote or a piped list of machines
+    .DESCRIPTION
+        Will require PowerShell 4.0 or later
+        Gets Public, Private and Domain Profiles
+    .EXAMPLE
+        Gets the firewall state for all domain controllers
+            Get-ADDomainController -filter * | Get-FirewallState
+    .PARAMETER Hostname
+        The host to query
+	.NOTES
+        Author: Based on http://power-shell.com/2015/powershell-scripts/get-curent-firewall-status-utilizing-netsh/
+        I added pipeline support and the inclusion of the hostname in the results
+    #&gt;
+Function Get-FirewallState
+{
+	[CmdletBinding()]
 
-DATESMTD 'Month to date
-=======
-		'-------------------------------------------------------------------------
-		'-- DATESMTD: Returns a table that contains a column of the dates for the 
-		'--			 month to date, in the current context.
-		'--
-		'--			 Note: Internally this function is re-written to use the
-		'--			 	   DATESBETWEEN function.
-		-------------------------------------------------------------------------
-		
-		EVALUATE
-		{
-			CALCULATE(
-				CALCULATE(
-					[Sales Amount],
-					--COUNTROWS('Calendar'),
-					DATESMTD('Calendar'[Date])
-					),
-				'Calendar'[Date] = DATE(2008,4,12)
-				)
-		}		
-		
-		EVALUATE
-		{
-			CALCULATE(
-				CALCULATE(
-					[Sales Amount],
-					DATESBETWEEN(
-						'Calendar'[Date],
-						STARTOFMONTH(LastDate('Calendar'[Date])), 
-						LASTDATE('Calendar'[Date])
-						)
-					),
-				'Calendar'[Date] = DATE(2008,4,12)
-				)
-		}
-		
-		
-DATESQTD 'quarter to date
-========
-		'-------------------------------------------------------------------------
-		'-- DATESQTD: Returns a table that contains a column of the dates for the 
-		'--			 quarter to date, in the current context.
-		'--
-		'--			 Note: Internally this function is re-written to use the
-		'--			 	   DATESBETWEEN function.
-		'-------------------------------------------------------------------------
-		
-		EVALUATE
-		{
-			CALCULATE(
-				CALCULATE(
-					[Sales Amount],
-					//'--COUNTROWS('Calendar'),
-					DATESQTD('Calendar'[Date])
-					),
-				'Calendar'[Date] = DATE(2008,6,12)
-				)
-		}		
-		
-		EVALUATE
-		{
-			CALCULATE(
-				CALCULATE(
-					[Sales Amount],
-					DATESBETWEEN(
-						'Calendar'[Date],
-						STARTOFQUARTER(LastDate('Calendar'[Date])), 
-						LASTDATE('Calendar'[Date])
-						)
-					),
-				'Calendar'[Date] = DATE(2008,6,12)
-				)
-		}
-		
-DATESYTD 'year to date
-========
-'Returns a table that contains a column of the dates for the year to date, in the current context.
+	Param ([Parameter(Mandatory = $true, ValueFromPipelineByPropertyName)]
+    [Alias("Name")]
+    [string]$Hostname)
 
-'SYNTAX
-	DATESYTD(
-				&lt;dates&gt; 
-				[,&lt;year_end_date&gt;]
-			)  
-			
-	dates	
-	'	A column that contains dates.
-	year_end_date	
-	'	(optional) A literal string with a date that defines the year-end date. The default is December 31.			
-	
-Return value
-'A table containing a single column of date values.	
----------------------------------------------------------------------------------------------------------------------------
-'EXAMPLE
-	
-	CALCULATE(
-				SUM(
-						InternetSales_USD[SalesAmount_USD])			//&lt;&lt;== e.g. using SUM on a field
-						, DATESYTD(DateTime[DateKey]
-			  		)
-			  ) 
----------------------------------------------------------------------------------------------------------------------------
-	
-	'for reference in the second statement, here is the MEASURE
-	Total Revenue = SUMX(
-							AW_Sales, AW_Sales[OrderQuantity] * RELATED(AW_Product_Lookup[ProductPrice])
-						)			  
-				  
-	YTD Revenue = CALCULATE(
-								[Total Revenue]							//&lt;== example without the SUM, b/c the SUM is in the MEASURE
-								, DATESYTD(AW_Calendar_Lookup[Date])	//&lt;== this acts like the filter for the MEASURE
-							)		
-							
-		'-------------------------------------------------------------------------
-		'-- DATESYTD: Returns a table that contains a column of the dates for the 
-		'--			 year to date, in the current context.
-		'--
-		'--			 Note: Internally this function is re-written to use the
-		'--			 	   DATESBETWEEN function.
-		'-------------------------------------------------------------------------
-		
-		EVALUATE
-		{
-			CALCULATE(
-				CALCULATE(
-					[Sales Amount],
-					--COUNTROWS('Calendar'),
-					DATESYTD('Calendar'[Date])
-					),
-				'Calendar'[Date] = DATE(2008,6,12)
-				)
-		}		
-		
-		EVALUATE
-		{
-			CALCULATE(
-				CALCULATE(
-					[Sales Amount],
-					DATESBETWEEN(
-						'Calendar'[Date],
-						STARTOFYEAR(LastDate('Calendar'[Date])), 
-						LASTDATE('Calendar'[Date])
-						)
-					),
-				'Calendar'[Date] = DATE(2008,6,12)
-				)
-		}
-											   
-									   
----------------------------------------------------------------------------------------------------------------------------							
-ENDOFMONTH
-==========
-		'------------------------------------------------------------------------------------
-		'-- ENDOFMONTH: Finds the date in the current context of the dates table and
-		'--			   returns the date of the first of the month of that date.
-		'------------------------------------------------------------------------------------
-		
-		EVALUATE
-		{
-			CALCULATE(
-				ENDOFMONTH('Calendar'[Date]),
-				'Calendar'[Date] = DATE(2008,4,12)
-				)
-		}
----------------------------------------------------------------------------------------------------------------------------
-ENDOFQUARTER
-============
+Begin{
+    $ErrorActionPreference = "Stop"
+}
 
-	'------------------------------------------------------------------------------------
-	'-- ENDOFQUARTER: Finds the date in the current context of the dates table and
-	'--			     returns the date of the last day of the quarter.
-	'------------------------------------------------------------------------------------
+Process{
+    Try {
+    $FirewallBlock = {
+				    $content = netsh advfirewall show allprofiles
+				    If ($domprofile = $content | Select-String 'Domain Profile' -Context 2 | Out-String)
+				    { $domainpro = ($domprofile.Substring($domprofile.Length - 9)).Trim()}
+				    Else { $domainpro = $null }
+				    If ($priprofile = $content | Select-String 'Private Profile' -Context 2 | Out-String)
+				    { $privatepro = ($priprofile.Substring($priprofile.Length - 9)).Trim()}
+				    Else { $privatepro = $null }
+				    If ($pubprofile = $content | Select-String 'Public Profile' -Context 2 | Out-String)
+				    { $publicpro = ($pubprofile.Substring($pubprofile.Length - 9)).Trim()}
+				    Else { $publicpro = $null }
+
+				    $FirewallObject = New-Object PSObject
+				    Add-Member -inputObject $FirewallObject -memberType NoteProperty -name "FirewallDomain" -value $domainpro
+				    Add-Member -inputObject $FirewallObject -memberType NoteProperty -name "FirewallPrivate" -value $privatepro
+				    Add-Member -inputObject $FirewallObject -memberType NoteProperty -name "FirewallPublic" -value $publicpro
+				    $FirewallObject
+			    }
+
+    Invoke-Command -computerName $HOSTNAME -command $FirewallBlock | Select-Object  @{N="Hostname";E={$hostname}},FirewallDomain, FirewallPrivate, FirewallPublic
+
+    }
+    Catch
+		    {
+           Write-Host  ($_.Exception.Message -split ' For')[0] -ForegroundColor Red
+            }
+}
+End{}
+}</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Network_subnet_IP_DNS_etc</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>PORT_open</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Network_subnet_IP_DNS_etc</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>PORT_open</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+netsh advfirewall firewall add rule name="Open Port 80" dir=in action=allow protocol=TCP localport=80
+netsh advfirewall firewall add rule name="Open Port 443" dir=in action=allow protocol=TCP localport=443
+
+Here is how you'd open the same ports for only the Domain and Private profiles (not Public) with PowerShell:
+
+New-NetFirewallRule -DisplayName 'HTTP(S) Inbound' -Profile @('Domain', 'Private') -Direction Inbound -Action Allow -Protocol TCP -LocalPort @('80', '443') </Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Remoting__Invoke-Command</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>Invoke-Command_inside_a_function__THEN_use_it</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Remoting__Invoke-Command</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>Invoke-Command_inside_a_function__THEN_use_it</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>This example has a bunch of commands to be run on a remote machine, inside a function whose PARM is the computername
+The results are returned to the screen of the local Machine 
+
+============================================================
+http://power-shell.com/2015/powershell-scripts/get-curent-firewall-status-utilizing-netsh/
+
+#' USAGE:
+&gt;Get-FirewallState -HOSTNAME SERVER01
+
+#' The function:
+
+Function Get-FirewallState
+{
+	[CmdletBinding()]
 	
-	EVALUATE
-	{
-		CALCULATE(
-			ENDOFQUARTER('Calendar'[Date]),
-			'Calendar'[Date] = DATE(2008,4,12)
-			)
+	Param ([Parameter(Mandatory = $true)][string]$HOSTNAME)
+$ErrorActionPreference = "Stop"
+Try {
+$FirewallBlock = {
+				$content = netsh advfirewall show allprofiles
+				If ($domprofile = $content | Select-String 'Domain Profile' -Context 2 | Out-String)
+				{ $domainpro = ($domprofile.Substring($domprofile.Length - 9)).Trim()}
+				Else { $domainpro = $null }
+				If ($priprofile = $content | Select-String 'Private Profile' -Context 2 | Out-String)
+				{ $privatepro = ($priprofile.Substring($priprofile.Length - 9)).Trim()}
+				Else { $privatepro = $null }
+				If ($pubprofile = $content | Select-String 'Public Profile' -Context 2 | Out-String)
+				{ $publicpro = ($pubprofile.Substring($pubprofile.Length - 9)).Trim()}
+				Else { $publicpro = $null }
+				
+				$FirewallObject = New-Object PSObject
+				Add-Member -inputObject $FirewallObject -memberType NoteProperty -name "FirewallDomain" -value $domainpro
+				Add-Member -inputObject $FirewallObject -memberType NoteProperty -name "FirewallPrivate" -value $privatepro
+				Add-Member -inputObject $FirewallObject -memberType NoteProperty -name "FirewallPublic" -value $publicpro
+				$FirewallObject
+			}
+ 
+Invoke-Command -computerName $HOSTNAME -command $FirewallBlock | Select-Object FirewallDomain, FirewallPrivate, FirewallPublic
+ 
+}
+Catch
+		{
+       Write-Host  ($_.Exception.Message -split ' For')[0] -ForegroundColor Red
+        }
+}
+============================================================ another example
+#'Invoke Remove-UserProfile on a Remote Computer 
+$scriptBlock = { 
+    function Remove-UserProfile 
+    { 
+        ... 
+    } 
+ 
+    Remove-UserProfile 
+} 
+ 
+Invoke-Command -ComputerName "GWS-F20" -ScriptBlock $scriptBlock 
+============================================================ Multiple computers 
+#'Invoke Remove-UserProfile on Many Remote Computers, Passing in Arguments 
+#'This Example Utilizes Windows Workflow Foundation Technology, Available in PowerShell V3 and Above 
+$scriptBlock = { 
+    function Remove-UserProfile 
+    { 
+        ... 
+    } 
+ 
+    Remove-UserProfile -Exclude $args 
+} 
+ 
+$compArray = @() 
+Get-Content -Path "\\path\to\computers.txt" | ForEach-Object { $compArray += $_ } 
+ 
+$excludedList = @("labadmin", "desktopuser") 
+ 
+Invoke-Command -ComputerName $compArray -ScriptBlock $scriptBlock -ArgumentList $excludedList -ThrottleLimit 50
+
+==================================================================================================================</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Remoting</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>TEST_and_FIX_RPC_server_is_unavailable.ps1</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Remoting</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>TEST_and_FIX_RPC_server_is_unavailable.ps1</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>#'TEST_and_FIX_RPC_server_is_unavailable.ps1  due to WMI connectivity
+
+#'================================================================TEST
+
+$cred = Get-Credential  #' Run Once
+
+
+
+$computer = 'LT-1031'
+
+
+Test-Connection $computer 
+
+
+gwmi win32_operatingsystem -computer $computer -credential $cred    #' ran netsh command, it is fixed
+
+#'=================================================================FIX
+
+psexec \\$computer -u Administrator -p JPHSA@Work -h -d NETSH.EXE ADVFIREWALL FIREWALL SET RULE GROUP="Windows Management Instrumentation (WMI)" NEW ENABLE=YES
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Remoting</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>TroubleShoot_he RPC server is unavailable. (Exception from HRESULT 0x800706BA)</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Remoting</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>TroubleShoot_he RPC server is unavailable. (Exception from HRESULT 0x800706BA)</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+https://community.servicenow.com/community?id=community_question&amp;sys_id=f781536ddbdcdbc01dcaf3231f9619de
+The RPC server is unavailable. (Exception from HRESULT: 0x800706BA)
+
+=====================================================================================Remote TEST for problem
+$cred = Get-Credential   #'run once
+
+gwmi win32_operatingsystem -computer IT-0987 -credential $cred   #'run this remotely to test the machine
+=======================================================================================from WMIDiag
+'Windows Firewall 'Windows Management Instrumentation (WMI)' group rule: 
+NETSH.EXE ADVFIREWALL FIREWALL SET RULE GROUP="Windows Management Instrumentation (WMI)" NEW ENABLE=YES
+
+'Windows Firewall 'Windows Management Instrumentation (DCOM-In)' rule: 
+NETSH.EXE ADVFIREWALL FIREWALL SET RULE NAME="Windows Management Instrumentation (DCOM-In)" NEW ENABLE=YES
+
+' Windows Firewall 'Windows Management Instrumentation (WMI-In)' rule: 
+NETSH.EXE ADVFIREWALL FIREWALL SET RULE NAME="Windows Management Instrumentation (WMI-In)" NEW ENABLE=YES
+
+'Windows Firewall 'Windows Management Instrumentation (WMI-Out)' rule:
+NETSH.EXE ADVFIREWALL FIREWALL SET RULE NAME="Windows Management Instrumentation (WMI-Out)" NEW ENABLE=YES
+
+'Windows Firewall 'Windows Management Instrumentation (ASync-In)' rule: 
+NETSH.EXE ADVFIREWALL FIREWALL SET RULE NAME="Windows Management Instrumentation (ASync-In)" NEW ENABLE=YES
+
+
+'some DLL's can be missing registration (check WMIDiag)
+REGSVR32.EXE &lt;Filename.DLL&gt; 
+
+=====================================================================================PSEXEC to fix it:
+
+psexec \\LT-1037 -u Administrator -p JPHSA@Work -h -d NETSH.EXE ADVFIREWALL FIREWALL SET RULE GROUP="Windows Management Instrumentation (WMI)" NEW ENABLE=YES
+
+psexec \\lt-3019 -u Administrator -p JPHSA@Work -h -d NETSH.EXE ADVFIREWALL FIREWALL SET RULE NAME="Windows Management Instrumentation (DCOM-In)" NEW ENABLE=YES
+
+psexec \\lt-3019 -u Administrator -p JPHSA@Work -h -d NETSH.EXE ADVFIREWALL FIREWALL SET RULE NAME="Windows Management Instrumentation (WMI-In)" NEW ENABLE=YES
+
+psexec \\lt-3019 -u Administrator -p JPHSA@Work -h -d NETSH.EXE ADVFIREWALL FIREWALL SET RULE NAME="Windows Management Instrumentation (WMI-Out)" NEW ENABLE=YES
+
+psexec \\lt-3019 -u Administrator -p JPHSA@Work -h -d NETSH.EXE ADVFIREWALL FIREWALL SET RULE NAME="Windows Management Instrumentation (ASync-In)" NEW ENABLE=YES
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Updates_on_Client</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>Reset-WindowsUpdate.ps1</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Updates_on_Client</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>Reset-WindowsUpdate.ps1</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+#'Reset-WindowsUpdate.ps1
+'https://gallery.technet.microsoft.com/scriptcenter/Reset-WindowsUpdateps1-e0c5eb78
+
+'This script will completely reset the Windows Update client settings. 
+'It has been tested on Windows 7, 8, 10, and Server 2012 R2. 
+'It will configure the services and registry keys related to Windows Update for default settings. 
+'It will also clean up files related to Windows Upda
+
+
+&lt;#
+.SYNOPSIS
+Reset-WindowsUpdate.ps1 - Resets the Windows Update components
+
+.DESCRIPTION 
+This script will reset all of the Windows Updates components to DEFAULT SETTINGS.
+
+.OUTPUTS
+Results are printed to the console. Future releases will support outputting to a log file. 
+
+.NOTES
+Written by: Ryan Nemeth
+
+Find me on:
+
+* My Blog:	http://www.geekyryan.com
+* Twitter:	https://twitter.com/geeky_ryan
+* LinkedIn:	https://www.linkedin.com/in/ryan-nemeth-b0b1504b/
+* Github:	https://github.com/rnemeth90
+* TechNet:  https://social.technet.microsoft.com/profile/ryan%20nemeth/
+
+Change Log
+V1.00, 05/21/2015 - Initial version
+V1.10, 09/22/2016 - Fixed bug with call to sc.exe
+V1.20, 11/13/2017 - Fixed environment variables
+#&gt;
+
+
+$arch = Get-WMIObject -Class Win32_Processor -ComputerName LocalHost | Select-Object AddressWidth
+
+Write-Host "1. Stopping Windows Update Services..."
+Stop-Service -Name BITS
+Stop-Service -Name wuauserv
+Stop-Service -Name appidsvc
+Stop-Service -Name cryptsvc
+
+Write-Host "2. Remove QMGR Data file..."
+Remove-Item "$env:allusersprofile\Application Data\Microsoft\Network\Downloader\qmgr*.dat" -ErrorAction SilentlyContinue
+
+Write-Host "3. Renaming the Software Distribution and CatRoot Folder..."
+Rename-Item $env:systemroot\SoftwareDistribution SoftwareDistribution.bak -ErrorAction SilentlyContinue
+Rename-Item $env:systemroot\System32\Catroot2 catroot2.bak -ErrorAction SilentlyContinue
+
+Write-Host "4. Removing old Windows Update log..."
+Remove-Item $env:systemroot\WindowsUpdate.log -ErrorAction SilentlyContinue
+
+Write-Host "5. Resetting the Windows Update Services to defualt settings..."
+"sc.exe sdset bits D:(A;;CCLCSWRPWPDTLOCRRC;;;SY)(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;BA)(A;;CCLCSWLOCRRC;;;AU)(A;;CCLCSWRPWPDTLOCRRC;;;PU)"
+"sc.exe sdset wuauserv D:(A;;CCLCSWRPWPDTLOCRRC;;;SY)(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;BA)(A;;CCLCSWLOCRRC;;;AU)(A;;CCLCSWRPWPDTLOCRRC;;;PU)"
+
+Set-Location $env:systemroot\system32
+
+Write-Host "6. Registering some DLLs..."
+regsvr32.exe /s atl.dll
+regsvr32.exe /s urlmon.dll
+regsvr32.exe /s mshtml.dll
+regsvr32.exe /s shdocvw.dll
+regsvr32.exe /s browseui.dll
+regsvr32.exe /s jscript.dll
+regsvr32.exe /s vbscript.dll
+regsvr32.exe /s scrrun.dll
+regsvr32.exe /s msxml.dll
+regsvr32.exe /s msxml3.dll
+regsvr32.exe /s msxml6.dll
+regsvr32.exe /s actxprxy.dll
+regsvr32.exe /s softpub.dll
+regsvr32.exe /s wintrust.dll
+regsvr32.exe /s dssenh.dll
+regsvr32.exe /s rsaenh.dll
+regsvr32.exe /s gpkcsp.dll
+regsvr32.exe /s sccbase.dll
+regsvr32.exe /s slbcsp.dll
+regsvr32.exe /s cryptdlg.dll
+regsvr32.exe /s oleaut32.dll
+regsvr32.exe /s ole32.dll
+regsvr32.exe /s shell32.dll
+regsvr32.exe /s initpki.dll
+regsvr32.exe /s wuapi.dll
+regsvr32.exe /s wuaueng.dll
+regsvr32.exe /s wuaueng1.dll
+regsvr32.exe /s wucltui.dll
+regsvr32.exe /s wups.dll
+regsvr32.exe /s wups2.dll
+regsvr32.exe /s wuweb.dll
+regsvr32.exe /s qmgr.dll
+regsvr32.exe /s qmgrprxy.dll
+regsvr32.exe /s wucltux.dll
+regsvr32.exe /s muweb.dll
+regsvr32.exe /s wuwebv.dll
+
+Write-Host "7) Removing WSUS client settings..."
+REG DELETE "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate" /v AccountDomainSid /f
+REG DELETE "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate" /v PingID /f
+REG DELETE "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate" /v SusClientId /f
+
+Write-Host "8) Resetting the WinSock..."
+netsh winsock reset
+netsh winhttp reset proxy
+
+Write-Host "9) Delete all BITS jobs..."
+Get-BitsTransfer | Remove-BitsTransfer
+
+Write-Host "10) Attempting to install the Windows Update Agent..."
+if($arch -eq 64){
+    wusa Windows8-RT-KB2937636-x64 /quiet
+}
+else{
+    wusa Windows8-RT-KB2937636-x86 /quiet
+}
+
+Write-Host "11) Starting Windows Update Services..."
+Start-Service -Name BITS
+Start-Service -Name wuauserv
+Start-Service -Name appidsvc
+Start-Service -Name cryptsvc
+
+Write-Host "12) Forcing discovery..."
+wuauclt /resetauthorization /detectnow
+
+Write-Host "Process complete. Please reboot your computer."</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_WiFi_Wireless</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>about_POWERSHELL_WiFi_Wireless</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_WiFi_Wireless</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>about_POWERSHELL_WiFi_Wireless</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>'about_POWERSHELL_WiFi_Wireless
+
+'Some articles for automating Password changes without having to go to each machine:
+
+https://stackoverflow.com/questions/35232162/add-wifi-profile-with-password-in-windows-programmatically
+https://stackoverflow.com/questions/34935746/change-the-password-for-a-wi-fi-profile
+https://stackoverflow.com/questions/21317611/change-wireless-network-security-key-cmd-or-vbscript
+https://gist.github.com/robie2011/11428210
+
+'Wireless Profile Samples
+https://msdn.microsoft.com/en-us/library/windows/desktop/aa369853(v=vs.85).aspx
+
+'GitHub to export wifi profiles
+https://gist.github.com/dolmen/864551
+
+other info
+https://www.nowiressecurity.com/import-export-windows-network-settings
+https://andernetwork.wordpress.com/2014/03/19/using-powershell-to-display-wireless-ssid-and-password/
+http://blog.jocha.se/tech/display-all-saved-wifi-passwords
+https://stackoverflow.com/questions/33874913/batch-powershell-to-backup-wlan-profiles-need-elevated-rights-not-admin
+https://stackoverflow.com/questions/44424425/read-wifi-status-with-powershell
+https://stackoverflow.com/questions/32760356/how-to-connect-to-a-wifi-in-powershell-knowing-the-ssid-and-password
+
+
+
+'Show profiles
+NETSH WLAN SHOW PROFILE</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_WiFi_Wireless</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>DELETE_all_Network_Profiles_LOCAL</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_WiFi_Wireless</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>DELETE_all_Network_Profiles_LOCAL</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>DELETE_all_Network_Profiles_LOCAL
+
+
+==========================================================================
+'https://gist.github.com/rleopold/b2af90f2261b33eb6bea8ecec76bbca0
+$networks = netsh wlan show profiles | select-string 'All User Profile'
+
+if($networks.Count -gt 0) {
+  $(foreach ($item in $networks) {
+    $item.Line.Split(':')[1].Trim()
+  }) | Out-GridView -Title 'Select one or more neowrks to forget' -OutputMode Multiple |
+  foreach {
+    netsh wlan delete profile name = "$_"
+  }
+}
+else {'No wifi networks detected'}
+==========================================================================</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_WiFi_Wireless</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>List_of_WIFI_profiles</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_WiFi_Wireless</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>List_of_WIFI_profiles</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+'https://ye110wbeard.wordpress.com/2014/08/18/using-windows-powershell-to-cleanup-your-wireless-profiles/
+
+$SSIDList=(NETSH WLAN SHOW PROFILE) | Select-String ‘All User Profile’
+
+'The first thing we’ll do format the output into something we can output directly to a csv.
+
+$SSIDList | Foreach { [pscustomobject]@{SSID=$_.line.substring(27) }} | Export-Csv C:\data\wifi.csv –NoTypeInformation
+
+'At this point you’ll have a list of all of your wireless profiles which you can sort through 
+'and clean with Excel 
+
+'We can then take this cleaned up list and clean up old profiles with our earlier function in this fashion.
+
+Import-Csv C:\data\wifi.csv | Foreach { Remove-WifiProfile –ssid $_.SSID }</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_WiFi_Wireless</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>Remove-WIFI_Profile</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_WiFi_Wireless</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>Remove-WIFI_Profile</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+=============================================
+Function Remove-WIFIProfile($SSID)
+	{	
+		(NETSH WLAN DELETE PROFILE NAME=$SSID)			
 	}
----------------------------------------------------------------------------------------------------------------------------
-ENDOFYEAR
-==============
-'------------------------------------------------------------------------------------
-'-- ENDOFYEAR: Finds the date in the current context of the dates table and
-'--			  returns the date of the last day of the year.
-'------------------------------------------------------------------------------------
-
-EVALUATE
-{
-	CALCULATE(
-		ENDOFYEAR('Calendar'[Date]),
-		'Calendar'[Date] = DATE(2008,4,12)
-		)
-}
----------------------------------------------------------------------------------------------------------------------------
-NEXTDAY
-==============
-
-'-- NEXTDAY: Returns a table that contains a column of all dates representing the 
-'--          day that occurs after the current date in the dates column, given the 
-'--          current context.
-'--
-'------------------------------------------------------------------------------------------------------
-
-EVALUATE
-{
-	'-- Return the day previous to the date contained in the filter
-	CALCULATE(
-		NEXTDAY('Calendar'[Date]),
-		'Calendar'[Date] = DATE(2008,4,12)
-		)
-}
-
-EVALUATE
-{
-	'-- Calculate total sales in the Contols database occuring the day after the current context date
-	CALCULATE(
-		CALCULATE(
-			[Sales Amount],
-			NEXTDAY('Calendar'[Date])			
-			),
-		'Calendar'[Date] = DATE(2008,4,12)
-		)
-}
-
----------------------------------------------------------------------------------------------------------------------------
-NEXTMONTH
-==============
-'-- NEXTMONTH: Returns a table that contains a column of all dates representing the 
-'--            month that occurs after the current date in the dates column, given the 
-'--            current context.
-'------------------------------------------------------------------------------------------------------
-
-EVALUATE
-{
-	-- Calculate total sales in the Contols database occuring in the month after the current context date
-	CALCULATE(
-		CALCULATE(
-			[Sales Amount],
-			NEXTMONTH('Calendar'[Date])			
-			),
-		'Calendar'[Date] = DATE(2008,4,12)
-		)
-}
-
----------------------------------------------------------------------------------------------------------------------------
-NEXTQUARTER
-==============
-'------------------------------------------------------------------------------------------------------
-'-- NEXTQUARTER: Returns a table that contains a column of all dates representing the 
-'--            	quarter that occurs after the current date in the dates column, given the 
-'--            	current context.
-'------------------------------------------------------------------------------------------------------
-
-EVALUATE
-{
-	-- Calculate total sales in the Contols database occuring in the month after the current context date
-	CALCULATE(
-		CALCULATE(
-			[Sales Amount],
-			NEXTQUARTER('Calendar'[Date])			
-			),
-		'Calendar'[Date] = DATE(2008,4,12)
-		)
-}
----------------------------------------------------------------------------------------------------------------------------
-NEXTYEAR
-==============
-'------------------------------------------------------------------------------------------------------
-'-- NEXTYEAR: Returns a table that contains a column of all dates representing the 
-'--           year that occurs after the current date in the dates column, given the 
-'--           current context.
-'------------------------------------------------------------------------------------------------------
-
-EVALUATE
-{
-	-- Calculate total sales in the Contols database occuring in the month after the current context date
-	CALCULATE(
-		CALCULATE(
-			[Sales Amount],
-			NEXTYEAR('Calendar'[Date])			
-			),
-		'Calendar'[Date] = DATE(2008,4,12)
-		)
-}
-
----------------------------------------------------------------------------------------------------------------------------
-PARALLELPERIOD
-==============
-'Returns a table that contains a column of dates that represents a period parallel to the dates in the specified dates column, 
-' in the current context, with the dates shifted a number of intervals either forward in time or back in time.
-
-'PARALLELPERIOD computes the entire period in the interval (i.e. entire year, quarter, etc.)
-'	Values in total rows may not reflect the expected total if partial periods are present =&gt; FUNKY totals
-
-'The PARALLELPERIOD function is similar to the DATEADD function 
-'	except that PARALLELPERIOD always returns full periods at the given granularity level instead of the partial periods that DATEADD returns. 
-'For example, 
-'	if you have a selection of dates that starts at June 10 and finishes at June 21 of the same year, 
-'	and you want to shift that selection forward by one month then the PARALLELPERIOD function will return all dates from the next month 
-'		(July 1 to July 31); 
-'	however, 
-'	if DATEADD is used instead, then the result will include only dates from 
-'		July 10 to July 21.
-
-
-'SYNTAX
-PARALLELPERIOD(
-				&lt;dates&gt;
-				,&lt;number_of_intervals&gt;
-				,&lt;interval&gt;
-			  )  
-			  
-
-dates	
-'A column that contains dates.
-number_of_intervals	
-'An integer that specifies the number of intervals to add to or subtract from the dates.
-interval	
-'The interval by which to shift the dates. The value for interval can be one of the following: year, quarter, month.			  
-			  
-'Example
---------
-'The following sample formula creates a measure that calculates the previous year sales for Internet sales.
-= CALCULATE(
-			SUM(InternetSales_USD[SalesAmount_USD])
-			, PARALLELPERIOD(
-								DateTime[DateKey]
-								,-1
-								,year)
-							)		
----------------------------------------------------------------------------------------------------------------------------								
-PREVIOUSDAY								  
-============
-
-'------------------------------------------------------------------------------------------------------
-'-- PREVIOUSDAY: Returns a table that contains a column of all dates representing the 
-'--              day that is previous to the current date in the dates column, given the 
-'--              current context.
-'--
-------------------------------------------------------------------------------------------------------
-
-EVALUATE
-{
-	//' Return the day previous to the date contained in the filter
-	CALCULATE(
-		PREVIOUSDAY('Calendar'[Date]),				//'&lt;=== Returns a table with a single row and a single column, so OK to use as 1st parm of CALCULATE
-		'Calendar'[Date] = DATE(2008,4,12)
-		)
-}								  
-								  
-EVALUATE		//' The outer CALCULATE sets the Date context, for the inner CALCULATE
-{
-	//' Calculate total sales in the Contols database occuring the day before the current context date
-	CALCULATE(
-		CALCULATE(
-			[Sales Amount],
-			PREVIOUSDAY('Calendar'[Date])			
-			),
-		'Calendar'[Date] = DATE(2008,4,12)
-		)
-}
----------------------------------------------------------------------------------------------------------------------------								
-PREVIOUSDMONTH								  
-============								  
-		'------------------------------------------------------------------------------------------------------
-		'-- PREVIOUSMONTH: Returns a table that contains a column of all dates representing the 
-		'--                month that is previous to the current date in the dates column, given the 
-		'--                current context.
-		'--
-		'------------------------------------------------------------------------------------------------------
-		
-		EVALUATE 
-		{
-			== ERROR
-			//' It won't work b/c PREVIOUSMONTH returns a column with multiple values0
-			CALCULATE(
-				PREVIOUSMONTH('Calendar'[Date]),
-				'Calendar'[Date] = DATE(2008,4,12)
-				)
-		}
-		
-		EVALUATE
-		{
-		//' Calculate total sales in the Contols database occuring in the month prior to the current context date
-			CALCULATE(
-				CALCULATE(
-					''COUNTROWS('Calendar'),  //'&lt;== if you use this you would see it is return 30 days of the month
-					[Sales Amount],			  //' the measure would aggregate all the rows 
-					PREVIOUSMONTH('Calendar'[Date])			
-					),
-				'Calendar'[Date] = DATE(2008,4,12)
-				)
-		}	
----------------------------------------------------------------------------------------------------------------------------								
-PREVIOUSQUARTER								  
-============			
-		'------------------------------------------------------------------------------------------------------
-		'-- PREVIOUSQUARTER: Returns a table that contains a column of all dates representing the 
-		'--                  quarter that is previous to the current date in the dates column, given the 
-		'--                  current context.
-		'--
-		'------------------------------------------------------------------------------------------------------
-		
-		EVALUATE
-		{
-			-- Calculate total sales in the Contols database occuring in the month prior to the current context date
-			CALCULATE(
-				CALCULATE(
-					--COUNTROWS('Calendar'),
-					[Sales Amount],
-					PREVIOUSQUARTER('Calendar'[Date])			
-					),
-				'Calendar'[Date] = DATE(2008,4,12)
-				)
-		}									  
----------------------------------------------------------------------------------------------------------------------------								
-PREVIOUSYEAR								  
-============									  
-		'------------------------------------------------------------------------------------------------------
-		'-- PREVIOUSYEAR: Returns a table that contains a column of all dates representing the 
-		'--               year that is previous to the current date in the dates column, given the 
-		'--               current context.
-		'--
-		'------------------------------------------------------------------------------------------------------
-		
-		EVALUATE
-		{
-			-- Calculate total sales in the Contols database occuring in the month prior to the current context date
-			CALCULATE(
-				CALCULATE(
-					[Sales Amount],
-					PREVIOUSYEAR('Calendar'[Date])			
-					),
-				'Calendar'[Date] = DATE(2007,4,12)
-				)
-		}
-									  
-
-
-
----------------------------------------------------------------------------------------------------------------------------				  
-STARTOFMONTH
-============			  
-		'------------------------------------------------------------------------------------
-		'-- STARTOFMONTH: Finds the date in the current context of the dates table and
-		'--				 returns the date of the first of the month of that date.
-		'------------------------------------------------------------------------------------
-		
-		EVALUATE
-		{
-			CALCULATE(
-				STARTOFMONTH('Calendar'[Date]),
-				'Calendar'[Date] = DATE(2008,4,12)
-				)
-		}		  
-							)			  
----------------------------------------------------------------------------------------------------------------------------				  
-STARTOFQUARTER	
-==============		  
-		'------------------------------------------------------------------------------------
-		'-- STARTOFQUARTER: Finds the date in the current context of the dates table and
-		'--				   returns the date of the first day of the quarter.
-		'------------------------------------------------------------------------------------
-		
-		EVALUATE
-		{
-			CALCULATE(
-				STARTOFQUARTER('Calendar'[Date]),
-				'Calendar'[Date] = DATE(2008,4,12)
-				)
-		}
----------------------------------------------------------------------------------------------------------------------------
-STARTOFYEAR
-==============					  
-'------------------------------------------------------------------------------------
-'-- STARTOFYEAR: Finds the date in the current context of the dates table and
-'--				returns the date of the first day of the year.
-'------------------------------------------------------------------------------------
-
-EVALUATE
-{
-	CALCULATE(
-		STARTOFYEAR('Calendar'[Date]),
-		'Calendar'[Date] = DATE(2008,4,12)
-		)
-}			  
-			  
----------------------------------------------------------------------------------------------------------------------------			  
-TOTALMTD			  
-==============			  
-			  -------------------------------------------------------------------------
-				-- TOTALMTD: Evaluates the value of the expression for the month to date, 
-				--   		 in the current context.
-				--
-				-- 			 Note: Internally TOTALMTD is re-written to use DATESMTD.
-				-------------------------------------------------------------------------
-				
-				EVALUATE
-				{
-					CALCULATE(
-						TOTALMTD(
-							[Sales Amount],
-							'Calendar'[Date]
-							),
-					'Calendar'[Date] = DATE(2008,4,12)
-					)
-				}
-				
-				EVALUATE
-				{
-					CALCULATE(
-						CALCULATE(
-							[Sales Amount],
-							DATESMTD('Calendar'[Date])
-							),
-					'Calendar'[Date] = DATE(2008,4,12)
-					)
-				}
----------------------------------------------------------------------------------------------------------------------------			  
-TOTALQTD			  
-==============
-			'----------------------------------------------------------------------------
-			'-- TOTALQTD: Evaluates the value of the expression for the quarter to date, 
-			'--   		 in the current context.
-			'--
-			'-- 			 Note: Internally TOTALQTD is re-written to use DATESQTD.
-			'----------------------------------------------------------------------------
-			
-			EVALUATE
-			{
-				CALCULATE(
-					TOTALQTD(
-						[Sales Amount],
-						'Calendar'[Date]
-						),
-				'Calendar'[Date] = DATE(2008,6,12)
-				)
-			}
-			
-			EVALUATE
-			{
-				CALCULATE(
-					CALCULATE(
-						[Sales Amount],
-						DATESQTD('Calendar'[Date])
-						),
-				'Calendar'[Date] = DATE(2008,6,12)
-				)
-			}
----------------------------------------------------------------------------------------------------------------------------			  
-TOTALQTD			  
-==============			
-		'----------------------------------------------------------------------------
-		'-- TOTALYTD: Evaluates the value of the expression for the quarter to date, 
-		'--   		 in the current context.
-		'--
-		'-- 			 Note: Internally TOTALYTD is re-written to use DATESYTD.
-		'----------------------------------------------------------------------------
-		
-		EVALUATE
-		{
-			CALCULATE(
-				TOTALYTD(
-					[Sales Amount],
-					'Calendar'[Date]
-					),
-			'Calendar'[Date] = DATE(2008,6,12)
-			)
-		}
-		
-		EVALUATE
-		{
-			CALCULATE(
-				CALCULATE(
-					[Sales Amount],
-					DATESYTD('Calendar'[Date])
-					),
-			'Calendar'[Date] = DATE(2008,6,12)
-			)
-		}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-			  
-			  
-			  </Code>
+------------------------------------------------USAGE
+Remove-WIFIProfile –SSID jphsa</Code>
       </SnippetValue>
     </value>
   </item>
   <item>
     <key>
       <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>DAX_Time_Intelligence</Category>
-        <Language>VB</Language>
+        <Category>POWERSHELL_WiFi_Wireless</Category>
+        <Language>VBSCRIPT</Language>
         <Public>false</Public>
-        <Name>YearOverYear_Growth</Name>
+        <Name>WIFI_removeProfile_etcetera.ps1</Name>
         <Group>My Snippets</Group>
       </SnippetKey>
     </key>
     <value>
       <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
         <Key>
-          <Category>DAX_Time_Intelligence</Category>
-          <Language>VB</Language>
+          <Category>POWERSHELL_WiFi_Wireless</Category>
+          <Language>VBSCRIPT</Language>
           <Public>false</Public>
-          <Name>YearOverYear_Growth</Name>
+          <Name>WIFI_removeProfile_etcetera.ps1</Name>
           <Group>My Snippets</Group>
         </Key>
         <Keywords />
         <Imports />
-        <Code>YearOverYear_Growth
-
-'Relationship:
-[OrderDate] of table [SalesHeader]  &lt;=&gt; [Date] of table [Date]
-'Cardinality: Many-to-one
-
-'TABLE: [Date] w/ 3 column &amp; 1 Measure
---------------
-'C1: Date
-'C2: "Year"
-'C3: "Month"
-
-Date =
-ADDCOLUMNS (
-    CALENDARAUTO ( 12 ),
-    "Year", YEAR ( [Date] ),
-    "Month", MONTH ( [Date] )
-)
-'Measure: YTD which pulls from the [SalesHeader] Table
-YTD = TOTALYTD(SUM(SalesHeader[TotalDue]),'Date'[Date])
+        <Code>WIFI_removeProfile_etcetera.ps1
 
 
-'TABLE: [SalesHeader]
----------------------
-'C1: OrderDate
-'C2: OrderDateNum  {YYYYMMDD : INTEGER}
-'Measure1: 
-	Prev Year = CALCULATE(SUM(SalesHeader[TotalDue]),PREVIOUSYEAR('Date'[Date]))
-'C3: SalesOrderID
-'C4: TotalDue
-'Measure2: 
-YoY Growth =
-	 ( SUM ( SalesHeader[TotalDue] ) - [Prev Year] )
-	    / SUM ( SalesHeader[TotalDue] )
-	
-'Design Surface
----------------------
-Table Visual
-'Values:
-	[DATE].[Year]				'{Don't summarize}
-	[SalesHeader].[TotalDue]	'{Sum}
-	[SalesHeader].[Prev Year]	'
-	[SalesHeader].[YoY Growth]	'
-	
-	
 
-</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>DAX_Time_Intelligence</Category>
-        <Language>VB</Language>
-        <Public>false</Public>
-        <Name>YearToDate_total</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>DAX_Time_Intelligence</Category>
-          <Language>VB</Language>
-          <Public>false</Public>
-          <Name>YearToDate_total</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>'Start w/ 2 tables:
+$theComputer = 'LT-102539'
+#'==============================================================
 
-'Relationship:
-[OrderDate] of table [SalesHeader]  &lt;=&gt; [Date] of table [Date]
-'Cardinality: Many-to-one
+psexec \\$theComputer -u Administrator -p JPHSA@Work -h -d powershell.exe "enable-psremoting -force"
 
-'TABLE: [Date] w/ 3 column &amp; 1 Measure
---------------
-'C1: Date
-'C2: "Year"
-'C3: "Month"
-Date = ADDCOLUMNS(CALENDARAUTO(12),"Year", YEAR([Date]),"Month", Month([Date]))
-'Measure: YTD which pulls from the [SalesHeader] Table
-YTD = TOTALYTD(SUM(SalesHeader[TotalDue]),'Date'[Date])
+#'==============================================================
+
+psexec \\$theComputer -u Administrator -p JPHSA@Work -h -d NETSH WLAN SHOW PROFILE
+
+psexec \\$theComputer -u Administrator -p JPHSA@Work -h -d NETSH WLAN DELETE PROFILE NAME=”JPHSA”
 
 
-'TABLE: [SalesHeader]
----------------------
-'C1: OrderDate
-'C2: OrderDateNum  {YYYYMMDD : INTEGER}
-'Measure1: 
-	Prev Year = CALCULATE(SUM(SalesHeader[TotalDue]),PREVIOUSYEAR('Date'[Date]))
-'C3: SalesOrderID
-'C4: TotalDue
-'Measure2: 
-	YoY Growth = (SUM(SalesHeader[TotalDue]) - [Prev Year]) / Sum(SalesHeader[TotalDue])
+#'==============================================================
 
-'Design Surface
----------------------
-Table Visual
-'Values:
-	[DATE].[Year]				'{Don't summarize}
-	[DATE].[Month]				'{Don't summarize}	
-	[SalesHeader].[TotalDue]	'{Sum}
-	[DATE].[YTD]				'
-	
-	
+Enter-PSSession –ComputerName $theComputer
 
-</Code>
+NETSH WLAN SHOW PROFILE
+
+NETSH WLAN DELETE PROFILE NAME=”JPHSA”
+
+
+
+Exit-PSSession 
+
+#'==============================================================</Code>
       </SnippetValue>
     </value>
   </item>
