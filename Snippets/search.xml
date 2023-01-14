@@ -1,2 +1,1200 @@
 <?xml version="1.0" encoding="utf-8"?>
-<dictionary />
+<dictionary>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>ASPNET_C#_State</Category>
+        <Language>ASP</Language>
+        <Public>false</Public>
+        <Name>use_ViewState_ratherThanHiddenFieldToStoreAValueBetweenRoundTrips</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>ASPNET_C#_State</Category>
+          <Language>ASP</Language>
+          <Public>false</Public>
+          <Name>use_ViewState_ratherThanHiddenFieldToStoreAValueBetweenRoundTrips</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>&lt;%@ Page Language="C#" AutoEventWireup="true" CodeFile="UseViewState.aspx.cs" Inherits="UseViewState" %&gt;
+
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;
+
+&lt;html xmlns="http://www.w3.org/1999/xhtml"&gt;
+&lt;head runat="server"&gt;
+    &lt;title&gt;&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;form id="form1" runat="server"&gt;
+    &lt;div&gt;
+     &lt;asp:ListBox ID="ListBox1" runat="server" 
+     AutoPostBack="True" onselectedindexchanged="ListBox1_SelectedIndexChanged"&gt;
+            &lt;asp:ListItem&gt;Item 1&lt;/asp:ListItem&gt;
+            &lt;asp:ListItem&gt;Item 2&lt;/asp:ListItem&gt;
+            &lt;asp:ListItem&gt;Item 3&lt;/asp:ListItem&gt;
+        &lt;/asp:ListBox&gt;
+        
+        
+        &lt;br /&gt;
+        You clicked the list box
+        &lt;asp:Label ID="Label1" runat="server" Text="0"&gt;&lt;/asp:Label&gt;
+&amp;nbsp;times!&lt;/div&gt;
+    &lt;/form&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+
+
+/////////////////////////////////////////////////////////
+
+//This gives you a strongly typed way to retain a value, instead of using a hidden field
+
+using System;
+using System.Collections.Generic;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+public partial class UseViewState : System.Web.UI.Page
+{
+    const string LBCC = "listBoxClickCount";       //When using a string to store ViewState, use this to give the  a name
+
+    public int ListBoxClickCount                    // Use Class Property to Get/Set the value
+     //                                               // and store the value in ViewState between trips to the server
+    {
+        get { return (int)(ViewState[LBCC] ?? 0); } //If the viewstate for LBCC is Null (i.e '??') then send back a Zero(0), 
+        //                                           // if not null then return whatever is in: ViewState[LBCC] and CAST it to an integer
+        set { ViewState[LBCC] = value;  }
+    }
+
+    protected void Page_Load(object sender, EventArgs e)
+    {
+
+    }
+    protected void ListBox1_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        ListBoxClickCount++;        //Increment the value
+        Label1.Text = ListBoxClickCount.ToString();
+    }
+}
+
+
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>ASPNET</Category>
+        <Language>ASP</Language>
+        <Public>false</Public>
+        <Name>PassingVariablesBetweenPagesUsingQueryString</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>ASPNET</Category>
+          <Language>ASP</Language>
+          <Public>false</Public>
+          <Name>PassingVariablesBetweenPagesUsingQueryString</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>PassingVariablesBetweenPagesUsingQueryString
+reference: http://www.codeproject.com/Articles/5876/Passing-variables-between-pages-using-QueryString
+
+
+? starts your QueryString, 
+and &amp; is used between variables.
+
+
+Submit button
+=================
+Private Sub btnSubmit_Click(sender As Object, e As System.EventArgs)
+	Response.Redirect("Webform2.aspx?Name=" &amp; Convert.ToString(Me.txtName.Text) &amp; "&amp;LastName=" &amp; Convert.ToString(Me.txtLastName.Text))
+End Sub
+
+
+retrieve this values from second page
+======================================== 
+
+Private Sub Page_Load(sender As Object, e As System.EventArgs)
+	Me.txtBox1.Text = Request.QueryString("Name")
+	Me.txtBox2.Text = Request.QueryString("LastName")
+End Sub
+
+OR
+====
+Private Sub Page_Load(sender As Object, e As System.EventArgs)
+	Me.txtBox1.Text = Request.QueryString(0)
+	Me.txtBox2.Text = Request.QueryString(1)
+End Sub 
+
+
+Get the elements of the array:
+=================================
+For Each s As String In Request.QueryString
+	Response.Write(Request.QueryString(s))
+Next
+
+
+OR
+========
+
+For i As Integer = 0 To Request.QueryString.Count - 1
+	Response.Write(Request.QueryString(i))
+Next
+
+
+To clean up the spaces:
+=============================
+Private Sub btnSubmit_Click(sender As Object, e As System.EventArgs)
+	Dim p1 As String = Me.txtName.Text.Replace("&amp;", "%26")
+	p1 = Me.txtName.Text.Replace(" ", "%20")
+	Dim p2 As String = Me.txtLastName.Text.Replace("&amp;", "%26")
+	p2 = Me.txtName.Text.Replace(" ", "%20")
+	"WebForm2.aspx?" &amp; "Name=" &amp; p1 &amp; "&amp;LastName=" &amp; p2
+	Response.Redirect(p2)
+End Sub
+
+
+
+Since this is a such a common problem Asp.Net should have some way to solve. 
+There it is Server.UrlEncode. 
+Server.UrlEncode method changes your query strings to so that they will not create problems. 
+================================================================================================
+Private Sub btnSubmit_Click(sender As Object, e As System.EventArgs)
+	Response.Redirect("WebForm2.Aspx?" &amp; "Name=" &amp; Server.UrlEncode(Me.txtName.Text) &amp; "&amp;LastName=" &amp; Server.UrlEncode(Me.txtLastName.Text))
+End Sub</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>CCWNC</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>CharIndex_get_text_between_special_Characters</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>CCWNC</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>CharIndex_get_text_between_special_Characters</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>-- PARSE: [*
+  	  
+  	  
+  	  ,	(SELECT     'TheCalculation' = 
+        		CASE 
+            			WHEN (charINDEX('[*',[NOTES]) &gt;= 0) and (charINDEX('*]',[NOTES]) &gt; 0 ) THEN SUBSTRING([NOTES],(charINDEX('[*',[NOTES])+3), (  (charINDEX('*]',[NOTES])-1) - (charINDEX('[*',[NOTES])+2)  ))
+        		 
+				ELSE NULL
+
+        			END) as GoodString
+        			
+        			
+///////////////////// nicer formatted version//////////////////
+
+	  	  ,	(SELECT     'TheCalculation' = 
+CASE 
+		WHEN (charINDEX('[*',[Program_Title]) &gt;= 0) and (charINDEX('*]',[Program_Title]) &gt; 0 ) 
+		THEN SUBSTRING(
+						[Program_Title],
+						(charINDEX('[*',[Program_Title])+3),
+						(  (charINDEX('*]',[Program_Title])-1) - (charINDEX('[*',[Program_Title])+2)  )
+					  )
+ 
+ELSE NULL
+
+	END) as GoodString	
+	
+////////////////////  definitions and more verbose///////////////
+
+	  	  ,	(SELECT     'TheCalculation' = 
+        		CASE 
+            			WHEN (charINDEX('[*',[Program_Title]) &gt;= 0) and (charINDEX('*]',[Program_Title]) &gt; 0 ) 
+            			THEN SUBSTRING(
+            							[Program_Title],						--SUBSTRING(value_expression , , )
+            							(										--SUBSTRING(,start_expression , )	{Is an integer or bigint expression that specifies where the returned characters start}
+            								charINDEX(							--charINDEX: Searches expression2 for expression1 and returns its starting position if found. The search starts at start_location.
+            											'[*',					--charINDEX: expression1: Is a character expression that contains the sequence to be found. expression1 is limited to 8000 characters. 
+            											[Program_Title]			--charINDEX: expression2: Is a character expression to be searched.
+            																	--charINDEX: start_location (optional):  Is an integer or bigint expression at which the search starts. If start_location is not specified, is a negative number, or is 0, the search starts at the beginning of expression2
+            										)
+            								+
+            								3
+            							),
+            							(										--SUBSTRING(, ,length_expression )  {Is a positive integer or bigint expression that specifies how many characters of the value_expression will be returned} 
+            								(
+            									charINDEX('*]',[Program_Title])
+            									-
+            									1
+            								) 
+            								- 
+            								(
+            									charINDEX('[*',[Program_Title])
+            									+
+            									2
+            								)  
+            							)
+            						  )</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>CSS_Text_Formatting</Category>
+        <Language>ASP</Language>
+        <Public>false</Public>
+        <Name>Margin_spaceBetweenElements</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>CSS_Text_Formatting</Category>
+          <Language>ASP</Language>
+          <Public>false</Public>
+          <Name>Margin_spaceBetweenElements</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>&lt;!DOCTYPE HTML&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta charset="UTF-8"&gt;
+&lt;title&gt;element spacing&lt;/title&gt;
+&lt;!--[if lt IE 9]&gt;
+&lt;script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"&gt;&lt;/script&gt;
+&lt;![endif]--&gt;
+&lt;style&gt;
+aside, article, section, header, footer, nav {
+	display: block;
+}
+body, h1, h2, h3, p {
+	margin: 0;  /* reset the margins */
+}
+html {
+	background-color: white;
+}
+body {
+	width: 50%;
+	margin: 0 auto;
+	font: 100% Georgia, "Times New Roman", Times, serif;
+	padding:50px;
+	line-height: 1.6;
+}
+h1 {
+	font-size: 1.8em;
+	margin-bottom: 1em;      /* &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;   */
+}
+h2 {
+	font-size: 1.4em;
+	margin-bottom: .2em;      /* &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;   */
+}
+p {
+	font-size: 1em;
+	margin-bottom: 1em;      /* &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;   */
+}
+span {
+	background: yellow;
+	display: inline-block;
+	line-height: 2;
+}
+.center {
+	color: #fff;
+	background: #666;
+	line-height: 50px;
+	padding-left: 25px;
+}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;article&gt;
+&lt;h1&gt;Line height&lt;/h1&gt;
+&lt;p&gt;Leading, or line spacing, is controlled in CSS through the line-height property. You can use any unit of measurement with line-height, and it is unique in that it allows you to use a &amp;quot;multiple&amp;quot; value as well. Multiples are a single number with no unit of measurement specified, the number simply acts as a multiple of the current element's font-size.&lt;/p&gt;
+&lt;h2&gt;How it's calculated&lt;/h2&gt;
+&lt;p&gt;The line-height value is used to specify the minimal height of line boxes within an element. If you want to visualize an element's line box, simply place a background color behind an element element with no padding. &lt;span&gt;Like this text, for example, which is in a span tag.&lt;/span&gt; The minimum height is determined by calculating the minimum height above the baseline and a minimum height below it.&lt;/p&gt;
+&lt;h2 class="center"&gt;Other uses&lt;/h2&gt;
+&lt;p&gt;Line-height is often used to center single line text vertically within a box. Take the above headline, by giving it a background color and a line-height to either match or set the element's height, and the text is vertically centered, as it &amp;quot;floats&amp;quot; in the middle of it's line-height. Try it!&lt;/p&gt;
+&lt;h2&gt;Things to consider&lt;/h2&gt;
+&lt;p&gt;If you use relative units of measurement with line-height, or a multiple, the value is calculated based on the font-size of the element it is applied to. If no font-size is explicitly set, the font-size of the parent element is used. In the case of element's inheriting line-height, they usually inherit the calculated value, meaning that if you set a parent element to 1em, that value will be calculated and passed down to all child elements. However, if you set line-height in multiples, the multiple itself is passed down, letting the children calculate  line-height values from their own font-size.&lt;/p&gt;
+&lt;/article&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DATES</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>BETWEEN_dates</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DATES</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>BETWEEN_dates</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>--================================================
+DECLARE @START_DATE datetime
+SELECT @START_DATE = '09-01-2019'		--'2019-09-01 00:00:00.000'
+
+
+DECLARE @END_DATE date
+SELECT @END_DATE = '2019-09-30'	--'09-30-2019'	
+
+;WITH cte_days as
+(
+	SELECT cast('2019-09-30 06:00:00.000' as datetime) as theDateTime
+	UNION SELECT '09-01-2019'
+	UNION SELECT '09-15-2019'
+	UNION SELECT '09-30-2019'
+	UNION SELECT '10-01-2019'
+)
+SELECT * 
+from cte_days
+WHERE 
+		CONVERT(DATE,theDateTime) &gt;= @START_DATE
+		AND
+		CONVERT(DATE,theDateTime) &lt;= @END_DATE  
+Order by theDateTime
+
+--OUTPUT
+---------
+--theDateTime
+2019-09-01 00:00:00.000
+2019-09-15 00:00:00.000
+2019-09-30 00:00:00.000
+2019-09-30 06:00:00.000
+
+
+--================================================
+
+
+
+(
+	(fi.fundDate is not null)
+	and
+	(fi.fundDate BETWEEN ( DATEADD(dd, -7, GETDATE()) ) AND GETDATE())	--in the last week
+)
+
+
+--------
+
+WHERE
+    DATE BETWEEN '2013-09-10 00:00:00.00' AND 'GETDATE()'
+    
+    
+    
+    
+    </Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DATES</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>Business_Work_days___Count_between_2_dates</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DATES</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>Business_Work_days___Count_between_2_dates</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+
+https://stackoverflow.com/questions/252519/count-work-days-between-two-dates
+
+--For workdays, Monday to Friday, you can do it with a single SELECT, like this:
+--both @StartDate and @EndDate are included in the count
+
+DECLARE @StartDate DATETIME
+DECLARE @EndDate DATETIME
+SET @StartDate = '2008/10/01'
+SET @EndDate = '2008/10/31'
+
+
+SELECT
+   (DATEDIFF(dd, @StartDate, @EndDate) + 1)
+  -(DATEDIFF(wk, @StartDate, @EndDate) * 2)
+  -(CASE WHEN DATENAME(dw, @StartDate) = 'Sunday' THEN 1 ELSE 0 END)
+  -(CASE WHEN DATENAME(dw, @EndDate) = 'Saturday' THEN 1 ELSE 0 END)
+  
+--The datename function is locale-dependent. 
+--A more robust but also more obscure solution is to replace the last two lines by: 
+-(case datepart(dw, @StartDate)+@@datefirst when 8 then 1 else 0 end) -(case datepart(dw, @EndDate)+@@datefirst when 7 then 1 when 14 then 1 else 0 end)   
+
+-- If you want Monday to Tuesday to count as 1 day, just remove the "+ 1" after the first DATEDIFF.
+--Then you'll also get Fri-&gt;Sat=0, Fri-&gt;Sun=0, Fri-&gt;Mon=1
+--When you remove the + 1 after the DATEDIFF to exclude the startdate from the count you also need to adjust the CASE part of this. 
+--I ended up using this: 
++(CASE WHEN DATENAME(dw, @StartDate) = 'Saturday' THEN 1 ELSE 0 END) - (CASE WHEN DATENAME(dw, @EndDate) = 'Saturday' THEN 1 ELSE 0 END)
+--To clarify @Sequenzia's comment, you would REMOVE the case statements about Sunday entirely, leaving only 
++(CASE WHEN DATENAME(dw, @StartDate) = 'Saturday' THEN 1 ELSE 0 END) - (CASE WHEN DATENAME(dw, @EndDate) = 'Saturday' THEN 1 ELSE 0 END)</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DATES</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>GENERATE_days_BetweenTwoDates_in_CTE</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DATES</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>GENERATE_days_BetweenTwoDates_in_CTE</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+https://dba.stackexchange.com/questions/144700/how-to-generate-list-of-dates-ie-every-day-for-the-past-2-years
+
+;WITH cte AS
+(
+  SELECT ROW_NUMBER() OVER (ORDER BY (SELECT 1)) - 1 AS [Incrementor]
+  FROM   [master].[sys].[columns] sc1
+  CROSS JOIN [master].[sys].[columns] sc2
+)
+,
+cte_theDates as
+(
+SELECT DATEADD(DAY, cte.[Incrementor], '2019-01-01') as theDate
+FROM   cte
+WHERE  DATEADD(DAY, cte.[Incrementor], '2019-01-01') &lt; '2019-02-01'			--GETDATE();
+)
+Select * from cte_theDates
+
+
+--OUTPUT
+2019-01-01 00:00:00.000
+2019-01-02 00:00:00.000
+2019-01-03 00:00:00.000
+2019-01-04 00:00:00.000
+2019-01-05 00:00:00.000
+2019-01-06 00:00:00.000
+2019-01-07 00:00:00.000
+2019-01-08 00:00:00.000
+2019-01-09 00:00:00.000
+2019-01-10 00:00:00.000
+2019-01-11 00:00:00.000
+2019-01-12 00:00:00.000
+2019-01-13 00:00:00.000</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DATES</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>Where_Date_BetweenTwoDates</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DATES</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>Where_Date_BetweenTwoDates</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>		WHERE  
+
+				(
+					(T5.[Admit_Date] &gt; '2012-01-01')
+					and
+					(T5.[Admit_Date] &lt; '2012-12-31')
+				)</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_Functions_String</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>extract_text_BETWEEN_Delimiters</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_Functions_String</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>extract_text_BETWEEN_Delimiters</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+My Example =============================================================================================== 
+----------------sample of paths-------------------------------------
+/Reports51/COLLECTIONS™ WORKBENCH™ Reporting/Volume Reports/Door Knock Cancel by Collector
+/Collections/Collection
+----------------------------------------------------------------------
+'The root folder
+================
+Folder_01 = 
+    var thePath = 'vw_ExecutionLog3_Modified_1'[ItemPath]
+    var Slash_1 = FIND("/",'vw_ExecutionLog3_Modified_1'[ItemPath],1,0)
+    var Slash_2= FIND("/",'vw_ExecutionLog3_Modified_1'[ItemPath],Slash_1+1,0)
+    var Slash_3= FIND("/",'vw_ExecutionLog3_Modified_1'[ItemPath],Slash_2+1,0)
+    var LengthOfString = LEN(vw_ExecutionLog3_Modified_1[ItemPath])		
+    var startNumber = IF(
+                        Slash_1 = 0
+                        , 0
+                        ,Slash_1 + 1
+                    )
+     var numberCharacters = IF(
+                        Slash_1 * Slash_2 = 0
+                        , 0
+                        ,Slash_2 - Slash_1 - 1
+                    )      
+     var result = MID(thePath, startNumber,numberCharacters)                            
+return
+result
+
+'The second folder
+=====================
+Folder_02 = 
+    var thePath = 'vw_ExecutionLog3_Modified_1'[ItemPath]
+    var Slash_1 = FIND("/",'vw_ExecutionLog3_Modified_1'[ItemPath],1,0)
+    var Slash_2= FIND("/",'vw_ExecutionLog3_Modified_1'[ItemPath],Slash_1+1,0)
+    var Slash_3= FIND("/",'vw_ExecutionLog3_Modified_1'[ItemPath],Slash_2+1,0)
+    var Slash_4= FIND("/",'vw_ExecutionLog3_Modified_1'[ItemPath],Slash_3+1,0)
+    var LengthOfString = LEN(vw_ExecutionLog3_Modified_1[ItemPath])	
+    var startNumber = IF(
+                        Slash_2 = 0
+                        , 1
+                        ,Slash_2 + 1
+                    )
+     var numberCharacters = IF(
+                         Slash_2 = 0 
+                        , 0
+                        ,IF( Slash_3 = 0, (  LengthOfString - Slash_2 ),  (  Slash_3 - Slash_2 - 1  ) )
+                    )      
+     var result = MID(thePath, startNumber,numberCharacters)                            
+return
+result
+
+'Third Folder
+======================
+Folder_03 = 
+    var thePath = 'vw_ExecutionLog3_Modified_1'[ItemPath]
+    var Slash_1 = FIND("/",'vw_ExecutionLog3_Modified_1'[ItemPath],1,0)
+    var Slash_2= FIND("/",'vw_ExecutionLog3_Modified_1'[ItemPath],Slash_1+1,0)
+    var Slash_3= FIND("/",'vw_ExecutionLog3_Modified_1'[ItemPath],Slash_2+1,0)
+    var Slash_4= FIND("/",'vw_ExecutionLog3_Modified_1'[ItemPath],Slash_3+1,0)
+    var LengthOfString = LEN(vw_ExecutionLog3_Modified_1[ItemPath])	
+    var startNumber = IF(
+                        Slash_2 = 0 || Slash_3 = 0
+                        , 1
+                        ,Slash_3 + 1
+                    )
+     var numberCharacters = IF(
+                         Slash_2 = 0 || Slash_3 = 0
+                        , 0
+                        ,IF( Slash_4 = 0, (  LengthOfString - Slash_3 ),  (  Slash_4 - Slash_3 - 1  ) )
+                    )      
+     var result = MID(thePath, startNumber,numberCharacters)                            
+return
+result
+=================================================================================================================
+https://community.powerbi.com/t5/DAX-Commands-and-Tips/DAX-extract-text-between-delimiter/m-p/1191367
+
+Q: 'How can I get the DDD using DAX? A text after equal and before semicolon
+	AAA=BBB,CCC=DDD;EEE=FFF
+	
+------------------------------------------------------------------------------------------------------
+	First Derived Column =
+VAR FirstEqual =
+    FIND (
+        "=",
+        'Table'[Sorting Text],
+        1
+    )
+VAR SecondEqual =
+    FIND (
+        "=",
+        'Table'[Sorting Text],
+        FirstEqual + 1
+    )
+VAR Thirdampersand =
+    FIND (
+        ";",
+        'Table'[Sorting Text],
+        SecondEqual + 1
+    )
+RETURN
+    MID (
+        'Table'[Sorting Text],
+        SecondEqual + 1,
+        Thirdampersand - SecondEqual - 1
+    )
+    
+------------------------------------------------------------------------------------------------------
+    
+ GetText =
+		VAR OriginalText = 'Table'[Column1]
+		VAR CountOfEqualSign =
+		    LEN ( 'Table'[Column1] ) - LEN ( SUBSTITUTE ( 'Table'[Column1], "=", "" ) )
+		VAR AddCaret =
+		    SUBSTITUTE ( OriginalText, "=", "^", CountOfEqualSign - 1 )
+		VAR FirstCharAfterCaret =
+		    SEARCH ( "^", AddCaret ) + 1
+		VAR SemiColonPostion =
+		    SEARCH ( ";", OriginalText )
+		VAR Result =
+		    MID ( AddCaret, FirstCharAfterCaret, SemiColonPostion - FirstCharAfterCaret )
+		RETURN
+		    Result   
+=================================================================================================================		    
+
+Q: 'I have a column in my data model table which has values like this: 
+'Example:AA:XX-yy:1234 --&gt; I would like to create 2 additional columns which contains only 
+	XX-yy '(text between 2nd/3rd colon delimiter) and 
+	1234 '(text after the last colon delimiter)
+----------------------------------------------------------------------------------------------
+First Derived Column = 
+			var FirstColon = FIND(":",'Table1'[Origin Column],1)
+			var SecondColon = FIND(":",'Table1'[Origin Column],FirstColon + 1)
+			var ThirdColon = FIND(":",'Table1'[Origin Column],SecondColon + 1)
+			return
+			MID('Table1'[Origin Column], SecondColon + 1, ThirdColon - SecondColon - 1)	
+			
+Second Derived Column = 
+			var FirstColon = FIND(":",'Table1'[Origin Column],1)
+			var SecondColon = FIND(":",'Table1'[Origin Column],FirstColon + 1)
+			var ThirdColon = FIND(":",'Table1'[Origin Column],SecondColon + 1)
+			var LengthOfString = LEN('Table1'[Origin Column])
+			return
+			MID('Table1'[Origin Column],ThirdColon + 1, LengthOfString -  ThirdColon + 1)			
+----------------------------------------------------------------------------------------------
+First Derived Column = 	Text.Split([Value], ":"){2}		
+'It splits the text on each colon and returns a list of the separated values. 
+'To fetch the 3rd value from the list you use {2} because the count starts at zero here.			
+			
+Second Derived Column = Text.AfterDelimiter([Value], ":", {0, RelativePosition.FromEnd})		</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>EXCEL</Category>
+        <Language>TEXT</Language>
+        <Public>false</Public>
+        <Name>Hours_Between_2_Times</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>EXCEL</Category>
+          <Language>TEXT</Language>
+          <Public>false</Public>
+          <Name>Hours_Between_2_Times</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>https://www.ablebits.com/office-addins-blog/2015/06/24/calculate-time-excel/
+
+
+Time (example: 9:30:15 PM and 9:40:00 PM)
+Calculate hours between two times: =TEXT(B2-A2, "h")
+Return hours and minutes between 2 times: =TEXT(B2-A2, "h:mm")
+Return hours, minutes and seconds between 2 times: =TEXT(B2-A2, "h:mm:ss")
+
+
+
+=(End time - Start time) * 24</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>JOIN</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>LeftOuterJoin_between_GroupOf2Tables_and_GroupOf3Tables</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>JOIN</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>LeftOuterJoin_between_GroupOf2Tables_and_GroupOf3Tables</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>--JUNK3.sql
+use DB2_CRM
+go
+
+select *
+
+From 
+		(
+			(
+			--==========================
+			
+						SELECT 
+						  L_Employee.T9_PK,
+						  L_Employee.[Name] as Employee_Name, 						  
+						  R_Supervisor.Name as SuperVisor_Name	--,
+					
+
+
+					  FROM 
+							[DB2_CRM].[dbo].[T9_CCWNC_Employees] as L_Employee
+							Left Outer Join
+							[DB2_CRM].[dbo].[T9_CCWNC_Employees] as R_Supervisor
+							on L_Employee.supervisor = R_Supervisor.T9_PK
+					  where  (
+								(L_Employee.bActiveEmployee = 1)
+							  )
+			
+			--===========================
+			) AS LEFT1
+			left outer join
+			(
+			--+++++++++++++++++++++++++++
+			SELECT	
+				T18_TeamMember.T18_PK,
+				T18_TeamMember.T9_FK,
+				T18_TeamMember.Team_Role_e16,
+				T17_PK,
+				T17_Team.Team_Name, 
+				T14_PK,
+				T14_Group.Group_Name
+			
+			FROM  
+				T18_TeamMember 
+				INNER JOIN
+				T17_Team 
+				ON T18_TeamMember.T17_FK = T17_Team.T17_PK 
+			    
+				INNER JOIN
+				T14_Group ON T17_Team.T14_FK = T14_Group.T14_PK
+			    
+			Where(
+					(T14_PK = 19)
+					and 
+					T9_FK is not null
+				  )
+						
+			--++++++++++++++++++++++++++++
+			) AS RIGHT1
+			on 
+			(LEFT1.T9_PK = RIGHT1.T9_FK  )
+		)</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_HASH_table</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>Query_EventLog_BetweenDateTimes_using_a_FilterHashTable</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_HASH_table</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>Query_EventLog_BetweenDateTimes_using_a_FilterHashTable</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+#'=====START: Get-WinEventWithin.ps1 ========================================================================
+
+param([string]$ComputerName = 'localhost',[datetime]$StartTimestamp,[datetime]$EndTimestamp)
+
+
+#'Get-WinEvent lets you query ALL event log sources, and is faster than Get-EventLog
+#'  "where { $_.RecordCount }" gets rid of all the event logs with no events
+$Logs = (Get-WinEvent -ListLog * -ComputerName $ComputerName | where { $_.RecordCount }).LogName
+
+$FilterTable = @{
+	                'StartTime' = $StartTimestamp
+	                'EndTime' = $EndTimestamp
+	                'LogName' = $Logs
+                }
+		
+Get-WinEvent -ComputerName $ComputerName -FilterHashtable $FilterTable -ErrorAction 'SilentlyContinue'
+#'=====END: Get-WinEventWithin.ps1 ========================================================================
+
+#'USAGE:===========================
+&gt; .\Get-WinEventWithin.ps1 -StartTimestamp '11-18-16 04:00' -EndTimestamp '11-18-16 05:10' 
+
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>SELECT_COMPLEX</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>Calculate_GetString_Between_Pattern_OfCharacters</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>SELECT_COMPLEX</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>Calculate_GetString_Between_Pattern_OfCharacters</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>-- PARSE: [*
+ 
+ ;WITH CTE_Records_GradesFilledIn_One  (Supervisor_Name, 
+										CM_Name
+										,ONE
+										,TWO
+										)										
+AS
+(
+	select Supervisor_Name, 
+			[CM_Name]
+			
+			,(
+				SELECT 'TheCalculation' = Case When ([ONE_0b_Demo_Page_e2]=0) then 0 ELSE 1 END 
+			  ) AS ONE 
+			,(
+				SELECT 'TheCalculation' = Case When ([TWO_0b_Goals_e2]=0) then 0 ELSE 1 END 
+			  ) AS TWO 			  
+	FROM vwFORM_0010_T0
+
+)
+Select * from CTE_Records_GradesFilledIn_One 	  
+  	  
+ /////////////////////////////////////////////////////////////////////////////// 	  
+  	  
+  	  
+  	  ,	(SELECT     'TheCalculation' = 
+        		CASE 
+            			WHEN (charINDEX('[*',[NOTES]) &gt;= 0) and (charINDEX('*]',[NOTES]) &gt; 0 ) 
+            			THEN SUBSTRING([NOTES],(charINDEX('[*',[NOTES])+3), (  (charINDEX('*]',[NOTES])-1) - (charINDEX('[*',[NOTES])+2)  ))
+        		 
+				ELSE NULL
+
+        			END) as GoodString
+        			
+        			
+///////////////////// nicer formatted version//////////////////
+
+,	(SELECT     'TheCalculation' = 
+			CASE 
+					WHEN (charINDEX('[*',[Program_Title]) &gt;= 0) and (charINDEX('*]',[Program_Title]) &gt; 0 ) 
+					THEN SUBSTRING(
+									[Program_Title],
+									(charINDEX('[*',[Program_Title])+3),
+									(  (charINDEX('*]',[Program_Title])-1) - (charINDEX('[*',[Program_Title])+2)  )
+								  )
+			 
+			ELSE NULL
+			
+				END) as GoodString	
+	
+////////////////////  definitions and more verbose///////////////
+
+	  	  ,	(SELECT     'TheCalculation' = 
+        		CASE 
+            			WHEN (charINDEX('[*',[Program_Title]) &gt;= 0) and (charINDEX('*]',[Program_Title]) &gt; 0 ) 
+            			THEN SUBSTRING(
+            							[Program_Title],						--SUBSTRING(value_expression , , )
+            							(										--SUBSTRING(,start_expression , )	{Is an integer or bigint expression that specifies where the returned characters start}
+            								charINDEX(							--charINDEX: Searches expression2 for expression1 and returns its starting position if found. The search starts at start_location.
+            											'[*',					--charINDEX: expression1: Is a character expression that contains the sequence to be found. expression1 is limited to 8000 characters. 
+            											[Program_Title]			--charINDEX: expression2: Is a character expression to be searched.
+            																	--charINDEX: start_location (optional):  Is an integer or bigint expression at which the search starts. If start_location is not specified, is a negative number, or is 0, the search starts at the beginning of expression2
+            										)
+            								+
+            								3
+            							),
+            							(										--SUBSTRING(, ,length_expression )  {Is a positive integer or bigint expression that specifies how many characters of the value_expression will be returned} 
+            								(
+            									charINDEX('*]',[Program_Title])
+            									-
+            									1
+            								) 
+            								- 
+            								(
+            									charINDEX('[*',[Program_Title])
+            									+
+            									2
+            								)  
+            							)
+            						  )</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>SELECT_COMPLEX</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>YYYYMMDD_WHERE_BETWEEN_from_date</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>SELECT_COMPLEX</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>YYYYMMDD_WHERE_BETWEEN_from_date</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>WHERE (  
+
+			(JC_TRANSACTIONS.CLASS='03' )
+			AND 
+			( JC_TRANSACTIONS.GL_PERIOD  Between 
+										(SELECT     'TheCalculation' = 
+															( SELECT RIGHT('0000' + CAST(year( @BeginDate) AS NVARCHAR),4)  ) +
+															( SELECT RIGHT('00' + CAST(MONTH( @BeginDate) AS NVARCHAR),2)  ) +
+															( SELECT RIGHT('00' + CAST(DAY( @BeginDate) AS NVARCHAR),2)  )
+															)
+										 and 
+										(SELECT     'TheCalculation' = 
+														( SELECT RIGHT('0000' + CAST(year( @EndDate) AS NVARCHAR),4)  ) +
+														( SELECT RIGHT('00' + CAST(MONTH( @EndDate) AS NVARCHAR),2)  ) +
+														( SELECT RIGHT('00' + CAST(DAY( @EndDate) AS NVARCHAR),2)  )
+														) 	
+			 )	</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>Table</Category>
+        <Language>SQLSERVER2K SQL</Language>
+        <Public>false</Public>
+        <Name>UPDATE_BetweenThreeTables_with_LinkTable_InTheMiddle</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>Table</Category>
+          <Language>SQLSERVER2K SQL</Language>
+          <Public>false</Public>
+          <Name>UPDATE_BetweenThreeTables_with_LinkTable_InTheMiddle</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+--Based on Template:
+
+UPDATE table2 
+SET table2col1 = table1.col1, 
+table2col2 = table1.col2,
+...
+FROM table1, table2 
+WHERE table1.memberid = table2.memberid
+
+
+--==============================================
+UPDATE DB2_CRM.dbo.LNK01_T5_T12_T13 
+SET T13_FK = null
+
+--==============================================
+T13 &lt;=&gt; LNK01 &lt;=&gt; T12
+
+--==============================================
+
+use DB2_CRM
+go
+
+UPDATE T12_NotEmployees_COPY 
+SET 
+	T12_NotEmployees_COPY.Position =  T13_NotEmployees_Practice_Details.Position ,
+	
+	T12_NotEmployees_COPY.Notes =  T13_NotEmployees_Practice_Details.Notes 
+
+										  
+FROM ( 
+		 (
+			  T13_NotEmployees_Practice_Details 
+			  left outer JOIN
+			  LNK01_T5_T12_T13 
+			  ON T13_NotEmployees_Practice_Details.T13_PK = LNK01_T5_T12_T13.T13_FK 
+		  )
+		  left outer JOIN
+		  T12_NotEmployees
+		  ON LNK01_T5_T12_T13.T12_FK = T12_NotEmployees.T12_PK
+	  )
+WHERE T12_NotEmployees_COPY.T12_PK = LNK01_T5_T12_T13.T12_FK
+
+
+--==========================
+
+	
+
+--I realy hope someone can help me with this. I have a databse with Account Numbers and card Numbers that
+-- I match to a file to update any card numbers to account number so I only work with account numbers.
+-- I created a view linking the Table to the Account/Card db to return the Table ID and the related Account number.
+-- Now I need to update those records where the ID matches with the Account Number.
+
+--Sales_Import where the account number field needs to be updated
+
+LeadID  AccountNumber
+147 5807811235
+150 5807811326
+185 7006100100007267039
+
+RetrieveAccountNumber where I need to update from
+
+LeadID  AccountNumber
+147 7006100100007266957
+150 7006100100007267039
+
+
+UPDATE Sales_Import 
+SET    AccountNumber = (SELECT RetrieveAccountNumber.AccountNumber 
+                          FROM   RetrieveAccountNumber 
+                          WHERE  Sales_Import.leadid =RetrieveAccountNumber.LeadID) 
+WHERE Sales_Import.leadid = (SELECT  RetrieveAccountNumber.LeadID 
+                             FROM   RetrieveAccountNumber 
+                             WHERE  Sales_Import.leadid = RetrieveAccountNumber.LeadID)  </Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>VBA_EXCEL_BetweenWorkBooks</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>Copy_Cell_Between2ClosedWorkBooks</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>VBA_EXCEL_BetweenWorkBooks</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>Copy_Cell_Between2ClosedWorkBooks</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>'I am assuming that both excel files are closed and you are doing what you want to do from a 3rd file...
+
+
+
+    Sub COPYCELL()
+    
+        Dim wbk As Workbook
+         
+        strFirstFile = "c:\hack.xls"
+        strSecondFile = "c:\vbf.xls"
+         
+        Set wbk = Workbooks.Open(strFirstFile)
+        With wbk.Sheets("Data")
+            .Range("G14").Copy
+        End With
+         
+        Set wbk = Workbooks.Open(strSecondFile)
+        With wbk.Sheets("MyDate")
+            .Range("E16").PasteSpecial Paste:=xlPasteAll, Operation:=xlNone, SkipBlanks:= _
+                False, Transpose:=False
+        End With
+     
+    End Sub</Code>
+      </SnippetValue>
+    </value>
+  </item>
+</dictionary>
