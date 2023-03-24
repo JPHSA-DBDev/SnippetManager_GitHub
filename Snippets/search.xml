@@ -3,89 +3,66 @@
   <item>
     <key>
       <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>ASPNET_C#_Databinding_in_CodeBehind</Category>
-        <Language>ASP</Language>
+        <Category>POWERSHELL_DISM</Category>
+        <Language>VBSCRIPT</Language>
         <Public>false</Public>
-        <Name>1_GridView_SqlConnection_SqlCommand_SqlDataReader</Name>
+        <Name>DefaultAppAssociations </Name>
         <Group>My Snippets</Group>
       </SnippetKey>
     </key>
     <value>
       <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
         <Key>
-          <Category>ASPNET_C#_Databinding_in_CodeBehind</Category>
-          <Language>ASP</Language>
+          <Category>POWERSHELL_DISM</Category>
+          <Language>VBSCRIPT</Language>
           <Public>false</Public>
-          <Name>1_GridView_SqlConnection_SqlCommand_SqlDataReader</Name>
+          <Name>DefaultAppAssociations </Name>
           <Group>My Snippets</Group>
         </Key>
         <Keywords />
         <Imports />
-        <Code>&lt;!--
-This particular example used a .mdf SQL file in the web
---&gt;
+        <Code>
+'The following default application association servicing options are available for a running operating system.
+
+DISM.exe /Online [/Export-DefaultAppAssociations | /Get-DefaultAppAssociations | Import-DefaultAppAssociations | Remove-DefaultAppAssociations]
 
 
-&lt;%@ Page Language="C#" AutoEventWireup="true"  CodeFile="Default.aspx.cs" Inherits="_Default" %&gt;
-&lt;%@ Page Language="C#" AutoEventWireup="true"  CodeFile="Default.aspx.cs" Inherits="_Default" %&gt;
+'Option							Description
+-----------------				----------------------------------------------------------------------------------
+/Get-Help						When used immediately after a default application association servicing command-line option, information about the option and the arguments is displayed. Additional topics might become available when an image is specified.
+	
+/?								Examples:	
+								Dism /image:C:\test\offline /Import-DefaultAppAssociations /?	
+								Dism /online /Get-DefaultAppAssociations /?
+					
+'Exports the default application associations from a running operating system to an .xml file.
+/Export-DefaultAppAssociations:&lt;path_to_export_file&gt;
+	
+								Example:	
+								Dism.exe /Online /Export-DefaultAppAssociations:C:\AppAssoc.xml
 
-&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;
+'Displays the list of default application associations that have been set in the specified Windows image. 
+'You can use this option to verify that default application associations were successfully imported to the image.	
+/Get-DefaultAppAssociations
 
-&lt;html xmlns="http://www.w3.org/1999/xhtml"&gt;
-&lt;head runat="server"&gt;
-    &lt;title&gt;&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;form id="form1" runat="server"&gt;
-    &lt;div&gt;
+								Examples:	
+								Dism.exe /Image:C:\test\offline /Get-DefaultAppAssociations	
+								Dism.exe /Online /Get-DefaultAppAssociations
 
-        &lt;asp:GridView 
-            ID="_moviesGrid" 
-            runat="server"&gt;
-        &lt;/asp:GridView&gt;
+'Imports a set of default application associations to a specified Windows image from an .xml file. 
+'The default application associations will be applied for each user during their first logon.	
+/Import-DefaultAppAssociations:&lt;path_to_xml_file&gt;
+	
+								Examples:	
+								Dism.exe /Image:C:\test\offline /Import-DefaultAppAssociations:C:\AppAssoc.xml	
+								Dism.exe /Online /Import-DefaultAppAssociations:C:\AppAssoc.xml
+							
+'Removes the default application associations from the specified Windows image.	
+/Remove-DefaultAppAssociations
 
-
-    &lt;/div&gt;
-    &lt;/form&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-
-
-
-///////////////////////////////////////////////////////////////
-
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using System.Data;
-using System.Data.SqlClient;
-using System.Configuration;
-
-public partial class _Default : System.Web.UI.Page 
-{
-    protected void Page_Load(object sender, EventArgs e)
-    {
-        string dsn = "Data Source=.\\SQLEXPRESS;AttachDbFilename=|DataDirectory|\\MovieReviews.mdf;Integrated Security=True;User Instance=True";
-        //string dsn = ConfigurationManager.ConnectionStrings["moviesConnectionString"].ConnectionString;
-        using (SqlConnection conn = new SqlConnection(dsn))
-        using (SqlCommand cmd = new SqlCommand("SELECT TOP 20 movie_id, title, release_date FROM movies", conn))
-        {
-            conn.Open();
-            SqlDataReader reader = cmd.ExecuteReader();
-            _moviesGrid.DataSource = reader;
-            _moviesGrid.DataBind();
-        }
-
-
-
-    }
-}
-
-
+								Examples:	
+								Dism.exe /Image:C:\test\offline /Remove-DefaultAppAssociations	
+								Dism.exe /Online /Remove-DefaultAppAssociations
 </Code>
       </SnippetValue>
     </value>
@@ -93,1175 +70,289 @@ public partial class _Default : System.Web.UI.Page
   <item>
     <key>
       <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>Connections</Category>
+        <Category>POWERSHELL_DISM</Category>
         <Language>VBSCRIPT</Language>
         <Public>false</Public>
-        <Name>CheckFor_Internet_Connections</Name>
+        <Name>DISM.exe__mapTo__DISM_cmdlet</Name>
         <Group>My Snippets</Group>
       </SnippetKey>
     </key>
     <value>
       <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
         <Key>
-          <Category>Connections</Category>
+          <Category>POWERSHELL_DISM</Category>
           <Language>VBSCRIPT</Language>
           <Public>false</Public>
-          <Name>CheckFor_Internet_Connections</Name>
+          <Name>DISM.exe__mapTo__DISM_cmdlet</Name>
           <Group>My Snippets</Group>
         </Key>
         <Keywords />
         <Imports />
-        <Code>Dim WshShell
- Set WshShell = createobject("wscript.shell") 
- strURL = "www.yahoo.com"
- set png = WshShell.exec("ping -n 1 " &amp; strURL) 
-     do until png.status = 1 
-  wscript.sleep 100 
-  loop 
- strPing = lcase(png.stdout.readall) 
-     Select Case True 
-         Case InStr(strPing, "reply from") &gt; 1 
-             strReply = True      '------"Request timed out" 
-         Case Else 
-             strReply = False 
-     End Select 
- msgbox strReply </Code>
+        <Code>'https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/use-dism-in-windows-powershell-s14
+
+Dism.exe command				DISM cmdlet
+Dism.exe /Add-Capability		Add-WindowsCapability
+Dism.exe /Append-Image			Add-WindowsImage
+Dism.exe /Apply-Image			Expand-WindowsImage
+Dism.exe /Capture-Image			New-WindowsImage
+Dism.exe /Cleanup-MountPoints	Clear-WindowsCorruptMountPoint
+Dism.exe /Commit-Image			Save-WindowsImage
+Dism.exe /Export-Image			Export-WindowsImage
+Dism.exe /Get-Capabilities		Get-WindowsCapability
+Dism.exe /Get-ImageInfo			Get-WindowsImage
+Dism.exe /Get-MountedImageInfo	Get-WindowsImage -Mounted
+Dism.exe /Get-WimBootEntry		Get-WIMBootEntry
+Dism.exe /List-Image			Get-WindowsImageContent
+Dism.exe /Mount-Image			Mount-WindowsImage
+Dism.exe /Split-Image			Split-WindowsImage
+Dism.exe /Remove-Capability		Remove-WindowsCapability
+Dism.exe /Remove-Image			Remove-WindowsImage
+Dism.exe /Remount-Image			Mount-WindowsImage -Remount
+Dism.exe /Unmount-Image			Dismount-WindowsImage
+Dism.exe /Update-WimBootEntry	Update-WIMBootEntry
+Dism.exe /Image:&lt;...&gt; /Add-Driver						Add-WindowsDriver
+Dism.exe /Image:&lt;...&gt; /Add-Package						Add-WindowsPackage
+Dism.exe /Image:&lt;...&gt; /Add-ProvisionedAppxPackage		Add-AppxProvisionedPackage
+Dism.exe /Image:&lt;...&gt; /Cleanup-Image /CheckHealth		Repair-WindowsImage -CheckHealth
+Dism.exe /Image:&lt;...&gt; /Cleanup-Image /ScanHealth		Repair-WindowsImage -ScanHealth
+Dism.exe /Image:&lt;...&gt; /Cleanup-Image /RestoreHealth		Repair-WindowsImage -RestoreHealth
+Dism.exe /Image:&lt;...&gt; /Disable-Feature					Disable-WindowsOptionalFeature
+Dism.exe /Image:&lt;...&gt; /Enable-Feature					Enable-WindowsOptionalFeature
+Dism.exe /Image:&lt;...&gt; /Export-Driver					Export-WindowsDriver
+Dism.exe /Image:&lt;...&gt; /Get-CurrentEdition				Get-WindowsEdition -Current
+Dism.exe /Image:&lt;...&gt; /Get-Driverinfo					Get-WindowsDriver -Driver
+Dism.exe /Image:&lt;...&gt; /Get-Drivers						Get-WindowsDriver
+Dism.exe /Image:&lt;...&gt; /Get-Featureinfo					Get-WindowsOptionalFeature -FeatureName
+Dism.exe /Image:&lt;...&gt; /Get-Features						Get-WindowsOptionalFeature
+Dism.exe /Image:&lt;...&gt; /Get-Packageinfo					Get-WindowsPackage -PackagePath
+Dism.exe /Image:&lt;...&gt; /Get-Packages						Get-WindowsPackage
+Dism.exe /Image:&lt;...&gt; /Get-ProvisionedAppxPackages		Get-AppxProvisionedPackage
+Dism.exe /Image:&lt;...&gt; /Get-TargetEditions				Get-WindowsEdition -Target
+Dism.exe /Image:&lt;...&gt; /Optimize-Image					Optimize-WindowsImage
+Dism.exe /Image:&lt;...&gt; /Remove-Driver					Remove-WindowsDriver
+Dism.exe /Image:&lt;...&gt; /Remove-Package					Remove-WindowsPackage
+Dism.exe /Image:&lt;...&gt; /Remove-ProvisionedAppxPackage	Remove-AppxProvisionedPackage
+Dism.exe /Image:&lt;...&gt; /Set-Edition						Set-WindowsEdition
+Dism.exe /Image:&lt;...&gt; /Set-ProductKey					Set-WindowsProductKey
+Dism.exe /Image:&lt;...&gt; /Set-ProvisionedAppxDataFile		Set-AppXProvisionedDataFile
+</Code>
       </SnippetValue>
     </value>
   </item>
   <item>
     <key>
       <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>Connections</Category>
-        <Language>VBSCRIPT</Language>
-        <Public>false</Public>
-        <Name>ReadMe_Connections</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>Connections</Category>
-          <Language>VBSCRIPT</Language>
-          <Public>false</Public>
-          <Name>ReadMe_Connections</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>ReadMe_Connections</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>Outlook</Category>
+        <Category>Windows_10</Category>
         <Language>TEXT</Language>
         <Public>false</Public>
-        <Name>View_Established_Connections_in_Outlook</Name>
+        <Name>Stop_Resetting_Default_Apps</Name>
         <Group>My Snippets</Group>
       </SnippetKey>
     </key>
     <value>
       <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
         <Key>
-          <Category>Outlook</Category>
+          <Category>Windows_10</Category>
           <Language>TEXT</Language>
           <Public>false</Public>
-          <Name>View_Established_Connections_in_Outlook</Name>
+          <Name>Stop_Resetting_Default_Apps</Name>
           <Group>My Snippets</Group>
         </Key>
         <Keywords />
         <Imports />
-        <Code>Hold [Command] key and right-click on Outlook icon in system tray =&gt; Connection Status</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>POWER_BI</Category>
-        <Language>TEXT</Language>
-        <Public>false</Public>
-        <Name>Connections</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>POWER_BI</Category>
-          <Language>TEXT</Language>
-          <Public>false</Public>
-          <Name>Connections</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>Import
-=========
-data is imported into Power BI cache
-Report data must be refreshed to view changes in visualizations
-This is the default connection method in Power BI
+        <Code>Stop_Resetting_Default_Apps
+----------------------------
 
-Live Conection
-==============
-Solves the need to have a connection that many users can connect to.
-Three specific data sources that can use a Live Connection
-	SSAS
-	Common Data Service (Power platform CDS)
-	any Power BI data set, that has been published to PowerBI.com
 
-DirectQuery
-============
-Loaded data is  not imported into Power BI cache
-Visualizations ared created using the data source
-Report data must still be refresshed to view changes in visualizations
-Each time you open or create a report the data source is queried
-Slower than Import, which pulls from cache, and not available for all data connections</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>POWER_BI</Category>
-        <Language>TEXT</Language>
-        <Public>false</Public>
-        <Name>PORT_number_for_AnalysisServices_connection_from_SSMS</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>POWER_BI</Category>
-          <Language>TEXT</Language>
-          <Public>false</Public>
-          <Name>PORT_number_for_AnalysisServices_connection_from_SSMS</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>
+https://4sysops.com/archives/default-file-associations-in-windows-10/
 
-1] in DAX STUDIO it shows the localhost and port number in lower right
 
-or
+To deploy the default file associations, 
+	you first have to configure the settings on a reference machine 
+	and then export the configuration in an XML file that you can deploy in your network.
 
-2] or from the 'msmdsrv.port.txt' file
+1] You can configure the settings in the Control Panel under Programs &gt; Default Programs &gt; Set Default Program.
 
-To get the Port number for connecting to Analysis Services using SSMS
-If you can not get the Local Host Port directly from DAX STUDIO, you can go here:
-------------------------------------------------------------------------------------
-1] C:\Users\glenn\AppData\Local\Microsoft\Power BI Desktop\AnalysisServicesWorkspaces
-2] inside of there is a folder w/ a random GUID or number as a suffix
-	e.g.AnalysisServicesWorkspace_76cc3262-081c-4340-b54e-93c5afc0f165
-	go into that folder, then the 'Data' folder
-	e.g. C:\Users\glenn\AppData\Local\Microsoft\Power BI Desktop\AnalysisServicesWorkspaces\AnalysisServicesWorkspace_76cc3262-081c-4340-b54e-93c5afc0f165\Data
-	and you will see this file:		
-		msmdsrv.port.txt
-		in that file is the port number
-		e.g. 59505
+2] Once you do that, you have to open a command prompt 
+	with the user account from above 
+	and use the DISM tool to export the current settings to an .XML file, as shown below.
+	
+
+&gt;Dism.exe /online /Export-DefaultAppAssociations:C:\DATA\DefaultApplications\DefaultApps.xml
+
+{See below for example of the file for Windows 10 Build 1709}
+
+
+Now you have a .XML file with all the file associations from that user. 
+	People often ask me if it is possible to deploy just one file association 
+	or if they must use the entire file, which also contains all the default settings. 
+	The answer is, yes, you can import just the association you need.
+
+3] Deploying default file associations using Group Policy
+
+You can also deploy the default file associations using Group Policy: 
+	Computer Configuration &gt; Administrative Templates &gt; Windows Components &gt; File Explorer
 		
+	
+Set the Group Policy	
+https://docs.microsoft.com/en-us/internet-explorer/ie11-deploy-guide/set-the-default-browser-using-group-policy
+=============================================================================================================
+
+1] Open your Group Policy editor and go to the following policy 
+
+	Administrative Templates\Windows Components\File Explorer\Set a default associations configuration file setting
+	
+	a] 	Enabled
+	
+	b]	Default Associations Configuration File
+	
+		C:\DATA\DefaultApplications\DefaultApps.xml
 		
-------------------------------------------------		
-In SSMS =&gt; Connect to Server =&gt;
-	Server Type: Analysis Services
-	Server name: localhost 59505   (e.g.)
-	
-If you have an open Power BI file you will see a database listed whose name is a GUID</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>POWERSHELL_MISC</Category>
-        <Language>VBSCRIPT</Language>
-        <Public>false</Public>
-        <Name>PING_Test-Connection</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>POWERSHELL_MISC</Category>
-          <Language>VBSCRIPT</Language>
-          <Public>false</Public>
-          <Name>PING_Test-Connection</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>Test-Connection www.cnbc.com -Count 1000</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>POWERSHELL_WMI</Category>
-        <Language>VBSCRIPT</Language>
-        <Public>false</Public>
-        <Name>simple_test_WMI_connection</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>POWERSHELL_WMI</Category>
-          <Language>VBSCRIPT</Language>
-          <Public>false</Public>
-          <Name>simple_test_WMI_connection</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>
 
-&gt;Get-WmiObject -Namespace "root\cimv2" -Class Win32_Process -Impersonation 3 -ComputerName Computer_B
 
-'It will either spit back a bunch of results, or you might get a RED error:
-
-		Get-WmiObject : The RPC server is unavailable. (Exception from HRESULT: 0x800706BA)
-		
-=================================================================		
-
-Get-WmiObject Win32_ComputerSystem –ComputerName IT-3020</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>SOMEE.COM</Category>
-        <Language>TEXT</Language>
-        <Public>false</Public>
-        <Name>ConnectionString_and_Web.config</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>SOMEE.COM</Category>
-          <Language>TEXT</Language>
-          <Public>false</Public>
-          <Name>ConnectionString_and_Web.config</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>
-1] I developed the Web Application and the SQL database locally.
-
-	a) the Local Database was on the DEV Server as Database: "MVC_App_2"
-	
-	b) the connection string in Web.Config, on my development workstation was:
-	
-        &lt;add name="Project_Connection"
-             connectionString="Data Source=SQL-SERVER\DEV;Initial Catalog=MVC_App_2;Integrated Security=True;Trusted_Connection=Yes;Pooling=False"
-             providerName="System.Data.SqlClient" /&gt;
-             
-   c) I had to use this connection string for the Somee web.config:
-   
-    &lt;connectionStrings&gt;
-         &lt;add name="Project_Connection"
-             connectionString="workstation id=DEV1234.mssql.somee.com;packet size=4096;user id=glenngarson_SQLLogin_2;pwd=cgxk7uk72p;data source=DEV1234.mssql.somee.com;persist security info=False;initial catalog=DEV1234"
-             providerName="System.Data.SqlClient" /&gt;
-    &lt;/connectionStrings&gt;
-             	
-         
-
-2] I seeded the SQL database (MVC_App_2), then detached it on the local server. 
-
-4] I created an SQL database on the Somee platform called DEV1234
-
-3] In the Somee interface, I browsed to my local MVC_App_2.mdf file and attached it to the DEV1234 remote database 
-
-1] The connections string from Somee.com for my FiveHappiness DEV website, for the DEV1234 SQL database:
-
-
-Connection string:  workstation id=DEV1234.mssql.somee.com;packet size=4096;user id=glenngarson_SQLLogin_2;pwd=cgxk7uk72p;data source=DEV1234.mssql.somee.com;persist security info=False;initial catalog=DEV1234  
-
-
-Here is the Web.config for the remote application on Somee:
-
-==============================================================
-
-
-
-&lt;?xml version="1.0" encoding="utf-8"?&gt;
-&lt;!--
-  For more information on how to configure your ASP.NET application, please visit
-  http://go.microsoft.com/fwlink/?LinkId=301880
-  --&gt;
-&lt;configuration&gt;
-  &lt;configSections&gt;
-    &lt;!-- For more information on Entity Framework configuration, visit http://go.microsoft.com/fwlink/?LinkID=237468 --&gt;
-    &lt;section name="entityFramework" type="System.Data.Entity.Internal.ConfigFile.EntityFrameworkSection, EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" requirePermission="false" /&gt;
-  &lt;/configSections&gt;
-    &lt;connectionStrings&gt;
-         &lt;add name="Project_Connection"
-             connectionString="workstation id=DEV1234.mssql.somee.com;packet size=4096;user id=glenngarson_SQLLogin_2;pwd=cgxk7uk72p;data source=DEV1234.mssql.somee.com;persist security info=False;initial catalog=DEV1234"
-             providerName="System.Data.SqlClient" /&gt;
-    &lt;/connectionStrings&gt;
-    &lt;appSettings&gt;
-    &lt;add key="webpages:Version" value="3.0.0.0" /&gt;
-    &lt;add key="webpages:Enabled" value="false" /&gt;
-    &lt;add key="ClientValidationEnabled" value="true" /&gt;
-    &lt;add key="UnobtrusiveJavaScriptEnabled" value="true" /&gt;
-  &lt;/appSettings&gt;
-  &lt;system.web&gt;
-    &lt;compilation debug="true" targetFramework="4.5" /&gt;
-    &lt;httpRuntime targetFramework="4.5" /&gt;
-    &lt;customErrors mode="Off"/&gt;
-  &lt;/system.web&gt;
-  &lt;runtime&gt;
-    &lt;assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1"&gt;
-      &lt;dependentAssembly&gt;
-        &lt;assemblyIdentity name="Newtonsoft.Json" culture="neutral" publicKeyToken="30ad4fe6b2a6aeed" /&gt;
-        &lt;bindingRedirect oldVersion="0.0.0.0-6.0.0.0" newVersion="6.0.0.0" /&gt;
-      &lt;/dependentAssembly&gt;
-      &lt;dependentAssembly&gt;
-        &lt;assemblyIdentity name="System.Web.Optimization" publicKeyToken="31bf3856ad364e35" /&gt;
-        &lt;bindingRedirect oldVersion="1.0.0.0-1.1.0.0" newVersion="1.1.0.0" /&gt;
-      &lt;/dependentAssembly&gt;
-      &lt;dependentAssembly&gt;
-        &lt;assemblyIdentity name="WebGrease" publicKeyToken="31bf3856ad364e35" /&gt;
-        &lt;bindingRedirect oldVersion="0.0.0.0-1.5.2.14234" newVersion="1.5.2.14234" /&gt;
-      &lt;/dependentAssembly&gt;
-      &lt;dependentAssembly&gt;
-        &lt;assemblyIdentity name="System.Web.Helpers" publicKeyToken="31bf3856ad364e35" /&gt;
-        &lt;bindingRedirect oldVersion="1.0.0.0-3.0.0.0" newVersion="3.0.0.0" /&gt;
-      &lt;/dependentAssembly&gt;
-      &lt;dependentAssembly&gt;
-        &lt;assemblyIdentity name="System.Web.WebPages" publicKeyToken="31bf3856ad364e35" /&gt;
-        &lt;bindingRedirect oldVersion="1.0.0.0-3.0.0.0" newVersion="3.0.0.0" /&gt;
-      &lt;/dependentAssembly&gt;
-      &lt;dependentAssembly&gt;
-        &lt;assemblyIdentity name="System.Web.Mvc" publicKeyToken="31bf3856ad364e35" /&gt;
-        &lt;bindingRedirect oldVersion="1.0.0.0-5.2.2.0" newVersion="5.2.2.0" /&gt;
-      &lt;/dependentAssembly&gt;
-    &lt;/assemblyBinding&gt;
-  &lt;/runtime&gt;
-  &lt;entityFramework&gt;
-      
-      &lt;contexts&gt;
-          &lt;context type="MVC_App_2.DAL.ProjectContext, MVC_App_2"&gt;
-              &lt;databaseInitializer type="MVC_App_2.DAL.ProjectInitializer, MVC_App_2" /&gt;
-          &lt;/context&gt;
-      &lt;/contexts&gt;
-      &lt;defaultConnectionFactory type="System.Data.Entity.Infrastructure.SqlConnectionFactory, EntityFramework" /&gt;
-      &lt;providers&gt;
-          &lt;provider invariantName="System.Data.SqlClient"
-                    type="System.Data.Entity.SqlServer.SqlProviderServices, EntityFramework.SqlServer" /&gt;
-      &lt;/providers&gt;     
-      &lt;!--
-    &lt;defaultConnectionFactory type="System.Data.Entity.Infrastructure.LocalDbConnectionFactory, EntityFramework"&gt;
-      &lt;parameters&gt;
-        &lt;parameter value="mssqllocaldb" /&gt;
-      &lt;/parameters&gt;
-    &lt;/defaultConnectionFactory&gt;
-    &lt;providers&gt;
-      &lt;provider invariantName="System.Data.SqlClient" type="System.Data.Entity.SqlServer.SqlProviderServices, EntityFramework.SqlServer" /&gt;
-    &lt;/providers&gt;
-    --&gt;
-    
-  &lt;/entityFramework&gt;
-&lt;/configuration&gt;</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>SSRS</Category>
-        <Language>SQLSERVER2K SQL</Language>
-        <Public>false</Public>
-        <Name>List_DataSources_ConnectionStrings_Credentials_SQL_vs_Windows___for_SQL_2012</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>SSRS</Category>
-          <Language>SQLSERVER2K SQL</Language>
-          <Public>false</Public>
-          <Name>List_DataSources_ConnectionStrings_Credentials_SQL_vs_Windows___for_SQL_2012</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>--List_DataSources_ConnectionStrings_Credentials_SQL_vs_Windows___for_SQL_2012
-
-
-use ReportServer
-go
-
-
-
-;WITH XMLNAMESPACES  -- XML namespace def must be the first in with clause.
-(DEFAULT 'http://schemas.microsoft.com/sqlserver/reporting/2006/03/reportdatasource'
-,'http://schemas.microsoft.com/SQLServer/reporting/reportdesigner'
- AS rd)
-,SDS AS
-(SELECT SDS .name AS SharedDsName
-,isnull(RCounts .Dependents, 0) as Dependents ,SDS. [Path]
-,CONVERT( xml, CONVERT(varbinary (max), content)) AS DEF 
-,DS .extension as Extension
-,case DS.credentialretrieval
-       when 1 then 'User Supplied'
-      when 2 then 'Stored'
-      when 3 then 'Windows Integrated'
-      when 4 then 'Not Required'
-      end as CredentialType,
-    CONVERT( smalldatetime,SDS .CreationDate, 100) as CreationDate,
-   u .Username as CreatedBy, um . Username as ModifiedBy ,
-    CONVERT(smalldatetime ,SDS. ModifiedDate,100 ) as ModifiedDate
-     FROM dbo. [Catalog] AS SDS
- JOIN ReportServer. dbo.Users U ON SDS. CreatedByID = U .UserID
- JOIN ReportServer .dbo. Users UM ON SDS. ModifiedByID = UM .UserID
- JOIN Reportserver. dbo.Datasource DS on SDS. ItemID=DS .itemID
-LEFT OUTER JOIN (SELECT DS .Link as DSLink, count(*) as Dependents
-  FROM  Catalog AS C INNER JOIN Users AS CU ON C. CreatedByID = CU .UserID
-  INNER JOIN Users AS MU ON C. ModifiedByID = MU .UserID
-  LEFT OUTER JOIN SecData AS SD ON C.PolicyID = SD. PolicyID AND SD.AuthType = 1
-  INNER JOIN DataSource AS DS ON C. ItemID = DS .ItemID
-  group by DS.Link ) RCounts on Rcounts.DSLink =SDS. ItemID
-WHERE SDS. Type = 5)    
-  
-SELECT  CON. [Path]
-,CON. SharedDsName
-,CON. Dependents
-,CON. ConnString
-,CON. extension
-,CON. credentialtype
-,CON. CreationDate
-,CON. CreatedBy
-,CON. ModifiedDate
-,CON. ModifiedBy
-FROM
-(SELECT SDS .[Path]
-,SDS. SharedDsName
-,SDS. Dependents
-,DSN. value('ConnectString[1]' , 'varchar(MAX)' ) AS ConnString
-,SDS. extension
-,SDS. credentialtype
-,SDS. CreationDate
-,SDS. CreatedBy
-,SDS. ModifiedDate
-,SDS. ModifiedBy
-FROM SDS
-CROSS APPLY  
-SDS .DEF. nodes('/DataSourceDefinition' ) AS R(DSN )
- ) AS CON
--- Optional filter:
---WHERE upper (CON. Path) LIKE '%YOURPATH%'
-</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>SSRS</Category>
-        <Language>SQLSERVER2K SQL</Language>
-        <Public>false</Public>
-        <Name>LIST_reportName_dataSourceName_dataProvider_connectionString</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>SSRS</Category>
-          <Language>SQLSERVER2K SQL</Language>
-          <Public>false</Public>
-          <Name>LIST_reportName_dataSourceName_dataProvider_connectionString</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>--LIST_reportName_dataSourceName_dataProvider_connectionString
---https://social.msdn.microsoft.com/Forums/sqlserver/en-US/601a784f-e28f-49b2-a02d-aa0db24994ec/way-to-discover-all-fields-used-in-all-ssrs-reports?forum=sqlreportingservices
-
-use ProductionReportServer
-go
-
-WITH XMLNAMESPACES ( DEFAULT 'http://schemas.microsoft.com/sqlserver/reporting/2010/01/reportdefinition', 'http://schemas.microsoft.com/SQLServer/reporting/reportdesigner' AS rd )
-SELECT ReportName		 = name
-    ,DataSourceName	 = x.value('(@Name)[1]', 'VARCHAR(250)') 
-	  ,DataProvider	 = x.value('(ConnectionProperties/DataProvider)[1]','VARCHAR(250)')
-	  ,ConnectionString = x.value('(ConnectionProperties/ConnectString)[1]','VARCHAR(250)')
- FROM ( SELECT C.Name,CONVERT(XML,CONVERT(VARBINARY(MAX),C.Content)) AS reportXML
-      FROM ProductionReportServer.dbo.Catalog C
-     WHERE C.Content is not null
-      AND C.Type = 2
-
- ) a
- CROSS APPLY reportXML.nodes('/Report/DataSources/DataSource') r ( x )
-ORDER BY name ;</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>UTILITIES</Category>
-        <Language>SQLSERVER2K SQL</Language>
-        <Public>false</Public>
-        <Name>count of SQL connections by IP address</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>UTILITIES</Category>
-          <Language>SQLSERVER2K SQL</Language>
-          <Public>false</Public>
-          <Name>count of SQL connections by IP address</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>-- Get a count of SQL connections by IP address
-SELECT ec.client_net_address, es.[program_name], 
-es.[host_name], es.login_name, 
-COUNT(ec.session_id) AS [connection count] 
-FROM sys.dm_exec_sessions AS es  
-INNER JOIN sys.dm_exec_connections AS ec  
-ON es.session_id = ec.session_id   
-GROUP BY ec.client_net_address, es.[program_name], es.[host_name], es.login_name  
-ORDER BY ec.client_net_address, es.[program_name];
-
--- Get a count of SQL connections by login_name
-SELECT login_name, COUNT(session_id) AS [session_count] 
-FROM  sys.dm_exec_sessions
-GROUP BY login_name
-ORDER BY login_name;</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>UTILITIES</Category>
-        <Language>SQLSERVER2K SQL</Language>
-        <Public>false</Public>
-        <Name>Users_and_Connections</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>UTILITIES</Category>
-          <Language>SQLSERVER2K SQL</Language>
-          <Public>false</Public>
-          <Name>Users_and_Connections</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>SELECT 
-    DB_NAME(dbid) as DBName, 
-    COUNT(dbid) as NumberOfConnections,
-    loginame as LoginName
-FROM
-    sys.sysprocesses
-WHERE 
-    dbid &gt; 0
-GROUP BY 
-    dbid, loginame
-;
-
-
-\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-
-exec sp_who
-
-\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-
-exec sp_who2
-
-//////////////////////////////
-
-Declare @dbName varchar(150)
-set @dbName = 'barriere'
-
---Total machine connections
---SELECT  COUNT(dbid) as TotalConnections FROM sys.sysprocesses WHERE dbid &gt; 0
-
---Available connections
-DECLARE @SPWHO1 TABLE (DBName VARCHAR(1000) NULL, NoOfAvailableConnections VARCHAR(1000) NULL, LoginName VARCHAR(1000) NULL)
-INSERT INTO @SPWHO1 
-    SELECT db_name(dbid), count(dbid), loginame FROM sys.sysprocesses WHERE dbid &gt; 0 GROUP BY dbid, loginame
-SELECT * FROM @SPWHO1 WHERE DBName = @dbName
-
---Running connections
-DECLARE @SPWHO2 TABLE (SPID VARCHAR(1000), [Status] VARCHAR(1000) NULL, [Login] VARCHAR(1000) NULL, HostName VARCHAR(1000) NULL, BlkBy VARCHAR(1000) NULL, DBName VARCHAR(1000) NULL, Command VARCHAR(1000) NULL, CPUTime VARCHAR(1000) NULL, DiskIO VARCHAR(1000) NULL, LastBatch VARCHAR(1000) NULL, ProgramName VARCHAR(1000) NULL, SPID2 VARCHAR(1000) NULL, Request VARCHAR(1000) NULL)
-INSERT INTO @SPWHO2 
-    EXEC sp_who2 'Active'
-SELECT * FROM @SPWHO2 WHERE DBName = @dbName
-
-
-////////////////////////////////////////////
-
-SELECT DB_NAME(dbid) AS DBName,
-COUNT(dbid) AS NumberOfConnections,
-loginame
-FROM    sys.sysprocesses
-GROUP BY dbid, loginame
-ORDER BY DB_NAME(dbid)</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>VBA_ACCESS_ADO</Category>
-        <Language>VB</Language>
-        <Public>false</Public>
-        <Name>DestroyAnADOConnection</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>VBA_ACCESS_ADO</Category>
-          <Language>VB</Language>
-          <Public>false</Public>
-          <Name>DestroyAnADOConnection</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>'refernece: Microsoft ActiveX Data Objects 2.8 Library
-
-
-
-Sub DestroyAdoConnection(Connection As ADODB.Connection)
-    
-    ' Check the Errors collection
-    If Connection.errors.Count &gt; 0 Then
-        ' Do some error handling
-    End If
-    
-    ' Close the Connection
-    Connection.Close
-    
-    ' Destroy the Connection
-    Set Connection = Nothing
-    
-End sub</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>VBA_ACCESS_ADO</Category>
-        <Language>VB</Language>
-        <Public>false</Public>
-        <Name>Function_CreateConnectionString</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>VBA_ACCESS_ADO</Category>
-          <Language>VB</Language>
-          <Public>false</Public>
-          <Name>Function_CreateConnectionString</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>'refernece: Microsoft ActiveX Data Objects 2.8 Library
-
-
-Function CreateConnectionFromString() As ADODB.Connection
-
-    ' Define Variables
-    Dim cn As New ADODB.Connection
-    
-    ' The paths have been truncated in this example.
-    ' For this to work properly, the developer need to
-    ' specify the correct Database and MDW file paths.
-    cn.ConnectionString = _
-        "Provider=Microsoft.ACE.OLEDB.12.0;" &amp; _
-        "User ID=Admin;" &amp; _
-        "Data Source=D:\Sample.accdb;" &amp; _
-        "Mode=Share Deny None;" &amp; _
-        "Jet OLEDB:System database=D:\System.mdw;" &amp; _
-        "Jet OLEDB:Database Password="""";" &amp; _
-        "Jet OLEDB:Support Complex Data=True"
-        
-    ' Open the Connection
-    cn.Open
-    
-    ' Return the Connection
-    Set CreateConnectionFromString = cn
-
-End Function</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>VBA_ACCESS_ADO</Category>
-        <Language>VB</Language>
-        <Public>false</Public>
-        <Name>Function_CreateUDLConnection</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>VBA_ACCESS_ADO</Category>
-          <Language>VB</Language>
-          <Public>false</Public>
-          <Name>Function_CreateUDLConnection</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>'refernece: Microsoft ActiveX Data Objects 2.8 Library
-
-'To create the UDL:
-'	crate a text file, rename suffix: UDL\
-'	Double click on it, set the settings, [Test the Connection]
-
-
-
-
-Function CreateConnectionUDL() As ADODB.Connection
-
-    ' Define Variables
-    Dim strConnectionString As String
-    Dim cn                  As New ADODB.Connection
-    
-    ' Open the Connection from the UDL file
-    cn.Open "File Name=C:\Connection.UDL"
-    
-    ' Return the Connection
-    Set CreateConnectionUDL = cn
-
-End Function</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>VBA_ACCESS_ADO</Category>
-        <Language>VB</Language>
-        <Public>false</Public>
-        <Name>ReturnRecordSet_FromCurrentProject_ImplicitConnection</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>VBA_ACCESS_ADO</Category>
-          <Language>VB</Language>
-          <Public>false</Public>
-          <Name>ReturnRecordSet_FromCurrentProject_ImplicitConnection</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>
-'refernece: Microsoft ActiveX Data Objects 2.8 Library
-
-'Implicit connection to CurrentProject
-'Returns ADODB.Recordset from local 
-
-Function fn_CreateImplicitAdoConnection() As ADODB.Recordset
-
-    ' Define Variables
-    Dim strSQL  As String
-    Dim rs      As New ADODB.Recordset
-    
-    ' Set the SQL for the Recordset
-    strSQL = "SELECT [CONTACTS].* FROM [CONTACTS]"
-    
-    ' Open the Recordset using to Contacts connection
-    rs.Open strSQL, CurrentProject.AccessConnection
-    
-    ' Return the Recordset
-    Set CreateImplicitAdoConnection = rs
-
-End Function
-
-
-
-=========================================================================
-
-
-Private Sub cmdGetRecord_Click()
-'refernece: Microsoft ActiveX Data Objects 2.8 Library
-
-    ' Define Variables
-    Dim strSQL  As String
-    Dim rs      As New ADODB.Recordset
-    
-    ' Set the SQL for the Recordset
-    strSQL = "SELECT t_Rates.* FROM t_Rates WHERE (((t_Rates.Rate_ID)=1))"
-
-    
-    rs.Open strSQL, CurrentProject.AccessConnection
-    
-    Dim iFieldCount As Integer
-    iFieldCount = rs.Fields.Count
-    
-    Dim arrFields() As Variant
-    ReDim arrFields(1 To iFieldCount)
-    
-    Dim iFieldCounter As Integer
-    For iFieldCounter = 1 To iFieldCount
-        arrFields(iFieldCounter) = rs(iFieldCounter - 1)
-        Debug.Print "iFieldCounter: " &amp; iFieldCounter &amp; ", rs(i-1).Name: " &amp; rs.Fields(iFieldCounter - 1).Name &amp; ", arrFields(i): " &amp; arrFields(iFieldCounter)
-    Next iFieldCounter
-
-
-
-
-End Sub</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>web_config</Category>
-        <Language>ASP</Language>
-        <Public>false</Public>
-        <Name>ConnectionString_allows_SharePointServer_ToAccess_SQL-SERVER</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>web_config</Category>
-          <Language>ASP</Language>
-          <Public>false</Public>
-          <Name>ConnectionString_allows_SharePointServer_ToAccess_SQL-SERVER</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>&lt;?xml version="1.0"?&gt;
-
-&lt;!--
-  For more information on how to configure your ASP.NET application, please visit
-  http://go.microsoft.com/fwlink/?LinkId=169433
-  --&gt;
-
-&lt;configuration&gt;
-  &lt;connectionStrings&gt;
-    &lt;add name="ApplicationServices" connectionString="data source=.\SQLEXPRESS;Integrated Security=SSPI;AttachDBFilename=|DataDirectory|\aspnetdb.mdf;User Instance=true"
-      providerName="System.Data.SqlClient" /&gt;
-    &lt;add name="DB2_CRMConnectionString" connectionString="Data Source=SQL-SERVER\PRODUCTION;Initial Catalog=DB2_CRM;Persist Security Info=True;User ID=Web_ASP_NET_user;Password=abcde12345"
-      providerName="System.Data.SqlClient" /&gt;
-    &lt;add name="DB5_FORMsConnectionString" connectionString="Data Source=SQL-SERVER\PRODUCTION;Initial Catalog=DB5_FORMs;Persist Security Info=True;User ID=Web_ASP_NET_user;Password=abcde12345"
-      providerName="System.Data.SqlClient" /&gt;
-
-  &lt;/connectionStrings&gt;
-
-  &lt;system.web&gt;
-    &lt;compilation debug="true" targetFramework="4.0" /&gt;
-
-      &lt;customErrors mode="Off"/&gt;
-
-      &lt;authentication mode="Windows"/&gt;
-      &lt;authorization&gt;
-          &lt;!--&lt;allow users="accessiicarewnc\ggarson" /&gt;--&gt;
-          &lt;allow roles="accessiicarewnc\Domain Users" /&gt;
-          &lt;deny users="*"/&gt;
-          &lt;!--&lt;allow users="*"/&gt;--&gt;
-      &lt;/authorization&gt;
-
-
-  &lt;/system.web&gt;
-
-  &lt;system.webServer&gt;
-     &lt;modules runAllManagedModulesForAllRequests="true"/&gt;
-  &lt;/system.webServer&gt;
-&lt;/configuration&gt;
-</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>web_config</Category>
-        <Language>ASP</Language>
-        <Public>false</Public>
-        <Name>MyVersionForDEVweb_withConnectionStrings</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>web_config</Category>
-          <Language>ASP</Language>
-          <Public>false</Public>
-          <Name>MyVersionForDEVweb_withConnectionStrings</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>&lt;?xml version="1.0"?&gt;
-&lt;!--
-  For more information on how to configure your ASP.NET application, please visit
-  http://go.microsoft.com/fwlink/?LinkId=169433
-  --&gt;
-&lt;configuration&gt;
-  &lt;connectionStrings&gt;
-    &lt;add name="ApplicationServices" connectionString="data source=.\SQLEXPRESS;Integrated Security=SSPI;AttachDBFilename=|DataDirectory|\aspnetdb.mdf;User Instance=true"
-      providerName="System.Data.SqlClient" /&gt;
-    &lt;add name="mybookstoreConnectionString1" connectionString="Data Source=HOMETOWER\DEV;Initial Catalog=mybookstore;Integrated Security=True"
-      providerName="System.Data.SqlClient" /&gt;
-    &lt;add name="mybookstoreConnectionString" connectionString="Data Source=HOMETOWER\DEV;Initial Catalog=mybookstore;Integrated Security=True"
-      providerName="System.Data.SqlClient" /&gt;
-  &lt;/connectionStrings&gt;
-  &lt;system.web&gt;
-    &lt;compilation debug="true" strict="false" explicit="true" targetFramework="4.0"/&gt;
-
-    &lt;!-- this is the new part --&gt;
-    
-    &lt;pages&gt;
-      &lt;controls&gt;
-
-        &lt;add
-            tagPrefix="gigControls"
-            tagName="HeaderWithProperty"
-            src="~/controls/HeaderWithProps.ascx"/&gt;        
-        
-        &lt;add 
-            tagPrefix="customControls" 
-            tagName="HeaderWithProps" 
-            src="~/controls/HeaderWithProps.ascx"/&gt;
-        
-      &lt;/controls&gt;
-    &lt;/pages&gt;
-    
-    &lt;!-- ==================== --&gt;   
-    
-    
-    &lt;authentication mode="Forms"&gt;
-      &lt;forms loginUrl="~/Account/Login.aspx" timeout="2880"/&gt;
-    &lt;/authentication&gt;
-    &lt;membership&gt;
-      &lt;providers&gt;
-        &lt;clear/&gt;
-        &lt;add name="AspNetSqlMembershipProvider" type="System.Web.Security.SqlMembershipProvider" connectionStringName="ApplicationServices" enablePasswordRetrieval="false" enablePasswordReset="true" requiresQuestionAndAnswer="false" requiresUniqueEmail="false" maxInvalidPasswordAttempts="5" minRequiredPasswordLength="6" minRequiredNonalphanumericCharacters="0" passwordAttemptWindow="10" applicationName="/"/&gt;
-      &lt;/providers&gt;
-    &lt;/membership&gt;
-    &lt;profile&gt;
-      &lt;providers&gt;
-        &lt;clear/&gt;
-        &lt;add name="AspNetSqlProfileProvider" type="System.Web.Profile.SqlProfileProvider" connectionStringName="ApplicationServices" applicationName="/"/&gt;
-      &lt;/providers&gt;
-    &lt;/profile&gt;
-    &lt;roleManager enabled="false"&gt;
-      &lt;providers&gt;
-        &lt;clear/&gt;
-        &lt;add name="AspNetSqlRoleProvider" type="System.Web.Security.SqlRoleProvider" connectionStringName="ApplicationServices" applicationName="/"/&gt;
-        &lt;add name="AspNetWindowsTokenRoleProvider" type="System.Web.Security.WindowsTokenRoleProvider" applicationName="/"/&gt;
-      &lt;/providers&gt;
-    &lt;/roleManager&gt;
-  &lt;/system.web&gt;
-  &lt;system.webServer&gt;
-    &lt;modules runAllManagedModulesForAllRequests="true"/&gt;
-  &lt;/system.webServer&gt;
-&lt;/configuration&gt;</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>web_config</Category>
-        <Language>ASP</Language>
-        <Public>false</Public>
-        <Name>UseConnectionStrringFromWeb.config_in_CodeBehind</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>web_config</Category>
-          <Language>ASP</Language>
-          <Public>false</Public>
-          <Name>UseConnectionStrringFromWeb.config_in_CodeBehind</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>
-&lt;!--
-import this
---&gt;	
-using System.Configuration; //For Connection String from web.config
-using System.Data.SqlClient; //SqlConnection
-	
-	
-            using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DB2_CRMConnectionString1"].ConnectionString))
-            {
-                using (SqlCommand cmd = new SqlCommand("dbo.GetCountByLastName"))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.Add(new SqlParameter("@T9_PK", (int)sT9_PK)   );
-
-                    SqlParameter countParameter = new SqlParameter("@LastNameCount", 0);
-                    countParameter.Direction = ParameterDirection.Output;
-                    cmd.Parameters.Add(countParameter);
-
-                    conn.Open();
-                    cmd.Connection = conn;
-
-                    cmd.ExecuteNonQuery();
-                    int count = Int32.Parse(cmd.Parameters["@LastNameCount"].Value.ToString());
-                    Debug.Write("&lt;p&gt;Count: " + count.ToString());
-                    conn.Close();
-                }
-            }	
-	
-	
-	
-	
-	
-	
-&lt;!--
-  -------------------------------------------------------------------
-
-import this
---&gt;
-
-    using System.Configuration;
-&lt;!--
-in aspx page
---&gt;
-
-    SqlConnection con;
-
-    string conn = ConfigurationManager.ConnectionStrings["connection string name in web config"].ConnectionString;
-    
-    
-    
-    
-    
-  
-
-</Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>Windows_7</Category>
-        <Language>TEXT</Language>
-        <Public>false</Public>
-        <Name>Close_VPN_Connections</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>Windows_7</Category>
-          <Language>TEXT</Language>
-          <Public>false</Public>
-          <Name>Close_VPN_Connections</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>&gt; ipconfig /release
-
-This option terminates any active TCP/IP connections on all network adapters 
-and releases those IP addresses for use by other applications. 'ipconfig /release" 
-can be used with specific Windows connection names. In this case, 
-the command will affect only the specified connections and not all. 
-The command accepts either full connection names or wildcard names. Examples:
-
-    ipconfig /release "Local Area Connection 1"
-    ipconfig /release *Local* 
-    
-    
-/////////////////////////////////////////////////////////////
-
-Typing ipconfig /release 
-instructs the DHCP server to erase the existing IP address for all adapters, 
-be they ethernet or wireless. The process should take a few seconds, 
-confirmed with a display in the DOS box showing all zeros for the IP address and subnet mask.
-
-{you can then browse just like before to our SQL-Server
-
-
-
-Now type: ipconfig /renew. 
-If the command is successful, a new IP address, a subnet mask, and the default 
-gateway will appear along with the DNS suffix (basically your ISP's address, such as comcast.net).    </Code>
-      </SnippetValue>
-    </value>
-  </item>
-  <item>
-    <key>
-      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Category>Windows_7</Category>
-        <Language>TEXT</Language>
-        <Public>false</Public>
-        <Name>List_active_Connections_and_Which_Application_owns_the_connection</Name>
-        <Group>My Snippets</Group>
-      </SnippetKey>
-    </key>
-    <value>
-      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <Key>
-          <Category>Windows_7</Category>
-          <Language>TEXT</Language>
-          <Public>false</Public>
-          <Name>List_active_Connections_and_Which_Application_owns_the_connection</Name>
-          <Group>My Snippets</Group>
-        </Key>
-        <Keywords />
-        <Imports />
-        <Code>List active connections and which application has the connection open:
- &gt; netstat -b
-
-
-https://www.howtogeek.com/98601/easily-monitor-your-computers-internet-connection-activity/
-
-netstat -abf 5 &gt; activity.txt
-
-We’re using four modifiers on the netstat command. 
-The –a option tells it to show all connections and listening ports. 
-The –b option adds what application is making the connection to the results. 
-The –f option displays the full DNS name for each connection option, 
-	so that you can more easily understand where the connections are being made. 
-The 5 option causes the command to poll every five seconds for connections (to make it more easy to track what is going on). 
-We’re then using the piping symbol “&gt;” to save the results to a text file named “activity.txt.”</Code>
+Export or Import Default Application Associations
+https://technet.microsoft.com/en-us/library/hh825038.aspx
+=============================================================	
+
+EXPORT
+(e.g. Dism /Online /Export-DefaultAppAssociations:\\Server\Share\AppAssoc.xml)
+
+For error: 0x80004002
+https://social.technet.microsoft.com/Forums/ie/en-US/0d3d994a-fd12-4b27-a684-a60c665e29db/help-failing-to-export-default-file-associations-on-server-2012r2?forum=mdt
+1] try modifying command
+Dism /Online /get-DefaultAppAssociations &gt;C:\TEMP\DefaultApps.txt
+2] run command as local administrator
+
+
+IMPORT
+(mount image)
+Dism /Mount-Image /ImageFile:C:\test\images\install.wim /Name:"Windows" /MountDir:C:\test\offline
+(Import the .xml file that has the default application association settings to the Windows image. For example, at the command prompt type the following command:)
+
+
+=================================================================
+
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;DefaultAssociations&gt;
+  &lt;Association Identifier=".3g2" ProgId="WMP11.AssocFile.3G2" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".3gp" ProgId="WMP11.AssocFile.3GP" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".3gp2" ProgId="WMP11.AssocFile.3G2" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".3gpp" ProgId="WMP11.AssocFile.3GP" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".aac" ProgId="WMP11.AssocFile.ADTS" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".ac3" ProgId="AppXqj98qxeaynz6dv4459ayz6bnqxbyaqcs" ApplicationName="Groove Music" /&gt;
+  &lt;Association Identifier=".adt" ProgId="AppXqj98qxeaynz6dv4459ayz6bnqxbyaqcs" ApplicationName="Groove Music" /&gt;
+  &lt;Association Identifier=".adts" ProgId="WMP11.AssocFile.ADTS" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".aif" ProgId="WMP11.AssocFile.AIFF" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".aifc" ProgId="WMP11.AssocFile.AIFF" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".aiff" ProgId="WMP11.AssocFile.AIFF" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".amr" ProgId="AppXqj98qxeaynz6dv4459ayz6bnqxbyaqcs" ApplicationName="Groove Music" /&gt;
+  &lt;Association Identifier=".ani" ProgId="IrfanView.ani" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".arw" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" /&gt;
+  &lt;Association Identifier=".asf" ProgId="WMP11.AssocFile.ASF" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".asx" ProgId="WMP11.AssocFile.ASX" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".au" ProgId="WMP11.AssocFile.AU" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".avi" ProgId="WMP11.AssocFile.AVI" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".bmp" ProgId="IrfanView.bmp" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".cda" ProgId="WMP11.AssocFile.CDA" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".cr2" ProgId="IrfanView.cr2" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".crw" ProgId="IrfanView.crw" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".dcx" ProgId="IrfanView.dcx" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".dib" ProgId="IrfanView.bmp" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".ec3" ProgId="AppXqj98qxeaynz6dv4459ayz6bnqxbyaqcs" ApplicationName="Groove Music" /&gt;
+  &lt;Association Identifier=".emf" ProgId="IrfanView.emf" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".eps" ProgId="IrfanView.eps" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".epub" ProgId="AppXvepbp3z66accmsd0x877zbbxjctkpr6t" ApplicationName="Microsoft Edge" /&gt;
+  &lt;Association Identifier=".erf" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" /&gt;
+  &lt;Association Identifier=".flac" ProgId="WMP11.AssocFile.FLAC" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".gif" ProgId="IrfanView.gif" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".htm" ProgId="ChromeHTML.BFATTW3WY5HWWRDPZHSSXN7MKY" ApplicationName="Google Chrome" /&gt;
+  &lt;Association Identifier=".html" ProgId="ChromeHTML.BFATTW3WY5HWWRDPZHSSXN7MKY" ApplicationName="Google Chrome" /&gt;
+  &lt;Association Identifier=".ico" ProgId="IrfanView.ico" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".jfif" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" /&gt;
+  &lt;Association Identifier=".jpc" ProgId="IrfanView.jp2" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".jpe" ProgId="IrfanView.jpg" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".jpeg" ProgId="IrfanView.jpg" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".jpg" ProgId="IrfanView.jpg" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".jxr" ProgId="IrfanView.hdp" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".kdc" ProgId="IrfanView.kdc" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".lbm" ProgId="IrfanView.iff" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".m1v" ProgId="WMP11.AssocFile.MPEG" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".m2t" ProgId="WMP11.AssocFile.M2TS" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".m2ts" ProgId="WMP11.AssocFile.M2TS" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".m3u" ProgId="WMP11.AssocFile.m3u" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".m4a" ProgId="WMP11.AssocFile.M4A" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".m4r" ProgId="AppXqj98qxeaynz6dv4459ayz6bnqxbyaqcs" ApplicationName="Groove Music" /&gt;
+  &lt;Association Identifier=".m4v" ProgId="WMP11.AssocFile.MP4" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".mid" ProgId="WMP11.AssocFile.MIDI" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".midi" ProgId="WMP11.AssocFile.MIDI" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".MK3D" ProgId="WMP11.AssocFile.MK3D" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".mka" ProgId="WMP11.AssocFile.MKA" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".mkv" ProgId="WMP11.AssocFile.MKV" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".mod" ProgId="AppX6eg8h5sxqq90pv53845wmnbewywdqq5h" ApplicationName="Movies &amp;amp; TV" /&gt;
+  &lt;Association Identifier=".mov" ProgId="WMP11.AssocFile.MOV" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".MP2" ProgId="WMP11.AssocFile.MP3" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".mp2v" ProgId="WMP11.AssocFile.MPEG" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".mp3" ProgId="WMP11.AssocFile.MP3" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".mp4" ProgId="WMP11.AssocFile.MP4" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".mp4v" ProgId="WMP11.AssocFile.MP4" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".mpa" ProgId="WMP11.AssocFile.MPEG" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".MPE" ProgId="WMP11.AssocFile.MPEG" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".mpeg" ProgId="WMP11.AssocFile.MPEG" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".mpg" ProgId="WMP11.AssocFile.MPEG" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".mpv2" ProgId="WMP11.AssocFile.MPEG" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".mrw" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" /&gt;
+  &lt;Association Identifier=".mts" ProgId="WMP11.AssocFile.M2TS" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".nef" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" /&gt;
+  &lt;Association Identifier=".nrw" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" /&gt;
+  &lt;Association Identifier=".orf" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" /&gt;
+  &lt;Association Identifier=".oxps" ProgId="Windows.XPSReachViewer" ApplicationName="XPS Viewer" /&gt;
+  &lt;Association Identifier=".pcx" ProgId="IrfanView.pcx" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".pdf" ProgId="AcroExch.Document" ApplicationName="Adobe Acrobat 9.0" /&gt;
+  &lt;Association Identifier=".pef" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" /&gt;
+  &lt;Association Identifier=".pgm" ProgId="IrfanView.pgm" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".png" ProgId="IrfanView.png" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".ppm" ProgId="IrfanView.ppm" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".psd" ProgId="IrfanView.psd" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".raf" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" /&gt;
+  &lt;Association Identifier=".raw" ProgId="IrfanView.raw" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".rgb" ProgId="IrfanView.sgi" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".rle" ProgId="IrfanView.rle" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".rmi" ProgId="WMP11.AssocFile.MIDI" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".rw2" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" /&gt;
+  &lt;Association Identifier=".rwl" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" /&gt;
+  &lt;Association Identifier=".snd" ProgId="WMP11.AssocFile.AU" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".sr2" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" /&gt;
+  &lt;Association Identifier=".srw" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" /&gt;
+  &lt;Association Identifier=".tif" ProgId="IrfanView.tif" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".tod" ProgId="AppX6eg8h5sxqq90pv53845wmnbewywdqq5h" ApplicationName="Movies &amp;amp; TV" /&gt;
+  &lt;Association Identifier=".TS" ProgId="WMP11.AssocFile.TTS" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".TTS" ProgId="WMP11.AssocFile.TTS" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".txt" ProgId="txtfile" ApplicationName="Notepad" /&gt;
+  &lt;Association Identifier=".url" ProgId="IE.AssocFile.URL" ApplicationName="Internet Browser" /&gt;
+  &lt;Association Identifier=".wav" ProgId="WMP11.AssocFile.WAV" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".wax" ProgId="WMP11.AssocFile.WAX" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".wdp" ProgId="IrfanView.hdp" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".website" ProgId="IE.AssocFile.WEBSITE" ApplicationName="Internet Explorer" /&gt;
+  &lt;Association Identifier=".wfw" ProgId="Applications\notepad.exe" ApplicationName="Notepad" /&gt;
+  &lt;Association Identifier=".wm" ProgId="WMP11.AssocFile.ASF" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".wma" ProgId="WMP11.AssocFile.WMA" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".wmf" ProgId="IrfanView.wmf" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".wmv" ProgId="WMP11.AssocFile.WMV" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".wmx" ProgId="WMP11.AssocFile.ASX" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".WPL" ProgId="WMP11.AssocFile.WPL" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".wvx" ProgId="WMP11.AssocFile.WVX" ApplicationName="Windows Media Player" /&gt;
+  &lt;Association Identifier=".xbm" ProgId="IrfanView.xbm" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".xpm" ProgId="IrfanView.xpm" ApplicationName="IrfanView 64-bit" /&gt;
+  &lt;Association Identifier=".xps" ProgId="Windows.XPSReachViewer" ApplicationName="XPS Viewer" /&gt;
+  &lt;Association Identifier=".xvid" ProgId="AppX6eg8h5sxqq90pv53845wmnbewywdqq5h" ApplicationName="Movies &amp;amp; TV" /&gt;
+  &lt;Association Identifier=".zpl" ProgId="AppXqj98qxeaynz6dv4459ayz6bnqxbyaqcs" ApplicationName="Groove Music" /&gt;
+  &lt;Association Identifier="bingmaps" ProgId="AppXp9gkwccvk6fa6yyfq3tmsk8ws2nprk1p" ApplicationName="Maps" /&gt;
+  &lt;Association Identifier="http" ProgId="ChromeHTML.BFATTW3WY5HWWRDPZHSSXN7MKY" ApplicationName="Google Chrome" /&gt;
+  &lt;Association Identifier="https" ProgId="ChromeHTML.BFATTW3WY5HWWRDPZHSSXN7MKY" ApplicationName="Google Chrome" /&gt;
+  &lt;Association Identifier="mailto" ProgId="Outlook.URL.mailto.15" ApplicationName="Outlook 2016" /&gt;
+  &lt;Association Identifier="mswindowsmusic" ProgId="AppXtggqqtcfspt6ks3fjzyfppwc05yxwtwy" ApplicationName="Groove Music" /&gt;
+  &lt;Association Identifier="mswindowsvideo" ProgId="AppX6w6n4f8xch1s3vzwf3af6bfe88qhxbza" ApplicationName="Movies &amp;amp; TV" /&gt;
+&lt;/DefaultAssociations&gt;</Code>
       </SnippetValue>
     </value>
   </item>
