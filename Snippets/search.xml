@@ -1,2 +1,491 @@
 <?xml version="1.0" encoding="utf-8"?>
-<dictionary />
+<dictionary>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>DAX_SimulatedData</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>Date_Table</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>DAX_SimulatedData</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>Date_Table</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>
+
+'========================================= version 1
+Dates = 
+
+VAR BaseTable =                             --VAR creates a variable and opens a SCOPE
+    CALENDAR(DATE(2017,1,1) , TODAY())
+    
+VAR AddYears =
+    ADDCOLUMNS(BaseTable,"Year",YEAR([Date]))
+    
+VAR AddMonths =
+                ADDCOLUMNS(
+                            AddYears,
+                            "MonthID", FORMAT([Date], "YYYYMM"),
+                            "Month", FORMAT( [Date], "MMM YY")
+                            )
+VAR AddDay =
+     ADDCOLUMNS(AddMonths, "Day", FORMAT([Date], "DDD d MMM YY"))
+     
+VAR AddStartOfWeek =
+     ADDCOLUMNS(AddDay, "Start of Week", [Date] - WEEKDAY([Date]))
+     
+--RETURN is required to close the scope opened by a VAR
+--RETURN BaseTable  --&lt;== This would just return the BaseTable, but not the AddYears Column
+RETURN AddStartOfWeek    
+
+'========================================= version 2 -- this gives the same results:
+Dates ALL = 
+    VAR BaseTable =                             --VAR creates a variable and opens a SCOPE
+                    CALENDAR(DATE(2017,1,1) , TODAY())
+RETURN GENERATE(
+     BaseTable,
+     VAR BaseDay = [Date]
+     VAR BaseYear = YEAR(BaseDay)
+     VAR BaseMonthID = INT(FORMAT(BaseDay,"YYYYMM"))
+     VAR BaseMonth = FORMAT(BaseDay, "MMM YY")
+     VAR BaseDayLong = FORMAT(BaseDay, "DDD d  MMM YY")
+     VAR BaseStartOfWeek = WEEKDAY(BaseDay)
+
+RETURN ROW(
+     "Year", BaseYear,
+     "MonthID", BaseMonthID,
+     "Month", BaseMonth, 
+     "Day", BaseDayLong,
+     "Start of Week", BaseDay - BaseStartOfWeek
+            )
+)
+</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>M_CalendarTables</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>from_EnterpriseDNA</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>M_CalendarTables</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>from_EnterpriseDNA</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>https://forum.enterprisedna.co/t/extended-date-table-power-query-m-function/6390
+
+=============================================================================
+
+
+let fnDateTable = ( StartDate as date, EndDate as date, optional FYStartMonthNum as number, optional Holidays as list, optional WDStartNum as number, optional AddRelativeNetWorkdays as logical ) as table =&gt;
+  let
+      FYStartMonth = List.Select( {1..12}, each _ = FYStartMonthNum ){0}? ?? 1,
+      WDStart = List.Select( {0..1}, each _ = WDStartNum ){0}? ?? 0,
+      CurrentDate = Date.From( DateTime.FixedLocalNow()),
+      DayCount = Duration.Days( Duration.From( EndDate - StartDate)) +1,
+      Source = List.Dates( StartDate, DayCount, #duration(1,0,0,0)),
+      AddToday = if EndDate &lt; CurrentDate then List.Combine( {Source, {CurrentDate}}) else Source,
+      ToTable = Table.FromList(AddToday, Splitter.SplitByNothing(), type table [Date = Date.Type] ),
+      InsertYear = Table.AddColumn(ToTable, "Year", each Date.Year([Date]), type number),
+      InsertYearOffset = Table.AddColumn(InsertYear, "CurrYearOffset", each Date.Year([Date]) - Date.Year( Date.From(CurrentDate)), type number),
+      InsertCompletedYear = Table.AddColumn(InsertYearOffset, "YearCompleted", each Date.EndOfYear([Date]) &lt; Date.From( Date.EndOfYear(CurrentDate)), type logical),
+
+      InsertQuarterNum = Table.AddColumn(InsertCompletedYear, "Quarter Number", each Date.QuarterOfYear([Date]), type number),
+      InsertQuarter = Table.AddColumn(InsertQuarterNum, "Quarter", each "Q" &amp; Number.ToText([Quarter Number]), type text),
+      InsertStartOfQuarter = Table.AddColumn(InsertQuarter, "Start of Quarter", each Date.StartOfQuarter([Date]), type date),
+      InsertEndOfQuarter = Table.AddColumn(InsertStartOfQuarter, "End of Quarter", each Date.EndOfQuarter([Date]), type date),
+      InsertCalendarQtr = Table.AddColumn(InsertEndOfQuarter, "Quarter &amp; Year", each "Q" &amp; Number.ToText( Date.QuarterOfYear([Date])) &amp; Date.ToText([Date], [Format = " yyyy"]), type text),
+      InsertQuarternYear = Table.AddColumn(InsertCalendarQtr, "QuarternYear", each [Year] * 10 + [Quarter Number], type number),
+      InsertQuarterOffset = Table.AddColumn(InsertQuarternYear, "CurrQuarterOffset", each ((4 * Date.Year([Date])) +  Date.QuarterOfYear([Date])) - ((4 * Date.Year(Date.From(CurrentDate))) +  Date.QuarterOfYear(Date.From(CurrentDate))), type number),
+      InsertCompletedQuarter = Table.AddColumn(InsertQuarterOffset, "QuarterCompleted", each Date.EndOfQuarter([Date]) &lt; Date.From(Date.EndOfQuarter(CurrentDate)), type logical),
+
+      InsertMonth = Table.AddColumn(InsertCompletedQuarter, "Month", each Date.Month([Date]), type number),
+      InsertStartOfMonth = Table.AddColumn(InsertMonth, "Start of Month", each Date.StartOfMonth([Date]), type date),
+      InsertEndOfMonth = Table.AddColumn(InsertStartOfMonth, "End of Month", each Date.EndOfMonth([Date]), type date),
+      InsertCalendarMonth = Table.AddColumn(InsertEndOfMonth, "Month &amp; Year", each Text.Proper( Date.ToText([Date], [Format = "MMM yyyy"])), type text),
+      InsertMonthnYear = Table.AddColumn(InsertCalendarMonth , "MonthnYear", each [Year] * 100 + [Month], type number),
+      InsertMonthOffset = Table.AddColumn(InsertMonthnYear, "CurrMonthOffset", each ((12 * Date.Year([Date])) +  Date.Month([Date])) - ((12 * Date.Year(Date.From(CurrentDate))) +  Date.Month(Date.From(CurrentDate))), type number),
+      InsertCompletedMonth = Table.AddColumn(InsertMonthOffset, "MonthCompleted", each Date.EndOfMonth([Date]) &lt; Date.From(Date.EndOfMonth(CurrentDate)), type logical),
+      InsertMonthName = Table.AddColumn(InsertCompletedMonth, "Month Name", each Text.Proper( Date.ToText([Date], "MMMM")), type text),
+      InsertMonthShort = Table.AddColumn( InsertMonthName, "Month Short", each Text.Proper( Date.ToText([Date], "MMM")), type text),
+      InsertMonthInitial = Table.AddColumn(InsertMonthShort, "Month Initial", each Text.Start([Month Name], 1) &amp; Text.Repeat( Character.FromNumber(8203), Date.Month([Date]) ), type text),
+      InsertDayOfMonth = Table.AddColumn(InsertMonthInitial, "Day of Month", each Date.Day([Date]), type number),
+  
+      InsertWeekNumber = Table.AddColumn(InsertDayOfMonth, "Week Number", each
+        if Number.RoundDown((Date.DayOfYear([Date])-(Date.DayOfWeek([Date], Day.Monday)+1)+10)/7)=0
+        then Number.RoundDown((Date.DayOfYear(#date(Date.Year([Date])-1,12,31))-(Date.DayOfWeek(#date(Date.Year([Date])-1,12,31), Day.Monday)+1)+10)/7)
+        else if (Number.RoundDown((Date.DayOfYear([Date])-(Date.DayOfWeek([Date], Day.Monday)+1)+10)/7)=53 and (Date.DayOfWeek(#date(Date.Year([Date]),12,31), Day.Monday)+1&lt;4))
+        then 1 else Number.RoundDown((Date.DayOfYear([Date])-(Date.DayOfWeek([Date], Day.Monday)+1)+10)/7), type number),
+      InsertStartOfWeek = Table.AddColumn(InsertWeekNumber, "Start of Week", each Date.StartOfWeek([Date], Day.Monday), type date),
+      InsertWeekEnding = Table.AddColumn(InsertStartOfWeek, "End of Week", each Date.EndOfWeek( [Date], Day.Monday), type date),
+      InsertCalendarWk = Table.AddColumn(InsertWeekEnding, "Week &amp; Year", each "W" &amp; Text.PadStart( Text.From( [Week Number] ), 2, "0") &amp; " " &amp; Text.From(Date.Year( Date.AddDays( Date.StartOfWeek([Date], Day.Monday), 3 ))), type text ),
+      InsertWeeknYear = Table.AddColumn(InsertCalendarWk, "WeeknYear", each Date.Year( Date.AddDays( Date.StartOfWeek([Date], Day.Monday), 3 )) * 100 + [Week Number],  Int64.Type),
+      InsertWeekOffset = Table.AddColumn(InsertWeeknYear, "CurrWeekOffset", each (Number.From(Date.StartOfWeek([Date], Day.Monday))-Number.From(Date.StartOfWeek(CurrentDate, Day.Monday)))/7, type number),
+      InsertCompletedWeek = Table.AddColumn(InsertWeekOffset, "WeekCompleted", each Date.EndOfWeek( [Date], Day.Monday) &lt; Date.From(Date.EndOfWeek(CurrentDate, Day.Monday)), type logical),
+  
+      InsertDayWeek = Table.AddColumn(InsertCompletedWeek, "Day of Week Number", each Date.DayOfWeek([Date], Day.Monday) + WDStart, Int64.Type),
+      InsertDayName = Table.AddColumn(InsertDayWeek, "Day of Week Name", each Text.Proper( Date.ToText([Date], "dddd" )), type text),
+      InsertDayInitial = Table.AddColumn(InsertDayName, "Day of Week Initial", each Text.Proper(Text.Start([Day of Week Name], 1)) &amp; Text.Repeat( Character.FromNumber(8203), Date.DayOfWeek([Date], Day.Monday) + WDStart ), type text),
+      InsertDayOfYear = Table.AddColumn(InsertDayInitial, "Day of Year", each Date.DayOfYear([Date]), Int64.Type),
+      InsertDayInt = Table.AddColumn(InsertDayOfYear, "DateInt", each [Year] * 10000 + [Month] * 100 + [Day of Month], type number),
+      InsertDayOffset = Table.AddColumn(InsertDayInt, "CurrDayOffset", each Number.From([Date]) - Number.From(CurrentDate), type number),
+      InsertIsAfterToday = Table.AddColumn(InsertDayOffset, "IsAfterToday", each not ([Date] &lt;= Date.From(CurrentDate)), type logical),
+      InsertIsWorkingDay = Table.AddColumn(InsertIsAfterToday, "IsWeekDay", each if Date.DayOfWeek([Date], Day.Monday) &gt; 4 then false else true, type logical),
+      InsertIsHoliday = Table.AddColumn(InsertIsWorkingDay, "IsHoliday", each if Holidays = null then "Unknown" else List.Contains( Holidays, [Date] ), if Holidays = null then type text else type logical),
+      InsertIsBusinessDay = Table.AddColumn(InsertIsHoliday, "IsBusinessDay", each if [IsWeekDay] = true and [IsHoliday] &lt;&gt; true then true else false, type logical),
+      InsertDayType = Table.AddColumn(InsertIsBusinessDay, "Day Type", each if [IsHoliday] = true then "Holiday" else if [IsWeekDay] = false then "Weekend" else if [IsWeekDay] = true then "Weekday" else null, type text),
+
+      InsertISOYear = Table.AddColumn( InsertDayType, "ISO Year", each Date.Year( Date.AddDays( Date.StartOfWeek([Date], Day.Monday), 3 )), type number),
+      InsertISOqNum = Table.AddColumn(InsertISOYear, "ISO Quarter Number", each if [Week Number] &gt;39 then 4 else if [Week Number] &gt;26 then 3 else if [Week Number] &gt;13 then 2 else 1, Int64.Type),
+      InsertISOqtr = Table.AddColumn(InsertISOqNum, "ISO Quarter", each "Q" &amp; Number.ToText([ISO Quarter Number]), type text),
+      InsertISOQuarter = Table.AddColumn(InsertISOqtr, "ISO Quarter &amp; Year", each "Q" &amp; Number.ToText([ISO Quarter Number]) &amp; " " &amp; Number.ToText([ISO Year]), type text),
+      InsertISOqNy = Table.AddColumn(InsertISOQuarter, "ISO QuarternYear", each [ISO Year] * 10 + [ISO Quarter Number], type number),
+
+      // BufferTable = Table.Buffer(Table.Distinct( InsertISOqNy[[ISO Year], [DateInt]])),
+      // InsertISOday = Table.AddColumn(InsertISOqNy, "ISO Day of Year", (OT) =&gt; Table.RowCount( Table.SelectRows( BufferTable, (IT) =&gt; IT[DateInt] &lt;= OT[DateInt] and IT[ISO Year] = OT[ISO Year])),  Int64.Type),
+      AddFY = Table.AddColumn(InsertISOqNy, "Fiscal Year", each "FY" &amp; (if [Month] &gt;= FYStartMonth and FYStartMonth &gt;1 then Text.From([Year] +1) else Text.From([Year])), type text),
+      //AddFYs = Table.AddColumn(AddFY, "Fiscal Year short", each "FY" &amp; (if [Month] &gt;= FYStartMonth and FYStartMonth &gt;1 then Text.PadEnd( Text.End( Text.From([Year] +1), 2), 2, "0") else Text.End( Text.From([Year]), 2)), type text),
+      AddFQ = Table.AddColumn(AddFY, "Fiscal Quarter", each "FQ" &amp; Text.From( Number.RoundUp( Date.Month( Date.AddMonths( [Date], - (FYStartMonth -1) )) / 3 )) &amp; " " &amp; (if [Month] &gt;= FYStartMonth and FYStartMonth &gt;1 then Text.From([Year] +1) else Text.From([Year])), type text),
+      AddFQnYr = Table.AddColumn(AddFQ, "FQuarternYear", each (if [Month] &gt;= FYStartMonth and FYStartMonth &gt;1 then [Year] +1 else [Year]) * 10 + Number.RoundUp( Date.Month( Date.AddMonths( [Date], - (FYStartMonth -1) )) / 3 ), type number),
+      AddFM = Table.AddColumn(AddFQnYr, "Fiscal Period Number", each if [Month] &gt;= FYStartMonth and FYStartMonth &gt;1 then [Month] - (FYStartMonth-1) else if [Month] &gt;= FYStartMonth and FYStartMonth =1 then [Month] else [Month] + (12-FYStartMonth+1), type number),
+      AddFP = Table.AddColumn(AddFM, "Fiscal Period", each "FP" &amp; Text.PadStart( Text.From([Fiscal Period Number]), 2, "0") &amp; " " &amp; (if [Month] &gt;= FYStartMonth and FYStartMonth &gt;1 then Text.From([Year] +1) else Text.From([Year])), type text),
+      AddFMnYr = Table.AddColumn(AddFP , "FPeriodnYear", each (if [Month] &gt;= FYStartMonth and FYStartMonth &gt;1 then [Year] +1 else [Year]) * 100 + [Fiscal Period Number], type number),
+      FYCalendarStart = #date( Date.Year(StartDate)-1, FYStartMonth, 1 ),
+      InsertFFD = Table.AddColumn( AddFMnYr, "FiscalFirstDay", each if [Month] &gt;= FYStartMonth and FYStartMonth &gt;1 then #date( Date.Year([Date])+1, FYStartMonth, 1) else #date( Date.Year([Date]), FYStartMonth, 1), type date ),
+
+      InitTable = Table.FromList( List.Transform( {Number.From(FYCalendarStart) .. Number.From(EndDate)}, Date.From), Splitter.SplitByNothing(), type table [DateFW = Date.Type]),
+      AddFFD = Table.AddColumn( InitTable, "FiscalFirstDay", each if Date.Month([DateFW]) &lt; FYStartMonth then #date(Date.Year([DateFW]), FYStartMonth, 1) else #date(Date.Year([DateFW]) + 1, FYStartMonth, 1)),
+      AddFWSD = Table.AddColumn( AddFFD, "FWStartDate", each Date.AddYears(Date.StartOfWeek([DateFW], Day.Monday), 1)),
+      Group1 = Table.Group( AddFWSD, {"FiscalFirstDay", "FWStartDate"}, {{"AllRows", each _, type table [DateFW = nullable date, FiscalFirstDay = date, FWStartDate = date]}}),
+      Group2 = Table.Group( Group1, {"FiscalFirstDay"}, {{"AllRows2", each _, type table [FiscalFirstDay = date, FWStartDate = date, AllRows = table]}}),
+      AddIndex = Table.AddColumn( Group2, "Custom", each Table.AddIndexColumn([AllRows2], "Fiscal Week Number", 1, 1) )[[Custom]],
+      ExpandG2 = Table.ExpandTableColumn( AddIndex, "Custom", {"FiscalFirstDay", "FWStartDate", "AllRows", "Fiscal Week Number"}, {"FiscalFirstDay", "FWStartDate", "AllRows", "Fiscal Week Number"}), 
+      ExpandG1 = Table.ExpandTableColumn( ExpandG2, "AllRows", {"DateFW"}, {"DateFW"} )[[DateFW], [Fiscal Week Number]],
+      MergeFYW = Table.Join( InsertFFD, {"Date"}, ExpandG1, {"DateFW"}, JoinKind.LeftOuter, JoinAlgorithm.SortMerge ),
+      FWlogic = List.Contains( {null}, FYStartMonthNum),
+      UpdateFYWeek = if FWlogic then Table.ReplaceValue(MergeFYW, each [Fiscal Week Number], each if FYStartMonth =1 then [Week Number] else [Fiscal Week Number], Replacer.ReplaceValue, {"Fiscal Week Number"}) else MergeFYW,
+      AddFYW = Table.AddColumn( UpdateFYWeek, "Fiscal Week", each if FWlogic then "F" &amp; [#"Week &amp; Year"] else if FYStartMonth =1 then "FW" &amp; Text.PadStart( Text.From([Fiscal Week Number]), 2, "0") &amp; Date.ToText([Date], " yyyy") else if Date.Month([Date]) &lt; FYStartMonth then "FW" &amp; Text.PadStart( Text.From([Fiscal Week Number]), 2, "0") &amp; Date.ToText([Date], " yyyy") else "FW" &amp; Text.PadStart(Text.From([Fiscal Week Number]), 2, "0") &amp; " " &amp; Text.From( Date.Year([Date])+1), type text),
+      InsertFWeeknYear = Table.AddColumn(AddFYW, "FWeeknYear", each if FWlogic then [WeeknYear] else (if FYStartMonth =1 then Date.Year([Date]) else if Date.Month([Date]) &lt; FYStartMonth then Date.Year([Date]) else Date.Year([Date])+1) * 100 + [Fiscal Week Number],  Int64.Type),
+      
+      CurrentDateRecord = Table.SelectRows(InsertFWeeknYear, each ([Date] = CurrentDate)),
+      CurrentISOyear = CurrentDateRecord{0}[ISO Year],
+      CurrentISOqtr = CurrentDateRecord{0}[ISO Quarter Number],
+      CurrentYear = CurrentDateRecord{0}[Year],
+      CurrentMonth = CurrentDateRecord{0}[Month],
+      CurrentFiscalFirstDay = CurrentDateRecord{0}[FiscalFirstDay],
+      PrevFiscalFirstDay = Date.AddYears(CurrentFiscalFirstDay, -1),
+      CurrentFY = CurrentDateRecord{0}[Fiscal Year],
+      CurrentFQ = CurrentDateRecord{0}[FQuarternYear],
+      CurrentFP = CurrentDateRecord{0}[FPeriodnYear],
+      CurrentFW = CurrentDateRecord{0}[FWeeknYear],
+
+      InsertISOYrOffset = Table.AddColumn(InsertFWeeknYear, "ISO CurrYearOffset", each [ISO Year] - CurrentISOyear, type number),
+      InsertISOQtrOffset = Table.AddColumn(InsertISOYrOffset, "ISO CurrQuarterOffset", each ((4 * [ISO Year]) +  [ISO Quarter Number]) - ((4 * CurrentISOyear) + CurrentISOqtr), type number),
+      InsertFYoffset = Table.AddColumn(InsertISOQtrOffset, "Fiscal CurrYearOffset", each try (if [Month] &gt;= FYStartMonth then [Year]+1 else [Year]) - (if CurrentMonth &gt;= FYStartMonth then CurrentYear+1 else CurrentYear) otherwise null, type number),
+      InsertCurrentFY = Table.AddColumn(InsertFYoffset, "IsCurrentFY", each if [Fiscal Year] = CurrentFY then true else false, type logical),
+      InsertCurrentFQ = Table.AddColumn(InsertCurrentFY, "IsCurrentFQ", each if [FQuarternYear] = CurrentFQ then true else false, type logical),
+      InsertCurrentFP = Table.AddColumn(InsertCurrentFQ, "IsCurrentFP", each if [FPeriodnYear] = CurrentFP then true else false, type logical),
+      InsertCurrentFW = Table.AddColumn(InsertCurrentFP, "IsCurrentFW", each if [FWeeknYear] = InsertISOYrOffset then true else false, type logical),
+      InsertPYTD = Table.AddColumn(InsertCurrentFW, "IsPYTD", each if CurrentYear-1 = [Year] and [Day of Year] &lt;= CurrentDateRecord{0}[Day of Year] then true else false, type logical),
+        ListPrevFYDates = List.Buffer( Table.SelectRows( Table.ExpandTableColumn( Table.NestedJoin(
+            Table.AddIndexColumn( Table.RenameColumns( Table.TransformColumnTypes( Table.FromList( List.Dates( PrevFiscalFirstDay, Number.From(CurrentFiscalFirstDay-PrevFiscalFirstDay),#duration(1,0,0,0)), Splitter.SplitByNothing()),{{"Column1", type date}}), {{"Column1", "DateFY"}}), "Index", 1, 1), {"Index"}, 
+            Table.AddIndexColumn( Table.RenameColumns( Table.TransformColumnTypes( Table.FromList( List.Dates( Date.AddYears( PrevFiscalFirstDay, -1), Number.From( PrevFiscalFirstDay - Date.AddYears( PrevFiscalFirstDay, -1)),#duration(1,0,0,0)), Splitter.SplitByNothing()),{{"Column1", type date}}), {{"Column1", "DateFY"}}), "Index", 1, 1)
+            , {"Index"}, "Table", JoinKind.LeftOuter), "Table", {"DateFY"}, {"PrevDateFY"}), each [DateFY] &lt;= CurrentDate)[PrevDateFY] ),
+      InsertPFYTD = Table.AddColumn(InsertPYTD, "IsPFYTD", each if [Fiscal CurrYearOffset] = -1 and List.Contains(ListPrevFYDates, [Date] ) then true else false, type logical),
+      InsertNetWorkdays = if AddRelativeNetWorkdays = true then Table.AddColumn(InsertPFYTD, "Relative Networkdays", each fxNETWORKDAYS( StartDate, [Date], Holidays ), type number ) else InsertPFYTD,
+      fxNETWORKDAYS = (StartDate, EndDate, optional Holidays as list) =&gt;
+        let
+          ListOfDates = List.Dates( StartDate, Number.From(EndDate-StartDate)+1, Duration.From(1) ),
+          DeleteHolidays = if Holidays = null then ListOfDates else List.Difference( ListOfDates, List.Transform(Holidays, Date.From )),
+          DeleteWeekends = List.Select( DeleteHolidays, each Date.DayOfWeek( _, Day.Monday) &lt; 5 ),
+          CountDays = List.Count( DeleteWeekends)
+        in
+          CountDays,
+      RemoveToday = Table.RemoveColumns( if EndDate &lt; CurrentDate then Table.SelectRows(InsertNetWorkdays, each ([Date] &lt;&gt; CurrentDate)) else InsertNetWorkdays, {"Day of Year", "FiscalFirstDay"}), 
+      ChType = Table.TransformColumnTypes(RemoveToday,{{"Year", Int64.Type}, {"Quarter Number", Int64.Type}, {"Month", Int64.Type}, {"Day of Month", Int64.Type}, {"DateInt", Int64.Type}, {"Day of Week Number", Int64.Type}, {"ISO CurrYearOffset", Int64.Type}, {"ISO QuarternYear", Int64.Type}, {"ISO CurrQuarterOffset", Int64.Type}, {"Week Number", Int64.Type}, {"WeeknYear", Int64.Type}, {"MonthnYear", Int64.Type}, {"QuarternYear", Int64.Type}, {"FQuarternYear", Int64.Type}, {"Fiscal Period Number", Int64.Type}, {"FPeriodnYear", Int64.Type}, {"CurrWeekOffset", Int64.Type}, {"CurrMonthOffset", Int64.Type}, {"CurrQuarterOffset", Int64.Type}, {"CurrYearOffset", Int64.Type}, {"Fiscal CurrYearOffset", Int64.Type}, {"Fiscal Week Number", Int64.Type}}),
+      ReorderCols = Table.ReorderColumns(ChType,{"Date", "Year", "CurrYearOffset", "YearCompleted", "Quarter Number", "Quarter", "Start of Quarter", "End of Quarter", "Quarter &amp; Year", "QuarternYear", "CurrQuarterOffset", "QuarterCompleted", "Month", "Start of Month", "End of Month", "Month &amp; Year", "MonthnYear", "CurrMonthOffset", "MonthCompleted", "Month Name", "Month Short", "Month Initial", "Day of Month", "Week Number", "Start of Week", "End of Week", "Week &amp; Year", "WeeknYear", "CurrWeekOffset", "WeekCompleted", "Day of Week Number", "Day of Week Name", "Day of Week Initial", "DateInt", "CurrDayOffset", "IsAfterToday", "IsWeekDay", "IsHoliday", "IsBusinessDay", "Day Type", "ISO Year", "ISO CurrYearOffset", "ISO Quarter Number", "ISO Quarter", "ISO Quarter &amp; Year", "ISO QuarternYear", "ISO CurrQuarterOffset", "Fiscal Year", "Fiscal CurrYearOffset", "Fiscal Quarter", "FQuarternYear", "Fiscal Period Number", "Fiscal Period", "FPeriodnYear", "DateFW", "Fiscal Week Number", "Fiscal Week", "FWeeknYear", "IsCurrentFY", "IsCurrentFQ", "IsCurrentFP", "IsCurrentFW", "IsPYTD", "IsPFYTD"}),
+      ListCols = if FWlogic then Table.RemoveColumns(ReorderCols,{"ISO Quarter Number", "Fiscal Year", "Fiscal Quarter", "FQuarternYear", "Fiscal Period Number", "Fiscal Period", "FPeriodnYear", "DateFW", "Fiscal Week Number", "Fiscal Week", "FWeeknYear", "Fiscal CurrYearOffset", "IsCurrentFQ", "IsCurrentFP", "IsCurrentFW"}) else Table.RemoveColumns(ReorderCols,{"Fiscal Period Number", "DateFW", "Fiscal Week Number", "ISO Quarter Number"})
+  in
+      ListCols,
+      Documentation = [
+      Documentation.Name =  " fxCalendar", 
+      Documentation.Description = " Date table function to create an ISO-8601 calendar", 
+      Documentation.LongDescription = " Date table function to create an ISO-8601 calendar", 
+      Documentation.Category = " Table", 
+      Documentation.Version = " 2.01: full code review",
+      Documentation.Source = " local", 
+      Documentation.Author = " Melissa de Korte", 
+      Documentation.Examples = { [Description =  " See: https://forum.enterprisedna.co/t/extended-date-table-power-query-m-function/6390", 
+        Code = " Optional paramters: #(lf)
+        (FYStartMonthNum) Month number the fiscal year starts, Januari if omitted #(lf) 
+        (Holidays) Select a query (and column) that contains a list of holiday dates #(lf) 
+        (WDStartNum) Switch default weekday numbering from 0-6 to 1-7 by entering a 1 #(lf)
+        (AddRelativeNetWorkdays) if true adds a Relative Networkdays column to the date table #(lf)
+        #(lf)
+        Important to note: #(lf)
+        [Fiscal Week] starts on a Monday and can contain less than 7 days in a First- and/or Last Week of a FY #(lf)
+        [IsWeekDay] does not take holiday dates into account  #(lf)
+        [IsBusinessDay] does take optional holiday dates into account  #(lf)
+        [IsPYTD] and [IsPFYTD] compare Previous [Day of Year] with the Current [Day of Year] number, so dates don't align in leap years #(lf)
+        IMPORTANT! No Fiscal columns will be added if the (FYStartMonthNum) is omitted", 
+        Result = " " ] }
+      ]
+  in 
+  Value.ReplaceType( fnDateTable, Value.ReplaceMetadata( Value.Type( fnDateTable ), Documentation ))</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>M_Dates</Category>
+        <Language>VB</Language>
+        <Public>false</Public>
+        <Name>01__00_DateTable_Overview</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>M_Dates</Category>
+          <Language>VB</Language>
+          <Public>false</Public>
+          <Name>01__00_DateTable_Overview</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>01__00_DateTable_Overview
+
+
+'1] Crete the Start Date Parameter:
+ Create a Query in the Query Editor, 
+ In the Query definition field at the top of the screen, under the ribbon =&gt; paste the following formula
+	
+		= Date.AddDays(Date.From(DateTime.LocalNow()),-10)
+		
+		'{also: Date.AddMonths, Date.AddQuarters, Date.AddWeeks, Date.AddYears}
+		
+		------------------
+		'OR for a specific date usd this
+		= Date.FromText("2010, 09, 01")
+		------------------
+	
+	A3] rename the Query "StartDATE"
+	
+	close and apply, inorder to return to the Power BI home 
+	
+	
+
+
+'2] Create the function that is called to create the [DateTable], in query editor: new blank query
+	'see snippet: 01__01_DateTable_function
+	'copy/paste the snippet into the Advanced Editor
+	
+'3] Create the query that will be the DateTable
+	'see snippet: 01__02_DateTable_AdvancedEditory_code
+	'Create a new blank query and copy/paste this into the Advanced Editor
+	'Rename the query: DateTable
+	</Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWER_BI</Category>
+        <Language>TEXT</Language>
+        <Public>false</Public>
+        <Name>PARAMETER_in_SELECT</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWER_BI</Category>
+          <Language>TEXT</Language>
+          <Public>false</Public>
+          <Name>PARAMETER_in_SELECT</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>Quick Alternative from Courtney:
+= Table.SelectRows(FactApplication1, each Date.IsInPreviousNMonths([ApplicationDate], 12))
+===============================================================================================
+
+
+
+
+This example uses the dynamic Scaler Query value in the SOURCE step, so only the last 10 days of data is uploaded 
+
+
+example get data from DimContract where [DateCreated] is greater than 10 days prior to Power BI report refresh date
+
+A] Create a Query in the Query Editor, using [Tranform Data] to get the date 10 days prior to today
+
+	A1) In Query Editor =&gt; right-click in Queries {Pane on left} =&gt; New Query =&gt; Blank Query
+	
+	A2] In the Query definition field at the top of the screen, under the ribbon =&gt; paste the following formula
+	
+		= Date.AddDays(Date.From(DateTime.LocalNow()),-10)
+		
+		{also: Date.AddMonths, Date.AddQuarters, Date.AddWeeks, Date.AddYears}
+	
+	A3] rename the Query "StartDate"
+	
+	close and apply, inorder to return to the Power BI home 
+
+B]  Get data using a SELECT statement from the SQL Server
+
+	B1] Use a SELECT statement to get data into Power BI, and Hard code a date:
+	
+	
+			SELECT *
+			  FROM [edwCrescent].[dbo].[DimContract]
+			  WHERE [DateCreated] &gt; '2021-10-01'
+			
+		Do not transform or change the data when it comes into Power BI, just Load it.
+		
+		Rename that query SELECT_DimContract
+		
+		Then go into the Query Editor, from [Transform Data] icon on the Home tab of the Ribbon
+		
+	B2] Get the M-code from the Advanced Editor, in the 'Query' secton, of the Home Tab of the ribbon of the Query Editor:
+	
+	
+		let
+		    Source = Sql.Database("cbtsql04", "edwCrescent", [Query="SELECT *#(lf)  FROM [edwCrescent].[dbo].[DimContract]#(lf)  WHERE [DateCreated] &gt; '2021-10-01'", CreateNavigationProperties=false, HierarchicalNavigation=true])
+		in
+		    Source
+		
+	B3] Modify the M-code to use the Scaler Query value rather than the Hard-Coded date value
+	
+	
+		let
+		   StartDateParm = Text.From (StartDate),
+		    Source = Sql.Database("cbtsql04", "edwCrescent", [Query="SELECT *#(lf)  FROM [edwCrescent].[dbo].[DimContract]#(lf)  WHERE [DateCreated] &gt; ' " &amp; StartDateParm &amp;  " ' ", CreateNavigationProperties=false, HierarchicalNavigation=true])
+		in
+		    Source
+	    
+Now when you refresh the data it will just get the data for the last 10 days	  </Code>
+      </SnippetValue>
+    </value>
+  </item>
+  <item>
+    <key>
+      <SnippetKey xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Category>POWERSHELL_Variables</Category>
+        <Language>VBSCRIPT</Language>
+        <Public>false</Public>
+        <Name>DateTime_METHODS_PROPERTY</Name>
+        <Group>My Snippets</Group>
+      </SnippetKey>
+    </key>
+    <value>
+      <SnippetValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Key>
+          <Category>POWERSHELL_Variables</Category>
+          <Language>VBSCRIPT</Language>
+          <Public>false</Public>
+          <Name>DateTime_METHODS_PROPERTY</Name>
+          <Group>My Snippets</Group>
+        </Key>
+        <Keywords />
+        <Imports />
+        <Code>&gt;$now = Get-Date
+&gt;$now | Get-Member
+
+'OUTPUT
+===========
+   TypeName: System.DateTime
+
+Name                 MemberType     Definition                                                                   
+----                 ----------     ----------                                                                   
+Add                  Method         datetime Add(timespan value)                                                 
+AddDays              Method         datetime AddDays(double value)                                               
+AddHours             Method         datetime AddHours(double value)                                              
+AddMilliseconds      Method         datetime AddMilliseconds(double value)                                       
+AddMinutes           Method         datetime AddMinutes(double value)                                            
+AddMonths            Method         datetime AddMonths(int months)                                               
+AddSeconds           Method         datetime AddSeconds(double value)                                            
+AddTicks             Method         datetime AddTicks(long value)                                                
+AddYears             Method         datetime AddYears(int value)                                                 
+CompareTo            Method         int CompareTo(System.Object value), int CompareTo(datetime value), int ICo...
+Equals               Method         bool Equals(System.Object value), bool Equals(datetime value), bool IEquat...
+GetDateTimeFormats   Method         string[] GetDateTimeFormats(), string[] GetDateTimeFormats(System.IFormatP...
+GetHashCode          Method         int GetHashCode()                                                            
+GetObjectData        Method         void ISerializable.GetObjectData(System.Runtime.Serialization.Serializatio...
+GetType              Method         type GetType()                                                               
+GetTypeCode          Method         System.TypeCode GetTypeCode(), System.TypeCode IConvertible.GetTypeCode()    
+IsDaylightSavingTime Method         bool IsDaylightSavingTime()                                                  
+Subtract             Method         timespan Subtract(datetime value), datetime Subtract(timespan value)         
+ToBinary             Method         long ToBinary()                                                              
+ToBoolean            Method         bool IConvertible.ToBoolean(System.IFormatProvider provider)                 
+ToByte               Method         byte IConvertible.ToByte(System.IFormatProvider provider)                    
+ToChar               Method         char IConvertible.ToChar(System.IFormatProvider provider)                    
+ToDateTime           Method         datetime IConvertible.ToDateTime(System.IFormatProvider provider)            
+ToDecimal            Method         decimal IConvertible.ToDecimal(System.IFormatProvider provider)              
+ToDouble             Method         double IConvertible.ToDouble(System.IFormatProvider provider)                
+ToFileTime           Method         long ToFileTime()                                                            
+ToFileTimeUtc        Method         long ToFileTimeUtc()                                                         
+ToInt16              Method         int16 IConvertible.ToInt16(System.IFormatProvider provider)                  
+ToInt32              Method         int IConvertible.ToInt32(System.IFormatProvider provider)                    
+ToInt64              Method         long IConvertible.ToInt64(System.IFormatProvider provider)                   
+ToLocalTime          Method         datetime ToLocalTime()                                                       
+ToLongDateString     Method         string ToLongDateString()                                                    
+ToLongTimeString     Method         string ToLongTimeString()                                                    
+ToOADate             Method         double ToOADate()                                                            
+ToSByte              Method         sbyte IConvertible.ToSByte(System.IFormatProvider provider)                  
+ToShortDateString    Method         string ToShortDateString()                                                   
+ToShortTimeString    Method         string ToShortTimeString()                                                   
+ToSingle             Method         float IConvertible.ToSingle(System.IFormatProvider provider)                 
+ToString             Method         string ToString(), string ToString(string format), string ToString(System....
+ToType               Method         System.Object IConvertible.ToType(type conversionType, System.IFormatProvi...
+ToUInt16             Method         uint16 IConvertible.ToUInt16(System.IFormatProvider provider)                
+ToUInt32             Method         uint32 IConvertible.ToUInt32(System.IFormatProvider provider)                
+ToUInt64             Method         uint64 IConvertible.ToUInt64(System.IFormatProvider provider)                
+ToUniversalTime      Method         datetime ToUniversalTime()                                                   
+DisplayHint          NoteProperty   DisplayHintType DisplayHint=DateTime                                         
+Date                 Property       datetime Date {get;}                                                         
+Day                  Property       int Day {get;}                                                               
+DayOfWeek            Property       System.DayOfWeek DayOfWeek {get;}                                            
+DayOfYear            Property       int DayOfYear {get;}                                                         
+Hour                 Property       int Hour {get;}                                                              
+Kind                 Property       System.DateTimeKind Kind {get;}                                              
+Millisecond          Property       int Millisecond {get;}                                                       
+Minute               Property       int Minute {get;}                                                            
+Month                Property       int Month {get;}                                                             
+Second               Property       int Second {get;}                                                            
+Ticks                Property       long Ticks {get;}                                                            
+TimeOfDay            Property       timespan TimeOfDay {get;}                                                    
+Year                 Property       int Year {get;}                                                              
+DateTime             ScriptProperty System.Object DateTime {get=if ((&amp; { Set-StrictMode -Version 1; $this.Disp...</Code>
+      </SnippetValue>
+    </value>
+  </item>
+</dictionary>
